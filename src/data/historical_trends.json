@@ -1,0 +1,358 @@
+{
+  "hypertension_historical": {
+    "prevalence_by_year": {
+      "1998": {
+        "crude": 25.1,
+        "age_standardized": 26.0,
+        "male": 28.5,
+        "female": 22.1
+      },
+      "2001": {
+        "crude": 26.0,
+        "age_standardized": 23.6,
+        "male": 30.7,
+        "female": 22.7
+      },
+      "2005": {
+        "crude": 22.9,
+        "age_standardized": 22.7,
+        "male": 25.5,
+        "female": 20.4
+      },
+      "2007": {
+        "crude": 20.4,
+        "age_standardized": 19.7,
+        "male": 21.5,
+        "female": 19.3
+      },
+      "2008": {
+        "crude": 22.7,
+        "age_standardized": 21.4,
+        "male": 23.5,
+        "female": 21.9
+      },
+      "2009": {
+        "crude": 23.4,
+        "age_standardized": 21.4,
+        "male": 25.9,
+        "female": 20.9
+      },
+      "2010": {
+        "crude": 24.1,
+        "age_standardized": 21.7,
+        "male": 25.3,
+        "female": 23.0
+      },
+      "2011": {
+        "crude": 26.5,
+        "age_standardized": 23.9,
+        "male": 29.8,
+        "female": 23.3
+      },
+      "2012": {
+        "crude": 26.7,
+        "age_standardized": 23.8,
+        "male": 28.4,
+        "female": 25.1
+      },
+      "2013": {
+        "crude": 25.7,
+        "age_standardized": 22.4,
+        "male": 28.9,
+        "female": 22.8
+      },
+      "2014": {
+        "crude": 24.3,
+        "age_standardized": 20.5,
+        "male": 26.4,
+        "female": 22.2
+      },
+      "2015": {
+        "crude": 27.0,
+        "age_standardized": 22.5,
+        "male": 29.5,
+        "female": 24.5
+      },
+      "2016": {
+        "crude": 28.5,
+        "age_standardized": 23.7,
+        "male": 31.9,
+        "female": 25.1
+      },
+      "2017": {
+        "crude": 26.9,
+        "age_standardized": 22.3,
+        "male": 30.4,
+        "female": 23.5
+      },
+      "2018": {
+        "crude": 28.8,
+        "age_standardized": 23.5,
+        "male": 31.5,
+        "female": 26.0
+      },
+      "2019": {
+        "crude": 28.4,
+        "age_standardized": 22.5,
+        "male": 29.7,
+        "female": 27.0
+      },
+      "2020": {
+        "crude": 29.4,
+        "age_standardized": 23.3,
+        "male": 33.5,
+        "female": 25.4
+      },
+      "2021": {
+        "crude": 28.4,
+        "age_standardized": 21.8,
+        "male": 30.4,
+        "female": 26.4
+      }
+    },
+    "awareness_by_year": {
+      "1998": 23.5,
+      "2007-2009": 66.3,
+      "2013-2015": 67.3,
+      "2020": 69.5,
+      "2021": 74.1
+    },
+    "treatment_by_year": {
+      "1998": 20.4,
+      "2007-2009": 60.3,
+      "2013-2015": 63.6,
+      "2020": 64.8,
+      "2021": 70.3
+    },
+    "control_by_year": {
+      "1998": 4.9,
+      "2007-2009": 42.1,
+      "2008-2009": 41.6,
+      "2013-2015": 46.2,
+      "2016-2017": 47.3,
+      "2020": 47.4,
+      "2021": 56.0
+    },
+    "key_findings": {
+      "prevalence_trend": "Age-standardized prevalence decreased from 26.0% (1998) to 21.8% (2021). Crude prevalence showed more variation but remained 25-30% range from 2010-2021.",
+      "awareness_trend": "Awareness improved dramatically from 23.5% (1998) to 74.1% (2021), with major gains between 1998-2009, then plateau 2009-2021.",
+      "treatment_trend": "Treatment improved from 20.4% (1998) to 70.3% (2021), following similar pattern to awareness.",
+      "control_trend": "Control improved approximately 10-fold from 4.9% (1998) to 56.0% (2021), most rapid improvement 1998-2009.",
+      "gender_differences": "Age-standardized rates generally higher in men than women across most years.",
+      "pandemic_effect": "Slight increase in prevalence during 2020 (29.4% crude), with increasing slope slowing during pandemic period."
+    },
+    "sources": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC10905929/ (Korea Hypertension Fact Sheet 2023)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8722090/ (Korea Hypertension Fact Sheet 2021)",
+      "https://pubmed.ncbi.nlm.nih.gov/38066091/ (Trends 1998-2021 comprehensive)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6662850/ (Prevalence, Awareness, Treatment, Control 1998-2015)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC7997987/ (Ten-year trends 2008-2017)"
+    ]
+  },
+  "diabetes_historical": {
+    "prevalence_by_year": {
+      "1998-2005": 6.71,
+      "2007-2009": 10.02,
+      "2010-2012": 11.64,
+      "2011": 12.4,
+      "2013-2015": 13.33,
+      "2016-2018": 13.8,
+      "2016-2019": 14.07,
+      "2019-2020": 16.7,
+      "2020-2022": 15.61,
+      "2021-2022": 15.5
+    },
+    "awareness_by_year": {
+      "2013-2016": 62.5,
+      "2013-2015": 64.37,
+      "2016-2018": 65.0,
+      "2019-2020": 65.8,
+      "2020-2022": 72.56,
+      "2021-2022": 74.7
+    },
+    "treatment_by_year": {
+      "2007-2009": 57.2,
+      "2013-2016": 56.7,
+      "2016-2018": 60.1,
+      "2019-2020": 61.4,
+      "2020-2022": 68.33,
+      "2021-2022": 70.9
+    },
+    "control_by_year": {
+      "hba1c_less_than_6.5_percent": {
+        "2013-2014": 24.8,
+        "2013-2016": 25.1,
+        "2016-2018": 28.3,
+        "2019-2020": 24.5,
+        "2020-2022": 29.14,
+        "2021-2022": 32.4
+      },
+      "hba1c_less_than_7.0_percent": {
+        "2013-2015": "no consistent trend"
+      },
+      "all_goals_met": {
+        "2016-2018": 11.5,
+        "2019-2020": 9.7,
+        "2021-2022": 15.9,
+        "comment": "All three targets: HbA1c <6.5%, BP <140/85, LDL-C <100"
+      }
+    },
+    "comorbidity_management": {
+      "blood_pressure_control": {
+        "2007-2009": 41.1,
+        "2016-2017": 53.2
+      },
+      "cholesterol_control": {
+        "2007-2009": 65.0,
+        "2016-2017": 78.0
+      },
+      "lipid_control": {
+        "2016-2018": 53.3,
+        "2019-2020": 38.3,
+        "note": "Significant decline during pandemic"
+      }
+    },
+    "age_specific_data_2019_2022": {
+      "young_adults_19_39": {
+        "prevalence": 2.2,
+        "awareness": 43.3,
+        "treatment": 34.6,
+        "control_hba1c_less_than_6.5": 29.6
+      },
+      "older_adults_65_plus": {
+        "prevalence": 29.3,
+        "awareness": 78.8,
+        "treatment": 75.7,
+        "control_hba1c_less_than_6.5": 31.2,
+        "control_hba1c_less_than_7.5": 79.8
+      }
+    },
+    "key_findings": {
+      "prevalence_trend": "Steady increase from 6.71% (1998-2005) to 15.61% (2020-2022), with acceleration after 2010. COVID-19 spike in 2020 (16.7%), then slight decrease.",
+      "awareness_trend": "Gradual improvement from 62.5% (2013) to 74.7% (2021-2022), with nadir at 64.37% (2013-2015).",
+      "treatment_trend": "Improved from 57.2% (2007-2009) to 70.9% (2021-2022).",
+      "control_trend": "HbA1c <6.5% control rates variable: 24.8-28.3% (2013-2018), dipped to 24.5% (2019-2020), recovered to 32.4% (2021-2022).",
+      "integrated_management": "Only 15.9% meet all three integrated targets (HbA1c, BP, LDL-C), highlighting treatment gap.",
+      "pandemic_effect": "Prevalence spike in 2020 (16.7%) followed by stabilization. Lipid control worsened during 2019-2020.",
+      "gender_differences": "Men have higher prevalence (18.1%) than women (13.0%) in 2021-2022."
+    },
+    "sources": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC9171160/ (Diabetes Fact Sheet 2021)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC7850879/ (Diabetes Fact Sheet 2020)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6702122/ (Trends 2007-2017)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC11387923/ (Type 2 Diabetes Trends 1998-2022)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC11788544/ (Diabetes Fact Sheet 2024)"
+    ]
+  },
+  "dyslipidemia_historical": {
+    "hypercholesterolemia_prevalence": {
+      "2007": 8.8,
+      "2018": 20.7,
+      "2022": 22.4,
+      "crude_prevalence_2020": 24.0,
+      "crude_prevalence_2016_2020": 24.0,
+      "crude_prevalence_2016_2022": 27.4
+    },
+    "overall_dyslipidemia_prevalence": {
+      "2005-2009": 41.30,
+      "2010-2012": 43.14,
+      "2013-2015": 44.60,
+      "2016-2019": 47.00,
+      "2020-2022": 48.41,
+      "2018_men": 45.6,
+      "2018_women": 31.3,
+      "2020": 40.2,
+      "2020_dyslipidemia_1": 37.7,
+      "2020_dyslipidemia_2": 45.4,
+      "crude_2016_2020_dyslipidemia_1": 40.2,
+      "crude_2016_2020_dyslipidemia_2": 48.2
+    },
+    "awareness_by_period": {
+      "2005-2009": 17.87,
+      "2010-2012": 23.48,
+      "2013-2015": 31.42,
+      "2016-2019": 40.38,
+      "2019-2020": 63.0,
+      "2020-2022": 48.90
+    },
+    "treatment_by_period": {
+      "2007_2009_men": 1.6,
+      "2007_2009_women": 1.5,
+      "2013_2015_men": 4.7,
+      "2013_2015_women": 7.0,
+      "2005-2009": 7.10,
+      "2010-2012": 13.37,
+      "2013-2015": 18.83,
+      "2016-2019": 27.52,
+      "2019-2020": 55.2,
+      "2020-2022": 38.19
+    },
+    "control_among_prevalence": {
+      "2005-2009": 6.49,
+      "2010-2012": 10.61,
+      "2013-2015": 15.62,
+      "2016-2019": 22.84,
+      "2019-2020": 47.7,
+      "2020-2022": 31.82,
+      "2016-2018": 41.3,
+      "note": "Control defined as cholesterol <200 mg/dL or on treatment with good control"
+    },
+    "control_among_treatment": {
+      "2007-2009": 72.4,
+      "2005-2009": 52.55,
+      "2010-2012": 54.68,
+      "2013-2015": 63.10,
+      "2016-2019": 69.20,
+      "2019-2020": 85.0,
+      "2020-2022": 74.55,
+      "2024_note": "87% of lipid-lowering drug users maintain cholesterol <200 mg/dL"
+    },
+    "lipid_profile_changes_2005_2015": {
+      "total_cholesterol_mg_dl": {
+        "men_2005": 183.4,
+        "men_2013_2015": 187.7,
+        "women_2005": 184.3,
+        "women_2013_2015": 187.9
+      },
+      "hdl_cholesterol_mg_dl": {
+        "men_2005": 42.4,
+        "men_2013_2015": 47.6,
+        "women_2005": 47.3,
+        "women_2013_2015": 54.8
+      }
+    },
+    "key_findings": {
+      "prevalence_trend": "Steady increase from 41.30% (2005-2009) to 48.41% (2020-2022). Hypercholesterolemia specifically increased from 8.8% (2007) to 22.4% (2022).",
+      "awareness_trend": "Dramatic improvement from 17.87% (2005-2009) to 48.90% (2020-2022), tripling over period.",
+      "treatment_trend": "Significant increase from 7.10% (2005-2009) to 38.19% (2020-2022). Medication use among untreated increased from 1.6-1.5% (2007-2009) to 4.7-7% (2013-2015).",
+      "control_trend": "Among treated, control improved from 52.55% (2005-2009) to 74.55% (2020-2022), with 87% achieving target in 2024.",
+      "pandemic_acceleration": "Awareness, treatment, and control increased more rapidly during 2020-2022 pandemic period.",
+      "lipid_level_changes": "Total cholesterol increased slightly 2005-2015; HDL cholesterol improved substantially (men +5.2, women +7.5 mg/dL), indicating favorable lipid profile shifts.",
+      "gender_differences": "Women historically had lower dyslipidemia prevalence (31.3% vs 45.6% in 2018), but prevalence of dyslipidemia type 2 similar between genders.",
+      "awareness_gap": "One-third of adults with hypercholesterolemia remain unaware of condition (2024)."
+    },
+    "sources": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC10548191/ (Dyslipidemia Fact Sheet 2022)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8159761/ (Dyslipidemia Fact Sheet 2020)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC12062479/ (National trends 2005-2022)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6678152/ (Secular Trends 2005-2015)",
+      "https://e-jla.org/DOIx.php?id=10.12997/jla.2025.14.3.298 (Dyslipidemia Fact Sheet 2024)"
+    ]
+  },
+  "metadata": {
+    "extraction_date": "2026-03-19",
+    "data_sources": "Korean National Health and Nutrition Examination Survey (KNHANES), National Health Insurance Big Data, Korean Society of Hypertension, Korean Diabetes Association, Korean Society of Lipid and Atherosclerosis",
+    "coverage": {
+      "hypertension": "1998-2021 (individual years 1998-2021, aggregated 2020-2021 for management metrics)",
+      "diabetes": "1998-2022 (period aggregates from 1998-2005, 2007-2022 in various groupings)",
+      "dyslipidemia": "2005-2024 (period aggregates 2005-2022, 2024 point estimates)"
+    },
+    "data_quality_notes": [
+      "Hypertension: Comprehensive individual year prevalence data 1998-2021. Management metrics available primarily for recent years and key periods.",
+      "Diabetes: Preference for period aggregates (3-year rolling periods) in source documents. Prevalence appears to have peaked in 2020 (16.7%), likely due to COVID-19, then stabilized.",
+      "Dyslipidemia: Data primarily in period aggregates (3-5 year periods). 2007 represents earliest year with standardized hypercholesterolemia measure.",
+      "Pandemic effects: Notable increases or changes in 2020 across all three conditions, followed by varying trajectories 2020-2022.",
+      "Gender stratification: All conditions show male predominance in age-standardized prevalence."
+    ]
+  }
+}
