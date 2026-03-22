@@ -90,11 +90,11 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
 
         {/* Ulleungdo */}
         <circle cx="385" cy="120" r="5" fill="#2a2a3a" stroke="rgba(255,255,255,0.4)" strokeWidth={0.8} />
-        <text x="385" y="134" textAnchor="middle" fontSize={7} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>울릉도</text>
+        <text x="385" y="134" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>울릉도</text>
 
         {/* Dokdo */}
         <circle cx="408" cy="115" r="2.5" fill="#2a2a3a" stroke="rgba(255,255,255,0.4)" strokeWidth={0.8} />
-        <text x="408" y="106" textAnchor="middle" fontSize={6} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>독도</text>
+        <text x="408" y="106" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>독도</text>
 
         {/* Siren animation */}
         <style>{`
@@ -159,7 +159,7 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
                   x={x}
                   y={y + 5}
                   textAnchor="middle"
-                  fontSize={11}
+                  fontSize={12}
                   fontWeight={isActive ? 800 : 600}
                   fill={isActive ? '#000' : isWorst ? '#ff6666' : isBest ? '#66ffaa' : '#e8e8f0'}
                   fontFamily="'Noto Sans KR', sans-serif"
@@ -181,13 +181,13 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
         </defs>
         <g transform="translate(82, 160)">
           <rect x="0" y="0" width="8" height="160" rx="4" fill="url(#legendGrad)" />
-          <text x="12" y="8" fontSize="7" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
+          <text x="12" y="8" fontSize="9" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
             {range[1]}%
           </text>
-          <text x="12" y="160" fontSize="7" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
+          <text x="12" y="160" fontSize="9" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
             {range[0]}%
           </text>
-          <text x="4" y="-10" fontSize="7" fill="#555570" fontFamily="'Noto Sans KR'" textAnchor="start">
+          <text x="4" y="-10" fontSize="9" fill="#555570" fontFamily="'Noto Sans KR'" textAnchor="start">
             {metric === 'obesity' ? '비만율' : '대사증후군'}
           </text>
         </g>

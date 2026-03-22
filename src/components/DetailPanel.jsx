@@ -42,7 +42,7 @@ function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, 
       onMouseEnter={() => tooltip && setShowTip(true)}
       onMouseLeave={() => { setShowTip(false); setShowInfo(false); }}
     >
-      <div style={{ fontSize: '10px', color: '#8888aa', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
+      <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
         {label}
         {info && (
           <span
@@ -51,14 +51,14 @@ function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, 
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               width: '13px', height: '13px', borderRadius: '50%',
-              border: '1px solid #555570', fontSize: '8px', color: '#8888aa',
+              border: '1px solid #555570', fontSize: '9px', color: '#8888aa',
               cursor: 'help', lineHeight: 1, flexShrink: 0,
             }}
           >?</span>
         )}
       </div>
       <div style={{ fontSize: '16px', fontWeight: 800, fontFamily: "'JetBrains Mono'", color }}>
-        {value}{unit && <span style={{ fontSize: '9px', color: '#555570', fontWeight: 400, marginLeft: '2px' }}>{unit}</span>}
+        {value}{unit && <span style={{ fontSize: '10px', color: '#555570', fontWeight: 400, marginLeft: '2px' }}>{unit}</span>}
       </div>
       {avg != null && rawValue != null && (() => {
         const diff = rawValue - avg;
@@ -67,7 +67,7 @@ function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, 
         const arrow = isAbove ? '▲' : '▼';
         const diffColor = Math.abs(diff) < 0.3 ? '#8888aa' : isGood ? '#00ff88' : '#ff4444';
         return (
-          <div style={{ fontSize: '8px', color: diffColor, marginTop: '2px', fontFamily: "'JetBrains Mono'" }}>
+          <div style={{ fontSize: '9px', color: diffColor, marginTop: '2px', fontFamily: "'JetBrains Mono'" }}>
             {arrow} 전국대비 {isAbove ? '+' : ''}{typeof rawValue === 'number' && rawValue % 1 !== 0 ? diff.toFixed(1) : Math.round(diff)}
           </div>
         );
@@ -132,8 +132,8 @@ function CompareBar({ value, avg, min, max, color, label, unit = '', higherIsBet
   return (
     <div style={{ marginBottom: '8px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
-        <span style={{ fontSize: '10px', color: '#8888aa' }}>{label}</span>
-        <span style={{ fontSize: '10px', fontFamily: "'JetBrains Mono'", color: isGood ? '#00ff88' : '#ff4444', fontWeight: 700 }}>
+        <span style={{ fontSize: '11px', color: '#8888aa' }}>{label}</span>
+        <span style={{ fontSize: '11px', fontFamily: "'JetBrains Mono'", color: isGood ? '#00ff88' : '#ff4444', fontWeight: 700 }}>
           {typeof value === 'number' && value % 1 !== 0 ? value.toFixed(1) : value}{unit}
         </span>
       </div>
@@ -152,7 +152,7 @@ function CompareBar({ value, avg, min, max, color, label, unit = '', higherIsBet
       <div style={{ position: 'relative', height: '12px' }}>
         <span style={{
           position: 'absolute', left: `${avgPos}%`, transform: 'translateX(-50%)',
-          fontSize: '7px', color: '#8888aa', top: '1px',
+          fontSize: '9px', color: '#8888aa', top: '1px',
         }}>
           전국 {typeof avg === 'number' && avg % 1 !== 0 ? avg.toFixed(1) : avg}
         </span>
@@ -355,7 +355,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                 <span style={{ fontSize: '16px', fontWeight: 900, color: '#e8e8f0' }}>
                   상세분석 — {selectedProvince.name}
                 </span>
-                <span style={{ fontSize: '7px', color: '#444460', cursor: 'help' }} title="인구: 행안부(2024) · GRDP: 통계청(2023) · 고령화: 통계청(2024) · 기대수명: 통계청(2022) · 상급종합: 복지부 제5기 · 의사수: KOSIS(2022) · 미충족의료: 지역건강조사(2023) · 흡연/음주/운동: 건강검진통계연보(2024)">
+                <span style={{ fontSize: '9px', color: '#444460', cursor: 'help' }} title="인구: 행안부(2024) · GRDP: 통계청(2023) · 고령화: 통계청(2024) · 기대수명: 통계청(2022) · 상급종합: 복지부 제5기 · 의사수: KOSIS(2022) · 미충족의료: 지역건강조사(2023) · 흡연/음주/운동: 건강검진통계연보(2024)">
                   출처 ⓘ
                 </span>
               </div>
@@ -469,7 +469,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                             {provInfo.tertiaryList.map((h, i) => (
                               <div key={i} style={{ fontSize: '10px', color: '#ccc', lineHeight: 1.6 }}>· {h}</div>
                             ))}
-                            <div style={{ fontSize: '9px', color: '#666', marginTop: '4px' }}>
+                            <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
                               인구당 {(provInfo.tertiaryHospitals / (provInfo.population / 1e6)).toFixed(1)}개/백만명
                             </div>
                           </div>

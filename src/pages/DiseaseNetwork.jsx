@@ -437,7 +437,7 @@ function DiseaseNode({ disease, pos, isSelected, onClick, dimmed }) {
       <text
         x={pos.x} y={pos.y + (disease.level === 0 ? 13 : disease.level === 3 ? 9 : 11)}
         textAnchor="middle" fill={glowColor}
-        fontSize={disease.level === 3 ? 8 : 9}
+        fontSize={disease.level === 3 ? 9 : 10}
         fontFamily="'JetBrains Mono', monospace" fontWeight="600" opacity="0.8"
       >
         {disease.prevalence}
@@ -591,7 +591,7 @@ function DiseaseDetail({ disease, onClose }) {
                 }} />
               </div>
               <span style={{
-                fontSize: 9, color: pColor, fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 10, color: pColor, fontFamily: "'JetBrains Mono', monospace",
                 textTransform: 'capitalize',
               }}>
                 {e.pathway}
@@ -630,14 +630,14 @@ function DiseaseDetail({ disease, onClose }) {
               paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.06)',
             }}>
               <p style={{
-                color: '#6a6a8a', fontSize: 9, margin: 0, lineHeight: 1.6,
+                color: '#6a6a8a', fontSize: 10, margin: 0, lineHeight: 1.6,
                 fontFamily: "'Noto Sans KR', sans-serif",
               }}>
                 {'\uD83D\uDCDA'} {epi.ref}
               </p>
               {epi.refUrl && (
                 <a href={epi.refUrl} target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: 8, color: '#4a4aaa', textDecoration: 'underline', wordBreak: 'break-all' }}>
+                  style={{ fontSize: 9, color: '#4a4aaa', textDecoration: 'underline', wordBreak: 'break-all' }}>
                   {epi.refUrl}
                 </a>
               )}
@@ -740,7 +740,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
               }} />
               <span style={{
                 fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 9, color: p.color, letterSpacing: 0.5, opacity: 0.7,
+                fontSize: 10, color: p.color, letterSpacing: 0.5, opacity: 0.7,
               }}>
                 {p.label}
               </span>
@@ -806,7 +806,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
                   <text
                     x="16" y={LEVEL_Y[lvl] + 16}
                     fill={LEVEL_ZONE_BORDERS[lvl]}
-                    fontSize="8" fontFamily="'JetBrains Mono', monospace" opacity="0.5"
+                    fontSize="9" fontFamily="'JetBrains Mono', monospace" opacity="0.5"
                   >
                     {['LV.0  ROOT', 'LV.1  PRIMARY', 'LV.2  SECONDARY', 'LV.3  TERMINAL'][lvl]}
                   </text>
@@ -1006,7 +1006,7 @@ function MASLDHeatmapView() {
       ctx.fillStyle = getColor(t * maxVal, maxVal);
       ctx.fillRect(legendX, legendY + i, legendW, 1);
     }
-    ctx.font = "9px 'JetBrains Mono', monospace";
+    ctx.font = "10px 'JetBrains Mono', monospace";
     ctx.fillStyle = '#6666aa';
     ctx.textAlign = 'left';
     ctx.fillText('0%', legendX + legendW + 4, legendY + 8);
@@ -1183,7 +1183,7 @@ function MASLDHeatmapView() {
       </div>
       <div style={{
         padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 9, color: '#4a4a6a',
+        fontSize: 10, color: '#4a4a6a',
       }}>
         출처: KASL MASLD Fact Sheet 2023, NHIS 2010 코호트 10년 추적 데이터
       </div>
@@ -1222,15 +1222,15 @@ function CascadeView() {
     { value: 9.2 },
   ];
 
-  const marginL = 24;
-  const marginR = 24;
+  const marginL = 50;
+  const marginR = 30;
   const marginT = 70;
-  const marginB = 50;
+  const marginB = 55;
   const chartW = w - marginL - marginR;
   const chartH = h - marginT - marginB;
   const barCount = overall.length;
-  const barW = Math.min(chartW / barCount * 0.65, 80);
-  const gap = (chartW - barW * barCount) / (barCount + 1);
+  const gap = chartW / (barCount * 2.5 + 1);
+  const barW = gap * 1.5;
 
   const getBarColor = (val) => {
     const t = val / 100;
@@ -1274,7 +1274,7 @@ function CascadeView() {
                 <line x1={marginL} y1={yy} x2={w - marginR} y2={yy}
                   stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
                 <text x={marginL - 4} y={yy + 3} textAnchor="end"
-                  fill="#4a4a6a" fontSize="9" fontFamily="'JetBrains Mono', monospace">
+                  fill="#4a4a6a" fontSize="10" fontFamily="'JetBrains Mono', monospace">
                   {pct}%
                 </text>
               </g>
@@ -1324,7 +1324,7 @@ function CascadeView() {
                         stroke="#ff4444" strokeWidth="1" strokeDasharray="4 3" opacity="0.5" />
                       {dropPct > 1 && (
                         <text x={(prevX + x) / 2} y={Math.min(prevY, y) - 4}
-                          textAnchor="middle" fill="#ff6666" fontSize="8"
+                          textAnchor="middle" fill="#ff6666" fontSize="9"
                           fontFamily="'JetBrains Mono', monospace">
                           -{dropPct.toFixed(1)}%p
                         </text>
@@ -1342,11 +1342,11 @@ function CascadeView() {
 
                 {/* Bottom label */}
                 <text x={x + barW / 2} y={marginT + chartH + 16} textAnchor="middle"
-                  fill="#aaaacc" fontSize="10" fontFamily="'Noto Sans KR', sans-serif" fontWeight="600">
+                  fill="#aaaacc" fontSize="11" fontFamily="'Noto Sans KR', sans-serif" fontWeight="600">
                   {step.label}
                 </text>
-                <text x={x + barW / 2} y={marginT + chartH + 28} textAnchor="middle"
-                  fill="#4a4a6a" fontSize="8" fontFamily="'JetBrains Mono', monospace">
+                <text x={x + barW / 2} y={marginT + chartH + 30} textAnchor="middle"
+                  fill="#4a4a6a" fontSize="9" fontFamily="'JetBrains Mono', monospace">
                   {step.sub}
                 </text>
               </g>
@@ -1373,7 +1373,7 @@ function CascadeView() {
                 })()}
                 {/* Young adult value */}
                 <text x={x} y={y - 10} textAnchor="middle"
-                  fill="#ff006e" fontSize="9" fontWeight="600"
+                  fill="#ff006e" fontSize="10" fontWeight="600"
                   fontFamily="'JetBrains Mono', monospace">
                   {step.value.toFixed(1)}%
                 </text>
@@ -1454,7 +1454,7 @@ function CascadeView() {
       </div>
       <div style={{
         padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 9, color: '#4a4a6a',
+        fontSize: 10, color: '#4a4a6a',
       }}>
         출처: KDA Diabetes Fact Sheet 2024, KNHANES 2019-2022
       </div>
@@ -1465,6 +1465,7 @@ function CascadeView() {
 // ── Multi-Disease Trend Comparison (SVG) ────────────────────
 function TrendsView() {
   const svgRef = useRef(null);
+  const containerRef = useRef(null);
   const [mode, setMode] = useState('prevalence');
   const [hoverInfo, setHoverInfo] = useState(null);
   const [hiddenDiseases, setHiddenDiseases] = useState({});
@@ -1633,7 +1634,7 @@ function TrendsView() {
                 <line x1={marginL} y1={yy} x2={w - marginR} y2={yy}
                   stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
                 <text x={marginL - 6} y={yy + 3} textAnchor="end"
-                  fill="#4a4a6a" fontSize="9" fontFamily="'JetBrains Mono', monospace">
+                  fill="#4a4a6a" fontSize="10" fontFamily="'JetBrains Mono', monospace">
                   {pct}%
                 </text>
               </g>
@@ -1643,7 +1644,7 @@ function TrendsView() {
           {/* X axis labels */}
           {Array.from({ length: Math.floor((maxYear - minYear) / 4) + 1 }, (_, i) => minYear + i * 4).map(yr => (
             <text key={yr} x={xScale(yr)} y={marginT + chartH + 18} textAnchor="middle"
-              fill="#4a4a6a" fontSize="9" fontFamily="'JetBrains Mono', monospace">
+              fill="#4a4a6a" fontSize="10" fontFamily="'JetBrains Mono', monospace">
               {yr}
             </text>
           ))}
@@ -1732,7 +1733,7 @@ function TrendsView() {
               , data[0]);
               if (!closest || Math.abs(closest.year - hoverInfo.year) > 3) return null;
               return (
-                <div key={key} style={{ color: COLORS[key], fontSize: 9 }}>
+                <div key={key} style={{ color: COLORS[key], fontSize: 10 }}>
                   {LABELS[key]}: {closest.value.toFixed(1)}% ({closest.year})
                 </div>
               );
@@ -1772,7 +1773,7 @@ function TrendsView() {
       </div>
       <div style={{
         padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 9, color: '#4a4a6a',
+        fontSize: 10, color: '#4a4a6a',
       }}>
         출처: 고혈압학회 Fact Sheet 2024, 당뇨병학회 Fact Sheet 2024, 지질동맥경화학회 Fact Sheet 2024, KNHANES 1998-2022
       </div>

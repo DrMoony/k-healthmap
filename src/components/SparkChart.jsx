@@ -64,7 +64,7 @@ export default function SparkChart({ data, labels, color, height = 100, showLabe
           />
           <text
             x={width - padding.right - 4} y={avgY - 2}
-            textAnchor="end" fontSize={9} fill="#fff" fontWeight={600} fontFamily="'JetBrains Mono'"
+            textAnchor="end" fontSize={10} fill="#fff" fontWeight={600} fontFamily="'JetBrains Mono'"
           >
             전국 {avgLine.toFixed(1)}%
           </text>
@@ -75,7 +75,7 @@ export default function SparkChart({ data, labels, color, height = 100, showLabe
       {rankText && (
         <text
           x={width - padding.right} y={12}
-          textAnchor="end" fontSize={9} fill="#ccccdd" fontWeight={600} fontFamily="'JetBrains Mono'"
+          textAnchor="end" fontSize={10} fill="#ccccdd" fontWeight={600} fontFamily="'JetBrains Mono'"
         >
           {rankText}
         </text>
@@ -139,7 +139,7 @@ export default function SparkChart({ data, labels, color, height = 100, showLabe
             key={`label-${i}`}
             x={p.x} y={height - 4}
             textAnchor="middle"
-            fontSize={9}
+            fontSize={10}
             fontFamily="'JetBrains Mono'"
             fill={hoveredIdx === i ? color : '#aaaacc'}
             fontWeight={i === data.length - 1 ? 700 : 400}

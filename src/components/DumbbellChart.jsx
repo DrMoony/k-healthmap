@@ -73,7 +73,7 @@ export default function DumbbellChart({ data, label, onItemClick }) {
           x2={xScale(avg)} y2={padT + chartH}
           stroke="#ffd60a" strokeWidth={1} strokeDasharray="4,3" opacity={0.5}
         />
-        <text x={xScale(avg)} y={padT - 7} fill="#ffd60a" fontSize="8"
+        <text x={xScale(avg)} y={padT - 7} fill="#ffd60a" fontSize="9"
           fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.7}>
           평균 {avg.toFixed(1)}%
         </text>
@@ -143,7 +143,7 @@ export default function DumbbellChart({ data, label, onItemClick }) {
                     {d.female}%
                   </text>
                   <text x={(xScale(d.male) + xScale(d.female)) / 2} y={y + 13}
-                    fill="#ffd60a" fontSize="8"
+                    fill="#ffd60a" fontSize="9"
                     fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.8}>
                     gap {d.gap.toFixed(1)}
                   </text>
@@ -159,7 +159,7 @@ export default function DumbbellChart({ data, label, onItemClick }) {
           const step = Math.ceil((maxVal - minVal) / 6);
           for (let v = Math.ceil(minVal); v <= maxVal; v += step) ticks.push(v);
           return ticks.map(v => (
-            <text key={v} x={xScale(v)} y={padT + chartH + 12} fill="#555577" fontSize="8"
+            <text key={v} x={xScale(v)} y={padT + chartH + 12} fill="#555577" fontSize="9"
               fontFamily="JetBrains Mono, monospace" textAnchor="middle">{v}%</text>
           ));
         })()}

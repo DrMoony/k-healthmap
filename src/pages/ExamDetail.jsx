@@ -790,9 +790,9 @@ function KpiCard({ label, value, sub, color }) {
       flex: 1,
       minWidth: 0,
     }}>
-      <div style={{ fontSize: 9, color: NEON.dimText, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</div>
+      <div style={{ fontSize: 10, color: NEON.dimText, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</div>
       <div style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, fontSize: 13, color, lineHeight: 1.2 }}>{value}</div>
-      {sub && <div style={{ fontSize: 9, color: NEON.labelText, marginTop: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{sub}</div>}
+      {sub && <div style={{ fontSize: 10, color: NEON.labelText, marginTop: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{sub}</div>}
     </div>
   );
 }
@@ -810,7 +810,7 @@ function DiseaseCard({ item }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
         <span style={{ fontWeight: 700, fontSize: 11, color: item.color }}>{item.disease}</span>
         <span style={{
-          fontSize: 9,
+          fontSize: 10,
           fontFamily: 'JetBrains Mono',
           background: hexToRgba(item.color, 0.12),
           borderRadius: 4,
@@ -916,7 +916,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
 
           <div style={{ display: 'flex', gap: 10, marginBottom: 4 }}>
             <div>
-              <div style={{ fontSize: 9, color: NEON.dimText }}>이상치율</div>
+              <div style={{ fontSize: 10, color: NEON.dimText }}>이상치율</div>
               <div style={{
                 fontFamily: 'JetBrains Mono', fontWeight: 700, fontSize: 15,
                 color: selAllRates.length > 0
@@ -925,14 +925,14 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
               }}>
                 {selRate.toFixed(1)}%
               </div>
-              <div style={{ fontSize: 9, color: selDiff > 0 ? NEON.magenta : NEON.green }}>
+              <div style={{ fontSize: 10, color: selDiff > 0 ? NEON.magenta : NEON.green }}>
                 전국 대비 {selDiff > 0 ? '+' : ''}{selDiff.toFixed(1)}%p
               </div>
             </div>
           </div>
 
           {/* Category breakdown */}
-          <div style={{ fontSize: 9, color: NEON.dimText, marginBottom: 2 }}>카테고리 분포</div>
+          <div style={{ fontSize: 10, color: NEON.dimText, marginBottom: 2 }}>카테고리 분포</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             {categories.map((cat, ci) => {
               const isAbn = abnormalIndices.includes(ci);

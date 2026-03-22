@@ -198,7 +198,7 @@ export default function RadarProfile({ provinceName, onAxisClick }) {
             fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">
             {provinceName}
           </text>
-          <text x={cx} y={cy + 10} fill="#555577" fontSize="8"
+          <text x={cx} y={cy + 10} fill="#555577" fontSize="9"
             fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">
             외곽 = 나쁨 | --- 전국평균
           </text>

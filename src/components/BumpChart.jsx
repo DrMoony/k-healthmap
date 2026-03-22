@@ -123,7 +123,7 @@ export default function BumpChart({ metric, onProvinceClick }) {
           <g key={r}>
             <line x1={padL} y1={yScale(r)} x2={padL + chartW} y2={yScale(r)}
               stroke="rgba(255,255,255,0.03)" strokeWidth={0.5} />
-            <text x={padL - 6} y={yScale(r) + 3} fill="#555577" fontSize="9"
+            <text x={padL - 6} y={yScale(r) + 3} fill="#555577" fontSize="10"
               fontFamily="JetBrains Mono, monospace" textAnchor="end">{r}</text>
           </g>
         ))}
@@ -159,7 +159,7 @@ export default function BumpChart({ metric, onProvinceClick }) {
                 <text
                   x={validPoints[validPoints.length - 1].x + 6}
                   y={validPoints[validPoints.length - 1].y + 3}
-                  fill={color} fontSize="9" fontFamily="Noto Sans KR, sans-serif"
+                  fill={color} fontSize="10" fontFamily="Noto Sans KR, sans-serif"
                   opacity={dimmed ? 0.2 : 0.7}
                 >{p}</text>
               )}
@@ -195,7 +195,7 @@ export default function BumpChart({ metric, onProvinceClick }) {
               {validPoints.map((pt, i) => (
                 <g key={i}>
                   <circle cx={pt.x} cy={pt.y} r={5} fill={color} stroke="#0a0a0f" strokeWidth={1.5} />
-                  <text x={pt.x} y={pt.y - 9} fill={color} fontSize="9"
+                  <text x={pt.x} y={pt.y - 9} fill={color} fontSize="10"
                     fontFamily="JetBrains Mono, monospace" textAnchor="middle" fontWeight="bold">
                     {ranks[p][YEARS.indexOf(YEARS[points.indexOf(pt) !== -1 ? points.findIndex((pp, idx) => pp === pt) : i])]}
                   </text>
@@ -207,7 +207,7 @@ export default function BumpChart({ metric, onProvinceClick }) {
                 if (r == null) return null;
                 const pt = { x: xScale(yi), y: yScale(r) };
                 return (
-                  <text key={yi} x={pt.x} y={pt.y - 9} fill={color} fontSize="9"
+                  <text key={yi} x={pt.x} y={pt.y - 9} fill={color} fontSize="10"
                     fontFamily="JetBrains Mono, monospace" textAnchor="middle" fontWeight="bold">
                     {r}
                   </text>

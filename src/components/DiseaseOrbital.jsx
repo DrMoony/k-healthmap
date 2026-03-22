@@ -568,7 +568,7 @@ export default function DiseaseOrbital() {
 
             {/* Source */}
             <div style={{
-              color: 'rgba(255,255,255,0.2)', fontSize: 9,
+              color: 'rgba(255,255,255,0.2)', fontSize: 10,
               fontFamily: "'JetBrains Mono', monospace",
               borderTop: '1px solid rgba(255,255,255,0.06)',
               paddingTop: 8, marginTop: 8,
@@ -605,7 +605,7 @@ export default function DiseaseOrbital() {
               width: 6, height: 6, borderRadius: '50%',
               background: l.color, boxShadow: `0 0 4px ${l.color}`,
             }} />
-            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 9 }}>{l.label}</span>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>{l.label}</span>
           </div>
         ))}
       </div>

@@ -170,7 +170,7 @@ export default function Metabolic() {
       ctx.translate(x, LABEL_TOP - 4);
       ctx.rotate(-Math.PI / 4);
       ctx.fillStyle = selectedProv === p ? '#ffd60a' : '#8888aa';
-      ctx.font = selectedProv === p ? 'bold 10px "Noto Sans KR", sans-serif' : '9px "Noto Sans KR", sans-serif';
+      ctx.font = selectedProv === p ? 'bold 11px "Noto Sans KR", sans-serif' : '11px "Noto Sans KR", sans-serif';
       ctx.fillText(p, 0, 0);
       ctx.restore();
     });
@@ -181,7 +181,7 @@ export default function Metabolic() {
     AGE_GROUPS.forEach((a, i) => {
       const y = LABEL_TOP + i * cellH + cellH / 2;
       ctx.fillStyle = selectedAge === a ? '#ffd60a' : '#8888aa';
-      ctx.font = selectedAge === a ? 'bold 10px "JetBrains Mono", monospace' : '9px "JetBrains Mono", monospace';
+      ctx.font = selectedAge === a ? 'bold 11px "JetBrains Mono", monospace' : '11px "JetBrains Mono", monospace';
       ctx.fillText(a, LABEL_LEFT - 4, y);
     });
 
@@ -547,7 +547,7 @@ export default function Metabolic() {
                 x={60 + (nationalAvg / rankMax) * (rankChartW - 110)}
                 y={provRanking.length * (barH + barGap) + 12}
                 fill="#ffd60a"
-                fontSize="9"
+                fontSize="10"
                 fontFamily="JetBrains Mono, monospace"
                 textAnchor="middle"
                 opacity={0.8}
@@ -649,7 +649,7 @@ export default function Metabolic() {
                 { key: 'dumbbell', label: '덤벨' },
               ].map(v => (
                 <button key={v.key} onClick={() => setGenderView(v.key)} style={{
-                  padding: '2px 7px', fontSize: '9px', borderRadius: '4px',
+                  padding: '2px 7px', fontSize: '10px', borderRadius: '4px',
                   border: genderView === v.key ? '1px solid #ff006e' : '1px solid rgba(255,255,255,0.1)',
                   background: genderView === v.key ? '#ff006e22' : 'transparent',
                   color: genderView === v.key ? '#ff006e' : '#888',
@@ -692,10 +692,10 @@ export default function Metabolic() {
                     style={{ cursor: 'pointer' }}
                   >
                     <rect x={x} y={maxBarH - maleH + 5} width={18} height={maleH} rx={3} fill="#00d4ff" opacity={maleOpacity} />
-                    <text x={x + 9} y={maxBarH - maleH} fill="#00d4ff" fontSize="8" fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.9}>{d.male}</text>
+                    <text x={x + 9} y={maxBarH - maleH} fill="#00d4ff" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.9}>{d.male}</text>
                     <rect x={x + 22} y={maxBarH - femaleH + 5} width={18} height={femaleH} rx={3} fill="#ff006e" opacity={femaleOpacity} />
-                    <text x={x + 31} y={maxBarH - femaleH} fill="#ff006e" fontSize="8" fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.9}>{d.female}</text>
-                    <text x={x + 20} y={maxBarH + 20} fill={isSelected ? '#ffd60a' : '#8888aa'} fontSize="9" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">{d.name}</text>
+                    <text x={x + 31} y={maxBarH - femaleH} fill="#ff006e" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.9}>{d.female}</text>
+                    <text x={x + 20} y={maxBarH + 20} fill={isSelected ? '#ffd60a' : '#8888aa'} fontSize="10" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">{d.name}</text>
                     {isSelected && (
                       <rect x={x - 2} y={2} width={44} height={maxBarH + 24} rx={6} fill="none" stroke="#ffd60a44" strokeWidth={1} />
                     )}
@@ -705,7 +705,7 @@ export default function Metabolic() {
               {nationalAvg && (
                 <>
                   <line x1={25} y1={110 - (nationalAvg / genderMax) * 110 + 5} x2={genderCompData.length * 52 + 30} y2={110 - (nationalAvg / genderMax) * 110 + 5} stroke="#ffd60a" strokeWidth={1} strokeDasharray="4,3" opacity={0.5} />
-                  <text x={20} y={110 - (nationalAvg / genderMax) * 110 + 2} fill="#ffd60a" fontSize="8" fontFamily="JetBrains Mono, monospace" textAnchor="end" opacity={0.7}>{nationalAvg}%</text>
+                  <text x={20} y={110 - (nationalAvg / genderMax) * 110 + 2} fill="#ffd60a" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="end" opacity={0.7}>{nationalAvg}%</text>
                 </>
               )}
             </svg>
@@ -732,7 +732,7 @@ export default function Metabolic() {
             paddingBottom: '6px',
             borderBottom: '1px solid rgba(255,255,255,0.06)',
           }}>
-            <span style={{ fontSize: '9px', color: '#555577', flexShrink: 0 }}>선택:</span>
+            <span style={{ fontSize: '10px', color: '#555577', flexShrink: 0 }}>선택:</span>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -758,7 +758,7 @@ export default function Metabolic() {
                   }}
                 >
                   {selectedProv}
-                  <span style={{ fontSize: '8px', opacity: 0.6 }}>x</span>
+                  <span style={{ fontSize: '9px', opacity: 0.6 }}>x</span>
                 </span>
               ) : null}
 
@@ -786,7 +786,7 @@ export default function Metabolic() {
                   }}
                 >
                   {selectedAge}세
-                  <span style={{ fontSize: '8px', opacity: 0.6 }}>x</span>
+                  <span style={{ fontSize: '9px', opacity: 0.6 }}>x</span>
                 </span>
               ) : null}
 
@@ -828,14 +828,14 @@ export default function Metabolic() {
               const maxV = Math.max(...vals, 1);
               return (
                 <div style={{ marginBottom: '6px' }}>
-                  <div style={{ fontSize: '9px', color: color || '#aaaacc', fontWeight: 600, marginBottom: '2px' }}>{label}</div>
+                  <div style={{ fontSize: '10px', color: color || '#aaaacc', fontWeight: 600, marginBottom: '2px' }}>{label}</div>
                   {BMI_CATS.map((cat, ci) => (
                     <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '1px' }}>
-                      <span style={{ fontSize: '8px', color: '#8888aa', width: '52px', textAlign: 'right', flexShrink: 0 }}>{cat}</span>
+                      <span style={{ fontSize: '9px', color: '#8888aa', width: '52px', textAlign: 'right', flexShrink: 0 }}>{cat}</span>
                       <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
                         <div style={{ width: `${(vals[ci] / maxV) * 100}%`, height: '100%', background: BMI_COLORS[ci], opacity: 0.3 + (vals[ci] / maxV) * 0.7, borderRadius: '2px' }} />
                       </div>
-                      <span style={{ fontSize: '8px', color: '#ccccdd', width: '32px', fontFamily: '"JetBrains Mono", monospace' }}>{vals[ci]}%</span>
+                      <span style={{ fontSize: '9px', color: '#ccccdd', width: '32px', fontFamily: '"JetBrains Mono", monospace' }}>{vals[ci]}%</span>
                     </div>
                   ))}
                 </div>
@@ -906,7 +906,7 @@ export default function Metabolic() {
                         <span style={{ fontSize: '10px' }}>{provInsight.statusEmoji}</span>
                         <span style={{ fontSize: '10px', fontWeight: 600, color: '#e0e0ff' }}>{provInsight.title}</span>
                         <span style={{
-                          fontSize: '8px',
+                          fontSize: '9px',
                           padding: '1px 5px',
                           borderRadius: '4px',
                           background: `${provInsight.statusColor}22`,
@@ -918,7 +918,7 @@ export default function Metabolic() {
                         </span>
                       </div>
                       {provInsight.lines.map((line, i) => (
-                        <div key={i} style={{ color: line.color, marginBottom: '1px', fontSize: '9px' }}>
+                        <div key={i} style={{ color: line.color, marginBottom: '1px', fontSize: '10px' }}>
                           <span style={{ marginRight: '3px' }}>{line.icon}</span>
                           {line.text}
                         </div>
@@ -935,10 +935,10 @@ export default function Metabolic() {
                       borderRadius: '6px',
                       borderLeft: '2px solid #00d4ff44',
                     }}>
-                      <div style={{ fontSize: '9px', fontWeight: 600, color: '#00d4ff', marginBottom: '2px' }}>
+                      <div style={{ fontSize: '10px', fontWeight: 600, color: '#00d4ff', marginBottom: '2px' }}>
                         {selectedAge}세 임상 컨텍스트
                       </div>
-                      <div style={{ color: '#bbbbdd', fontSize: '9px' }}>
+                      <div style={{ color: '#bbbbdd', fontSize: '10px' }}>
                         {ageInsight.note}
                       </div>
                     </div>
@@ -953,9 +953,9 @@ export default function Metabolic() {
                   {/* Correlations if available */}
                   {provInsight?.correlations?.length > 0 && (
                     <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
-                      <div style={{ color: '#8888aa', fontSize: '8px', marginBottom: '2px', fontWeight: 600 }}>연관 요인</div>
+                      <div style={{ color: '#8888aa', fontSize: '9px', marginBottom: '2px', fontWeight: 600 }}>연관 요인</div>
                       {provInsight.correlations.slice(0, 2).map((c, i) => (
-                        <div key={i} style={{ color: '#aaaacc', fontSize: '8px', marginBottom: '1px', paddingLeft: '6px' }}>
+                        <div key={i} style={{ color: '#aaaacc', fontSize: '9px', marginBottom: '1px', paddingLeft: '6px' }}>
                           {'• '}{c}
                         </div>
                       ))}

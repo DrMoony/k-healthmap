@@ -239,7 +239,7 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
       ctx.stroke();
 
       ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.font = '10px "JetBrains Mono", monospace';
       ctx.textAlign = 'right';
       ctx.fillText(((4 - i) / 4 * maxVal).toFixed(0), padL - 2, y + 3);
     }
@@ -274,7 +274,7 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
 
       // Value on top
       ctx.fillStyle = isSelected ? '#ffd60a' : '#fff';
-      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.font = '10px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText(d.value.toFixed(1), x + barW / 2, y - 3);
 
@@ -283,7 +283,7 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
       ctx.translate(x + barW / 2, padT + chartH + 6);
       ctx.rotate(Math.PI / 4);
       ctx.fillStyle = isSelected ? '#ffd60a' : '#aaa';
-      ctx.font = '9px "Noto Sans KR", sans-serif';
+      ctx.font = '10px "Noto Sans KR", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(d.label, 0, 0);
       ctx.restore();
@@ -387,13 +387,13 @@ function TrendChart({ category, onYearClick, selectedYear }) {
         {yTicks.map(v => (
           <g key={v}>
             <line x1={padL} y1={yScale(v)} x2={w - padR} y2={yScale(v)} stroke="rgba(255,255,255,0.06)" />
-            <text x={padL - 4} y={yScale(v) + 3} fill="#666" fontSize="9" fontFamily="JetBrains Mono" textAnchor="end">{v}</text>
+            <text x={padL - 4} y={yScale(v) + 3} fill="#666" fontSize="10" fontFamily="JetBrains Mono" textAnchor="end">{v}</text>
           </g>
         ))}
 
         {/* X labels - clickable */}
         {years.map((yr, i) => (
-          <text key={yr} x={xScale(i)} y={h - 6} fill={selectedYear === yr ? '#ffd60a' : '#888'} fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle"
+          <text key={yr} x={xScale(i)} y={h - 6} fill={selectedYear === yr ? '#ffd60a' : '#888'} fontSize="10" fontFamily="JetBrains Mono" textAnchor="middle"
             style={{ cursor: 'pointer' }} onClick={() => onYearClick?.(yr)}
             fontWeight={selectedYear === yr ? 'bold' : 'normal'}>{yr}</text>
         ))}
@@ -439,7 +439,7 @@ function TrendChart({ category, onYearClick, selectedYear }) {
                   onClick={() => onYearClick?.(years[i])}
                 />
               ))}
-              <text x={lastX + 5} y={lastY + 3} fill={lineColor} fontSize="9" fontFamily="Noto Sans KR">{p}</text>
+              <text x={lastX + 5} y={lastY + 3} fill={lineColor} fontSize="10" fontFamily="Noto Sans KR">{p}</text>
             </g>
           );
         })}
@@ -660,11 +660,11 @@ export default function Lifestyle() {
                   <div style={{ fontSize: '10px', color: color || '#ccc', fontWeight: 600, marginBottom: '4px' }}>{label}</div>
                   {catNames.map((c, ci) => (
                     <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '1px' }}>
-                      <span style={{ fontSize: '9px', color: '#8888aa', width: '56px', textAlign: 'right', flexShrink: 0 }}>{c}</span>
+                      <span style={{ fontSize: '10px', color: '#8888aa', width: '56px', textAlign: 'right', flexShrink: 0 }}>{c}</span>
                       <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
                         <div style={{ width: `${(vals[ci] / maxV) * 100}%`, height: '100%', background: cat.color, opacity: 0.3 + (vals[ci] / maxV) * 0.7, borderRadius: '2px' }} />
                       </div>
-                      <span style={{ fontSize: '8px', color: '#ccccdd', width: '36px', fontFamily: '"JetBrains Mono", monospace' }}>{vals[ci]}%</span>
+                      <span style={{ fontSize: '9px', color: '#ccccdd', width: '36px', fontFamily: '"JetBrains Mono", monospace' }}>{vals[ci]}%</span>
                     </div>
                   ))}
                 </div>
@@ -684,7 +684,7 @@ export default function Lifestyle() {
                     <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '4px' }}>
                       {selectedProv}
                     </div>
-                    <div style={{ fontSize: '9px', color: '#8888aa' }}>
+                    <div style={{ fontSize: '10px', color: '#8888aa' }}>
                       {provGender === 'male' ? '남성' : provGender === 'female' ? '여성' : '전체'} 기준
                     </div>
                     <div style={{ fontSize: '10px', color: cat.color, marginTop: '6px', fontWeight: 600 }}>
@@ -710,7 +710,7 @@ export default function Lifestyle() {
                     <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '4px' }}>
                       {selectedAge}세
                     </div>
-                    <div style={{ fontSize: '9px', color: '#8888aa' }}>
+                    <div style={{ fontSize: '10px', color: '#8888aa' }}>
                       {ageGender === 'male' ? '남성' : ageGender === 'female' ? '여성' : '전체'} 기준
                     </div>
                     <div style={{ fontSize: '10px', color: cat.color, marginTop: '6px', fontWeight: 600 }}>
@@ -742,18 +742,18 @@ export default function Lifestyle() {
                     <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffd60a', marginBottom: '4px' }}>
                       {selectedYear}년
                     </div>
-                    <div style={{ fontSize: '9px', color: '#8888aa' }}>
+                    <div style={{ fontSize: '10px', color: '#8888aa' }}>
                       {cat.label} 시도별 현황
                     </div>
                   </div>
                   <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: '4px 12px' }}>
                     {yearVals.map((d, i) => (
                       <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '4px', minWidth: '120px' }}>
-                        <span style={{ fontSize: '9px', color: i < 3 ? cat.color : i >= yearVals.length - 3 ? '#00d4ff' : '#8888aa', width: '24px', textAlign: 'right' }}>{d.name}</span>
+                        <span style={{ fontSize: '10px', color: i < 3 ? cat.color : i >= yearVals.length - 3 ? '#00d4ff' : '#8888aa', width: '24px', textAlign: 'right' }}>{d.name}</span>
                         <div style={{ width: '60px', height: '8px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
                           <div style={{ width: `${(d.value / maxV) * 100}%`, height: '100%', background: i < 3 ? cat.color : '#00d4ff', opacity: 0.3 + (d.value / maxV) * 0.7, borderRadius: '2px' }} />
                         </div>
-                        <span style={{ fontSize: '9px', color: '#ccccdd', fontFamily: '"JetBrains Mono", monospace' }}>{d.value}%</span>
+                        <span style={{ fontSize: '10px', color: '#ccccdd', fontFamily: '"JetBrains Mono", monospace' }}>{d.value}%</span>
                       </div>
                     ))}
                   </div>
