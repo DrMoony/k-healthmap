@@ -3,6 +3,8 @@ import { DISEASE_EPI } from '../data/disease_epi';
 import nafldData from '../data/nafld_2023.json';
 import diabetesData from '../data/diabetes_2024.json';
 import trendsData from '../data/historical_trends.json';
+import cvData from '../data/cardiovascular_2022.json';
+import { DISEASE_TIMESERIES } from '../data/disease_epi';
 import DiseaseOrbital from '../components/DiseaseOrbital';
 import DiseaseSankey from '../components/DiseaseSankey';
 import DiseaseChord from '../components/DiseaseChord';
@@ -1241,14 +1243,14 @@ function MASLDHeatmapView() {
   );
 }
 
-// ── Diabetes Control Cascade (SVG Waterfall) ────────────────
+// ── Diabetes Control Cascade (SVG Funnel) ────────────────────
 function CascadeView() {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const [cascadeDetail, setCascadeDetail] = useState(null);
 
-  // Fixed viewBox — no ResizeObserver needed, SVG scales via preserveAspectRatio
-  const w = 900, h = 500;
+  // Fixed viewBox 900x420
+  const w = 900, h = 420;
 
   // Overall cascade (30+)
   const overall = [
@@ -1272,17 +1274,16 @@ function CascadeView() {
     { value: 9.2 },
   ];
 
-  const marginL = 50;
-  const marginR = 30;
-  const marginT = 70;
-  const marginB = 55;
-  const chartW = w - marginL - marginR;
-  const chartH = h - marginT - marginB;
-  const barCount = overall.length;
-  const gap = chartW / (barCount * 2.5 + 1);
-  const barW = gap * 1.5;
+  // Funnel dimensions
+  const marginT = 52;
+  const marginB = 8;
+  const maxWidth = 580;
+  const cx = w / 2 - 20; // center x, shifted left for right-side labels
+  const stepCount = overall.length;
+  const totalH = h - marginT - marginB;
+  const stepH = totalH / stepCount;
 
-  const getBarColor = (val) => {
+  const getStepColor = (val) => {
     const t = val / 100;
     const r = Math.round(0 + (1 - t) * 255);
     const g = Math.round(212 * t);
@@ -1303,10 +1304,10 @@ function CascadeView() {
           fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a',
           margin: '2px 0 0', letterSpacing: 0.5,
         }}>
-          DIABETES INTEGRATED CONTROL WATERFALL
+          DIABETES INTEGRATED CONTROL FUNNEL
         </p>
       </div>
-      <div style={{ flex: 1, padding: '0 8px 0' }} ref={containerRef}>
+      <div style={{ flex: 1, padding: '0 8px 0', position: 'relative' }} ref={containerRef}>
         <svg ref={svgRef} viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }}
           preserveAspectRatio="xMidYMid meet">
           <defs>
@@ -1316,29 +1317,27 @@ function CascadeView() {
           </defs>
           <rect width={w} height={h} fill="url(#cascGrid)" />
 
-          {/* Y-axis gridlines */}
-          {[0, 25, 50, 75, 100].map(pct => {
-            const yy = marginT + chartH * (1 - pct / 100);
-            return (
-              <g key={pct}>
-                <line x1={marginL} y1={yy} x2={w - marginR} y2={yy}
-                  stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
-                <text x={marginL - 4} y={yy + 3} textAnchor="end"
-                  fill="#4a4a6a" fontSize="10" fontFamily="'JetBrains Mono', monospace">
-                  {pct}%
-                </text>
-              </g>
-            );
-          })}
-
-          {/* Overall bars */}
+          {/* Funnel trapezoids */}
           {overall.map((step, i) => {
-            const x = marginL + gap + i * (barW + gap);
-            const barH = (step.value / 100) * chartH;
-            const y = marginT + chartH - barH;
-            const color = getBarColor(step.value);
-            // Rule 2: bar opacity based on retention value
-            const barOpacity = 0.4 + (step.value / 100) * 0.55;
+            const topW = (step.value / 100) * maxWidth;
+            const bottomW = i < overall.length - 1
+              ? (overall[i + 1].value / 100) * maxWidth
+              : topW * 0.85;
+            const yTop = marginT + i * stepH;
+            const yBottom = yTop + stepH;
+            const color = getStepColor(step.value);
+            const opacity = 0.4 + (step.value / 100) * 0.55;
+
+            // Trapezoid points: top-left, top-right, bottom-right, bottom-left
+            const path = `M${cx - topW / 2},${yTop} L${cx + topW / 2},${yTop} L${cx + bottomW / 2},${yBottom} L${cx - bottomW / 2},${yBottom} Z`;
+
+            // Drop-off between this step and next
+            const dropPct = i < overall.length - 1 ? step.value - overall[i + 1].value : 0;
+            const dropOpacity = dropPct > 1 ? Math.min(dropPct / 40, 0.7) * 0.35 : 0;
+
+            // Young adult comparison bar
+            const youngBarH = Math.max((young[i].value / 100) * stepH * 0.8, 2);
+            const youngBarX = cx + topW / 2 + 30;
 
             return (
               <g key={i} style={{ cursor: 'pointer' }}
@@ -1348,84 +1347,55 @@ function CascadeView() {
                   prevValue: i > 0 ? overall[i - 1].value : null,
                   youngValue: young[i].value,
                 })}>
-                {/* Bar with value-based gradient opacity */}
-                <rect x={x} y={y} width={barW} height={barH}
-                  fill={color} opacity={barOpacity} rx="3" />
-                {/* Glow */}
-                <rect x={x} y={y} width={barW} height={barH}
-                  fill="none" stroke={color} strokeWidth="1" opacity="0.4" rx="3" />
+                {/* Main trapezoid */}
+                <path d={path} fill={color} opacity={opacity} />
+                <path d={path} fill="none" stroke={color} strokeWidth="1" opacity="0.5" />
 
-                {/* Drop-off area with red tint */}
-                {i > 0 && (() => {
-                  const prevX = marginL + gap + (i - 1) * (barW + gap) + barW;
-                  const prevH = (overall[i - 1].value / 100) * chartH;
-                  const prevY = marginT + chartH - prevH;
-                  const dropPct = overall[i - 1].value - step.value;
-                  const dropOpacity = Math.min(dropPct / 50, 0.6) * 0.3;
-                  return (
-                    <g>
-                      {/* Red drop zone */}
-                      {dropPct > 1 && (
-                        <rect x={prevX} y={Math.min(prevY, y)}
-                          width={x - prevX} height={Math.abs(y - prevY) + 2}
-                          fill="#ff2222" opacity={dropOpacity} rx="2" />
-                      )}
-                      <line x1={prevX} y1={prevY + 2} x2={x} y2={y + 2}
-                        stroke="#ff4444" strokeWidth="1" strokeDasharray="4 3" opacity="0.5" />
-                      {dropPct > 1 && (
-                        <text x={(prevX + x) / 2} y={Math.min(prevY, y) - 4}
-                          textAnchor="middle" fill="#ff6666" fontSize="9"
-                          fontFamily="'JetBrains Mono', monospace">
-                          -{dropPct.toFixed(1)}%p
-                        </text>
-                      )}
-                    </g>
-                  );
-                })()}
+                {/* Drop-off red tint in the angled gap areas */}
+                {dropPct > 1 && (
+                  <g>
+                    <path d={`M${cx - topW / 2},${yTop} L${cx - topW / 2},${yBottom} L${cx - bottomW / 2},${yBottom} Z`}
+                      fill="#ff2222" opacity={dropOpacity} />
+                    <path d={`M${cx + topW / 2},${yTop} L${cx + topW / 2},${yBottom} L${cx + bottomW / 2},${yBottom} Z`}
+                      fill="#ff2222" opacity={dropOpacity} />
+                  </g>
+                )}
 
-                {/* Value label */}
-                <text x={x + barW / 2} y={y - 6} textAnchor="middle"
-                  fill={color} fontSize="12" fontWeight="700"
-                  fontFamily="'JetBrains Mono', monospace">
-                  {step.value.toFixed(1)}%
-                </text>
-
-                {/* Bottom label */}
-                <text x={x + barW / 2} y={marginT + chartH + 16} textAnchor="middle"
+                {/* Step label - left side */}
+                <text x={cx - topW / 2 - 10} y={yTop + stepH / 2 + 1} textAnchor="end"
                   fill="#aaaacc" fontSize="11" fontFamily="'Noto Sans KR', sans-serif" fontWeight="600">
                   {step.label}
                 </text>
-                <text x={x + barW / 2} y={marginT + chartH + 30} textAnchor="middle"
+                <text x={cx - topW / 2 - 10} y={yTop + stepH / 2 + 14} textAnchor="end"
                   fill="#4a4a6a" fontSize="9" fontFamily="'JetBrains Mono', monospace">
                   {step.sub}
                 </text>
-              </g>
-            );
-          })}
 
-          {/* Young adult overlay line */}
-          {young.map((step, i) => {
-            const x = marginL + gap + i * (barW + gap) + barW / 2;
-            const y = marginT + chartH * (1 - step.value / 100);
-            return (
-              <g key={`young-${i}`} style={{ cursor: 'pointer' }}
-                onClick={() => setCascadeDetail({
-                  type: 'young', label: overall[i].label, sub: overall[i].sub,
-                  youngValue: step.value, overallValue: overall[i].value,
-                  gap: (overall[i].value - step.value).toFixed(1),
-                })}>
-                <circle cx={x} cy={y} r="6" fill="transparent" />
-                <circle cx={x} cy={y} r="4" fill="#ff006e" stroke="#ff006e44" strokeWidth="2" />
-                {i < young.length - 1 && (() => {
-                  const nx = marginL + gap + (i + 1) * (barW + gap) + barW / 2;
-                  const ny = marginT + chartH * (1 - young[i + 1].value / 100);
-                  return <line x1={x} y1={y} x2={nx} y2={ny} stroke="#ff006e" strokeWidth="1.5" opacity="0.7" />;
-                })()}
-                {/* Young adult value */}
-                <text x={x} y={y - 10} textAnchor="middle"
-                  fill="#ff006e" fontSize="10" fontWeight="600"
-                  fontFamily="'JetBrains Mono', monospace">
+                {/* Value label - center */}
+                <text x={cx} y={yTop + stepH / 2 + 2} textAnchor="middle"
+                  fill="#ffffff" fontSize="14" fontWeight="700"
+                  fontFamily="'JetBrains Mono', monospace"
+                  style={{ textShadow: '0 0 8px rgba(0,0,0,0.8)' }}>
                   {step.value.toFixed(1)}%
+                </text>
+
+                {/* Drop amount - right of funnel */}
+                {dropPct > 1 && (
+                  <text x={cx + topW / 2 + 10} y={yTop + stepH - 2} textAnchor="start"
+                    fill="#ff6666" fontSize="9" fontWeight="600"
+                    fontFamily="'JetBrains Mono', monospace">
+                    ▼ {dropPct.toFixed(1)}%p
+                  </text>
+                )}
+
+                {/* Young adult comparison bar */}
+                <rect x={youngBarX} y={yTop + (stepH - youngBarH) / 2}
+                  width={6} height={youngBarH}
+                  fill="#ff006e" opacity="0.7" rx="2" />
+                <text x={youngBarX + 12} y={yTop + stepH / 2 + 3} textAnchor="start"
+                  fill="#ff006e" fontSize="9" fontWeight="600"
+                  fontFamily="'JetBrains Mono', monospace">
+                  {young[i].value.toFixed(1)}%
                 </text>
               </g>
             );
@@ -1433,14 +1403,15 @@ function CascadeView() {
 
           {/* Legend */}
           <g>
-            <rect x={w - 200} y={12} width={180} height={44} rx="6"
+            <rect x={w - 200} y={8} width={185} height={38} rx="6"
               fill="#0d0d1aee" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
-            <rect x={w - 190} y={24} width={12} height={8} rx="2" fill="#00d4ff" opacity="0.8" />
-            <text x={w - 174} y={32} fill="#aaaacc" fontSize="10" fontFamily="'Noto Sans KR', sans-serif">
+            <path d={`M${w - 192},${18} L${w - 178},${18} L${w - 180},${28} L${w - 190},${28} Z`}
+              fill="#00d4ff" opacity="0.7" />
+            <text x={w - 174} y={26} fill="#aaaacc" fontSize="10" fontFamily="'Noto Sans KR', sans-serif">
               30세 이상 전체
             </text>
-            <circle cx={w - 184} cy={46} r="3" fill="#ff006e" />
-            <text x={w - 174} y={49} fill="#ff006e" fontSize="10" fontFamily="'Noto Sans KR', sans-serif">
+            <rect x={w - 190} y={33} width={6} height={8} rx="2" fill="#ff006e" opacity="0.7" />
+            <text x={w - 174} y={41} fill="#ff006e" fontSize="10" fontFamily="'Noto Sans KR', sans-serif">
               19-39세 청년층
             </text>
           </g>
@@ -1521,8 +1492,8 @@ function TrendsView() {
   const [hiddenDiseases, setHiddenDiseases] = useState({});
   const [pointDetail, setPointDetail] = useState(null);
 
-  // Fixed viewBox — wider aspect ratio to prevent bottom clipping
-  const w = 900, h = 420;
+  // Fixed viewBox — reduced height to prevent bottom clipping
+  const w = 900, h = 380;
   const marginL = 50;
   const marginR = 30;
   const marginT = 40;
@@ -1541,6 +1512,15 @@ function TrendsView() {
     dyslipidemia: '이상지질혈증',
   };
 
+  const isIncidenceMode = mode === 'incidence';
+
+  // Different colors/labels for incidence mode (MI, Stroke, NAFLD)
+  const INCIDENCE_COLORS = { mi: '#ff4444', stroke: '#ff8800', nafld: '#66ff66' };
+  const INCIDENCE_LABELS = { mi: '심근경색', stroke: '뇌졸중', nafld: 'MASLD' };
+
+  const activeColors = isIncidenceMode ? INCIDENCE_COLORS : COLORS;
+  const activeLabels = isIncidenceMode ? INCIDENCE_LABELS : LABELS;
+
   // Build prevalence series
   const buildPrevalenceSeries = () => {
     const htData = trendsData.hypertension_historical.prevalence_by_year;
@@ -1552,7 +1532,6 @@ function TrendsView() {
       dyslipidemia: [],
     };
 
-    // Diabetes - map period keys to approximate years
     const dbPrev = trendsData.diabetes_historical.prevalence_by_year;
     const dbMapping = [
       ['1998-2005', 2002], ['2007-2009', 2008], ['2010-2012', 2011],
@@ -1562,7 +1541,6 @@ function TrendsView() {
       if (dbPrev[key] != null) series.diabetes.push({ year: yr, value: dbPrev[key] });
     }
 
-    // Dyslipidemia
     const dlPrev = trendsData.dyslipidemia_historical.overall_dyslipidemia_prevalence;
     const dlMapping = [
       ['2005-2009', 2007], ['2010-2012', 2011], ['2013-2015', 2014],
@@ -1600,15 +1578,113 @@ function TrendsView() {
     return series;
   };
 
-  const series = mode === 'prevalence' ? buildPrevalenceSeries() : buildAwarenessSeries();
+  // Build treatment series (치료율)
+  const buildTreatmentSeries = () => {
+    const series = { hypertension: [], diabetes: [], dyslipidemia: [] };
+
+    const htTx = trendsData.hypertension_historical.treatment_by_year;
+    const htMapping = [['1998', 1998], ['2007-2009', 2008], ['2013-2015', 2014], ['2020', 2020], ['2021', 2021]];
+    for (const [key, yr] of htMapping) {
+      if (htTx[key] != null) series.hypertension.push({ year: yr, value: htTx[key] });
+    }
+
+    const dbTx = trendsData.diabetes_historical.treatment_by_year;
+    const dbMapping = [['2007-2009', 2008], ['2013-2016', 2015], ['2016-2018', 2017], ['2019-2020', 2020], ['2021-2022', 2022]];
+    for (const [key, yr] of dbMapping) {
+      if (dbTx[key] != null) series.diabetes.push({ year: yr, value: dbTx[key] });
+    }
+
+    const dlTx = trendsData.dyslipidemia_historical.treatment_by_period;
+    const dlMapping = [['2005-2009', 2007], ['2010-2012', 2011], ['2013-2015', 2014], ['2016-2019', 2018], ['2020-2022', 2021]];
+    for (const [key, yr] of dlMapping) {
+      if (dlTx[key] != null) series.dyslipidemia.push({ year: yr, value: dlTx[key] });
+    }
+
+    return series;
+  };
+
+  // Build control series (조절률)
+  const buildControlSeries = () => {
+    const series = { hypertension: [], diabetes: [], dyslipidemia: [] };
+
+    const htCtrl = trendsData.hypertension_historical.control_by_year;
+    const htMapping = [['1998', 1998], ['2007-2009', 2008], ['2013-2015', 2014], ['2020', 2020], ['2021', 2021]];
+    for (const [key, yr] of htMapping) {
+      if (htCtrl[key] != null) series.hypertension.push({ year: yr, value: htCtrl[key] });
+    }
+
+    // Diabetes control: use HbA1c <6.5% rates
+    const dbCtrl = trendsData.diabetes_historical.control_by_year.hba1c_less_than_6_5_percent || trendsData.diabetes_historical.control_by_year['hba1c_less_than_6.5_percent'];
+    if (dbCtrl) {
+      const dbMapping = [['2013-2014', 2014], ['2016-2018', 2017], ['2019-2020', 2020], ['2021-2022', 2022]];
+      for (const [key, yr] of dbMapping) {
+        if (dbCtrl[key] != null) series.diabetes.push({ year: yr, value: dbCtrl[key] });
+      }
+    }
+
+    const dlCtrl = trendsData.dyslipidemia_historical.control_among_prevalence;
+    const dlMapping = [['2005-2009', 2007], ['2010-2012', 2011], ['2013-2015', 2014], ['2016-2019', 2018], ['2020-2022', 2021]];
+    for (const [key, yr] of dlMapping) {
+      if (dlCtrl[key] != null) series.dyslipidemia.push({ year: yr, value: dlCtrl[key] });
+    }
+
+    return series;
+  };
+
+  // Build incidence series (발생건수) — MI, Stroke, NAFLD
+  const buildIncidenceSeries = () => {
+    const series = { mi: [], stroke: [], nafld: [] };
+
+    const mi = DISEASE_TIMESERIES.mi_incidence;
+    mi.years.forEach((yr, i) => series.mi.push({ year: yr, value: mi.cases[i] }));
+
+    const st = DISEASE_TIMESERIES.stroke_incidence;
+    st.years.forEach((yr, i) => series.stroke.push({ year: yr, value: st.cases[i] }));
+
+    const nf = DISEASE_TIMESERIES.nafld_incidence;
+    nf.years.forEach((yr, i) => series.nafld.push({ year: yr, value: nf.cases[i] }));
+
+    return series;
+  };
+
+  const TREND_MODES = [
+    { id: 'prevalence', label: '유병률' },
+    { id: 'awareness', label: '인지율' },
+    { id: 'treatment', label: '치료율' },
+    { id: 'control', label: '조절률' },
+    { id: 'incidence', label: '발생건수' },
+  ];
+
+  const MODE_LABELS = {
+    prevalence: '유병률', awareness: '인지율', treatment: '치료율',
+    control: '조절률', incidence: '발생건수',
+  };
+
+  const buildSeries = () => {
+    switch (mode) {
+      case 'prevalence': return buildPrevalenceSeries();
+      case 'awareness': return buildAwarenessSeries();
+      case 'treatment': return buildTreatmentSeries();
+      case 'control': return buildControlSeries();
+      case 'incidence': return buildIncidenceSeries();
+      default: return buildPrevalenceSeries();
+    }
+  };
+
+  const series = buildSeries();
 
   // Compute axes
   const allYears = Object.values(series).flatMap(s => s.map(d => d.year));
   const allValues = Object.values(series).flatMap(s => s.map(d => d.value));
   const minYear = Math.min(...allYears);
   const maxYear = Math.max(...allYears);
-  const minVal = Math.floor(Math.min(...allValues) / 5) * 5;
-  const maxVal = Math.ceil(Math.max(...allValues) / 5) * 5 + 5;
+
+  // For incidence, values are large integers; for percentages, step by 5
+  const valStep = isIncidenceMode
+    ? (() => { const range = Math.max(...allValues) - Math.min(...allValues); if (range > 1000000) return 500000; if (range > 100000) return 200000; return 50000; })()
+    : 5;
+  const minVal = Math.floor(Math.min(...allValues) / valStep) * valStep;
+  const maxVal = Math.ceil(Math.max(...allValues) / valStep) * valStep + valStep;
 
   const xScale = (yr) => marginL + ((yr - minYear) / (maxYear - minYear)) * chartW;
   const yScale = (val) => marginT + chartH * (1 - (val - minVal) / (maxVal - minVal));
@@ -1638,25 +1714,22 @@ function TrendsView() {
             MULTI-DISEASE TREND COMPARISON 1998-2022
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {[
-            { id: 'prevalence', label: '유병률' },
-            { id: 'awareness', label: '인지율' },
-          ].map(m => (
-            <button key={m.id} onClick={() => setMode(m.id)} style={{
-              padding: '4px 14px', borderRadius: 14,
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {TREND_MODES.map(m => (
+            <button key={m.id} onClick={() => { setMode(m.id); setHiddenDiseases({}); setPointDetail(null); }} style={{
+              padding: '4px 12px', borderRadius: 14,
               border: `1px solid ${mode === m.id ? '#b388ff44' : 'rgba(255,255,255,0.1)'}`,
               background: mode === m.id ? 'rgba(179,136,255,0.15)' : 'transparent',
               color: mode === m.id ? '#b388ff' : '#6666aa',
-              fontFamily: "'Noto Sans KR', sans-serif", fontSize: 12, fontWeight: 600, cursor: 'pointer',
+              fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, fontWeight: 600, cursor: 'pointer',
             }}>
               {m.label}
             </button>
           ))}
         </div>
       </div>
-      <div style={{ flex: 1, padding: '0 8px 0', position: 'relative' }} ref={containerRef}>
-        <svg ref={svgRef} viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }}
+      <div style={{ flex: 1, minHeight: 0, padding: '0 8px 0', position: 'relative', overflow: 'visible' }} ref={containerRef}>
+        <svg ref={svgRef} viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', display: 'block' }}
           preserveAspectRatio="xMidYMid meet"
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
@@ -1678,7 +1751,7 @@ function TrendsView() {
           <rect width={w} height={h} fill="url(#trendGrid)" />
 
           {/* Y gridlines */}
-          {Array.from({ length: Math.round((maxVal - minVal) / 5) + 1 }, (_, i) => minVal + i * 5).map(pct => {
+          {Array.from({ length: Math.round((maxVal - minVal) / valStep) + 1 }, (_, i) => minVal + i * valStep).map(pct => {
             const yy = yScale(pct);
             return (
               <g key={pct}>
@@ -1686,7 +1759,7 @@ function TrendsView() {
                   stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
                 <text x={marginL - 6} y={yy + 3} textAnchor="end"
                   fill="#4a4a6a" fontSize="10" fontFamily="'JetBrains Mono', monospace">
-                  {pct}%
+                  {isIncidenceMode ? (pct >= 1000000 ? `${(pct / 10000).toFixed(0)}만` : pct >= 10000 ? `${(pct / 10000).toFixed(1)}만` : pct.toLocaleString()) : `${pct}%`}
                 </text>
               </g>
             );
@@ -1702,24 +1775,20 @@ function TrendsView() {
 
           {/* Lines */}
           {Object.entries(series).map(([disease, data]) => {
-            if (hiddenDiseases[disease]) return null;
-            // Rule 2: line thickness based on max prevalence magnitude
+            if (hiddenDiseases[disease] || data.length === 0) return null;
             const maxDiseaseVal = Math.max(...data.map(d => d.value), 1);
             const lineWidth = 1.2 + (maxDiseaseVal / maxVal) * 2.5;
             const glowWidth = lineWidth * 2.5;
+            const color = activeColors[disease] || '#888';
             return (
               <g key={disease}>
-                {/* Glow line */}
-                <path d={buildPath(data)} fill="none" stroke={COLORS[disease]}
+                <path d={buildPath(data)} fill="none" stroke={color}
                   strokeWidth={glowWidth} opacity="0.15" />
-                {/* Main line */}
-                <path d={buildPath(data)} fill="none" stroke={COLORS[disease]}
+                <path d={buildPath(data)} fill="none" stroke={color}
                   strokeWidth={lineWidth} opacity="0.9" strokeLinejoin="round" />
-                {/* Clickable data points */}
                 {data.map((d, i) => (
                   <g key={i} style={{ cursor: 'pointer' }}
                     onClick={() => {
-                      // Gather all diseases' values for this year
                       const yearData = {};
                       Object.entries(series).forEach(([dk, dd]) => {
                         const match = dd.find(p => p.year === d.year);
@@ -1729,7 +1798,7 @@ function TrendsView() {
                     }}>
                     <circle cx={xScale(d.year)} cy={yScale(d.value)} r="8" fill="transparent" />
                     <circle cx={xScale(d.year)} cy={yScale(d.value)} r="3.5"
-                      fill="#0a0a0f" stroke={COLORS[disease]} strokeWidth="1.5" />
+                      fill="#0a0a0f" stroke={color} strokeWidth="1.5" />
                   </g>
                 ))}
               </g>
@@ -1744,18 +1813,19 @@ function TrendsView() {
 
           {/* Clickable Legend (toggle disease lines) */}
           <g>
-            {Object.entries(LABELS).map(([key, label], i) => {
+            {Object.entries(activeLabels).map(([key, label], i) => {
               const isHidden = hiddenDiseases[key];
+              const color = activeColors[key] || '#888';
               return (
                 <g key={key} transform={`translate(${marginL + 10 + i * 130}, ${marginT - 20})`}
                   style={{ cursor: 'pointer' }}
                   onClick={() => setHiddenDiseases(prev => ({ ...prev, [key]: !prev[key] }))}>
                   <rect x="-4" y="-10" width="120" height="20" fill="transparent" />
-                  <line x1="0" y1="0" x2="18" y2="0" stroke={COLORS[key]} strokeWidth="2.5"
+                  <line x1="0" y1="0" x2="18" y2="0" stroke={color} strokeWidth="2.5"
                     opacity={isHidden ? 0.2 : 1} />
                   <circle cx="9" cy="0" r="3" fill={isHidden ? '#333' : '#0a0a0f'}
-                    stroke={COLORS[key]} strokeWidth="1.5" opacity={isHidden ? 0.2 : 1} />
-                  <text x="24" y="4" fill={COLORS[key]} fontSize="11"
+                    stroke={color} strokeWidth="1.5" opacity={isHidden ? 0.2 : 1} />
+                  <text x="24" y="4" fill={color} fontSize="11"
                     fontFamily="'Noto Sans KR', sans-serif" fontWeight="600"
                     opacity={isHidden ? 0.3 : 1}
                     textDecoration={isHidden ? 'line-through' : 'none'}>
@@ -1778,14 +1848,17 @@ function TrendsView() {
           }}>
             <div style={{ fontWeight: 700, marginBottom: 3 }}>{hoverInfo.year}</div>
             {Object.entries(series).map(([key, data]) => {
-              if (hiddenDiseases[key]) return null;
+              if (hiddenDiseases[key] || data.length === 0) return null;
               const closest = data.reduce((prev, curr) =>
                 Math.abs(curr.year - hoverInfo.year) < Math.abs(prev.year - hoverInfo.year) ? curr : prev
               , data[0]);
               if (!closest || Math.abs(closest.year - hoverInfo.year) > 3) return null;
+              const color = activeColors[key] || '#888';
+              const label = activeLabels[key] || key;
+              const valStr = isIncidenceMode ? `${closest.value.toLocaleString()}건` : `${closest.value.toFixed(1)}%`;
               return (
-                <div key={key} style={{ color: COLORS[key], fontSize: 10 }}>
-                  {LABELS[key]}: {closest.value.toFixed(1)}% ({closest.year})
+                <div key={key} style={{ color, fontSize: 10 }}>
+                  {label}: {valStr} ({closest.year})
                 </div>
               );
             })}
@@ -1808,17 +1881,22 @@ function TrendsView() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>x</button>
             <h4 style={{ color: '#b388ff', margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-              {pointDetail.year}년 {mode === 'prevalence' ? '유병률' : '인지율'}
+              {pointDetail.year}년 {MODE_LABELS[mode] || mode}
             </h4>
-            {Object.entries(pointDetail.allDiseases).map(([key, val]) => (
-              <div key={key} style={{
-                display: 'flex', justifyContent: 'space-between', padding: '4px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.04)',
-              }}>
-                <span style={{ color: COLORS[key], fontSize: 12, fontFamily: "'Noto Sans KR', sans-serif" }}>{LABELS[key]}</span>
-                <span style={{ color: COLORS[key], fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{val.toFixed(1)}%</span>
-              </div>
-            ))}
+            {Object.entries(pointDetail.allDiseases).map(([key, val]) => {
+              const color = activeColors[key] || '#888';
+              const label = activeLabels[key] || key;
+              const valStr = isIncidenceMode ? `${val.toLocaleString()}건/년` : `${val.toFixed(1)}%`;
+              return (
+                <div key={key} style={{
+                  display: 'flex', justifyContent: 'space-between', padding: '4px 0',
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                }}>
+                  <span style={{ color, fontSize: 12, fontFamily: "'Noto Sans KR', sans-serif" }}>{label}</span>
+                  <span style={{ color, fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{valStr}</span>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -1826,7 +1904,7 @@ function TrendsView() {
         padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
         fontSize: 10, color: '#4a4a6a',
       }}>
-        출처: 고혈압학회 Fact Sheet 2024, 당뇨병학회 Fact Sheet 2024, 지질동맥경화학회 Fact Sheet 2024, KNHANES 1998-2022
+        출처: 고혈압학회, 당뇨병학회, 지질동맥경화학회 Fact Sheet 2024, 질병관리청 심뇌혈관 발생통계 2022, KASL NAFLD Fact Sheet 2023
       </div>
     </div>
   );

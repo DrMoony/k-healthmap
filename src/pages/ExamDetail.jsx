@@ -246,11 +246,15 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [canvasWidth, setCanvasWidth] = useState(600);
+  const [canvasHeight, setCanvasHeight] = useState(400);
   const [tooltip, setTooltip] = useState(null);
 
   useEffect(() => {
     const ro = new ResizeObserver(entries => {
-      for (const entry of entries) setCanvasWidth(Math.floor(entry.contentRect.width));
+      for (const entry of entries) {
+        setCanvasWidth(Math.floor(entry.contentRect.width));
+        setCanvasHeight(Math.floor(entry.contentRect.height));
+      }
     });
     if (containerRef.current) ro.observe(containerRef.current);
     return () => ro.disconnect();
@@ -280,7 +284,7 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
     const w = canvasWidth;
-    const h = height;
+    const h = Math.max(canvasHeight, 200);
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -378,16 +382,16 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
       ctx.textAlign = 'right';
       ctx.fillText(d.label, ml - 6, y + barH / 2 + 3.5);
     });
-  }, [sortedData, canvasWidth, height, maxRate, minRate, nationalAvg]);
+  }, [sortedData, canvasWidth, canvasHeight, maxRate, minRate, nationalAvg]);
 
   useEffect(() => { draw(); }, [draw]);
 
   const getIdxFromY = useCallback((my) => {
     const mt2 = 8, mb2 = 8;
-    const ch2 = height - mt2 - mb2;
+    const ch2 = canvasHeight - mt2 - mb2;
     const rowH2 = ch2 / sortedData.length;
     return Math.floor((my - mt2) / rowH2);
-  }, [sortedData.length, height]);
+  }, [sortedData.length, canvasHeight]);
 
   const handleMouseMove = useCallback((e) => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -415,10 +419,10 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
   }, [sortedData, getIdxFromY, onBarClick]);
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas
         ref={canvasRef}
-        style={{ width: '100%', height, display: 'block', cursor: 'crosshair' }}
+        style={{ width: '100%', height: '100%', display: 'block', cursor: 'crosshair' }}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setTooltip(null)}
         onClick={handleClick}
@@ -456,10 +460,14 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
   const containerRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const [canvasWidth, setCanvasWidth] = useState(600);
+  const [canvasHeight, setCanvasHeight] = useState(400);
 
   useEffect(() => {
     const ro = new ResizeObserver(entries => {
-      for (const entry of entries) setCanvasWidth(Math.floor(entry.contentRect.width));
+      for (const entry of entries) {
+        setCanvasWidth(Math.floor(entry.contentRect.width));
+        setCanvasHeight(Math.floor(entry.contentRect.height));
+      }
     });
     if (containerRef.current) ro.observe(containerRef.current);
     return () => ro.disconnect();
@@ -471,7 +479,7 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
     const w = canvasWidth;
-    const h = height;
+    const h = Math.max(canvasHeight, 200);
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -553,14 +561,14 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
       ctx.fillText(label, 0, 0);
       ctx.restore();
     });
-  }, [labels, dataObj, categories, gender, abnormalIndices, nationalAvg, canvasWidth, height, highlightCat]);
+  }, [labels, dataObj, categories, gender, abnormalIndices, nationalAvg, canvasWidth, canvasHeight, highlightCat]);
 
   useEffect(() => { draw(); }, [draw]);
 
   const getBarInfo = useCallback((mx, my) => {
     const ml2 = 50, mt2 = 18, mb2 = 56;
     const cw2 = canvasWidth - ml2 - 15;
-    const ch2 = height - mt2 - mb2;
+    const ch2 = canvasHeight - mt2 - mb2;
     const gap2 = cw2 / labels.length;
     const idx = Math.floor((mx - ml2) / gap2);
     if (idx < 0 || idx >= labels.length || my < mt2 || my > mt2 + ch2) return null;
@@ -579,7 +587,7 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
       cumY += bh;
     }
     return { idx, label, vals, catIdx: -1 };
-  }, [labels, dataObj, gender, canvasWidth, height]);
+  }, [labels, dataObj, gender, canvasWidth, canvasHeight]);
 
   const handleMouseMove = useCallback((e) => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -600,10 +608,10 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
   }, [getBarInfo, onSegmentClick]);
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas
         ref={canvasRef}
-        style={{ width: '100%', height, display: 'block', cursor: 'crosshair' }}
+        style={{ width: '100%', height: '100%', display: 'block', cursor: 'crosshair' }}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setTooltip(null)}
         onClick={handleStackedClick}
@@ -871,17 +879,16 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
   return (
     <div style={{
       display: 'flex',
-      flexDirection: 'column',
-      gap: 8,
+      flexDirection: 'row',
+      gap: 12,
       height: '100%',
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      paddingRight: 2,
-      /* custom scrollbar */
+      overflowX: 'auto',
+      overflowY: 'hidden',
+      paddingBottom: 2,
     }}>
-      {/* KPI Cards */}
+      {/* KPI Cards - Left Section */}
       {hasAbnormal && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, flexShrink: 0 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4, flexShrink: 0, minWidth: 240 }}>
           <KpiCard label="전국 이상치율" value={natAvgProv.toFixed(1) + '%'} color={NEON.magenta} />
           <KpiCard label="최고 시도" value={highest?.rate.toFixed(1) + '%'} sub={highest?.name} color="#ff6b6b" />
           <KpiCard label="최저 시도" value={lowest?.rate.toFixed(1) + '%'} sub={lowest?.name} color={NEON.green} />
@@ -889,7 +896,8 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
         </div>
       )}
 
-      {/* Selected Detail */}
+      {/* Middle Section: Selected Detail + Disease Correlations */}
+      <div style={{ flex: 1, minWidth: 200, display: 'flex', flexDirection: 'row', gap: 10, overflowX: 'auto' }}>
       {selLabel && hasAbnormal && (
         <div style={{
           background: 'rgba(10,10,20,0.92)',
@@ -897,6 +905,9 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           borderRadius: 10,
           padding: '8px 10px',
           flexShrink: 0,
+          minWidth: 220,
+          maxWidth: 300,
+          overflowY: 'auto',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
             <span style={{ fontWeight: 700, fontSize: 12, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.cyan) }}>{selLabel}</span>
@@ -992,7 +1003,8 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
         </div>
       )}
 
-      {/* Clinical Threshold Reference */}
+      </div>
+      {/* Right Section: Clinical Threshold Reference */}
       {examData.ref && (
         <div style={{
           background: 'rgba(255,255,255,0.02)',
@@ -1000,6 +1012,9 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           borderRadius: 8,
           padding: '6px 8px',
           flexShrink: 0,
+          minWidth: 200,
+          maxWidth: 260,
+          overflowY: 'auto',
         }}>
           <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Noto Sans KR', color: NEON.bodyText, marginBottom: 4 }}>
             판정 기준
@@ -1025,6 +1040,8 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           padding: '12px 8px', lineHeight: 1.5,
           border: `1px dashed rgba(255,255,255,0.08)`,
           borderRadius: 8,
+          alignSelf: 'center',
+          minWidth: 180,
         }}>
           차트에서 시도 또는 연령대를 클릭하면<br />상세 분석이 여기에 표시됩니다
         </div>
@@ -1119,16 +1136,14 @@ export default function ExamDetail() {
 
   const insight = generateInsight(examData, selectedExam, abnormalIndices, genderProv, genderAge);
 
-  // Chart height — FIXED, never shrinks
-  const CHART_HEIGHT = 340;
 
   return (
     <div style={{
       height: 'calc(100vh - 56px)',
       marginTop: 56,
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr 320px',
-      gridTemplateRows: 'auto 1fr',
+      gridTemplateColumns: '1fr 1fr',
+      gridTemplateRows: 'auto 1fr auto',
       gap: 10,
       padding: 12,
       overflow: 'hidden',
@@ -1259,7 +1274,6 @@ export default function ExamDetail() {
               gender={genderProv}
               abnormalIndices={abnormalIndices}
               nationalAvg={natAvgProv}
-              height={CHART_HEIGHT}
               sortMode={sortProv}
               onBarClick={(label) => { setSelectedProv(prev => prev === label ? null : label); setSelectedAge(null); }}
             />
@@ -1272,7 +1286,6 @@ export default function ExamDetail() {
                 gender={genderProv}
                 abnormalIndices={abnormalIndices}
                 nationalAvg={natAvgProv}
-                height={CHART_HEIGHT}
                 highlightCat={highlightCat}
                 onSegmentClick={(label) => { setSelectedProv(label); setSelectedAge(null); }}
               />
@@ -1319,7 +1332,6 @@ export default function ExamDetail() {
               gender={genderAge}
               abnormalIndices={abnormalIndices}
               nationalAvg={natAvgAge}
-              height={CHART_HEIGHT}
               sortMode={sortAge}
               onBarClick={(label) => { setSelectedAge(prev => prev === label ? null : label); setSelectedProv(null); }}
             />
@@ -1332,7 +1344,6 @@ export default function ExamDetail() {
                 gender={genderAge}
                 abnormalIndices={abnormalIndices}
                 nationalAvg={natAvgAge}
-                height={CHART_HEIGHT}
                 highlightCat={highlightCat}
                 onSegmentClick={(label) => { setSelectedAge(label); setSelectedProv(null); }}
               />
@@ -1342,8 +1353,8 @@ export default function ExamDetail() {
         </div>
       </Panel>
 
-      {/* ─── Analysis Panel (Col 3) ────────────────────────────────── */}
-      <Panel style={{ minHeight: 0, overflow: 'hidden' }}>
+      {/* ─── Analysis Panel (Bottom Row, Full Width) ──────────────── */}
+      <Panel style={{ gridColumn: '1 / -1', maxHeight: 200, overflow: 'hidden' }}>
         <div style={{ fontSize: 12, fontWeight: 700, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.bodyText), marginBottom: 6, flexShrink: 0 }}>
           분석 패널
         </div>
