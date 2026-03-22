@@ -7,7 +7,7 @@ import cvData from '../data/cardiovascular_2022.json';
 import { DISEASE_TIMESERIES } from '../data/disease_epi';
 import DiseaseOrbital from '../components/DiseaseOrbital';
 import DiseaseSankey from '../components/DiseaseSankey';
-import DiseaseChord from '../components/DiseaseChord';
+import UpSetPlot from '../components/UpSetPlot';
 
 // ── Disease Data ──────────────────────────────────────────────
 const DISEASES = {
@@ -230,7 +230,7 @@ const VIEW_MODES = [
   { id: 'trends', label: '추이 비교' },
   { id: 'orbital', label: '궤도 뷰' },
   { id: 'sankey', label: '질환 흐름' },
-  { id: 'chord', label: '동반질환' },
+  { id: 'upset', label: '동반질환' },
 ];
 
 // ── CSS Animations ───────────────────────────────────────────
@@ -1969,7 +1969,20 @@ export default function DiseaseNetwork() {
           {viewMode === 'trends' && <TrendsView />}
           {viewMode === 'orbital' && <DiseaseOrbital />}
           {viewMode === 'sankey' && <DiseaseSankey />}
-          {viewMode === 'chord' && <DiseaseChord />}
+          {viewMode === 'upset' && (
+            <div>
+              <h3 style={{ color: '#ccd6f6', fontSize: 18, fontWeight: 600, marginBottom: 4, textAlign: 'center' }}>
+                MASLD 동반질환 교차 분석
+              </h3>
+              <p style={{ color: '#8892b0', fontSize: 13, textAlign: 'center', marginBottom: 16 }}>
+                2012 vs 2022 동반이환 패턴 변화
+              </p>
+              <UpSetPlot />
+              <p style={{ color: '#556', fontSize: 10, textAlign: 'right', marginTop: 8 }}>
+                출처: KASL MASLD Fact Sheet 2023, NHIS 2012-2022
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </>
