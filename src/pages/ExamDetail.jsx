@@ -1143,7 +1143,7 @@ export default function ExamDetail() {
       marginTop: 56,
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
-      gridTemplateRows: 'auto 1fr auto',
+      gridTemplateRows: 'auto 1fr 180px',
       gap: 10,
       padding: 12,
       overflow: 'hidden',
@@ -1354,7 +1354,7 @@ export default function ExamDetail() {
       </Panel>
 
       {/* ─── Analysis Panel (Bottom Row, Full Width) ──────────────── */}
-      <Panel style={{ gridColumn: '1 / -1', maxHeight: 200, overflow: 'hidden' }}>
+      <Panel style={{ gridColumn: '1 / -1', overflow: 'auto' }}>
         <div style={{ fontSize: 12, fontWeight: 700, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.bodyText), marginBottom: 6, flexShrink: 0 }}>
           분석 패널
         </div>
