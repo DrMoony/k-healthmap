@@ -79,14 +79,44 @@ const DISEASES = {
     color: '#4ecdc4',
     pathway: 'renal',
   },
-  cirrhosis: {
-    id: 'cirrhosis', name: '간경변/HCC', nameEn: 'Cirrhosis / Liver Cancer',
-    level: 3, prevalence: '간암 발생률 34.2/10만명', population: '간암 사망률 14.1/10만명',
-    trend: 'B형간염 감소하나 MASH 기인 간암 증가',
-    riskFactors: ['MASLD/MASH', 'B형간염', 'C형간염', '알코올'],
-    description: 'MASLD → MASH → 간섬유화 → 간경변 → 간세포암(HCC). MASH 기인 HCC 비율 증가 추세.',
-    comorbidity: '간경변 5년 생존율 약 50%, HCC 5년 생존율 약 38%',
+  mash: {
+    id: 'mash', name: 'MASH', nameEn: 'Metabolic Steatohepatitis',
+    level: 2, prevalence: '~153만', population: 'MASLD의 ~20% 진행',
+    trend: 'MASLD 증가에 비례하여 증가',
+    riskFactors: ['MASLD', '비만', '당뇨', '인슐린 저항성'],
+    description: '대사이상관련 지방간염. MASLD에서 간세포 손상 + 염증 동반 상태. 간섬유화의 핵심 단계.',
+    comorbidity: '간경변 진행 10-20%, HCC 연간 발생률 1-2%',
+    color: '#2ecc71',
+    pathway: 'liver',
+  },
+  lc: {
+    id: 'lc', name: '간경변', nameEn: 'Liver Cirrhosis',
+    level: 3, prevalence: 'MASLD 10년 진행 ~3%', population: '-',
+    trend: 'MASH 기인 간경변 증가',
+    riskFactors: ['MASH', 'B형간염', 'C형간염', '알코올'],
+    description: '간 섬유화 F4 단계. MASH에서 10-20% 진행. 5년 생존율 ~50%.',
+    comorbidity: 'HCC 연간 1-3% 발생, 간부전, 복수, 정맥류 출혈',
     color: '#e74c3c',
+    pathway: 'liver',
+  },
+  hcc: {
+    id: 'hcc', name: '간세포암', nameEn: 'Hepatocellular Carcinoma',
+    level: 3, prevalence: '발생률 34.2/10만', population: '사망률 14.1/10만',
+    trend: 'B형간염 감소하나 MASH 기인 HCC 증가',
+    riskFactors: ['간경변', 'MASH', 'B형간염', 'C형간염'],
+    description: '간세포암. 간경변에서 연간 1-3% 발생, 비간경변 MASH에서도 직접 발생 가능.',
+    comorbidity: '5년 생존율 ~38%',
+    color: '#c0392b',
+    pathway: 'liver',
+  },
+  lt: {
+    id: 'lt', name: '간이식', nameEn: 'Liver Transplant',
+    level: 3, prevalence: '연간 ~1,500건', population: '대기자 ~5,000명',
+    trend: 'MASH 기인 간이식 적응증 증가',
+    riskFactors: ['간경변 말기', 'HCC'],
+    description: '말기 간질환 또는 간암의 근치적 치료. 국내 뇌사 간이식 + 생체 간이식.',
+    comorbidity: '5년 생존율 ~75%',
+    color: '#e67e22',
     pathway: 'liver',
   },
   mi_stroke: {
@@ -119,10 +149,11 @@ const NODE_POSITIONS = {
   diabetes:      { x: 160, y: LEVEL_Y[1] },
   dyslipidemia:  { x: 400, y: LEVEL_Y[1] },
   hypertension:  { x: 640, y: LEVEL_Y[1] },
-  masld:         { x: 160, y: LEVEL_Y[2] },
-  cvd:           { x: 400, y: LEVEL_Y[2] },
-  ckd:           { x: 640, y: LEVEL_Y[2] },
-  cirrhosis:     { x: 160, y: LEVEL_Y[3] },
+  masld:         { x: 120, y: LEVEL_Y[2] },
+  mash:          { x: 280, y: LEVEL_Y[2] },
+  cvd:           { x: 470, y: LEVEL_Y[2] },
+  ckd:           { x: 660, y: LEVEL_Y[2] },
+  cirrhosis:     { x: 200, y: LEVEL_Y[3] },
   mi_stroke:     { x: 400, y: LEVEL_Y[3] },
   dialysis:      { x: 640, y: LEVEL_Y[3] },
 };
@@ -140,7 +171,8 @@ const EDGES = [
   { from: 'dyslipidemia', to: 'cvd', strength: 3, pathway: 'cardiac' },
   { from: 'hypertension', to: 'cvd', strength: 3, pathway: 'cardiac' },
   { from: 'hypertension', to: 'ckd', strength: 2.5, pathway: 'renal' },
-  { from: 'masld', to: 'cirrhosis', strength: 2.5, pathway: 'liver' },
+  { from: 'masld', to: 'mash', strength: 2.5, pathway: 'liver' },
+  { from: 'mash', to: 'cirrhosis', strength: 2, pathway: 'liver' },
   { from: 'cvd', to: 'mi_stroke', strength: 3, pathway: 'cardiac' },
   { from: 'ckd', to: 'dialysis', strength: 3, pathway: 'renal' },
   { from: 'obesity', to: 'masld', strength: 1.5, pathway: 'liver' },
@@ -1052,7 +1084,7 @@ function MASLDHeatmapView() {
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#8888aa',
             margin: '4px 0 0', lineHeight: 1.5,
           }}>
-            2010년 MASLD 진단 코호트를 10년 추적 — 연령별 합병증 누적 발생률 (%)
+            2010년 MASLD 진단 코호트 10년 추적 — 연령별 누적 발생률 (%). ⚠️ 여성 데이터 일부 매핑 오류 의심 (원본 팩트시트 검증 필요)
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>

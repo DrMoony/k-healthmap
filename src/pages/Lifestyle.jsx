@@ -87,7 +87,7 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
     const maxVal = Math.max(...data.map(d => d.value), avg) * 1.15;
     const catColor = CATEGORIES.find(c => c.key === category).color;
 
-    const labelW = 42;
+    const labelW = 55;
     const valueW = 46;
     const chartL = labelW + 4;
     const chartR = w - valueW;
@@ -156,7 +156,7 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
 
     // Average label
     ctx.fillStyle = '#00d4ff';
-    ctx.font = '10px "JetBrains Mono", monospace';
+    ctx.font = '11px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText(`평균 ${avg}`, avgX, h - 2);
   }, [category, gender, selectedProv]);
@@ -217,10 +217,10 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
     const dataMax = Math.max(...data.map(d => d.value), 1);
     const catColor = CATEGORIES.find(c => c.key === category).color;
 
-    const padL = 10;
-    const padR = 10;
+    const padL = 50;
+    const padR = 15;
     const padT = 16;
-    const padB = 40;
+    const padB = 45;
     const chartW = w - padL - padR;
     const chartH = h - padT - padB;
     const barW = Math.min(28, (chartW / data.length) * 0.65);
@@ -239,9 +239,9 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
       ctx.stroke();
 
       ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.font = '11px "JetBrains Mono", monospace';
       ctx.textAlign = 'right';
-      ctx.fillText(((4 - i) / 4 * maxVal).toFixed(0), padL - 2, y + 3);
+      ctx.fillText(((4 - i) / 4 * maxVal).toFixed(0), padL - 4, y + 3);
     }
 
     // Bars with value-based opacity
@@ -274,7 +274,7 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
 
       // Value on top
       ctx.fillStyle = isSelected ? '#ffd60a' : '#fff';
-      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.font = '11px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText(d.value.toFixed(1), x + barW / 2, y - 3);
 
@@ -283,7 +283,7 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
       ctx.translate(x + barW / 2, padT + chartH + 6);
       ctx.rotate(Math.PI / 4);
       ctx.fillStyle = isSelected ? '#ffd60a' : '#aaa';
-      ctx.font = '10px "Noto Sans KR", sans-serif';
+      ctx.font = '11px "Noto Sans KR", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(d.label, 0, 0);
       ctx.restore();
@@ -321,7 +321,7 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
 }
 
 // ── 10-Year Trends (SVG Line Chart) ──
-function TrendChart({ category, onYearClick, selectedYear }) {
+function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
   const containerRef = useRef(null);
   const [size, setSize] = useState({ w: 400, h: 200 });
 
@@ -354,10 +354,10 @@ function TrendChart({ category, onYearClick, selectedYear }) {
   const minVal = Math.floor(Math.min(...allVals) - 2);
   const maxVal = Math.ceil(Math.max(...allVals) + 2);
 
-  const padL = 36;
+  const padL = 56;
   const padR = 16;
-  const padT = 12;
-  const padB = 28;
+  const padT = 15;
+  const padB = 35;
   const { w, h } = size;
   const chartW = w - padL - padR;
   const chartH = h - padT - padB;
@@ -365,12 +365,13 @@ function TrendChart({ category, onYearClick, selectedYear }) {
   const xScale = (i) => padL + (i / (years.length - 1)) * chartW;
   const yScale = (v) => padT + chartH - ((v - minVal) / (maxVal - minVal)) * chartH;
 
-  // Highlight top 3 and bottom 3
+  // Highlight top 3 and bottom 3 (+ selectedProv if any)
   const lastVals = provinces.map(p => ({ p, v: trendData[p][trendData[p].length - 1] }));
   lastVals.sort((a, b) => b.v - a.v);
   const highlightSet = new Set([
     ...lastVals.slice(0, 3).map(d => d.p),
     ...lastVals.slice(-3).map(d => d.p),
+    ...(selectedProv && trendData[selectedProv] ? [selectedProv] : []),
   ]);
 
   const catColor = CATEGORIES.find(c => c.key === category).color;
@@ -387,13 +388,13 @@ function TrendChart({ category, onYearClick, selectedYear }) {
         {yTicks.map(v => (
           <g key={v}>
             <line x1={padL} y1={yScale(v)} x2={w - padR} y2={yScale(v)} stroke="rgba(255,255,255,0.06)" />
-            <text x={padL - 4} y={yScale(v) + 3} fill="#666" fontSize="10" fontFamily="JetBrains Mono" textAnchor="end">{v}</text>
+            <text x={padL - 4} y={yScale(v) + 3} fill="#666" fontSize="11" fontFamily="JetBrains Mono" textAnchor="end">{v}</text>
           </g>
         ))}
 
         {/* X labels - clickable */}
         {years.map((yr, i) => (
-          <text key={yr} x={xScale(i)} y={h - 6} fill={selectedYear === yr ? '#ffd60a' : '#888'} fontSize="10" fontFamily="JetBrains Mono" textAnchor="middle"
+          <text key={yr} x={xScale(i)} y={h - 6} fill={selectedYear === yr ? '#ffd60a' : '#888'} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle"
             style={{ cursor: 'pointer' }} onClick={() => onYearClick?.(yr)}
             fontWeight={selectedYear === yr ? 'bold' : 'normal'}>{yr}</text>
         ))}
@@ -416,8 +417,9 @@ function TrendChart({ category, onYearClick, selectedYear }) {
 
         {/* Lines - highlighted */}
         {provinces.filter(p => highlightSet.has(p)).map((p, idx) => {
+          const isSelected = selectedProv === p;
           const isTop = lastVals.slice(0, 3).some(d => d.p === p);
-          const lineColor = isTop ? catColor : '#00d4ff';
+          const lineColor = isSelected ? '#ffd60a' : isTop ? catColor : '#00d4ff';
           const lastIdx = trendData[p].length - 1;
           const lastY = yScale(trendData[p][lastIdx]);
           const lastX = xScale(lastIdx);
@@ -426,8 +428,8 @@ function TrendChart({ category, onYearClick, selectedYear }) {
               <polyline
                 fill="none"
                 stroke={lineColor}
-                strokeWidth="1.5"
-                strokeOpacity="0.8"
+                strokeWidth={isSelected ? 2.5 : 1.5}
+                strokeOpacity={isSelected ? 1 : 0.8}
                 points={trendData[p].map((v, i) => `${xScale(i)},${yScale(v)}`).join(' ')}
               />
               {/* Clickable data points */}
@@ -439,7 +441,7 @@ function TrendChart({ category, onYearClick, selectedYear }) {
                   onClick={() => onYearClick?.(years[i])}
                 />
               ))}
-              <text x={lastX + 5} y={lastY + 3} fill={lineColor} fontSize="10" fontFamily="Noto Sans KR">{p}</text>
+              <text x={lastX + 5} y={lastY + 3} fill={lineColor} fontSize="11" fontFamily="Noto Sans KR" fontWeight={isSelected ? 700 : 400}>{p}</text>
             </g>
           );
         })}
@@ -495,12 +497,12 @@ export default function Lifestyle() {
   };
   const handleAgeClick = (label) => {
     setSelectedAge(prev => prev === label ? null : label);
-    setSelectedProv(null);
+    // Keep selectedProv so trend chart stays highlighted
     setSelectedYear(null);
   };
   const handleYearClick = (yr) => {
     setSelectedYear(prev => prev === yr ? null : yr);
-    setSelectedProv(null);
+    // Keep selectedProv so trend chart stays highlighted
     setSelectedAge(null);
   };
 
@@ -626,7 +628,7 @@ export default function Lifestyle() {
         </div>
         <div style={{ flex: 1, minHeight: 0 }}>
           {trendView === 'line' ? (
-            <TrendChart category={category} selectedYear={selectedYear} onYearClick={handleYearClick} />
+            <TrendChart category={category} selectedYear={selectedYear} onYearClick={handleYearClick} selectedProv={selectedProv} />
           ) : (
             <BumpChart metric={bumpMetric} onProvinceClick={(name) => setSelectedProv(name)} />
           )}

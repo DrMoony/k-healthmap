@@ -38,10 +38,18 @@ const diseaseNodes = [
   {
     id: 'masld', name: 'MASLD', nameEn: 'Steatotic Liver', level: 2,
     prevalence: '768만', prevalenceNum: 38, population: 'NHIS 진단 기준 768만명',
-    color: '#00ff88', relatedIds: ['obesity', 'diabetes', 'dyslipidemia', 'cirrhosis'],
+    color: '#00ff88', relatedIds: ['obesity', 'diabetes', 'dyslipidemia', 'mash'],
     status: 'critical', energy: 88, angle: 0,
     genderGap: { male: 45, female: 30 },
     trend: '급증 추세',
+  },
+  {
+    id: 'mash', name: 'MASH', nameEn: 'Steatohepatitis', level: 2,
+    prevalence: '~153만', prevalenceNum: 20, population: 'MASLD의 ~20% 진행',
+    color: '#2ecc71', relatedIds: ['masld', 'cirrhosis'],
+    status: 'danger', energy: 75, angle: 60,
+    genderGap: { male: null, female: null },
+    trend: 'MASLD 비례 증가',
   },
   {
     id: 'cvd', name: '심혈관질환', nameEn: 'Cardiovascular', level: 2,
@@ -62,7 +70,7 @@ const diseaseNodes = [
   {
     id: 'cirrhosis', name: '간경변/HCC', nameEn: 'Cirrhosis/HCC', level: 3,
     prevalence: '간암 34.2/10만', prevalenceNum: 5, population: '간암 사망률 14.1/10만',
-    color: '#e74c3c', relatedIds: ['masld'],
+    color: '#e74c3c', relatedIds: ['mash'],
     status: 'danger', energy: 50, angle: 0,
     genderGap: { male: null, female: null },
     trend: 'MASH 기인 증가',

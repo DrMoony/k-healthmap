@@ -368,13 +368,13 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
       // Value text at end of bar
       const textColor = abnormalColor(d.rate, minRate, maxRate);
       ctx.fillStyle = textColor;
-      ctx.font = '10px JetBrains Mono';
+      ctx.font = '11px JetBrains Mono';
       ctx.textAlign = 'left';
       ctx.fillText(d.rate.toFixed(1) + '%', ml + bw + 4, y + barH / 2 + 3.5);
 
       // Label on left
       ctx.fillStyle = NEON.labelText;
-      ctx.font = '10px Noto Sans KR';
+      ctx.font = '11px Noto Sans KR';
       ctx.textAlign = 'right';
       ctx.fillText(d.label, ml - 6, y + barH / 2 + 3.5);
     });
@@ -479,7 +479,7 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, w, h);
 
-    const ml = 36, mr = 12, mt = 18, mb = 56;
+    const ml = 50, mr = 15, mt = 18, mb = 56;
     const cw = w - ml - mr;
     const ch = h - mt - mb;
     const n = labels.length;
@@ -548,7 +548,7 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
       ctx.translate(ml + i * gap + gap / 2, mt + ch + 8);
       ctx.rotate(labels.length > 10 ? -Math.PI / 3 : -Math.PI / 4);
       ctx.fillStyle = NEON.labelText;
-      ctx.font = '10px Noto Sans KR';
+      ctx.font = '11px Noto Sans KR';
       ctx.textAlign = 'right';
       ctx.fillText(label, 0, 0);
       ctx.restore();
@@ -558,8 +558,8 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
   useEffect(() => { draw(); }, [draw]);
 
   const getBarInfo = useCallback((mx, my) => {
-    const ml2 = 36, mt2 = 18, mb2 = 56;
-    const cw2 = canvasWidth - ml2 - 12;
+    const ml2 = 50, mt2 = 18, mb2 = 56;
+    const cw2 = canvasWidth - ml2 - 15;
     const ch2 = height - mt2 - mb2;
     const gap2 = cw2 / labels.length;
     const idx = Math.floor((mx - ml2) / gap2);
