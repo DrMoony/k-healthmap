@@ -420,36 +420,65 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
           <line x1={xScale(years.indexOf(selectedYear))} y1={padT} x2={xScale(years.indexOf(selectedYear))} y2={padT + chartH} stroke="#ffd60a" strokeWidth={1} strokeDasharray="4,3" opacity={0.5} />
         )}
 
-        {/* Lines - highlighted (top3 + bottom3 + selected) */}
-        {provinces.filter(p => highlightSet.has(p)).map((p) => {
-          const isSelected = selectedProv === p;
-          const isTop = lastVals.slice(0, 3).some(d => d.p === p);
-          const lineColor = isSelected ? '#ffd60a' : isTop ? catColor : '#00d4ff';
-          const lastIdx = trendData[p].length - 1;
-          const lastY = yScale(trendData[p][lastIdx]);
-          const lastX = xScale(lastIdx);
+        {/* National average line */}
+        {(() => {
+          const avgValues = years.map((_, i) => {
+            const vals = provinces.map(p => trendData[p][i]).filter(v => v != null);
+            return vals.reduce((s, v) => s + v, 0) / vals.length;
+          });
           return (
-            <g key={p}>
-              <polyline
-                fill="none"
-                stroke={lineColor}
-                strokeWidth={isSelected ? 2.5 : 1.5}
-                strokeOpacity={isSelected ? 1 : 0.8}
-                points={trendData[p].map((v, i) => `${xScale(i)},${yScale(v)}`).join(' ')}
-              />
-              {/* Clickable data points */}
-              {trendData[p].map((v, i) => (
-                <circle key={i} cx={xScale(i)} cy={yScale(v)} r={selectedYear === years[i] ? 5 : 3}
-                  fill={selectedYear === years[i] ? '#ffd60a' : lineColor}
-                  style={{ cursor: 'pointer' }}
-                  opacity={selectedYear === years[i] ? 1 : (i === lastIdx ? 1 : 0)}
-                  onClick={() => onYearClick?.(years[i])}
-                />
-              ))}
-              <text x={lastX + 6} y={lastY + 3} fill={lineColor} fontSize="11" fontFamily="Noto Sans KR" fontWeight={isSelected ? 700 : 400}>{p}</text>
+            <g>
+              <polyline fill="none" stroke="#ffffff" strokeWidth={2} strokeDasharray="6,4" strokeOpacity={0.5}
+                points={avgValues.map((v, i) => `${xScale(i)},${yScale(v)}`).join(' ')} />
+              <text x={xScale(years.length - 1) + 6} y={yScale(avgValues[avgValues.length - 1]) + 3}
+                fill="#ffffff" fontSize="10" fontFamily="JetBrains Mono" fontWeight={600} opacity={0.7}>전국</text>
             </g>
           );
-        })}
+        })()}
+
+        {/* Lines - highlighted (top3 + bottom3 + selected) with label collision avoidance */}
+        {(() => {
+          const highlighted = provinces.filter(p => highlightSet.has(p));
+          // Collect label positions and resolve collisions
+          const labels = highlighted.map(p => {
+            const lastIdx = trendData[p].length - 1;
+            return { p, y: yScale(trendData[p][lastIdx]), x: xScale(lastIdx) };
+          });
+          labels.sort((a, b) => a.y - b.y);
+          // Push apart labels that are too close (min 14px gap)
+          for (let i = 1; i < labels.length; i++) {
+            if (labels[i].y - labels[i - 1].y < 14) {
+              labels[i].y = labels[i - 1].y + 14;
+            }
+          }
+          const labelMap = {};
+          labels.forEach(l => { labelMap[l.p] = l.y; });
+
+          return highlighted.map((p) => {
+            const isSelected = selectedProv === p;
+            const isTop = lastVals.slice(0, 3).some(d => d.p === p);
+            const lineColor = isSelected ? '#ffd60a' : isTop ? catColor : '#00d4ff';
+            const lastIdx = trendData[p].length - 1;
+            const lastX = xScale(lastIdx);
+            const labelY = labelMap[p];
+            return (
+              <g key={p}>
+                <polyline fill="none" stroke={lineColor}
+                  strokeWidth={isSelected ? 2.5 : 1.5} strokeOpacity={isSelected ? 1 : 0.8}
+                  points={trendData[p].map((v, i) => `${xScale(i)},${yScale(v)}`).join(' ')} />
+                {trendData[p].map((v, i) => (
+                  <circle key={i} cx={xScale(i)} cy={yScale(v)} r={selectedYear === years[i] ? 5 : 3}
+                    fill={selectedYear === years[i] ? '#ffd60a' : lineColor}
+                    style={{ cursor: 'pointer' }}
+                    opacity={selectedYear === years[i] ? 1 : (i === lastIdx ? 1 : 0)}
+                    onClick={() => onYearClick?.(years[i])} />
+                ))}
+                <text x={lastX + 6} y={labelY + 3} fill={lineColor} fontSize="11"
+                  fontFamily="Noto Sans KR" fontWeight={isSelected ? 700 : 500}>{p}</text>
+              </g>
+            );
+          });
+        })()}
       </svg>
     </div>
   );
