@@ -73,10 +73,9 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
     const dpr = window.devicePixelRatio || 1;
     const w = container.clientWidth;
     const h = container.clientHeight;
+    if (w <= 0 || h <= 0) return;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
 
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
@@ -87,21 +86,24 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
     const maxVal = Math.max(...data.map(d => d.value), avg) * 1.15;
     const catColor = CATEGORIES.find(c => c.key === category).color;
 
-    const labelW = 55;
-    const valueW = 46;
-    const chartL = labelW + 4;
-    const chartR = w - valueW;
+    const padL = 55;
+    const padR = 20;
+    const padT = 4;
+    const padB = 40;
+    const chartL = padL + 4;
+    const chartR = w - padR - 46;
     const chartW = chartR - chartL;
-    const barH = Math.min(18, (h - 8) / data.length - 3);
-    const gap = (h - data.length * barH) / (data.length + 1);
+    const availH = h - padT - padB;
+    const barH = Math.min(18, (availH) / data.length - 3);
+    const gap = (availH - data.length * barH) / (data.length + 1);
 
     // Store layout for hit detection
-    layoutRef.current = { data, chartL, barH, gap, maxVal, chartW };
+    layoutRef.current = { data, chartL, barH, gap, maxVal, chartW, padT };
 
     // Bars with value-based opacity
     const dataMax = Math.max(...data.map(d => d.value), 1);
     data.forEach((d, i) => {
-      const y = gap + i * (barH + gap);
+      const y = padT + gap + i * (barH + gap);
       const bw = (d.value / maxVal) * chartW;
       const isSelected = selectedProv === d.name;
       const valueOpacity = 0.3 + (d.value / dataMax) * 0.7;
@@ -132,7 +134,7 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
       ctx.font = '11px "Noto Sans KR", sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.fillText(d.name, labelW, y + barH / 2);
+      ctx.fillText(d.name, padL, y + barH / 2);
 
       // Value
       ctx.fillStyle = isSelected ? '#ffd60a' : '#fff';
@@ -149,8 +151,8 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 3]);
     ctx.beginPath();
-    ctx.moveTo(avgX, 0);
-    ctx.lineTo(avgX, h);
+    ctx.moveTo(avgX, padT);
+    ctx.lineTo(avgX, padT + availH);
     ctx.stroke();
     ctx.setLineDash([]);
 
@@ -158,23 +160,25 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
     ctx.fillStyle = '#00d4ff';
     ctx.font = '11px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`평균 ${avg}`, avgX, h - 2);
+    ctx.fillText(`평균 ${avg}`, avgX, h - padB + 16);
   }, [category, gender, selectedProv]);
 
   useEffect(() => {
     draw();
-    const handleResize = () => draw();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver(() => draw());
+    obs.observe(el);
+    return () => obs.disconnect();
   }, [draw]);
 
   const handleClick = (e) => {
     if (!layoutRef.current || !canvasRef.current) return;
-    const { data, barH, gap } = layoutRef.current;
+    const { data, barH, gap, padT } = layoutRef.current;
     const rect = canvasRef.current.getBoundingClientRect();
     const my = e.clientY - rect.top;
     for (let i = 0; i < data.length; i++) {
-      const y = gap + i * (barH + gap);
+      const y = padT + gap + i * (barH + gap);
       if (my >= y && my <= y + barH) {
         onProvClick?.(data[i].name);
         return;
@@ -183,8 +187,8 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
   };
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
-      <canvas ref={canvasRef} onClick={handleClick} style={{ cursor: 'pointer' }} />
+    <div ref={containerRef} style={{ width: '100%', height: '100%', minHeight: 0 }}>
+      <canvas ref={canvasRef} onClick={handleClick} style={{ width: '100%', height: '100%', cursor: 'pointer' }} />
     </div>
   );
 }
@@ -203,10 +207,9 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
     const dpr = window.devicePixelRatio || 1;
     const w = container.clientWidth;
     const h = container.clientHeight;
+    if (w <= 0 || h <= 0) return;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
 
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
@@ -217,8 +220,8 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
     const dataMax = Math.max(...data.map(d => d.value), 1);
     const catColor = CATEGORIES.find(c => c.key === category).color;
 
-    const padL = 50;
-    const padR = 15;
+    const padL = 55;
+    const padR = 20;
     const padT = 16;
     const padB = 45;
     const chartW = w - padL - padR;
@@ -294,9 +297,11 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
 
   useEffect(() => {
     draw();
-    const handleResize = () => draw();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver(() => draw());
+    obs.observe(el);
+    return () => obs.disconnect();
   }, [draw]);
 
   const handleClick = (e) => {
@@ -314,8 +319,8 @@ function AgeChart({ category, gender, selectedAge, onAgeClick }) {
   };
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
-      <canvas ref={canvasRef} onClick={handleClick} style={{ cursor: 'pointer' }} />
+    <div ref={containerRef} style={{ width: '100%', height: '100%', minHeight: 0 }}>
+      <canvas ref={canvasRef} onClick={handleClick} style={{ width: '100%', height: '100%', cursor: 'pointer' }} />
     </div>
   );
 }
@@ -355,9 +360,9 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
   const maxVal = Math.ceil(Math.max(...allVals) + 2);
 
   const padL = 56;
-  const padR = 16;
+  const padR = 70;
   const padT = 15;
-  const padB = 35;
+  const padB = 40;
   const { w, h } = size;
   const chartW = w - padL - padR;
   const chartH = h - padT - padB;
@@ -365,7 +370,7 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
   const xScale = (i) => padL + (i / (years.length - 1)) * chartW;
   const yScale = (v) => padT + chartH - ((v - minVal) / (maxVal - minVal)) * chartH;
 
-  // Highlight top 3 and bottom 3 (+ selectedProv if any)
+  // Show only top 3 + bottom 3 + selected province
   const lastVals = provinces.map(p => ({ p, v: trendData[p][trendData[p].length - 1] }));
   lastVals.sort((a, b) => b.v - a.v);
   const highlightSet = new Set([
@@ -399,13 +404,13 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
             fontWeight={selectedYear === yr ? 'bold' : 'normal'}>{yr}</text>
         ))}
 
-        {/* Lines - faded */}
+        {/* Lines - faded (only non-highlighted) */}
         {provinces.filter(p => !highlightSet.has(p)).map(p => (
           <polyline
             key={p}
             fill="none"
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="1"
+            stroke="rgba(255,255,255,0.05)"
+            strokeWidth="0.5"
             points={trendData[p].map((v, i) => `${xScale(i)},${yScale(v)}`).join(' ')}
           />
         ))}
@@ -415,8 +420,8 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
           <line x1={xScale(years.indexOf(selectedYear))} y1={padT} x2={xScale(years.indexOf(selectedYear))} y2={padT + chartH} stroke="#ffd60a" strokeWidth={1} strokeDasharray="4,3" opacity={0.5} />
         )}
 
-        {/* Lines - highlighted */}
-        {provinces.filter(p => highlightSet.has(p)).map((p, idx) => {
+        {/* Lines - highlighted (top3 + bottom3 + selected) */}
+        {provinces.filter(p => highlightSet.has(p)).map((p) => {
           const isSelected = selectedProv === p;
           const isTop = lastVals.slice(0, 3).some(d => d.p === p);
           const lineColor = isSelected ? '#ffd60a' : isTop ? catColor : '#00d4ff';
@@ -441,7 +446,7 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
                   onClick={() => onYearClick?.(years[i])}
                 />
               ))}
-              <text x={lastX + 5} y={lastY + 3} fill={lineColor} fontSize="11" fontFamily="Noto Sans KR" fontWeight={isSelected ? 700 : 400}>{p}</text>
+              <text x={lastX + 6} y={lastY + 3} fill={lineColor} fontSize="11" fontFamily="Noto Sans KR" fontWeight={isSelected ? 700 : 400}>{p}</text>
             </g>
           );
         })}
@@ -473,6 +478,131 @@ function GenderToggle({ value, onChange, accentColor }) {
           {g.label}
         </button>
       ))}
+    </div>
+  );
+}
+
+// ── Detail Panel Content ──
+function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGender, ageGender }) {
+  const cat = CATEGORIES.find(c => c.key === category);
+
+  const SMOKE_CATS = ['비흡연', '현재금연', '현재흡연'];
+  const DRINK_CATS = ['주1회이하', '주2-4회', '주5-7회', '월1회이상', '연1회이상', '비음주'];
+  const EXERCISE_CATS = ['0일', '1일', '2일', '3일', '4일', '5일', '6일', '7일'];
+  const CAT_MAP = { smoking: SMOKE_CATS, drinking: DRINK_CATS, exercise: EXERCISE_CATS };
+  const catNames = CAT_MAP[category];
+
+  const renderDistBars = (label, vals, color) => {
+    if (!vals) return null;
+    const maxV = Math.max(...vals, 1);
+    return (
+      <div style={{ marginBottom: '8px' }}>
+        <div style={{ fontSize: '10px', color: color || '#ccc', fontWeight: 600, marginBottom: '3px' }}>{label}</div>
+        {catNames.map((c, ci) => (
+          <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '1px' }}>
+            <span style={{ fontSize: '10px', color: '#8888aa', width: '56px', textAlign: 'right', flexShrink: 0 }}>{c}</span>
+            <div style={{ flex: 1, height: '7px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
+              <div style={{ width: `${(vals[ci] / maxV) * 100}%`, height: '100%', background: cat.color, opacity: 0.3 + (vals[ci] / maxV) * 0.7, borderRadius: '2px' }} />
+            </div>
+            <span style={{ fontSize: '9px', color: '#ccccdd', width: '36px', fontFamily: '"JetBrains Mono", monospace' }}>{vals[ci]}%</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Province selected
+  if (selectedProv) {
+    return (
+      <div style={{ overflowY: 'auto', height: '100%' }}>
+        <div style={{ marginBottom: '8px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedProv}</div>
+          <div style={{ fontSize: '10px', color: '#8888aa' }}>
+            {provGender === 'male' ? '남성' : provGender === 'female' ? '여성' : '전체'} 기준
+          </div>
+          <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
+            {getMetricValue(category, LIFESTYLE_DATA[category].province[selectedProv]?.[provGender] || [0,0,0])}%
+          </div>
+        </div>
+        {CATEGORIES.map(c => {
+          const vals = LIFESTYLE_DATA[c.key].province[selectedProv]?.[provGender];
+          return vals ? renderDistBars(`${c.icon} ${c.label}`, vals, c.color) : null;
+        })}
+      </div>
+    );
+  }
+
+  // Age selected
+  if (selectedAge) {
+    return (
+      <div style={{ overflowY: 'auto', height: '100%' }}>
+        <div style={{ marginBottom: '8px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedAge}세</div>
+          <div style={{ fontSize: '10px', color: '#8888aa' }}>
+            {ageGender === 'male' ? '남성' : ageGender === 'female' ? '여성' : '전체'} 기준
+          </div>
+          <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
+            {getMetricValue(category, LIFESTYLE_DATA[category].age[selectedAge]?.[ageGender] || [0,0,0])}%
+          </div>
+        </div>
+        {CATEGORIES.map(c => {
+          const vals = LIFESTYLE_DATA[c.key].age[selectedAge]?.[ageGender];
+          return vals ? renderDistBars(`${c.icon} ${c.label}`, vals, c.color) : null;
+        })}
+      </div>
+    );
+  }
+
+  // Year selected
+  if (selectedYear) {
+    const trendKey = category === 'exercise' ? null : category;
+    if (!trendKey) return <div style={{ color: '#666', fontSize: '11px' }}>운동 트렌드 데이터 없음</div>;
+    const yearIdx = LIFESTYLE_TRENDS.years.indexOf(selectedYear);
+    const trendData = LIFESTYLE_TRENDS[trendKey];
+    const yearVals = Object.entries(trendData).map(([p, vals]) => ({ name: p, value: vals[yearIdx] })).sort((a, b) => b.value - a.value);
+    const maxV = Math.max(...yearVals.map(d => d.value), 1);
+    return (
+      <div style={{ overflowY: 'auto', height: '100%' }}>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffd60a', marginBottom: '6px' }}>{selectedYear}년 {cat.label}</div>
+        {yearVals.map((d, i) => (
+          <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+            <span style={{ fontSize: '10px', color: i < 3 ? cat.color : i >= yearVals.length - 3 ? '#00d4ff' : '#8888aa', width: '36px', textAlign: 'right', flexShrink: 0 }}>{d.name}</span>
+            <div style={{ flex: 1, height: '7px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
+              <div style={{ width: `${(d.value / maxV) * 100}%`, height: '100%', background: i < 3 ? cat.color : '#00d4ff', opacity: 0.3 + (d.value / maxV) * 0.7, borderRadius: '2px' }} />
+            </div>
+            <span style={{ fontSize: '10px', color: '#ccccdd', fontFamily: '"JetBrains Mono", monospace', width: '40px' }}>{d.value}%</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Default: national summary
+  return (
+    <div style={{ overflowY: 'auto', height: '100%' }}>
+      <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '8px' }}>전국 평균 요약</div>
+      {CATEGORIES.map(c => {
+        const avg = getNationalAvg(c.key, 'total');
+        const ranking = getProvinceRanking(c.key, 'total');
+        const top = ranking[0];
+        const bottom = ranking[ranking.length - 1];
+        return (
+          <div key={c.key} style={{ marginBottom: '10px', padding: '6px 8px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+              <span>{c.icon}</span>
+              <span style={{ fontSize: '11px', color: c.color, fontWeight: 600 }}>{c.label}</span>
+              <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace', marginLeft: 'auto' }}>{avg}%</span>
+            </div>
+            <div style={{ fontSize: '10px', color: '#8888aa', display: 'flex', justifyContent: 'space-between' }}>
+              <span>최고: <span style={{ color: c.color }}>{top.name} {top.value}%</span></span>
+              <span>최저: <span style={{ color: '#00d4ff' }}>{bottom.name} {bottom.value}%</span></span>
+            </div>
+          </div>
+        );
+      })}
+      <div style={{ fontSize: '10px', color: '#555', marginTop: '4px' }}>차트를 클릭하면 상세 정보가 표시됩니다</div>
     </div>
   );
 }
@@ -512,7 +642,7 @@ export default function Lifestyle() {
       marginTop: '56px',
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
-      gridTemplateRows: 'auto 1fr 1fr auto',
+      gridTemplateRows: 'auto 1fr 1fr',
       gap: '10px',
       padding: '12px',
       overflow: 'hidden',
@@ -559,7 +689,7 @@ export default function Lifestyle() {
       </div>
 
       {/* Row 2 Left: Province Comparison */}
-      <div style={{ ...PANEL, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ ...PANEL, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
           <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>시도별 비교</span>
           <GenderToggle value={provGender} onChange={setProvGender} accentColor={cat.color} />
@@ -570,7 +700,7 @@ export default function Lifestyle() {
       </div>
 
       {/* Row 2 Right: Age Distribution */}
-      <div style={{ ...PANEL, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ ...PANEL, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
           <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>연령별 분포</span>
           <GenderToggle value={ageGender} onChange={setAgeGender} accentColor={cat.color} />
@@ -580,12 +710,12 @@ export default function Lifestyle() {
         </div>
       </div>
 
-      {/* Row 3: 10-year Trends (full width) */}
-      <div style={{ ...PANEL, gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {/* Row 3 Left: 10-year Trends */}
+      <div style={{ ...PANEL, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>
-              {trendView === 'line' ? `10년 추이 (${LIFESTYLE_TRENDS.years[0]}–${LIFESTYLE_TRENDS.years[LIFESTYLE_TRENDS.years.length - 1]})` : '시도 순위 변동 (Bump Chart)'}
+              {trendView === 'line' ? `10년 추이` : '순위 변동'}
             </span>
             <div style={{ display: 'flex', gap: '3px' }}>
               {[
@@ -604,9 +734,9 @@ export default function Lifestyle() {
             </div>
           </div>
           {trendView === 'line' && (
-            <span style={{ color: '#555', fontSize: '10px' }}>
-              상위 3개 시도 <span style={{ color: cat.color }}>●</span> &nbsp;
-              하위 3개 시도 <span style={{ color: '#00d4ff' }}>●</span>
+            <span style={{ color: '#555', fontSize: '9px' }}>
+              <span style={{ color: cat.color }}>●</span> 상위3 &nbsp;
+              <span style={{ color: '#00d4ff' }}>●</span> 하위3
             </span>
           )}
           {trendView === 'bump' && (
@@ -635,137 +765,30 @@ export default function Lifestyle() {
         </div>
       </div>
 
-      {/* Row 4: Insight Detail Panel (full width) */}
-      {(selectedProv || selectedAge || selectedYear) && (
-        <div style={{
-          ...PANEL,
-          gridColumn: '1 / -1',
-          background: 'linear-gradient(145deg, rgba(26,26,46,0.85) 0%, rgba(18,18,26,0.9) 100%)',
-          borderColor: `${cat.color}33`,
-          maxHeight: '160px',
-          overflowY: 'auto',
-          display: 'flex',
-          gap: '16px',
-        }}>
-          {(() => {
-            const SMOKE_CATS = ['비흡연', '현재금연', '현재흡연'];
-            const DRINK_CATS = ['주1회이하', '주2-4회', '주5-7회', '월1회이상', '연1회이상', '비음주'];
-            const EXERCISE_CATS = ['0일', '1일', '2일', '3일', '4일', '5일', '6일', '7일'];
-            const CAT_MAP = { smoking: SMOKE_CATS, drinking: DRINK_CATS, exercise: EXERCISE_CATS };
-            const catNames = CAT_MAP[category];
-
-            const renderDistBars = (label, vals, color) => {
-              if (!vals) return null;
-              const maxV = Math.max(...vals, 1);
-              return (
-                <div style={{ flex: 1, minWidth: '180px' }}>
-                  <div style={{ fontSize: '10px', color: color || '#ccc', fontWeight: 600, marginBottom: '4px' }}>{label}</div>
-                  {catNames.map((c, ci) => (
-                    <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '1px' }}>
-                      <span style={{ fontSize: '10px', color: '#8888aa', width: '56px', textAlign: 'right', flexShrink: 0 }}>{c}</span>
-                      <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
-                        <div style={{ width: `${(vals[ci] / maxV) * 100}%`, height: '100%', background: cat.color, opacity: 0.3 + (vals[ci] / maxV) * 0.7, borderRadius: '2px' }} />
-                      </div>
-                      <span style={{ fontSize: '9px', color: '#ccccdd', width: '36px', fontFamily: '"JetBrains Mono", monospace' }}>{vals[ci]}%</span>
-                    </div>
-                  ))}
-                </div>
-              );
-            };
-
-            // Province selected → show all 3 categories for that province
-            if (selectedProv) {
-              const provData = {};
-              CATEGORIES.forEach(c => {
-                const d = LIFESTYLE_DATA[c.key].province[selectedProv];
-                if (d) provData[c.key] = d[provGender];
-              });
-              return (
-                <>
-                  <div style={{ minWidth: '100px' }}>
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '4px' }}>
-                      {selectedProv}
-                    </div>
-                    <div style={{ fontSize: '10px', color: '#8888aa' }}>
-                      {provGender === 'male' ? '남성' : provGender === 'female' ? '여성' : '전체'} 기준
-                    </div>
-                    <div style={{ fontSize: '10px', color: cat.color, marginTop: '6px', fontWeight: 600 }}>
-                      {METRIC_LABELS[category]}
-                    </div>
-                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
-                      {getMetricValue(category, LIFESTYLE_DATA[category].province[selectedProv]?.[provGender] || [0,0,0])}%
-                    </div>
-                  </div>
-                  {CATEGORIES.map(c => {
-                    const vals = LIFESTYLE_DATA[c.key].province[selectedProv]?.[provGender];
-                    return vals ? renderDistBars(`${c.icon} ${c.label}`, vals, c.color) : null;
-                  })}
-                </>
-              );
-            }
-
-            // Age selected → show lifestyle profile for that age group
-            if (selectedAge) {
-              return (
-                <>
-                  <div style={{ minWidth: '100px' }}>
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '4px' }}>
-                      {selectedAge}세
-                    </div>
-                    <div style={{ fontSize: '10px', color: '#8888aa' }}>
-                      {ageGender === 'male' ? '남성' : ageGender === 'female' ? '여성' : '전체'} 기준
-                    </div>
-                    <div style={{ fontSize: '10px', color: cat.color, marginTop: '6px', fontWeight: 600 }}>
-                      {METRIC_LABELS[category]}
-                    </div>
-                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
-                      {getMetricValue(category, LIFESTYLE_DATA[category].age[selectedAge]?.[ageGender] || [0,0,0])}%
-                    </div>
-                  </div>
-                  {CATEGORIES.map(c => {
-                    const vals = LIFESTYLE_DATA[c.key].age[selectedAge]?.[ageGender];
-                    return vals ? renderDistBars(`${c.icon} ${c.label}`, vals, c.color) : null;
-                  })}
-                </>
-              );
-            }
-
-            // Year selected → show that year's trend data
-            if (selectedYear) {
-              const trendKey = category === 'exercise' ? null : category;
-              if (!trendKey) return <div style={{ color: '#666', fontSize: '11px' }}>운동 트렌드 데이터 없음</div>;
-              const yearIdx = LIFESTYLE_TRENDS.years.indexOf(selectedYear);
-              const trendData = LIFESTYLE_TRENDS[trendKey];
-              const yearVals = Object.entries(trendData).map(([p, vals]) => ({ name: p, value: vals[yearIdx] })).sort((a, b) => b.value - a.value);
-              const maxV = Math.max(...yearVals.map(d => d.value), 1);
-              return (
-                <>
-                  <div style={{ minWidth: '100px' }}>
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffd60a', marginBottom: '4px' }}>
-                      {selectedYear}년
-                    </div>
-                    <div style={{ fontSize: '10px', color: '#8888aa' }}>
-                      {cat.label} 시도별 현황
-                    </div>
-                  </div>
-                  <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: '4px 12px' }}>
-                    {yearVals.map((d, i) => (
-                      <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '4px', minWidth: '120px' }}>
-                        <span style={{ fontSize: '10px', color: i < 3 ? cat.color : i >= yearVals.length - 3 ? '#00d4ff' : '#8888aa', width: '24px', textAlign: 'right' }}>{d.name}</span>
-                        <div style={{ width: '60px', height: '8px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
-                          <div style={{ width: `${(d.value / maxV) * 100}%`, height: '100%', background: i < 3 ? cat.color : '#00d4ff', opacity: 0.3 + (d.value / maxV) * 0.7, borderRadius: '2px' }} />
-                        </div>
-                        <span style={{ fontSize: '10px', color: '#ccccdd', fontFamily: '"JetBrains Mono", monospace' }}>{d.value}%</span>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              );
-            }
-            return null;
-          })()}
+      {/* Row 3 Right: Detail Panel */}
+      <div style={{
+        ...PANEL,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        minHeight: 0,
+        background: 'linear-gradient(145deg, rgba(26,26,46,0.85) 0%, rgba(18,18,26,0.9) 100%)',
+        borderColor: (selectedProv || selectedAge || selectedYear) ? `${cat.color}33` : 'rgba(255,255,255,0.06)',
+      }}>
+        <div style={{ fontSize: '11px', color: '#888', marginBottom: '6px', flexShrink: 0, fontWeight: 600 }}>
+          {selectedProv ? '지역 상세' : selectedAge ? '연령 상세' : selectedYear ? '연도 상세' : '요약'}
         </div>
-      )}
+        <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+          <DetailPanel
+            category={category}
+            selectedProv={selectedProv}
+            selectedAge={selectedAge}
+            selectedYear={selectedYear}
+            provGender={provGender}
+            ageGender={ageGender}
+          />
+        </div>
+      </div>
     </div>
   );
 }
