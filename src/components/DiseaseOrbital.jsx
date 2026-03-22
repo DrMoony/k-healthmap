@@ -46,7 +46,7 @@ const diseaseNodes = [
   {
     id: 'mash', name: 'MASH', nameEn: 'Steatohepatitis', level: 2,
     prevalence: '~153만', prevalenceNum: 20, population: 'MASLD의 ~20% 진행',
-    color: '#2ecc71', relatedIds: ['masld', 'cirrhosis'],
+    color: '#2ecc71', relatedIds: ['masld', 'lc', 'hcc'],
     status: 'danger', energy: 75, angle: 60,
     genderGap: { male: null, female: null },
     trend: 'MASLD 비례 증가',
@@ -62,40 +62,64 @@ const diseaseNodes = [
   {
     id: 'ckd', name: 'CKD', nameEn: 'Chronic Kidney', level: 2,
     prevalence: '8.2%', prevalenceNum: 8.2, population: '약 360만명',
-    color: '#4ecdc4', relatedIds: ['diabetes', 'hypertension', 'dialysis'],
+    color: '#4ecdc4', relatedIds: ['diabetes', 'hypertension', 'dialysis', 'kt'],
     status: 'warning', energy: 65, angle: 240,
     genderGap: { male: null, female: null },
     trend: '지속 증가',
   },
   {
-    id: 'cirrhosis', name: '간경변/HCC', nameEn: 'Cirrhosis/HCC', level: 3,
-    prevalence: '간암 34.2/10만', prevalenceNum: 5, population: '간암 사망률 14.1/10만',
-    color: '#e74c3c', relatedIds: ['mash'],
+    id: 'lc', name: '간경변', nameEn: 'Liver Cirrhosis', level: 3,
+    prevalence: 'MASLD 10년 ~3%', prevalenceNum: 5, population: '-',
+    color: '#e74c3c', relatedIds: ['mash', 'hcc', 'lt'],
     status: 'danger', energy: 50, angle: 0,
     genderGap: { male: null, female: null },
-    trend: 'MASH 기인 증가',
+    trend: 'MASH 기인 간경변 증가',
+  },
+  {
+    id: 'hcc', name: '간세포암', nameEn: 'HCC', level: 3,
+    prevalence: '34.2/10만', prevalenceNum: 5, population: '사망률 14.1/10만',
+    color: '#c0392b', relatedIds: ['mash', 'lc', 'lt'],
+    status: 'danger', energy: 48, angle: 60,
+    genderGap: { male: null, female: null },
+    trend: 'MASH 기인 HCC 증가',
+  },
+  {
+    id: 'lt', name: '간이식', nameEn: 'Liver Transplant', level: 3,
+    prevalence: '연간 ~1,500건', prevalenceNum: 3, population: '대기자 ~5,000명',
+    color: '#e67e22', relatedIds: ['lc', 'hcc'],
+    status: 'danger', energy: 40, angle: 120,
+    genderGap: { male: null, female: null },
+    trend: 'MASH 기인 적응증 증가',
   },
   {
     id: 'mi_stroke', name: 'MI/뇌졸중', nameEn: 'MI/Stroke', level: 3,
     prevalence: '뇌졸중 217/10만', prevalenceNum: 8, population: '심근경색 65/10만',
-    color: '#e67e22', relatedIds: ['cvd', 'hypertension', 'diabetes'],
-    status: 'danger', energy: 55, angle: 120,
+    color: '#ff6347', relatedIds: ['cvd', 'hypertension', 'diabetes'],
+    status: 'danger', energy: 55, angle: 180,
     genderGap: { male: null, female: null },
     trend: '발생률 유지/증가',
   },
   {
-    id: 'dialysis', name: '투석/이식', nameEn: 'Dialysis', level: 3,
-    prevalence: '약 13만명', prevalenceNum: 3, population: '이식대기 약 3만명',
+    id: 'dialysis', name: '투석', nameEn: 'Dialysis', level: 3,
+    prevalence: '~13만명', prevalenceNum: 3, population: '연간 의료비 ~3,000만원/인',
     color: '#9b59b6', relatedIds: ['ckd'],
     status: 'danger', energy: 45, angle: 240,
     genderGap: { male: null, female: null },
     trend: '연 8% 증가',
   },
+  {
+    id: 'kt', name: '신장이식', nameEn: 'Kidney Transplant', level: 3,
+    prevalence: '대기자 ~3만명', prevalenceNum: 3, population: '연간 ~2,000건',
+    color: '#8e44ad', relatedIds: ['ckd', 'dialysis'],
+    status: 'danger', energy: 42, angle: 300,
+    genderGap: { male: null, female: null },
+    trend: '대기 기간 증가 추세',
+  },
 ];
 
 // ── Orbit config ────────────────────────────────────────────
 const ORBIT_RADII = { 0: 0, 1: 155, 2: 260, 3: 350 };
-const NODE_SIZES = { 0: 58, 1: 46, 2: 38, 3: 32 };
+const NODE_SIZES = { 0: 58, 1: 46, 2: 38, 3: 28 };
 const ORBIT_SPEEDS = { 0: 0, 1: 0.15, 2: 0.1, 3: 0.06 };
 const STATUS_LABELS = {
   critical: { text: '위험', bg: '#ff006e' },

@@ -130,18 +130,28 @@ const DISEASES = {
     pathway: 'cardiac',
   },
   dialysis: {
-    id: 'dialysis', name: '투석/이식', nameEn: 'Dialysis / Transplant',
-    level: 3, prevalence: '투석환자 약 13만명', population: '이식대기 약 3만명',
+    id: 'dialysis', name: '투석', nameEn: 'Dialysis',
+    level: 3, prevalence: '~13만명', population: '연간 의료비 ~3,000만원/인',
     trend: '투석환자 연 8% 증가',
     riskFactors: ['만성신장질환 진행', '당뇨성 신증', '고혈압성 신경화'],
-    description: 'ESKD(말기신부전)로 투석 또는 신장이식 필요. 연간 의료비 환자당 약 3,000만원.',
+    description: 'ESKD(말기신부전)로 투석 필요. 연간 의료비 환자당 약 3,000만원.',
     comorbidity: '투석환자 5년 생존율 약 60%',
     color: '#9b59b6',
     pathway: 'renal',
   },
+  kt: {
+    id: 'kt', name: '신장이식', nameEn: 'Kidney Transplant',
+    level: 3, prevalence: '대기자 ~3만명', population: '연간 ~2,000건',
+    trend: '대기 기간 증가 추세',
+    riskFactors: ['ESKD', '당뇨병성 신증'],
+    description: 'ESKD 환자의 근치적 치료. 생체이식 + 뇌사이식. 투석 대비 생존율 우수.',
+    comorbidity: '5년 생존율 ~95%',
+    color: '#8e44ad',
+    pathway: 'renal',
+  },
 };
 
-// ── Fixed positions (viewBox: 0 0 800 600) ───────────────────
+// ── Fixed positions (viewBox: 0 0 840 600) ───────────────────
 const LEVEL_Y = [75, 210, 370, 520];
 
 const NODE_POSITIONS = {
@@ -153,12 +163,15 @@ const NODE_POSITIONS = {
   mash:          { x: 280, y: LEVEL_Y[2] },
   cvd:           { x: 470, y: LEVEL_Y[2] },
   ckd:           { x: 660, y: LEVEL_Y[2] },
-  cirrhosis:     { x: 200, y: LEVEL_Y[3] },
-  mi_stroke:     { x: 400, y: LEVEL_Y[3] },
-  dialysis:      { x: 640, y: LEVEL_Y[3] },
+  lc:            { x: 100, y: LEVEL_Y[3] },
+  hcc:           { x: 240, y: LEVEL_Y[3] },
+  lt:            { x: 370, y: LEVEL_Y[3] },
+  mi_stroke:     { x: 500, y: LEVEL_Y[3] },
+  dialysis:      { x: 620, y: LEVEL_Y[3] },
+  kt:            { x: 740, y: LEVEL_Y[3] },
 };
 
-const NODE_RADIUS = { 0: 40, 1: 32, 2: 28, 3: 24 };
+const NODE_RADIUS = { 0: 40, 1: 32, 2: 28, 3: 22 };
 
 const EDGES = [
   { from: 'obesity', to: 'diabetes', strength: 3, pathway: 'mixed' },
@@ -172,9 +185,14 @@ const EDGES = [
   { from: 'hypertension', to: 'cvd', strength: 3, pathway: 'cardiac' },
   { from: 'hypertension', to: 'ckd', strength: 2.5, pathway: 'renal' },
   { from: 'masld', to: 'mash', strength: 2.5, pathway: 'liver' },
-  { from: 'mash', to: 'cirrhosis', strength: 2, pathway: 'liver' },
+  { from: 'mash', to: 'lc', strength: 2, pathway: 'liver' },
+  { from: 'mash', to: 'hcc', strength: 1.5, pathway: 'liver' },
+  { from: 'lc', to: 'hcc', strength: 2, pathway: 'liver' },
+  { from: 'lc', to: 'lt', strength: 1.5, pathway: 'liver' },
+  { from: 'hcc', to: 'lt', strength: 1, pathway: 'liver' },
   { from: 'cvd', to: 'mi_stroke', strength: 3, pathway: 'cardiac' },
   { from: 'ckd', to: 'dialysis', strength: 3, pathway: 'renal' },
+  { from: 'ckd', to: 'kt', strength: 1.5, pathway: 'renal' },
   { from: 'obesity', to: 'masld', strength: 1.5, pathway: 'liver' },
   { from: 'diabetes', to: 'mi_stroke', strength: 1.5, pathway: 'cardiac' },
   { from: 'hypertension', to: 'mi_stroke', strength: 2, pathway: 'cardiac' },
@@ -781,7 +799,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
         </div>
 
         <svg
-          viewBox="0 0 800 600"
+          viewBox="0 0 840 600"
           style={{ width: '100%', height: '100%' }}
           preserveAspectRatio="xMidYMid meet"
         >
@@ -988,10 +1006,10 @@ function MASLDHeatmapView() {
     const matrix = getData();
     const maxVal = Math.max(...matrix.flat());
 
-    const marginLeft = 110;
-    const marginTop = 60;
-    const marginRight = 80;
-    const marginBottom = 60;
+    const marginLeft = 100;
+    const marginTop = 45;
+    const marginRight = 50;
+    const marginBottom = 25;
     const cellW = (W - marginLeft - marginRight) / AGE_GROUPS.length;
     const cellH = (H - marginTop - marginBottom) / OUTCOMES.length;
 
