@@ -1046,13 +1046,13 @@ function MASLDHeatmapView() {
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
             color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,255,136,0.3)',
           }}>
-            MASLD 10년 합병증 진행률 (2010 기준)
+            MASLD 환자의 10년 후 합병증 발생률
           </h2>
           <p style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a',
-            margin: '2px 0 0', letterSpacing: 0.5,
+            fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#8888aa',
+            margin: '4px 0 0', lineHeight: 1.5,
           }}>
-            10-YEAR COMPLICATION PROGRESSION FROM MASLD DIAGNOSIS
+            2010년 MASLD 진단 코호트를 10년 추적 — 연령별 합병증 누적 발생률 (%)
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
@@ -1471,12 +1471,12 @@ function TrendsView() {
   const [hiddenDiseases, setHiddenDiseases] = useState({});
   const [pointDetail, setPointDetail] = useState(null);
 
-  // Fixed viewBox
-  const w = 900, h = 500;
+  // Fixed viewBox — wider aspect ratio to prevent bottom clipping
+  const w = 900, h = 420;
   const marginL = 50;
   const marginR = 30;
-  const marginT = 50;
-  const marginB = 50;
+  const marginT = 40;
+  const marginB = 40;
   const chartW = w - marginL - marginR;
   const chartH = h - marginT - marginB;
 
@@ -1557,10 +1557,11 @@ function TrendsView() {
   const allValues = Object.values(series).flatMap(s => s.map(d => d.value));
   const minYear = Math.min(...allYears);
   const maxYear = Math.max(...allYears);
-  const maxVal = Math.ceil(Math.max(...allValues) / 10) * 10;
+  const minVal = Math.floor(Math.min(...allValues) / 5) * 5;
+  const maxVal = Math.ceil(Math.max(...allValues) / 5) * 5 + 5;
 
   const xScale = (yr) => marginL + ((yr - minYear) / (maxYear - minYear)) * chartW;
-  const yScale = (val) => marginT + chartH * (1 - val / maxVal);
+  const yScale = (val) => marginT + chartH * (1 - (val - minVal) / (maxVal - minVal));
 
   const buildPath = (data) => {
     if (data.length === 0) return '';
@@ -1627,7 +1628,7 @@ function TrendsView() {
           <rect width={w} height={h} fill="url(#trendGrid)" />
 
           {/* Y gridlines */}
-          {Array.from({ length: maxVal / 10 + 1 }, (_, i) => i * 10).map(pct => {
+          {Array.from({ length: Math.round((maxVal - minVal) / 5) + 1 }, (_, i) => minVal + i * 5).map(pct => {
             const yy = yScale(pct);
             return (
               <g key={pct}>
