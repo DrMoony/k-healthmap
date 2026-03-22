@@ -81,6 +81,15 @@ const DISEASES = {
     color: '#4ecdc4',
     pathway: 'renal',
   },
+  heart_failure: {
+    id: 'heart_failure', name: '심부전', nameEn: 'Heart Failure',
+    level: 2, prevalence: '2.58%', population: '약 132만명',
+    trend: '2002년 0.77% → 2020년 2.58% (3.6배)',
+    riskFactors: ['고혈압', '당뇨', '허혈성심질환', '심방세동', '비만'],
+    description: '심장 펌프 기능 부전. 유병률 3.6배 증가, 의료비 3.2조원. 입원 사망률 16%.',
+    comorbidity: '고혈압 78.7%, 당뇨 58.8%, 허혈성심질환 50.6%',
+    color: '#e91e63', pathway: 'cardiac',
+  },
   mash: {
     id: 'mash', name: 'MASH', nameEn: 'Metabolic Steatohepatitis',
     level: 2, prevalence: '~153만', population: 'MASLD의 ~20% 진행',
@@ -163,8 +172,9 @@ const NODE_POSITIONS = {
   hypertension:  { x: 640, y: LEVEL_Y[1] },
   masld:         { x: 120, y: LEVEL_Y[2] },
   mash:          { x: 280, y: LEVEL_Y[2] },
-  cvd:           { x: 470, y: LEVEL_Y[2] },
-  ckd:           { x: 660, y: LEVEL_Y[2] },
+  cvd:           { x: 430, y: LEVEL_Y[2] },
+  heart_failure: { x: 565, y: LEVEL_Y[2] },
+  ckd:           { x: 700, y: LEVEL_Y[2] },
   lc:            { x: 100, y: LEVEL_Y[3] },
   hcc:           { x: 240, y: LEVEL_Y[3] },
   lt:            { x: 370, y: LEVEL_Y[3] },
@@ -199,6 +209,9 @@ const EDGES = [
   { from: 'diabetes', to: 'mi_stroke', strength: 1.5, pathway: 'cardiac' },
   { from: 'hypertension', to: 'mi_stroke', strength: 2, pathway: 'cardiac' },
   { from: 'ckd', to: 'cvd', strength: 1.5, pathway: 'renal' },
+  { from: 'diabetes', to: 'heart_failure', strength: 2.5, pathway: 'cardiac' },
+  { from: 'hypertension', to: 'heart_failure', strength: 3, pathway: 'cardiac' },
+  { from: 'cvd', to: 'heart_failure', strength: 2, pathway: 'cardiac' },
 ];
 
 const PATHWAY_COLORS = {
@@ -231,6 +244,9 @@ const VIEW_MODES = [
   { id: 'orbital', label: '궤도 뷰' },
   { id: 'sankey', label: '질환 흐름' },
   { id: 'upset', label: '동반질환' },
+  { id: 'cost', label: '의료비' },
+  { id: 'management', label: '관리 비교' },
+  { id: 'survival', label: '생존 곡선' },
 ];
 
 // ── CSS Animations ───────────────────────────────────────────
@@ -1910,6 +1926,370 @@ function TrendsView() {
   );
 }
 
+// ── Healthcare Cost Treemap View ─────────────────────────────
+function CostTreemapView() {
+  const [selectedCost, setSelectedCost] = useState(null);
+  const w = 900, h = 500;
+
+  const costData = [
+    { id: 'htn', name: '본태성 고혈압', cost: 4.5, perPatient: '약 37만원/년', population: '약 1,200만명', trend: '약제비 안정, 총진료비 증가', color: '#ffd60a' },
+    { id: 'eskd', name: 'ESKD 투석', cost: 3.9, perPatient: '약 3,000만원/년', population: '약 13만명', trend: '투석환자 연 8% 증가, 총비용 급증', color: '#9b59b6' },
+    { id: 'dm', name: '2형 당뇨병', cost: 3.2, perPatient: '약 53만원/년', population: '약 600만명', trend: 'GLP-1RA 등 신약 도입으로 약제비 증가', color: '#00d4ff' },
+    { id: 'hf', name: '심부전', cost: 3.2, perPatient: '약 320만원/년', population: '약 100만명', trend: '고령화로 환자수·입원비용 동반 증가', color: '#ff6b6b' },
+    { id: 'masld', name: 'MASLD', cost: 1.6, perPatient: '약 2.1만원/년', population: '약 768만명', trend: '진단 증가에 따라 의료비 확대 예상', color: '#00ff88' },
+  ];
+
+  const totalCost = costData.reduce((s, d) => s + d.cost, 0);
+
+  const margin = { top: 60, left: 40, right: 40, bottom: 40 };
+  const innerW = w - margin.left - margin.right;
+  const innerH = h - margin.top - margin.bottom;
+
+  const rects = [];
+  let y = margin.top;
+  const sorted = [...costData].sort((a, b) => b.cost - a.cost);
+  const rows = [sorted.slice(0, 2), sorted.slice(2)];
+  const rowHeights = [innerH * 0.55, innerH * 0.45];
+
+  rows.forEach((row, ri) => {
+    const rowTotal = row.reduce((s, d) => s + d.cost, 0);
+    let x = margin.left;
+    const rh = rowHeights[ri];
+    row.forEach(d => {
+      const rw = (d.cost / rowTotal) * innerW;
+      rects.push({ ...d, x, y, w: rw, h: rh });
+      x += rw;
+    });
+    y += rh;
+  });
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '12px 24px 4px' }}>
+        <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
+          질환별 의료비 규모
+        </h2>
+        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a', margin: '2px 0 0' }}>
+          HEALTHCARE COST TREEMAP — 단위: 조원/년
+        </p>
+      </div>
+      <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="costGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
+            </pattern>
+          </defs>
+          <rect width={w} height={h} fill="url(#costGrid)" />
+          {rects.map((r) => {
+            const isSelected = selectedCost?.id === r.id;
+            return (
+              <g key={r.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedCost(isSelected ? null : r)}>
+                <rect x={r.x + 2} y={r.y + 2} width={r.w - 4} height={r.h - 4} rx={8}
+                  fill={`${r.color}${isSelected ? '44' : '22'}`}
+                  stroke={r.color} strokeWidth={isSelected ? 2 : 1} strokeOpacity={isSelected ? 0.8 : 0.3} />
+                <text x={r.x + r.w / 2} y={r.y + r.h / 2 - 14} textAnchor="middle"
+                  fill={r.color} fontSize={14} fontWeight={700} fontFamily="'Noto Sans KR', sans-serif">{r.name}</text>
+                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 8} textAnchor="middle"
+                  fill="#e0e0ff" fontSize={22} fontWeight={800} fontFamily="'JetBrains Mono', monospace">{r.cost}조</text>
+                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 28} textAnchor="middle"
+                  fill="#8888aa" fontSize={10} fontFamily="'JetBrains Mono', monospace">
+                  총 {totalCost.toFixed(1)}조 중 {((r.cost / totalCost) * 100).toFixed(0)}%
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+        {selectedCost && (
+          <div style={{
+            position: 'absolute', right: 24, top: 24, width: 260,
+            background: 'rgba(10,10,20,0.95)', border: `1px solid ${selectedCost.color}44`,
+            borderRadius: 12, padding: 16, backdropFilter: 'blur(12px)',
+            animation: 'fadeInUp 0.3s ease-out',
+          }}>
+            <button onClick={() => setSelectedCost(null)} style={{
+              position: 'absolute', top: 8, right: 8, background: 'none', border: 'none',
+              color: '#666', fontSize: 14, cursor: 'pointer',
+            }}>x</button>
+            <h4 style={{ color: selectedCost.color, margin: '0 0 10px', fontSize: 14 }}>{selectedCost.name}</h4>
+            {[
+              ['연간 총 의료비', `${selectedCost.cost}조원`],
+              ['환자당 비용', selectedCost.perPatient],
+              ['대상 인구', selectedCost.population],
+              ['추이', selectedCost.trend],
+            ].map(([label, val]) => (
+              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <span style={{ color: '#8888aa', fontSize: 11 }}>{label}</span>
+                <span style={{ color: '#e0e0ff', fontSize: 12, fontWeight: 600, textAlign: 'right', maxWidth: 160 }}>{val}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
+        출처: HIRA 진료비통계, 대한신장학회, KASL MASLD Fact Sheet 2023
+      </div>
+    </div>
+  );
+}
+
+// ── Management Comparison View ───────────────────────────────
+function ManagementComparisonView() {
+  const [selectedFunnel, setSelectedFunnel] = useState(null);
+  const w = 900, h = 500;
+
+  const diseases = [
+    { id: 'htn', name: '고혈압', color: '#ffd60a',
+      stages: [{ label: '인지', value: 77 }, { label: '치료', value: 74 }, { label: '조절', value: 59 }],
+      detail: '고혈압 인지율 77%, 치료율 74%, 조절율 59%. 3차 예방 강화 필요.' },
+    { id: 'dm', name: '당뇨', color: '#00d4ff',
+      stages: [{ label: '인지', value: 75 }, { label: '치료', value: 71 }, { label: '조절', value: 32 }],
+      detail: '당뇨 인지율 75%, 치료율 71%이나 HbA1c<6.5% 조절율 32.4%로 매우 낮음. 통합관리 15.9%.' },
+    { id: 'dyslip', name: '이상지질혈증', color: '#b388ff',
+      stages: [{ label: '인지', value: 68 }, { label: '치료', value: 61 }, { label: '조절', value: 54 }],
+      detail: '이상지질혈증 인지율 68%, 치료율 61%, LDL 조절율 54%. 고위험군 스타틴 처방 확대 필요.' },
+    { id: 'ckd', name: 'CKD', color: '#4ecdc4',
+      stages: [{ label: '인지', value: 6.3 }, { label: '치료', value: 4 }, { label: '조절', value: 2 }],
+      detail: 'CKD 인지율 1.3~6.3%로 극히 낮음. 대부분 투석 직전까지 인지 못함. 조기 선별 시급.' },
+    { id: 'obesity', name: '비만', color: '#ff006e',
+      stages: [{ label: '인지', value: 55 }, { label: '관리', value: 30 }, { label: '감량', value: 12 }],
+      detail: '비만 인지율 약 55%, 적극 관리 30%, 5% 이상 감량 성공 12%. 약물치료 접근성 개선 필요.' },
+    { id: 'masld', name: 'MASLD', color: '#00ff88',
+      stages: [{ label: '인지', value: 10 }, { label: '진단', value: 5 }, { label: '관리', value: 2 }],
+      detail: 'MASLD 인지율 ~10%. 건강검진에서 지방간 소견 있으나 후속 관리 부재. FIB-4 기반 선별 도입 필요.' },
+  ];
+
+  const marginT = 60, marginL = 100, marginR = 40;
+  const barAreaW = w - marginL - marginR;
+  const rowH = (h - marginT - 40) / diseases.length;
+  const maxBarW = barAreaW * 0.85;
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '12px 24px 4px' }}>
+        <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
+          질환별 관리 캐스케이드 비교
+        </h2>
+        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a', margin: '2px 0 0' }}>
+          AWARENESS → TREATMENT → CONTROL
+        </p>
+      </div>
+      <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="mgmtGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
+            </pattern>
+          </defs>
+          <rect width={w} height={h} fill="url(#mgmtGrid)" />
+          {['인지', '치료', '조절'].map((label, ci) => (
+            <text key={label} x={marginL + (ci + 0.5) * (maxBarW / 3)} y={marginT - 12}
+              textAnchor="middle" fill="#8888aa" fontSize={11} fontFamily="'Noto Sans KR', sans-serif">{label}</text>
+          ))}
+          {diseases.map((d, di) => {
+            const y = marginT + di * rowH;
+            const isSelected = selectedFunnel?.id === d.id;
+            return (
+              <g key={d.id} style={{ cursor: 'pointer' }}
+                onClick={() => setSelectedFunnel(isSelected ? null : d)}>
+                <text x={marginL - 10} y={y + rowH / 2 + 4} textAnchor="end"
+                  fill={isSelected ? d.color : '#aaaacc'} fontSize={13} fontWeight={isSelected ? 700 : 500}
+                  fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
+                {d.stages.map((stage, si) => {
+                  const barW = (stage.value / 100) * (maxBarW / 3 - 8);
+                  const bx = marginL + si * (maxBarW / 3) + 4;
+                  const by = y + 8;
+                  const bh = rowH - 16;
+                  const opacity = 0.3 + (stage.value / 100) * 0.6;
+                  return (
+                    <g key={si}>
+                      <rect x={bx} y={by} width={maxBarW / 3 - 8} height={bh} rx={4} fill="rgba(255,255,255,0.03)" />
+                      <rect x={bx} y={by} width={barW} height={bh} rx={4}
+                        fill={d.color} opacity={opacity}
+                        stroke={isSelected ? d.color : 'none'} strokeWidth={isSelected ? 1 : 0} strokeOpacity={0.5} />
+                      <text x={bx + barW + 4} y={by + bh / 2 + 4}
+                        fill={d.color} fontSize={11} fontWeight={700} fontFamily="'JetBrains Mono', monospace" opacity={0.9}>
+                        {stage.value < 10 ? stage.value.toFixed(1) : Math.round(stage.value)}%
+                      </text>
+                    </g>
+                  );
+                })}
+                {di < diseases.length - 1 && (
+                  <line x1={marginL} y1={y + rowH} x2={w - marginR} y2={y + rowH}
+                    stroke="rgba(255,255,255,0.04)" strokeWidth={1} />
+                )}
+              </g>
+            );
+          })}
+        </svg>
+        {selectedFunnel && (
+          <div style={{
+            position: 'absolute', right: 24, bottom: 24, width: 300,
+            background: 'rgba(10,10,20,0.95)', border: `1px solid ${selectedFunnel.color}44`,
+            borderRadius: 12, padding: 16, backdropFilter: 'blur(12px)',
+            animation: 'fadeInUp 0.3s ease-out',
+          }}>
+            <button onClick={() => setSelectedFunnel(null)} style={{
+              position: 'absolute', top: 8, right: 8, background: 'none', border: 'none',
+              color: '#666', fontSize: 14, cursor: 'pointer',
+            }}>x</button>
+            <h4 style={{ color: selectedFunnel.color, margin: '0 0 8px', fontSize: 14 }}>{selectedFunnel.name} 관리 현황</h4>
+            <p style={{ color: '#bbb', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{selectedFunnel.detail}</p>
+          </div>
+        )}
+      </div>
+      <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
+        출처: 고혈압학회·당뇨병학회·지질동맥경화학회 Fact Sheet 2024, 대한신장학회 KORDS 2023
+      </div>
+    </div>
+  );
+}
+
+// ── Survival Curves View ─────────────────────────────────────
+function SurvivalCurvesView() {
+  const [selectedCurve, setSelectedCurve] = useState(null);
+  const [hoveredCurve, setHoveredCurve] = useState(null);
+  const w = 900, h = 500;
+
+  const curves = [
+    { id: 'hf_all', name: '심부전 (전체)', color: '#ff6b6b',
+      points: [{ t: 0, s: 100 }, { t: 1, s: 91 }, { t: 5, s: 79 }, { t: 10, s: 66 }, { t: 15, s: 54 }],
+      detail: '심부전 전체 환자 생존율. 1년 91%, 5년 79%, 10년 66%, 15년 54%.' },
+    { id: 'hf_hosp', name: '심부전 (입원)', color: '#e74c3c',
+      points: [{ t: 0, s: 100 }, { t: 1, s: 84 }, { t: 5, s: 66 }, { t: 10, s: 48 }, { t: 15, s: 34 }],
+      detail: '심부전 입원 환자 생존율. 입원 후 1년 84%, 5년 66%, 10년 48%, 15년 34%. 외래 대비 예후 불량.' },
+    { id: 'hf_out', name: '심부전 (외래)', color: '#ff9999',
+      points: [{ t: 0, s: 100 }, { t: 1, s: 96 }, { t: 5, s: 88 }, { t: 10, s: 79 }, { t: 15, s: 71 }],
+      detail: '심부전 외래 환자 생존율. 1년 96%, 5년 88%, 10년 79%, 15년 71%. 조기 진단·관리의 중요성.' },
+    { id: 'lc', name: '간경변', color: '#e67e22',
+      points: [{ t: 0, s: 100 }, { t: 1, s: 85 }, { t: 3, s: 65 }, { t: 5, s: 50 }, { t: 10, s: 30 }, { t: 15, s: 18 }],
+      detail: '간경변(LC) 5년 생존율 ~50%. MASH 기인 간경변 증가 추세. 비대상성 전환 시 예후 급격 악화.' },
+    { id: 'hcc', name: '간세포암 (HCC)', color: '#c0392b',
+      points: [{ t: 0, s: 100 }, { t: 1, s: 70 }, { t: 3, s: 48 }, { t: 5, s: 38 }, { t: 10, s: 22 }, { t: 15, s: 14 }],
+      detail: 'HCC 5년 생존율 ~38%. 간경변 배경 HCC는 예후 더 불량. 조기 발견(초음파+AFP) 중요.' },
+  ];
+
+  const margin = { top: 60, left: 70, right: 40, bottom: 50 };
+  const plotW = w - margin.left - margin.right;
+  const plotH = h - margin.top - margin.bottom;
+  const toX = (t) => margin.left + (t / 15) * plotW;
+  const toY = (s) => margin.top + ((100 - s) / 100) * plotH;
+
+  const buildPath = (points) => {
+    let d = '';
+    for (let i = 0; i < points.length; i++) {
+      const x = toX(points[i].t);
+      const y = toY(points[i].s);
+      if (i === 0) { d += `M${x},${y}`; }
+      else {
+        const prevY = toY(points[i - 1].s);
+        d += ` L${x},${prevY} L${x},${y}`;
+      }
+    }
+    return d;
+  };
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '12px 24px 4px' }}>
+        <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
+          질환별 생존 곡선
+        </h2>
+        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a', margin: '2px 0 0' }}>
+          KAPLAN-MEIER STYLE SURVIVAL CURVES
+        </p>
+      </div>
+      <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="survGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
+            </pattern>
+          </defs>
+          <rect width={w} height={h} fill="url(#survGrid)" />
+          {[0, 25, 50, 75, 100].map(s => (
+            <g key={s}>
+              <line x1={margin.left} y1={toY(s)} x2={w - margin.right} y2={toY(s)}
+                stroke="rgba(255,255,255,0.06)" strokeWidth={1} strokeDasharray={s === 50 ? '4,4' : 'none'} />
+              <text x={margin.left - 8} y={toY(s) + 4} textAnchor="end"
+                fill="#6666aa" fontSize={10} fontFamily="'JetBrains Mono', monospace">{s}%</text>
+            </g>
+          ))}
+          {[0, 1, 3, 5, 10, 15].map(t => (
+            <g key={t}>
+              <line x1={toX(t)} y1={margin.top} x2={toX(t)} y2={h - margin.bottom}
+                stroke="rgba(255,255,255,0.04)" strokeWidth={1} />
+              <text x={toX(t)} y={h - margin.bottom + 16} textAnchor="middle"
+                fill="#6666aa" fontSize={10} fontFamily="'JetBrains Mono', monospace">{t}yr</text>
+            </g>
+          ))}
+          <text x={w / 2} y={h - 6} textAnchor="middle" fill="#8888aa" fontSize={11} fontFamily="'Noto Sans KR', sans-serif">
+            추적 기간 (년)
+          </text>
+          <text x={16} y={h / 2} textAnchor="middle" fill="#8888aa" fontSize={11}
+            fontFamily="'Noto Sans KR', sans-serif" transform={`rotate(-90, 16, ${h / 2})`}>
+            생존율 (%)
+          </text>
+          {curves.map(curve => {
+            const isActive = hoveredCurve === curve.id || selectedCurve?.id === curve.id;
+            const isOther = (hoveredCurve || selectedCurve) && !isActive;
+            return (
+              <g key={curve.id} style={{ cursor: 'pointer' }}
+                onMouseEnter={() => setHoveredCurve(curve.id)}
+                onMouseLeave={() => setHoveredCurve(null)}
+                onClick={() => setSelectedCurve(selectedCurve?.id === curve.id ? null : curve)}>
+                <path d={buildPath(curve.points)} fill="none" stroke={curve.color}
+                  strokeWidth={isActive ? 3 : 2} opacity={isOther ? 0.2 : 0.9} />
+                {curve.points.map((p, pi) => (
+                  <circle key={pi} cx={toX(p.t)} cy={toY(p.s)} r={isActive ? 4 : 2.5}
+                    fill={curve.color} opacity={isOther ? 0.2 : 0.9}
+                    stroke={isActive ? '#fff' : 'none'} strokeWidth={1} strokeOpacity={0.3} />
+                ))}
+                {(() => {
+                  const last = curve.points[curve.points.length - 1];
+                  return (
+                    <text x={toX(last.t) + 6} y={toY(last.s) + 4}
+                      fill={curve.color} fontSize={10} fontWeight={600}
+                      fontFamily="'Noto Sans KR', sans-serif" opacity={isOther ? 0.2 : 0.9}>
+                      {curve.name} {last.s}%
+                    </text>
+                  );
+                })()}
+              </g>
+            );
+          })}
+        </svg>
+        {selectedCurve && (
+          <div style={{
+            position: 'absolute', right: 24, top: 24, width: 280,
+            background: 'rgba(10,10,20,0.95)', border: `1px solid ${selectedCurve.color}44`,
+            borderRadius: 12, padding: 16, backdropFilter: 'blur(12px)',
+            animation: 'fadeInUp 0.3s ease-out',
+          }}>
+            <button onClick={() => setSelectedCurve(null)} style={{
+              position: 'absolute', top: 8, right: 8, background: 'none', border: 'none',
+              color: '#666', fontSize: 14, cursor: 'pointer',
+            }}>x</button>
+            <h4 style={{ color: selectedCurve.color, margin: '0 0 8px', fontSize: 14 }}>{selectedCurve.name}</h4>
+            <div style={{ marginBottom: 8 }}>
+              {selectedCurve.points.filter(p => p.t > 0).map(p => (
+                <div key={p.t} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  <span style={{ color: '#8888aa', fontSize: 11 }}>{p.t}년 생존율</span>
+                  <span style={{ color: '#e0e0ff', fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{p.s}%</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ color: '#bbb', fontSize: 11, lineHeight: 1.6, margin: 0 }}>{selectedCurve.detail}</p>
+          </div>
+        )}
+      </div>
+      <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
+        출처: 대한심부전학회 2023, KASL MASLD Fact Sheet 2023, 국가암등록통계 2022
+      </div>
+    </div>
+  );
+}
+
 // ── Main Component ───────────────────────────────────────────
 export default function DiseaseNetwork() {
   const [selectedId, setSelectedId] = useState(null);
@@ -1983,6 +2363,9 @@ export default function DiseaseNetwork() {
               </p>
             </div>
           )}
+          {viewMode === 'cost' && <CostTreemapView />}
+          {viewMode === 'management' && <ManagementComparisonView />}
+          {viewMode === 'survival' && <SurvivalCurvesView />}
         </div>
       </div>
     </>

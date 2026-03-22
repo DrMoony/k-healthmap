@@ -79,6 +79,10 @@ export const DISEASE_EPI = {
         stage3_increase: '2.6배 (10년)',
       },
       severityTrend: { stage2_fold: 1.6, stage3_fold: 2.6, period: '10년' },
+      familyRisk: { parentObeseChildOR: 1.3 },
+      comorbidityOR: { diabetes: 5.2, hypertension: 2.1, dyslipidemia: 1.9, metabolicSyndrome: 3.1, nafld: 2.4, ckd: 1.5, gout: 1.4 },
+      pediatric: { trend: '19세 미만 2019년 이후 증가' },
+      agePeak: { male: '35-39세 58.0%', female: '75-79세 42.1%', overall: '35-39세 44.6%' },
       ref: 'Korean Society for the Study of Obesity (KOSSO), Obesity Fact Sheet 2024. Based on NHIS 2012-2022 & KNHANES 2013-2022.',
       refUrl: 'https://general.kosso.or.kr/html/user/core/view/reaction/main/kosso/inc/data/2024_Obesity_Fact_sheet_web_kor1223.pdf',
     },
@@ -434,7 +438,29 @@ export const DISEASE_EPI = {
     },
 
     // ──────────────────────────────────────────────
-    // 8. 만성신장질환 (CKD)
+    // 8a. 심부전 (Heart Failure)
+    // ──────────────────────────────────────────────
+    heart_failure: {
+      name: '심부전', nameEn: 'Heart Failure',
+      metricType: 'prevalence',
+      prevalence: { value: 2.58, unit: '%', population: '전체 인구', year: 2020 },
+      patients: '약 132만명',
+      trend: 'increasing',
+      trendDetail: '2002년 0.77% → 2020년 2.58% (3.6배 증가)',
+      genderGap: { male: 2.55, female: 2.62 },
+      comorbidities: { htn: 78.7, dm: 58.8, ihd: 50.6, af: 20.3, ckd: 15.8, stroke: 14.5 },
+      survival: { year1: 91, year5: 79, year10: 66, year15: 54 },
+      hospitalization: { allCause: 45.1, hfPrimary: 2.9, hfAny: 25.1 },
+      mortality: { perCapita2020: 15.6, inHospital: 16.0, cvDeath: 9.3 },
+      cost: { total2020_trillion: 3.2, perPatient2020_usd: 1855 },
+      medication: { arb: 76, ccb: 62, diuretic: 23, betaBlocker: 15 },
+      incidenceTrend: { y2002: 482, y2020: 609, unit: 'per100k' },
+      ref: 'Korean Society of Heart Failure, Heart Failure Statistics 2024 Update. NHIS 2002-2020.',
+      refUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC11058436/',
+    },
+
+    // ──────────────────────────────────────────────
+    // 8b. 만성신장질환 (CKD)
     // ──────────────────────────────────────────────
     ckd: {
       name: '만성신장질환',
@@ -451,6 +477,11 @@ export const DISEASE_EPI = {
       awarenessGap: { prevalence: 8.2, awareness_low: 1.3, awareness_high: 6.3 },
       nafldCkdLink: 19.1,
       ageNote: '고령일수록 급증, 35세 이상 13.7%',
+      eskd: {
+        incidenceRate2022: 360.2, // per million, world 3rd
+        incidenceChange: '10년간 2배 증가',
+        ref: 'KSN ESKD Fact Sheet 2024, KORDS 2010-2022',
+      },
       ref: 'Park S, et al. CKD prevalence and awareness in South Korea: KNHANES 2011-2013. Sci Rep. 2023;13:3377. (주의: 12년 전 데이터, 현재 유병률 10%+ 추정)',
       refUrl: 'https://doi.org/10.1038/s41598-023-30location',
       refNote: 'Nature Scientific Reports 2023, KNHANES 2011-2013 기반 전국 단면 연구',
@@ -516,7 +547,15 @@ export const DISEASE_EPI = {
       trend: 'stable_high',
       trendDetail: '2018년 78.5% 피크 후 68-70% 수준 유지. 구성요소(비만, 고혈압, 이상지질혈증, 고혈당) 각각 증가 추세.',
       components: ['obesity', 'hypertension', 'dyslipidemia', 'diabetes', 'abdominal_obesity'],
-      ref: '국민건강보험공단 건강검진통계 2015-2024 (K-HealthMap 기 수집 데이터).',
+      regionalPrevalence: {
+        충북: 37.8, 충남: 34.5, 강원: 32.2,
+      },
+      ageBreakdown: { '19-29': 8.7, '30-39': 19.3, '40-49': 26.7, '50-59': 34.2, '60-69': 41.5, '70+': 49.1 },
+      covidImpact: { pre: 27.74, post: 29.69 },
+      componentsDetail: { abdominalObesity: 33.2 },
+      overall30plus: 29.6,
+      overall65plus: 47.0,
+      ref: 'KSCMS Metabolic Syndrome Fact Sheet 2024. KNHANES VIII 2019-2021.',
       refUrl: 'https://kosis.kr',
       refNote: 'NHIS 건강검진 결과 기반, 정확한 대사증후군 유병률(NCEP ATP III 기준)과는 차이 있을 수 있음',
     },

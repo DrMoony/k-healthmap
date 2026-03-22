@@ -508,6 +508,40 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                 );
               })()}
 
+              {/* Obesity comorbidity OR info box */}
+              {provInfo && (
+                <div style={{
+                  background: 'rgba(255,0,110,0.06)',
+                  border: '1px solid rgba(255,0,110,0.15)',
+                  borderRadius: '8px',
+                  padding: '8px 10px',
+                  marginBottom: '8px',
+                }}>
+                  <div style={{ fontSize: '10px', color: '#ff006e', fontWeight: 700, marginBottom: '4px' }}>
+                    비만 동반질환 위험 (OR)
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {[
+                      { label: '당뇨', or: '5.2배', color: '#00d4ff' },
+                      { label: '대사증후군', or: '3.1배', color: '#ffd60a' },
+                      { label: '고혈압', or: '2.1배', color: '#ff6b6b' },
+                      { label: '이상지질혈증', or: '1.9배', color: '#b388ff' },
+                    ].map(item => (
+                      <span key={item.label} style={{
+                        fontSize: '10px', padding: '2px 7px', borderRadius: '10px',
+                        background: `${item.color}15`, border: `1px solid ${item.color}30`,
+                        color: item.color, fontFamily: "'JetBrains Mono', monospace", fontWeight: 600,
+                      }}>
+                        {item.label} {item.or}
+                      </span>
+                    ))}
+                  </div>
+                  <div style={{ fontSize: '9px', color: '#555570', marginTop: '4px' }}>
+                    출처: 대한비만학회 Fact Sheet 2024
+                  </div>
+                </div>
+              )}
+
               {/* Expanded badge ranking list */}
               {expandedBadge && (() => {
                 const ranked = getRankedList(expandedBadge);

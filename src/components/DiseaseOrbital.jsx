@@ -60,6 +60,14 @@ const diseaseNodes = [
     trend: '유병률 증가',
   },
   {
+    id: 'heart_failure', name: '심부전', nameEn: 'Heart Failure', level: 2,
+    prevalence: '2.58%', prevalenceNum: 2.58, population: '약 132만명',
+    color: '#e91e63', relatedIds: ['hypertension', 'diabetes', 'cvd', 'ckd'],
+    status: 'warning', energy: 72, angle: 180,
+    genderGap: { male: 2.55, female: 2.62 },
+    trend: '2002년 대비 3.6배 증가',
+  },
+  {
     id: 'ckd', name: 'CKD', nameEn: 'Chronic Kidney', level: 2,
     prevalence: '8.2%', prevalenceNum: 8.2, population: '약 360만명',
     color: '#4ecdc4', relatedIds: ['diabetes', 'hypertension', 'dialysis', 'kt'],

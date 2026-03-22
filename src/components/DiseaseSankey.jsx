@@ -20,6 +20,7 @@ const sankeyData = {
     { id: 'MASH ~153만', nodeColor: '#2ecc71' },
     { id: '심혈관질환', nodeColor: '#ff6b6b' },
     { id: 'CKD 357만', nodeColor: '#4ecdc4' },
+    { id: '심부전 132만', nodeColor: '#e91e63' },
     // Level 3 - Terminal outcomes
     { id: '간경변·HCC', nodeColor: '#e74c3c' },
     { id: 'MI·뇌졸중 14.5만/년', nodeColor: '#e67e22' },
@@ -97,6 +98,16 @@ const sankeyData = {
 
     { source: 'CKD 357만', target: '투석 13만', value: 13 },
     // ESKD 투석 13만 [NHIS]
+
+    // 심부전 flows
+    { source: '고혈압 1,300만', target: '심부전 132만', value: 100 },
+    // 심부전 132만 × HTN동반 78.7% = ~104만 → 역산 약 100만 [KSHF 2024]
+
+    { source: '당뇨 530만', target: '심부전 132만', value: 78 },
+    // 심부전 132만 × DM동반 58.8% = ~78만 [KSHF 2024]
+
+    { source: '심혈관질환', target: '심부전 132만', value: 67 },
+    // 심부전 132만 × IHD동반 50.6% = ~67만 [KSHF 2024]
   ],
 };
 
@@ -123,6 +134,9 @@ const LINK_EVIDENCE = {
   'MASH ~153만→간경변·HCC': 'MASH → 간경변 진행률 약 10%. 153만 × 10% = 15만. MASH 기인 HCC 비율 증가 추세. [KASL Fact Sheet 2023]',
   '심혈관질환→MI·뇌졸중 14.5만/년': '심혈관질환의 주요 종말점. 급성 심근경색 발생 연 3.5만건, 뇌졸중 연 11만건 = 14.5만/년. [KDCA Fact Sheet 2022]',
   'CKD 357만→투석 13만': 'CKD → ESKD 진행. 투석환자 약 13만명. 연간 1인당 의료비 약 3,000만원. [NHIS]',
+  '고혈압 1,300만→심부전 132만': '심부전 환자의 78.7%가 고혈압 동반. 132만 × 78.7% 역산 → 약 100만. 고혈압은 심부전의 1위 동반질환. [KSHF Heart Failure Statistics 2024]',
+  '당뇨 530만→심부전 132만': '심부전 환자의 58.8%가 당뇨 동반. 132만 × 58.8% = 약 78만. 당뇨는 심근 에너지 대사 장애 통해 심부전 촉진. [KSHF 2024]',
+  '심혈관질환→심부전 132만': '심부전 환자의 50.6%가 허혈성심질환 동반. 132만 × 50.6% = 약 67만. 심근경색 후 심부전 전이가 주요 경로. [KSHF 2024]',
 };
 
 // ── Node detail info ─────────────────────────────────────────
@@ -140,6 +154,7 @@ const NODE_DETAIL = {
   '간경변·HCC': { population: '간암 사망률 14.1/10만명', desc: 'MASLD → MASH → 간섬유화 → 간경변 → HCC. MASH 기인 HCC 증가 추세.', ref: 'KASL 2023' },
   'MI·뇌졸중 14.5만/년': { population: 'MI 3.5만건/년, 뇌졸중 11만건/년', desc: '골든타임 내 치료가 예후 결정. 뇌졸중 후 장애 발생률 약 50%.', ref: 'KDCA 2022' },
   '투석 13만': { population: '투석 13만명, 이식대기 3만명', desc: 'ESKD. 투석환자 5년 생존율 약 60%. 연간 의료비 약 3,000만원/인.', ref: 'NHIS' },
+  '심부전 132만': { population: '약 132만명 (2020)', desc: '심장 펌프 기능 부전. 2002-2020년 유병률 3.6배 증가 (0.77%→2.58%). 입원 사망률 16%, 연간 의료비 3.2조원. 고혈압 78.7%, 당뇨 58.8% 동반.', ref: 'KSHF Heart Failure Statistics 2024 Update' },
 };
 
 export default function DiseaseSankey() {
