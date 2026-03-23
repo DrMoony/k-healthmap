@@ -1809,7 +1809,7 @@ function CostTreemapView() {
       note: '직접: 입원 2.1조+외래 0.3조. 간접: 간병·재입원·조기사망, 한국 실측 없음.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
     { id: 'masld', name: 'MASLD', cost: 1.6, indirect: 10.0, indirectBasis: '⚠️ 근거 약함 (유럽 5개국 비율 한국 적용)',
       basis: '환자 직접 진료비', perPatient: '약 212만원/년', population: '진료 ~76만명',
-      note: '직접 1.6조. 간접 10조는 유럽 5개국(영·프·독·이·스) 연구(J Hepatol 2023)의 "간접=직접의 3-10배" 비율을 한국에 기계적 적용. 한국 실측 데이터 없음. 미진단 ~880만명 + MASH 진행 비용 포함 시 실제 부담은 막대하나 정확한 수치 산출 불가.', color: '#00ff88', ref: 'KASL FS 2023' },
+      note: '추정 유병자 ~1,650만명(성인 38%). 진단코드 768만, 적극 진료 ~76만, 미진단 ~880만. 직접비 1.6조는 진료이용 76만명 기준. 간접 10조는 유럽 연구 비율 적용 추정(한국 실측 없음). 1,650만명 전체의 사회적 부담은 산출 불가.', color: '#00ff88', ref: 'KASL FS 2023' },
   ];
 
   const sorted = [...costData].sort((a, b) => (b.cost + b.indirect) - (a.cost + a.indirect));
