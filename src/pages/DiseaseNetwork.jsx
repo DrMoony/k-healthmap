@@ -1792,21 +1792,23 @@ function CostTreemapView() {
   const [selectedCost, setSelectedCost] = useState(null);
   const w = 900, h = 340;
 
+  // indirect = 간접비(생산성 손실, 조기사망, 간병) + 미인지 환자 미래 비용 추정
+  // 근거: EU5 NAFLD 연구 — 간접비 = 직접의 3-10배, 비만 국민건강보험공단 2019 추정
   const costData = [
-    { id: 'htn', name: '고혈압', cost: 4.5, basis: '건보 직접 진료비', perPatient: '약 37만원/년', population: '약 1,200만명',
-      note: '건보 청구코드 기준 직접 진료비.', color: '#ffd60a', ref: 'KDCA 만성질환 현황 2025' },
-    { id: 'eskd', name: 'ESKD 투석', cost: 3.9, basis: '건보 직접 진료비', perPatient: '약 3,000만원/년', population: '약 13만명',
-      note: '혈액투석+복막투석 환자당 직접 진료비 × 환자 수.', color: '#9b59b6', ref: 'KSN ESKD FS 2024' },
-    { id: 'dm', name: '당뇨병', cost: 3.2, basis: '건보 직접 진료비', perPatient: '약 53만원/년', population: '약 600만명',
-      note: '건보 청구코드 기준. 약제비(OHA/인슐린) 별도 약 1.5조 추정.', color: '#00d4ff', ref: 'KDCA 만성질환 현황 2025' },
-    { id: 'hf', name: '심부전', cost: 3.2, basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
-      note: '입원 2.1조 + 외래 0.3조. 2002→2020 16배 증가.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
-    { id: 'masld', name: 'MASLD', cost: 1.6, basis: '환자 직접 진료비 (추정)', perPatient: '약 212만원/년', population: '진료이용 ~76만명',
-      note: '환자 1인당 212만원 × 진료이용 ~76만명. 전체 768만명 중 진단+진료 환자만.', color: '#00ff88', ref: 'KASL MASLD FS 2023' },
+    { id: 'htn', name: '고혈압', cost: 4.5, indirect: 3.5, basis: '건보 직접 진료비', perPatient: '약 37만원/년', population: '약 1,200만명',
+      note: '건보 청구코드 기준 직접 진료비. 간접비(생산성 손실 등) ~3.5조 추정.', color: '#ffd60a', ref: 'KDCA 만성질환 현황 2025' },
+    { id: 'eskd', name: 'ESKD 투석', cost: 3.9, indirect: 2.5, basis: '건보 직접 진료비', perPatient: '약 3,000만원/년', population: '약 13만명',
+      note: '환자당 직접 3,000만원. 간접비(간병·생산성) ~2.5조 추정.', color: '#9b59b6', ref: 'KSN ESKD FS 2024' },
+    { id: 'dm', name: '당뇨병', cost: 3.2, indirect: 4.8, basis: '건보 직접 진료비', perPatient: '약 53만원/년', population: '약 600만명',
+      note: '직접 3.2조 + 약제비 ~1.5조 + 합병증·생산성 ~3.3조. 미인지 25%(~134만명) 미래비용 미반영.', color: '#00d4ff', ref: 'KDCA 2025, KDA 연구' },
+    { id: 'hf', name: '심부전', cost: 3.2, indirect: 2.0, basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
+      note: '직접 3.2조. 간접비(간병·재입원·조기사망) ~2조 추정.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
+    { id: 'masld', name: 'MASLD', cost: 1.6, indirect: 10.0, basis: '환자 직접 진료비', perPatient: '약 212만원/년', population: '진료 ~76만명',
+      note: '직접 1.6조는 빙산의 일각. 미진단 ~880만명 + MASH 진행(간경변·HCC·이식) 비용 + 생산성 손실 = 간접 ~10조 추정. EU5 기준 간접=직접의 3-10배.', color: '#00ff88', ref: 'KASL FS 2023, J Hepatol 2023' },
   ];
 
-  const sorted = [...costData].sort((a, b) => b.cost - a.cost);
-  const maxCost = sorted[0].cost;
+  const sorted = [...costData].sort((a, b) => (b.cost + b.indirect) - (a.cost + a.indirect));
+  const maxCost = Math.max(...sorted.map(d => d.cost + d.indirect));
 
   const barH = 44;
   const gap = 8;
@@ -1819,39 +1821,52 @@ function CostTreemapView() {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '12px 24px 4px' }}>
         <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
-          질환별 직접 의료비 규모
+          질환별 사회경제적 부담
         </h2>
         <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#8888aa', margin: '4px 0 0' }}>
-          건보 청구코드 기준 직접 진료비 (간접비용·생산성 손실 미포함) — 단위: 조원/년
+          ■ 진한 색 = 직접 의료비 (건보 진료비)　■ 옅은 색 = 간접비 추정 (생산성 손실·미인지·진행 비용) — 조원/년
         </p>
       </div>
       <div style={{ flex: 1, display: 'flex', position: 'relative', minHeight: 0 }}>
         <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', display: 'block' }} preserveAspectRatio="xMidYMin meet">
           {sorted.map((d, i) => {
             const y = startY + i * (barH + gap);
-            const barW = (d.cost / maxCost) * barAreaW;
+            const totalW = ((d.cost + d.indirect) / maxCost) * barAreaW;
+            const directW = (d.cost / maxCost) * barAreaW;
             const isSelected = selectedCost?.id === d.id;
-            const opacity = 0.4 + (d.cost / maxCost) * 0.55;
             return (
               <g key={d.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedCost(isSelected ? null : d)}>
                 <text x={labelW - 8} y={y + barH / 2 - 4} textAnchor="end" dominantBaseline="middle"
-                  fill={isSelected ? d.color : '#ccccee'} fontSize={14} fontWeight={700} fontFamily="'Noto Sans KR', sans-serif">
+                  fill={isSelected ? d.color : '#ccccee'} fontSize={13} fontWeight={700} fontFamily="'Noto Sans KR', sans-serif">
                   {d.name}
                 </text>
                 <text x={labelW - 8} y={y + barH / 2 + 12} textAnchor="end"
                   fill="#555" fontSize={9} fontFamily="'JetBrains Mono', monospace">
                   {d.basis}
                 </text>
-                <rect x={labelW} y={y + 6} width={barW} height={barH - 12} rx={6}
-                  fill={d.color} opacity={opacity}
+                {/* Indirect cost bar — lighter */}
+                <rect x={labelW} y={y + 6} width={totalW} height={barH - 12} rx={6}
+                  fill={d.color} opacity={0.12}
+                  stroke={d.color} strokeWidth={0.5} strokeOpacity={0.2} strokeDasharray="4,3" />
+                {/* Direct cost bar — solid */}
+                <rect x={labelW} y={y + 6} width={directW} height={barH - 12} rx={6}
+                  fill={d.color} opacity={0.5 + (d.cost / maxCost) * 0.4}
                   stroke={isSelected ? '#fff' : 'none'} strokeWidth={isSelected ? 1.5 : 0} />
-                <text x={labelW + barW - 8} y={y + barH / 2} textAnchor="end" dominantBaseline="middle"
-                  fill="#fff" fontSize={20} fontWeight={800} fontFamily="'JetBrains Mono', monospace">
+                {/* Direct label */}
+                <text x={labelW + directW - 6} y={y + barH / 2 - 1} textAnchor="end" dominantBaseline="middle"
+                  fill="#fff" fontSize={16} fontWeight={800} fontFamily="'JetBrains Mono', monospace">
                   {d.cost}조
                 </text>
+                {/* Indirect label */}
+                {d.indirect > 0 && (
+                  <text x={labelW + totalW - 4} y={y + barH / 2 - 1} textAnchor="end" dominantBaseline="middle"
+                    fill={d.color} fontSize={11} fontWeight={600} fontFamily="'JetBrains Mono', monospace" opacity={0.6}>
+                    +{d.indirect}조
+                  </text>
+                )}
                 <text x={labelW + barAreaW + 14} y={y + barH / 2 - 6}
                   fill="#aaaacc" fontSize={11} fontFamily="'JetBrains Mono', monospace">
-                  {d.perPatient}
+                  총 {(d.cost + d.indirect).toFixed(1)}조
                 </text>
                 <text x={labelW + barAreaW + 14} y={y + barH / 2 + 10}
                   fill="#666" fontSize={10} fontFamily="'Noto Sans KR', sans-serif">
@@ -1874,7 +1889,9 @@ function CostTreemapView() {
             <h4 style={{ color: selectedCost.color, margin: '0 0 8px', fontSize: 14 }}>{selectedCost.name}</h4>
             {[
               ['비용 기준', selectedCost.basis],
-              ['연간 직접 의료비', `${selectedCost.cost}조원`],
+              ['직접 의료비', `${selectedCost.cost}조원`],
+              ['간접비 추정', `${selectedCost.indirect}조원`],
+              ['총 사회적 부담', `${(selectedCost.cost + selectedCost.indirect).toFixed(1)}조원`],
               ['환자당 비용', selectedCost.perPatient],
               ['대상 인구', selectedCost.population],
               ['비고', selectedCost.note],
