@@ -2334,7 +2334,7 @@ export default function DiseaseNetwork() {
         </div>
 
         {/* ── View Content ────────────────── */}
-        <div style={{ flex: 1, overflow: 'hidden' }}>
+        <div key={viewMode} style={{ flex: 1, overflow: 'hidden', minHeight: 0 }}>
           {viewMode === 'network' && (
             <NetworkView
               selectedId={selectedId}
