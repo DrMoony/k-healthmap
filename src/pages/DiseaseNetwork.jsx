@@ -1792,19 +1792,24 @@ function CostTreemapView() {
   const [selectedCost, setSelectedCost] = useState(null);
   const w = 900, h = 340;
 
-  // indirect = 간접비(생산성 손실, 조기사망, 간병) + 미인지 환자 미래 비용 추정
-  // 근거: EU5 NAFLD 연구 — 간접비 = 직접의 3-10배, 비만 국민건강보험공단 2019 추정
+  // indirect = 간접비 추정 (생산성 손실, 조기사망, 간병, 미인지 환자)
+  // ⚠️ 간접비는 한국 실측 데이터가 아닌 추정치. 근거 수준 표기 필수.
   const costData = [
-    { id: 'htn', name: '고혈압', cost: 4.5, indirect: 3.5, basis: '건보 직접 진료비', perPatient: '약 37만원/년', population: '약 1,200만명',
-      note: '건보 청구코드 기준 직접 진료비. 간접비(생산성 손실 등) ~3.5조 추정.', color: '#ffd60a', ref: 'KDCA 만성질환 현황 2025' },
-    { id: 'eskd', name: 'ESKD 투석', cost: 3.9, indirect: 2.5, basis: '건보 직접 진료비', perPatient: '약 3,000만원/년', population: '약 13만명',
-      note: '환자당 직접 3,000만원. 간접비(간병·생산성) ~2.5조 추정.', color: '#9b59b6', ref: 'KSN ESKD FS 2024' },
-    { id: 'dm', name: '당뇨병', cost: 3.2, indirect: 4.8, basis: '건보 직접 진료비', perPatient: '약 53만원/년', population: '약 600만명',
-      note: '직접 3.2조 + 약제비 ~1.5조 + 합병증·생산성 ~3.3조. 미인지 25%(~134만명) 미래비용 미반영.', color: '#00d4ff', ref: 'KDCA 2025, KDA 연구' },
-    { id: 'hf', name: '심부전', cost: 3.2, indirect: 2.0, basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
-      note: '직접 3.2조. 간접비(간병·재입원·조기사망) ~2조 추정.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
-    { id: 'masld', name: 'MASLD', cost: 1.6, indirect: 10.0, basis: '환자 직접 진료비', perPatient: '약 212만원/년', population: '진료 ~76만명',
-      note: '직접 1.6조는 빙산의 일각. 미진단 ~880만명 + MASH 진행(간경변·HCC·이식) 비용 + 생산성 손실 = 간접 ~10조 추정. EU5 기준 간접=직접의 3-10배.', color: '#00ff88', ref: 'KASL FS 2023, J Hepatol 2023' },
+    { id: 'htn', name: '고혈압', cost: 4.5, indirect: 3.5, indirectBasis: '추정 (한국 연구 미발표)',
+      basis: '건보 직접 진료비', perPatient: '약 37만원/년', population: '약 1,200만명',
+      note: '직접: 건보 청구코드 기준. 간접: 한국 실측 데이터 없음, 해외 비율(직접의 0.5-1배) 적용 추정.', color: '#ffd60a', ref: 'KDCA 만성질환 현황 2025' },
+    { id: 'eskd', name: 'ESKD 투석', cost: 3.9, indirect: 2.5, indirectBasis: '추정 (간병비 일부 연구)',
+      basis: '건보 직접 진료비', perPatient: '약 3,000만원/년', population: '약 13만명',
+      note: '직접: 환자당 3,000만원. 간접: 간병비·생산성 손실, 국내 일부 연구 기반 추정.', color: '#9b59b6', ref: 'KSN ESKD FS 2024' },
+    { id: 'dm', name: '당뇨병', cost: 3.2, indirect: 4.8, indirectBasis: '추정 (KDA 연구 일부)',
+      basis: '건보 직접 진료비', perPatient: '약 53만원/년', population: '약 600만명',
+      note: '직접: 건보 청구. 간접: 약제비 ~1.5조 + 합병증·생산성 ~3.3조 추정. 미인지 25%(~134만명) 미래비용 미반영.', color: '#00d4ff', ref: 'KDCA 2025' },
+    { id: 'hf', name: '심부전', cost: 3.2, indirect: 2.0, indirectBasis: '추정 (한국 연구 미발표)',
+      basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
+      note: '직접: 입원 2.1조+외래 0.3조. 간접: 간병·재입원·조기사망, 한국 실측 없음.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
+    { id: 'masld', name: 'MASLD', cost: 1.6, indirect: 10.0, indirectBasis: '⚠️ 근거 매우 약 (EU5 비율 적용)',
+      basis: '환자 직접 진료비', perPatient: '약 212만원/년', population: '진료 ~76만명',
+      note: '직접 1.6조. 간접 10조는 EU5 연구(J Hepatol 2023) "간접=직접의 3-10배" 기계적 적용. 한국 실측 데이터 없음. 미진단 ~880만명 + MASH 진행 비용 포함 시 실제 부담은 막대하나 정확한 수치 산출 불가.', color: '#00ff88', ref: 'KASL FS 2023' },
   ];
 
   const sorted = [...costData].sort((a, b) => (b.cost + b.indirect) - (a.cost + a.indirect));
@@ -1890,7 +1895,7 @@ function CostTreemapView() {
             {[
               ['비용 기준', selectedCost.basis],
               ['직접 의료비', `${selectedCost.cost}조원`],
-              ['간접비 추정', `${selectedCost.indirect}조원`],
+              ['간접비 추정', `${selectedCost.indirect}조원 (${selectedCost.indirectBasis})`],
               ['총 사회적 부담', `${(selectedCost.cost + selectedCost.indirect).toFixed(1)}조원`],
               ['환자당 비용', selectedCost.perPatient],
               ['대상 인구', selectedCost.population],
@@ -1906,7 +1911,7 @@ function CostTreemapView() {
         )}
       </div>
       <div style={{ padding: '4px 24px 8px', fontSize: 10, color: '#4a4a6a', fontFamily: "'Noto Sans KR', sans-serif" }}>
-        ※ 건보 청구코드 기준 직접 진료비. 간접비용(생산성 손실, 간병비) 미포함. 약제비 기준 질환별 상이. 출처: KDCA 2025, KSHF 2024, KASL 2023, KSN 2024
+        ※ 직접비: 건보 청구코드 기준. 간접비: 한국 실측 데이터 대부분 미발표, 해외 연구 비율 기반 추정. 근거 수준은 질환별 상이. 출처: KDCA 2025, KSHF 2024, KASL 2023, KSN 2024, J Hepatol 2023
       </div>
     </div>
   );
