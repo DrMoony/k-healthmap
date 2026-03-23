@@ -1807,9 +1807,9 @@ function CostTreemapView() {
     { id: 'hf', name: '심부전', cost: 3.2, indirect: 2.0, indirectBasis: '추정 (한국 연구 미발표)',
       basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
       note: '직접: 입원 2.1조+외래 0.3조. 간접: 간병·재입원·조기사망, 한국 실측 없음.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
-    { id: 'masld', name: 'MASLD', cost: 1.6, indirect: 10.0, indirectBasis: '⚠️ 근거 약함 (유럽 5개국 비율 한국 적용)',
-      basis: '환자 직접 진료비', perPatient: '약 212만원/년', population: '진료 ~76만명',
-      note: '추정 유병자 ~1,650만명(성인 38%). 진단코드 768만, 적극 진료 ~76만, 미진단 ~880만. 직접비 1.6조는 진료이용 76만명 기준. 간접 10조는 유럽 연구 비율 적용 추정(한국 실측 없음). 1,650만명 전체의 사회적 부담은 산출 불가.', color: '#00ff88', ref: 'KASL FS 2023' },
+    { id: 'masld', name: 'MASLD', cost: 16.3, indirect: 10.0, indirectBasis: '⚠️ 근거 약함 (유럽 5개국 비율 한국 적용)',
+      basis: 'NHIS 환자 1인당 진료비 × 환자수', perPatient: '약 212만원/년', population: 'NHIS 768만명',
+      note: 'NHIS 청구 환자 768만명 × 1인당 212만원 = 16.3조. 추정 유병 ~1,650만명(성인 38%) 중 768만만 진료 이용. 미진단 ~880만명의 미래 비용 미반영. 간접 10조는 유럽 연구 비율 적용(한국 실측 없음).', color: '#00ff88', ref: 'KASL MASLD FS 2023' },
   ];
 
   const sorted = [...costData].sort((a, b) => (b.cost + b.indirect) - (a.cost + a.indirect));
