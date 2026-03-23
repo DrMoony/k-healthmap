@@ -1095,7 +1095,7 @@ function MASLDHeatmapView() {
     if (col >= 0 && col < AGE_GROUPS.length && row >= 0 && row < OUTCOMES.length) {
       setTooltip({
         x: e.clientX, y: e.clientY,
-        text: `${OUTCOME_LABELS[row]} (${AGE_GROUPS[col]}): ${matrix[row][col].toFixed(2)}%`,
+        text: `${AGE_GROUPS[col]}세 MASLD 환자 중 ${matrix[row][col].toFixed(1)}%에서 10년 내 ${OUTCOME_LABELS[row]} 발생`,
       });
     } else {
       setTooltip(null);
@@ -1113,13 +1113,15 @@ function MASLDHeatmapView() {
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
             color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,255,136,0.3)',
           }}>
-            MASLD 환자의 10년 후 합병증 발생률
+            MASLD 코호트 10년 누적 질환 발생률
           </h2>
           <p style={{
-            fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#8888aa',
-            margin: '4px 0 0', lineHeight: 1.5,
+            fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc',
+            margin: '4px 0 0', lineHeight: 1.6,
           }}>
-            2010년 MASLD 진단 코호트 10년 추적 — 연령별 누적 발생률 (%). ⚠️ 여성 데이터 일부 매핑 오류 의심 (원본 팩트시트 검증 필요)
+            2010년 MASLD 진단 환자를 10년간 추적하여, 각 연령대에서 해당 질환이 새로 발생한 누적 비율(%).
+            예: 20-29세 남성 MASLD 환자 중 3.6%에서 10년 내 악성종양 발생.
+            ⚠️ 대조군 대비가 아닌 MASLD 코호트 내 절대 발생률. 여성 일부 데이터 검증 필요.
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
