@@ -1802,6 +1802,7 @@ function ManagementView() {
   const diseases = [
     {
       id: 'htn', name: '고혈압', color: '#ffd60a', highlight: false,
+      patients: '~1,300만',
       stages: [
         { label: '인지', value: 77 },
         { label: '치료', value: 74 },
@@ -1812,6 +1813,7 @@ function ManagementView() {
     },
     {
       id: 'dm', name: '당뇨', color: '#00d4ff', highlight: true,
+      patients: '~530만',
       stages: [
         { label: '인지', value: 75 },
         { label: '치료', value: 71 },
@@ -1832,6 +1834,7 @@ function ManagementView() {
     },
     {
       id: 'dyslip', name: '이상지질혈증', color: '#b388ff', highlight: false,
+      patients: '~1,780만',
       stages: [
         { label: '인지', value: 68 },
         { label: '치료', value: 61 },
@@ -1842,21 +1845,34 @@ function ManagementView() {
     },
     {
       id: 'ckd', name: 'CKD', color: '#4ecdc4', highlight: false,
+      patients: '~357만',
       stages: [
         { label: '인지', value: 6.3 },
+        { label: '치료', value: null },
+        { label: '조절', value: null },
       ],
       detail: 'CKD 인지율 1.3~6.3%로 극히 낮음. 대부분 투석 직전까지 인지 못함. 조기 선별 시급.',
       ref: '대한신장학회 KORDS 2023',
     },
     {
       id: 'obesity', name: '비만', color: '#ff006e', highlight: false,
-      stages: [],
+      patients: '~1,670만',
+      stages: [
+        { label: '인지', value: null },
+        { label: '치료', value: null },
+        { label: '조절', value: null },
+      ],
       detail: '비만 관리 캐스케이드 공식 데이터 부재. 인지율 약 55% 추정, 적극 관리 30%, 5% 이상 감량 성공 12%.',
       ref: '대한비만학회 Fact Sheet 2024 (추정)',
     },
     {
       id: 'masld', name: 'MASLD', color: '#00ff88', highlight: false,
-      stages: [],
+      patients: '~768만',
+      stages: [
+        { label: '인지', value: null },
+        { label: '치료', value: null },
+        { label: '조절', value: null },
+      ],
       detail: 'MASLD 인지율 ~10%. 건강검진에서 지방간 소견 있으나 후속 관리 부재. FIB-4 기반 선별 도입 필요.',
       ref: 'KASL MASLD Fact Sheet 2023',
     },
@@ -1874,53 +1890,37 @@ function ManagementView() {
     const fx = startX + idx * (funnelW + funnelGap);
     const stages = d.stages;
     const isSelected = selectedDisease?.id === d.id;
-    const hasData = stages.length > 0;
-
-    if (!hasData) {
-      // No data funnel - show placeholder
-      return (
-        <g key={d.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedDisease(isSelected ? null : d)}>
-          <rect x={fx} y={funnelTop - 10} width={funnelW} height={funnelH + 30} rx={8}
-            fill={isSelected ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.01)'}
-            stroke={isSelected ? `${d.color}66` : 'rgba(255,255,255,0.03)'} strokeWidth={1} />
-          {/* Disease name */}
-          <text x={fx + funnelW / 2} y={funnelTop + 8} textAnchor="middle"
-            fill={isSelected ? d.color : '#aaaacc'} fontSize={12} fontWeight={700}
-            fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
-          {/* Highlight marker */}
-          {d.highlight && <circle cx={fx + funnelW / 2 + 28} cy={funnelTop + 4} r={3} fill={d.color} opacity={0.8} />}
-          {/* No data message */}
-          <text x={fx + funnelW / 2} y={funnelTop + funnelH / 2} textAnchor="middle"
-            fill="#4a4a6a" fontSize={10} fontFamily="'JetBrains Mono', monospace">데이터 부족</text>
-        </g>
-      );
-    }
 
     // Build trapezoid stages
     const maxStageW = funnelW - 16;
     const stageH = Math.min(funnelH / stages.length - 4, 55);
-    const stageStartY = funnelTop + 24;
+    const stageStartY = funnelTop + 32;
 
     return (
       <g key={d.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedDisease(isSelected ? null : d)}>
         <rect x={fx} y={funnelTop - 10} width={funnelW} height={funnelH + 30} rx={8}
           fill={isSelected ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.01)'}
           stroke={isSelected ? `${d.color}66` : 'rgba(255,255,255,0.03)'} strokeWidth={1} />
-        {/* Disease name */}
-        <text x={fx + funnelW / 2} y={funnelTop + 8} textAnchor="middle"
+        {/* Disease name + patient count */}
+        <text x={fx + funnelW / 2} y={funnelTop + 4} textAnchor="middle"
           fill={isSelected ? d.color : '#aaaacc'} fontSize={12} fontWeight={700}
           fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
-        {/* Highlight marker for diabetes */}
-        {d.highlight && <circle cx={fx + funnelW / 2 + 28} cy={funnelTop + 4} r={3} fill={d.color} opacity={0.8} />}
+        {d.patients && (
+          <text x={fx + funnelW / 2} y={funnelTop + 18} textAnchor="middle"
+            fill="#666" fontSize={10} fontFamily="'JetBrains Mono', monospace">{d.patients}</text>
+        )}
+        {d.highlight && <circle cx={fx + funnelW / 2 + 28} cy={funnelTop} r={3} fill={d.color} opacity={0.8} />}
         {/* Trapezoid stages */}
         {stages.map((stage, si) => {
-          const nextVal = si < stages.length - 1 ? stages[si + 1].value : stage.value * 0.7;
-          const topW = (stage.value / 100) * maxStageW;
-          const bottomW = (nextVal / 100) * maxStageW;
+          const val = stage.value ?? 0;
+          const nextStage = si < stages.length - 1 ? stages[si + 1] : null;
+          const nextVal = nextStage ? (nextStage.value ?? val * 0.7) : val * 0.7;
+          const topW = val > 0 ? (val / 100) * maxStageW : maxStageW * 0.15;
+          const bottomW = nextVal > 0 ? (nextVal / 100) * maxStageW : maxStageW * 0.1;
           const cy = fx + funnelW / 2;
           const yTop = stageStartY + si * (stageH + 4);
           const yBottom = yTop + stageH;
-          const opacity = 0.35 + (stage.value / 100) * 0.55;
+          const opacity = val > 0 ? (0.35 + (val / 100) * 0.55) : 0.15;
 
           const path = `M${cy - topW / 2},${yTop} L${cy + topW / 2},${yTop} L${cy + bottomW / 2},${yBottom} L${cy - bottomW / 2},${yBottom} Z`;
 
@@ -1932,7 +1932,7 @@ function ManagementView() {
               <text x={cy} y={yTop + stageH / 2 - 4} textAnchor="middle"
                 fill="#ffffff" fontSize={10} fontWeight={700} fontFamily="'JetBrains Mono', monospace"
                 style={{ textShadow: '0 0 6px rgba(0,0,0,0.9)' }}>
-                {stage.value < 10 ? stage.value.toFixed(1) : Math.round(stage.value)}%
+                {stage.value == null ? '?' : (val < 10 ? val.toFixed(1) : Math.round(val)) + '%'}
               </text>
               <text x={cy} y={yTop + stageH / 2 + 8} textAnchor="middle"
                 fill="rgba(255,255,255,0.5)" fontSize={8} fontFamily="'Noto Sans KR', sans-serif">
