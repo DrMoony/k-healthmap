@@ -1947,12 +1947,12 @@ function CostTreemapView() {
   const sorted = [...costData].sort((a, b) => b.cost - a.cost);
   const maxCost = sorted[0].cost;
 
-  const barH = 52;
-  const gap = 12;
+  const barH = 44;
+  const gap = 8;
   const labelW = 130;
   const rightInfo = 180;
   const barAreaW = w - labelW - rightInfo - 20;
-  const startY = 70;
+  const startY = 20;
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
