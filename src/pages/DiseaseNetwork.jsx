@@ -1809,7 +1809,7 @@ function CostTreemapView() {
       note: '직접: 입원 2.1조+외래 0.3조. 간접: 간병·재입원·조기사망, 한국 실측 없음.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
     { id: 'masld', name: 'MASLD', cost: 7.5, indirect: 10.0, indirectBasis: '⚠️ 근거 약함 (유럽 비율 적용)',
       basis: 'MASLD 초과 의료비', perPatient: '초과 97만원/년 (총 212만 - 대조군 115만)', population: '유병환자 768만명 (2022)',
-      note: '212만원은 MASLD 환자의 "총" 의료비(지방간 외 포함). 대조군(성별·연령 매칭) 115만원과의 차이 97만원이 MASLD 기인 초과 비용. 768만 × 97만 = 7.5조(초과분). 추정 유병 ~1,650만 중 768만만 진료.', color: '#00ff88', ref: 'KASL MASLD FS 2023 (NHIS, 1:2 매칭)' },
+      note: '212만원 = 매칭 코호트 연구 기반 MASLD 환자 1인당 "총" 의료비(지방간 외 포함). 대조군(성별·연령 1:2 매칭) 115만원 대비 초과 97만원. 768만 × 97만 = 7.5조는 "추정치"(실측 합산 아님). 유병 ~1,650만 중 768만 진료.', color: '#00ff88', ref: 'KASL MASLD FS 2023 (NHIS, 매칭 코호트)' },
   ];
 
   const sorted = [...costData].sort((a, b) => (b.cost + b.indirect) - (a.cost + a.indirect));
