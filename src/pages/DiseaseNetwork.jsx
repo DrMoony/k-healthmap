@@ -239,13 +239,12 @@ const LEVEL_ZONE_BORDERS = [
 const VIEW_MODES = [
   { id: 'network', label: '질환 네트워크' },
   { id: 'masld', label: 'MASLD 진행' },
-  { id: 'cascade', label: '관리 캐스케이드' },
+  { id: 'management', label: '관리 현황' },
   { id: 'trends', label: '추이 비교' },
   { id: 'orbital', label: '궤도 뷰' },
   { id: 'sankey', label: '질환 흐름' },
   { id: 'upset', label: '동반질환' },
   { id: 'cost', label: '의료비' },
-  { id: 'management', label: '관리 비교' },
   { id: 'survival', label: '생존 곡선' },
 ];
 
@@ -1260,245 +1259,6 @@ function MASLDHeatmapView() {
 }
 
 // ── Diabetes Control Cascade (SVG Funnel) ────────────────────
-function CascadeView() {
-  const containerRef = useRef(null);
-  const svgRef = useRef(null);
-  const [cascadeDetail, setCascadeDetail] = useState(null);
-
-  // Fixed viewBox 900x420
-  const w = 900, h = 340;
-
-  // Overall cascade (30+)
-  const overall = [
-    { label: '당뇨 환자', value: 100, sub: '30세 이상' },
-    { label: '인지', value: 74.7, sub: 'Awareness' },
-    { label: '치료', value: 70.9, sub: 'Treatment' },
-    { label: 'HbA1c <6.5%', value: 32.4, sub: 'Glycemic Control' },
-    { label: '+BP 조절', value: 32.4 * 0.608, sub: 'BP <140/85' },
-    { label: '+LDL 조절', value: 15.9, sub: 'LDL <100' },
-    { label: '통합관리', value: 15.9, sub: 'All 3 Targets Met' },
-  ];
-
-  // Young adult cascade (19-39)
-  const young = [
-    { value: 100 },
-    { value: 43.3 },
-    { value: 34.6 },
-    { value: 29.6 },
-    { value: 29.6 * 0.269 },
-    { value: 9.2 },
-    { value: 9.2 },
-  ];
-
-  // Funnel dimensions
-  const marginT = 52;
-  const marginB = 8;
-  const maxWidth = 580;
-  const cx = w / 2 - 20; // center x, shifted left for right-side labels
-  const stepCount = overall.length;
-  const totalH = h - marginT - marginB;
-  const stepH = totalH / stepCount;
-
-  const getStepColor = (val) => {
-    const t = val / 100;
-    const r = Math.round(0 + (1 - t) * 255);
-    const g = Math.round(212 * t);
-    const b = Math.round(255 * t);
-    return `rgb(${r},${g},${b})`;
-  };
-
-  return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ padding: '12px 24px 4px' }}>
-        <h2 style={{
-          fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
-          color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,212,255,0.3)',
-        }}>
-          당뇨 관리 캐스케이드
-        </h2>
-        <p style={{
-          fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a',
-          margin: '2px 0 0', letterSpacing: 0.5,
-        }}>
-          DIABETES INTEGRATED CONTROL FUNNEL
-        </p>
-      </div>
-      <div style={{ flex: 1, padding: '0 8px 0', position: 'relative' }} ref={containerRef}>
-        <svg ref={svgRef} viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }}
-          preserveAspectRatio="xMidYMin meet">
-          <defs>
-            <pattern id="cascGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
-            </pattern>
-          </defs>
-          <rect width={w} height={h} fill="url(#cascGrid)" />
-
-          {/* Funnel trapezoids */}
-          {overall.map((step, i) => {
-            const topW = (step.value / 100) * maxWidth;
-            const bottomW = i < overall.length - 1
-              ? (overall[i + 1].value / 100) * maxWidth
-              : topW * 0.85;
-            const yTop = marginT + i * stepH;
-            const yBottom = yTop + stepH;
-            const color = getStepColor(step.value);
-            const opacity = 0.4 + (step.value / 100) * 0.55;
-
-            // Trapezoid points: top-left, top-right, bottom-right, bottom-left
-            const path = `M${cx - topW / 2},${yTop} L${cx + topW / 2},${yTop} L${cx + bottomW / 2},${yBottom} L${cx - bottomW / 2},${yBottom} Z`;
-
-            // Drop-off between this step and next
-            const dropPct = i < overall.length - 1 ? step.value - overall[i + 1].value : 0;
-            const dropOpacity = dropPct > 1 ? Math.min(dropPct / 40, 0.7) * 0.35 : 0;
-
-            // Young adult comparison bar
-            const youngBarH = Math.max((young[i].value / 100) * stepH * 0.8, 2);
-            const youngBarX = cx + topW / 2 + 30;
-
-            return (
-              <g key={i} style={{ cursor: 'pointer' }}
-                onClick={() => setCascadeDetail({
-                  type: 'bar', label: step.label, sub: step.sub,
-                  value: step.value,
-                  prevValue: i > 0 ? overall[i - 1].value : null,
-                  youngValue: young[i].value,
-                })}>
-                {/* Main trapezoid */}
-                <path d={path} fill={color} opacity={opacity} />
-                <path d={path} fill="none" stroke={color} strokeWidth="1" opacity="0.5" />
-
-                {/* Drop-off red tint in the angled gap areas */}
-                {dropPct > 1 && (
-                  <g>
-                    <path d={`M${cx - topW / 2},${yTop} L${cx - topW / 2},${yBottom} L${cx - bottomW / 2},${yBottom} Z`}
-                      fill="#ff2222" opacity={dropOpacity} />
-                    <path d={`M${cx + topW / 2},${yTop} L${cx + topW / 2},${yBottom} L${cx + bottomW / 2},${yBottom} Z`}
-                      fill="#ff2222" opacity={dropOpacity} />
-                  </g>
-                )}
-
-                {/* Step label - left side */}
-                <text x={cx - topW / 2 - 10} y={yTop + stepH / 2 + 1} textAnchor="end"
-                  fill="#aaaacc" fontSize="11" fontFamily="'Noto Sans KR', sans-serif" fontWeight="600">
-                  {step.label}
-                </text>
-                <text x={cx - topW / 2 - 10} y={yTop + stepH / 2 + 14} textAnchor="end"
-                  fill="#4a4a6a" fontSize="9" fontFamily="'JetBrains Mono', monospace">
-                  {step.sub}
-                </text>
-
-                {/* Value label - center */}
-                <text x={cx} y={yTop + stepH / 2 + 2} textAnchor="middle"
-                  fill="#ffffff" fontSize="14" fontWeight="700"
-                  fontFamily="'JetBrains Mono', monospace"
-                  style={{ textShadow: '0 0 8px rgba(0,0,0,0.8)' }}>
-                  {step.value.toFixed(1)}%
-                </text>
-
-                {/* Drop amount - right of funnel */}
-                {dropPct > 1 && (
-                  <text x={cx + topW / 2 + 10} y={yTop + stepH - 2} textAnchor="start"
-                    fill="#ff6666" fontSize="9" fontWeight="600"
-                    fontFamily="'JetBrains Mono', monospace">
-                    ▼ {dropPct.toFixed(1)}%p
-                  </text>
-                )}
-
-                {/* Young adult comparison bar */}
-                <rect x={youngBarX} y={yTop + (stepH - youngBarH) / 2}
-                  width={6} height={youngBarH}
-                  fill="#ff006e" opacity="0.7" rx="2" />
-                <text x={youngBarX + 12} y={yTop + stepH / 2 + 3} textAnchor="start"
-                  fill="#ff006e" fontSize="9" fontWeight="600"
-                  fontFamily="'JetBrains Mono', monospace">
-                  {young[i].value.toFixed(1)}%
-                </text>
-              </g>
-            );
-          })}
-
-          {/* Legend */}
-          <g>
-            <rect x={w - 200} y={8} width={185} height={38} rx="6"
-              fill="#0d0d1aee" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
-            <path d={`M${w - 192},${18} L${w - 178},${18} L${w - 180},${28} L${w - 190},${28} Z`}
-              fill="#00d4ff" opacity="0.7" />
-            <text x={w - 174} y={26} fill="#aaaacc" fontSize="10" fontFamily="'Noto Sans KR', sans-serif">
-              30세 이상 전체
-            </text>
-            <rect x={w - 190} y={33} width={6} height={8} rx="2" fill="#ff006e" opacity="0.7" />
-            <text x={w - 174} y={41} fill="#ff006e" fontSize="10" fontFamily="'Noto Sans KR', sans-serif">
-              19-39세 청년층
-            </text>
-          </g>
-        </svg>
-        {/* Cascade click detail */}
-        {cascadeDetail && (
-          <div className="detail-panel" style={{
-            position: 'absolute', top: 10, right: 10,
-            background: '#1a1a2eee', border: '1px solid rgba(0,212,255,0.3)', borderRadius: 10,
-            padding: '12px 14px', zIndex: 50, minWidth: 200, maxWidth: 260,
-            maxHeight: '250px', overflowY: 'auto',
-            boxShadow: '0 0 20px rgba(0,212,255,0.15)',
-          }}>
-            <button onClick={() => setCascadeDetail(null)} style={{
-              position: 'absolute', top: 6, right: 8,
-              background: 'rgba(255,255,255,0.06)', border: 'none',
-              color: '#8888aa', fontSize: 14, cursor: 'pointer',
-              width: 22, height: 22, borderRadius: '50%',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>x</button>
-            <h4 style={{ color: cascadeDetail.type === 'young' ? '#ff006e' : '#00d4ff', margin: '0 0 6px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-              {cascadeDetail.label}
-            </h4>
-            <p style={{ color: '#6666aa', fontSize: 10, margin: '0 0 10px' }}>{cascadeDetail.sub}</p>
-            {cascadeDetail.type === 'bar' && (
-              <>
-                <div className="stat-row">
-                  <span className="stat-label">잔존율</span>
-                  <span className="stat-value" style={{ color: '#00d4ff' }}>{cascadeDetail.value.toFixed(1)}%</span>
-                </div>
-                {cascadeDetail.prevValue && (
-                  <div className="stat-row">
-                    <span className="stat-label">이전 단계 대비 감소</span>
-                    <span className="stat-value" style={{ color: '#ff6666' }}>-{(cascadeDetail.prevValue - cascadeDetail.value).toFixed(1)}%p</span>
-                  </div>
-                )}
-                <div className="stat-row">
-                  <span className="stat-label">청년층 비교</span>
-                  <span className="stat-value" style={{ color: '#ff006e' }}>{cascadeDetail.youngValue.toFixed(1)}%</span>
-                </div>
-              </>
-            )}
-            {cascadeDetail.type === 'young' && (
-              <>
-                <div className="stat-row">
-                  <span className="stat-label">청년층 (19-39세)</span>
-                  <span className="stat-value" style={{ color: '#ff006e' }}>{cascadeDetail.youngValue.toFixed(1)}%</span>
-                </div>
-                <div className="stat-row">
-                  <span className="stat-label">전체 (30세+)</span>
-                  <span className="stat-value" style={{ color: '#00d4ff' }}>{cascadeDetail.overallValue.toFixed(1)}%</span>
-                </div>
-                <div className="stat-row">
-                  <span className="stat-label">격차</span>
-                  <span className="stat-value" style={{ color: '#ff6666' }}>{cascadeDetail.gap}%p</span>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-      <div style={{
-        padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 10, color: '#4a4a6a',
-      }}>
-        출처: KDA Diabetes Fact Sheet 2024, KNHANES 2019-2022
-      </div>
-    </div>
-  );
-}
-
 // ── Multi-Disease Trend Comparison (SVG) ────────────────────
 function TrendsView() {
   const svgRef = useRef(null);
@@ -2035,112 +1795,269 @@ function CostTreemapView() {
 }
 
 // ── Management Comparison View ───────────────────────────────
-function ManagementComparisonView() {
-  const [selectedFunnel, setSelectedFunnel] = useState(null);
+function ManagementView() {
+  const [selectedDisease, setSelectedDisease] = useState(null);
   const w = 900, h = 340;
 
   const diseases = [
-    { id: 'htn', name: '고혈압', color: '#ffd60a',
-      stages: [{ label: '인지', value: 77 }, { label: '치료', value: 74 }, { label: '조절', value: 59 }],
-      detail: '고혈압 인지율 77%, 치료율 74%, 조절율 59%. 3차 예방 강화 필요.' },
-    { id: 'dm', name: '당뇨', color: '#00d4ff',
-      stages: [{ label: '인지', value: 75 }, { label: '치료', value: 71 }, { label: '조절', value: 32 }],
-      detail: '당뇨 인지율 75%, 치료율 71%이나 HbA1c<6.5% 조절율 32.4%로 매우 낮음. 통합관리 15.9%.' },
-    { id: 'dyslip', name: '이상지질혈증', color: '#b388ff',
-      stages: [{ label: '인지', value: 68 }, { label: '치료', value: 61 }, { label: '조절', value: 54 }],
-      detail: '이상지질혈증 인지율 68%, 치료율 61%, LDL 조절율 54%. 고위험군 스타틴 처방 확대 필요.' },
-    { id: 'ckd', name: 'CKD', color: '#4ecdc4',
-      stages: [{ label: '인지', value: 6.3 }, { label: '치료', value: 4 }, { label: '조절', value: 2 }],
-      detail: 'CKD 인지율 1.3~6.3%로 극히 낮음. 대부분 투석 직전까지 인지 못함. 조기 선별 시급.' },
-    { id: 'obesity', name: '비만', color: '#ff006e',
-      stages: [{ label: '인지', value: 55 }, { label: '관리', value: 30 }, { label: '감량', value: 12 }],
-      detail: '비만 인지율 약 55%, 적극 관리 30%, 5% 이상 감량 성공 12%. 약물치료 접근성 개선 필요.' },
-    { id: 'masld', name: 'MASLD', color: '#00ff88',
-      stages: [{ label: '인지', value: 10 }, { label: '진단', value: 5 }, { label: '관리', value: 2 }],
-      detail: 'MASLD 인지율 ~10%. 건강검진에서 지방간 소견 있으나 후속 관리 부재. FIB-4 기반 선별 도입 필요.' },
+    {
+      id: 'htn', name: '고혈압', color: '#ffd60a', highlight: false,
+      stages: [
+        { label: '인지', value: 77 },
+        { label: '치료', value: 74 },
+        { label: '조절', value: 59 },
+      ],
+      detail: '고혈압 인지율 77%, 치료율 74%, 조절율 59%. 3차 예방 강화 필요.',
+      ref: '대한고혈압학회 Fact Sheet 2024',
+    },
+    {
+      id: 'dm', name: '당뇨', color: '#00d4ff', highlight: true,
+      stages: [
+        { label: '인지', value: 75 },
+        { label: '치료', value: 71 },
+        { label: '조절', value: 32 },
+      ],
+      extendedCascade: [
+        { label: '당뇨 환자', value: 100, sub: '30세 이상' },
+        { label: '인지', value: 74.7, sub: 'Awareness' },
+        { label: '치료', value: 70.9, sub: 'Treatment' },
+        { label: 'HbA1c <6.5%', value: 32.4, sub: 'Glycemic Control' },
+        { label: '+BP 조절', value: 19.7, sub: 'BP <140/85' },
+        { label: '+LDL 조절', value: 15.9, sub: 'LDL <100' },
+        { label: '통합관리', value: 15.9, sub: 'All 3 Targets Met' },
+      ],
+      youngAdult: [100, 43.3, 34.6, 29.6, 8.0, 9.2, 9.2],
+      detail: '당뇨 인지율 75%, 치료율 71%이나 HbA1c<6.5% 조절율 32.4%로 매우 낮음. 통합관리(혈당+혈압+LDL 동시조절) 15.9%.',
+      ref: 'KDA Diabetes Fact Sheet 2024',
+    },
+    {
+      id: 'dyslip', name: '이상지질혈증', color: '#b388ff', highlight: false,
+      stages: [
+        { label: '인지', value: 68 },
+        { label: '치료', value: 61 },
+        { label: '조절', value: 54 },
+      ],
+      detail: '이상지질혈증 인지율 68%, 치료율 61%, LDL 조절율 54%. 고위험군 스타틴 처방 확대 필요.',
+      ref: '한국지질동맥경화학회 Fact Sheet 2024',
+    },
+    {
+      id: 'ckd', name: 'CKD', color: '#4ecdc4', highlight: false,
+      stages: [
+        { label: '인지', value: 6.3 },
+      ],
+      detail: 'CKD 인지율 1.3~6.3%로 극히 낮음. 대부분 투석 직전까지 인지 못함. 조기 선별 시급.',
+      ref: '대한신장학회 KORDS 2023',
+    },
+    {
+      id: 'obesity', name: '비만', color: '#ff006e', highlight: false,
+      stages: [],
+      detail: '비만 관리 캐스케이드 공식 데이터 부재. 인지율 약 55% 추정, 적극 관리 30%, 5% 이상 감량 성공 12%.',
+      ref: '대한비만학회 Fact Sheet 2024 (추정)',
+    },
+    {
+      id: 'masld', name: 'MASLD', color: '#00ff88', highlight: false,
+      stages: [],
+      detail: 'MASLD 인지율 ~10%. 건강검진에서 지방간 소견 있으나 후속 관리 부재. FIB-4 기반 선별 도입 필요.',
+      ref: 'KASL MASLD Fact Sheet 2023',
+    },
   ];
 
-  const marginT = 60, marginL = 100, marginR = 40;
-  const barAreaW = w - marginL - marginR;
-  const rowH = (h - marginT - 40) / diseases.length;
-  const maxBarW = barAreaW * 0.85;
+  // Layout: mini funnels side by side
+  const funnelW = 130;
+  const funnelGap = 12;
+  const totalFunnelsW = diseases.length * funnelW + (diseases.length - 1) * funnelGap;
+  const startX = (w - totalFunnelsW) / 2;
+  const funnelTop = 60;
+  const funnelH = 200;
+
+  const renderMiniFunnel = (d, idx) => {
+    const fx = startX + idx * (funnelW + funnelGap);
+    const stages = d.stages;
+    const isSelected = selectedDisease?.id === d.id;
+    const hasData = stages.length > 0;
+
+    if (!hasData) {
+      // No data funnel - show placeholder
+      return (
+        <g key={d.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedDisease(isSelected ? null : d)}>
+          <rect x={fx} y={funnelTop - 10} width={funnelW} height={funnelH + 30} rx={8}
+            fill={isSelected ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.01)'}
+            stroke={isSelected ? `${d.color}66` : 'rgba(255,255,255,0.03)'} strokeWidth={1} />
+          {/* Disease name */}
+          <text x={fx + funnelW / 2} y={funnelTop + 8} textAnchor="middle"
+            fill={isSelected ? d.color : '#aaaacc'} fontSize={12} fontWeight={700}
+            fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
+          {/* Highlight marker */}
+          {d.highlight && <circle cx={fx + funnelW / 2 + 28} cy={funnelTop + 4} r={3} fill={d.color} opacity={0.8} />}
+          {/* No data message */}
+          <text x={fx + funnelW / 2} y={funnelTop + funnelH / 2} textAnchor="middle"
+            fill="#4a4a6a" fontSize={10} fontFamily="'JetBrains Mono', monospace">데이터 부족</text>
+        </g>
+      );
+    }
+
+    // Build trapezoid stages
+    const maxStageW = funnelW - 16;
+    const stageH = Math.min(funnelH / stages.length - 4, 55);
+    const stageStartY = funnelTop + 24;
+
+    return (
+      <g key={d.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedDisease(isSelected ? null : d)}>
+        <rect x={fx} y={funnelTop - 10} width={funnelW} height={funnelH + 30} rx={8}
+          fill={isSelected ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.01)'}
+          stroke={isSelected ? `${d.color}66` : 'rgba(255,255,255,0.03)'} strokeWidth={1} />
+        {/* Disease name */}
+        <text x={fx + funnelW / 2} y={funnelTop + 8} textAnchor="middle"
+          fill={isSelected ? d.color : '#aaaacc'} fontSize={12} fontWeight={700}
+          fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
+        {/* Highlight marker for diabetes */}
+        {d.highlight && <circle cx={fx + funnelW / 2 + 28} cy={funnelTop + 4} r={3} fill={d.color} opacity={0.8} />}
+        {/* Trapezoid stages */}
+        {stages.map((stage, si) => {
+          const nextVal = si < stages.length - 1 ? stages[si + 1].value : stage.value * 0.7;
+          const topW = (stage.value / 100) * maxStageW;
+          const bottomW = (nextVal / 100) * maxStageW;
+          const cy = fx + funnelW / 2;
+          const yTop = stageStartY + si * (stageH + 4);
+          const yBottom = yTop + stageH;
+          const opacity = 0.35 + (stage.value / 100) * 0.55;
+
+          const path = `M${cy - topW / 2},${yTop} L${cy + topW / 2},${yTop} L${cy + bottomW / 2},${yBottom} L${cy - bottomW / 2},${yBottom} Z`;
+
+          return (
+            <g key={si}>
+              <path d={path} fill={d.color} opacity={opacity} />
+              <path d={path} fill="none" stroke={d.color} strokeWidth={0.5} opacity={0.4} />
+              {/* Label */}
+              <text x={cy} y={yTop + stageH / 2 - 4} textAnchor="middle"
+                fill="#ffffff" fontSize={10} fontWeight={700} fontFamily="'JetBrains Mono', monospace"
+                style={{ textShadow: '0 0 6px rgba(0,0,0,0.9)' }}>
+                {stage.value < 10 ? stage.value.toFixed(1) : Math.round(stage.value)}%
+              </text>
+              <text x={cy} y={yTop + stageH / 2 + 8} textAnchor="middle"
+                fill="rgba(255,255,255,0.5)" fontSize={8} fontFamily="'Noto Sans KR', sans-serif">
+                {stage.label}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+    );
+  };
+
+  // Detail panel content
+  const renderDetail = () => {
+    if (!selectedDisease) return null;
+    const d = selectedDisease;
+    return (
+      <div style={{
+        position: 'absolute', right: 16, top: 60, width: 280,
+        background: 'rgba(10,10,20,0.96)', border: `1px solid ${d.color}44`,
+        borderRadius: 12, padding: 16, backdropFilter: 'blur(12px)',
+        animation: 'fadeInUp 0.3s ease-out', maxHeight: 260, overflowY: 'auto',
+        boxShadow: `0 0 20px ${d.color}15`,
+      }}>
+        <button onClick={() => setSelectedDisease(null)} style={{
+          position: 'absolute', top: 8, right: 10, background: 'rgba(255,255,255,0.06)',
+          border: 'none', color: '#8888aa', fontSize: 14, cursor: 'pointer',
+          width: 22, height: 22, borderRadius: '50%', display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+        }}>x</button>
+        <h4 style={{ color: d.color, margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
+          {d.name} 관리 현황
+        </h4>
+        <p style={{ color: '#bbb', fontSize: 11, lineHeight: 1.7, margin: '0 0 10px' }}>{d.detail}</p>
+
+        {/* Extended cascade for diabetes */}
+        {d.extendedCascade && (
+          <div style={{ marginTop: 8 }}>
+            <p style={{ color: '#6666aa', fontSize: 9, margin: '0 0 6px', fontFamily: "'JetBrains Mono', monospace" }}>
+              EXTENDED CASCADE (30+)
+            </p>
+            {d.extendedCascade.map((step, i) => {
+              const barW = (step.value / 100) * 200;
+              return (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
+                  <span style={{ width: 70, fontSize: 9, color: '#aaaacc', fontFamily: "'Noto Sans KR', sans-serif", flexShrink: 0 }}>
+                    {step.label}
+                  </span>
+                  <div style={{ flex: 1, height: 10, background: 'rgba(255,255,255,0.03)', borderRadius: 3, position: 'relative' }}>
+                    <div style={{
+                      width: barW, height: '100%', borderRadius: 3,
+                      background: `linear-gradient(90deg, ${d.color}88, ${d.color}44)`,
+                    }} />
+                  </div>
+                  <span style={{ width: 40, fontSize: 9, color: d.color, textAlign: 'right', fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
+                    {step.value.toFixed(1)}%
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Young adult comparison for diabetes */}
+        {d.youngAdult && (
+          <div style={{ marginTop: 10 }}>
+            <p style={{ color: '#ff006e', fontSize: 9, margin: '0 0 4px', fontFamily: "'JetBrains Mono', monospace" }}>
+              19-39세 청년층 비교
+            </p>
+            {d.extendedCascade.map((step, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                <span style={{ width: 70, fontSize: 8, color: '#666', fontFamily: "'Noto Sans KR', sans-serif", flexShrink: 0 }}>
+                  {step.label}
+                </span>
+                <span style={{ fontSize: 9, color: '#ff006e', fontFamily: "'JetBrains Mono', monospace" }}>
+                  {d.youngAdult[i].toFixed(1)}%
+                </span>
+                <span style={{ fontSize: 8, color: '#ff6666', marginLeft: 6, fontFamily: "'JetBrains Mono', monospace" }}>
+                  ({(d.youngAdult[i] - step.value) > 0 ? '+' : ''}{(d.youngAdult[i] - step.value).toFixed(1)}%p)
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <p style={{ color: '#4a4a6a', fontSize: 8, margin: '10px 0 0', fontFamily: "'JetBrains Mono', monospace" }}>
+          출처: {d.ref}
+        </p>
+      </div>
+    );
+  };
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '12px 24px 4px' }}>
-        <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
-          질환별 관리 캐스케이드 비교
+        <h2 style={{
+          fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
+          color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,212,255,0.3)',
+        }}>
+          질환별 관리 현황
         </h2>
-        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a', margin: '2px 0 0' }}>
-          AWARENESS → TREATMENT → CONTROL
+        <p style={{
+          fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a',
+          margin: '2px 0 0', letterSpacing: 0.5,
+        }}>
+          AWARENESS → TREATMENT → CONTROL FUNNELS
         </p>
       </div>
-      <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
-        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMin meet">
+      <div style={{ flex: 1, padding: '0 8px 0', position: 'relative' }}>
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }}
+          preserveAspectRatio="xMidYMin meet">
           <defs>
-            <pattern id="mgmtGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <pattern id="mgmtFunnelGrid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
             </pattern>
           </defs>
-          <rect width={w} height={h} fill="url(#mgmtGrid)" />
-          {['인지', '치료', '조절'].map((label, ci) => (
-            <text key={label} x={marginL + (ci + 0.5) * (maxBarW / 3)} y={marginT - 12}
-              textAnchor="middle" fill="#8888aa" fontSize={11} fontFamily="'Noto Sans KR', sans-serif">{label}</text>
-          ))}
-          {diseases.map((d, di) => {
-            const y = marginT + di * rowH;
-            const isSelected = selectedFunnel?.id === d.id;
-            return (
-              <g key={d.id} style={{ cursor: 'pointer' }}
-                onClick={() => setSelectedFunnel(isSelected ? null : d)}>
-                <text x={marginL - 10} y={y + rowH / 2 + 4} textAnchor="end"
-                  fill={isSelected ? d.color : '#aaaacc'} fontSize={13} fontWeight={isSelected ? 700 : 500}
-                  fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
-                {d.stages.map((stage, si) => {
-                  const barW = (stage.value / 100) * (maxBarW / 3 - 8);
-                  const bx = marginL + si * (maxBarW / 3) + 4;
-                  const by = y + 8;
-                  const bh = rowH - 16;
-                  const opacity = 0.3 + (stage.value / 100) * 0.6;
-                  return (
-                    <g key={si}>
-                      <rect x={bx} y={by} width={maxBarW / 3 - 8} height={bh} rx={4} fill="rgba(255,255,255,0.03)" />
-                      <rect x={bx} y={by} width={barW} height={bh} rx={4}
-                        fill={d.color} opacity={opacity}
-                        stroke={isSelected ? d.color : 'none'} strokeWidth={isSelected ? 1 : 0} strokeOpacity={0.5} />
-                      <text x={bx + barW + 4} y={by + bh / 2 + 4}
-                        fill={d.color} fontSize={11} fontWeight={700} fontFamily="'JetBrains Mono', monospace" opacity={0.9}>
-                        {stage.value < 10 ? stage.value.toFixed(1) : Math.round(stage.value)}%
-                      </text>
-                    </g>
-                  );
-                })}
-                {di < diseases.length - 1 && (
-                  <line x1={marginL} y1={y + rowH} x2={w - marginR} y2={y + rowH}
-                    stroke="rgba(255,255,255,0.04)" strokeWidth={1} />
-                )}
-              </g>
-            );
-          })}
+          <rect width={w} height={h} fill="url(#mgmtFunnelGrid)" />
+          {diseases.map((d, i) => renderMiniFunnel(d, i))}
+          {/* Instruction */}
+          <text x={w / 2} y={h - 8} textAnchor="middle" fill="#4a4a6a" fontSize={9}
+            fontFamily="'JetBrains Mono', monospace">
+            클릭하여 상세 정보 확인 | 출처: 각 학회 Fact Sheet 2024
+          </text>
         </svg>
-        {selectedFunnel && (
-          <div style={{
-            position: 'absolute', right: 24, bottom: 24, width: 300,
-            background: 'rgba(10,10,20,0.95)', border: `1px solid ${selectedFunnel.color}44`,
-            borderRadius: 12, padding: 16, backdropFilter: 'blur(12px)',
-            animation: 'fadeInUp 0.3s ease-out',
-          }}>
-            <button onClick={() => setSelectedFunnel(null)} style={{
-              position: 'absolute', top: 8, right: 8, background: 'none', border: 'none',
-              color: '#666', fontSize: 14, cursor: 'pointer',
-            }}>x</button>
-            <h4 style={{ color: selectedFunnel.color, margin: '0 0 8px', fontSize: 14 }}>{selectedFunnel.name} 관리 현황</h4>
-            <p style={{ color: '#bbb', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{selectedFunnel.detail}</p>
-          </div>
-        )}
-      </div>
-      <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
-        출처: 고혈압학회·당뇨병학회·지질동맥경화학회 Fact Sheet 2024, 대한신장학회 KORDS 2023
+        {renderDetail()}
       </div>
     </div>
   );
@@ -2346,7 +2263,6 @@ export default function DiseaseNetwork() {
             />
           )}
           {viewMode === 'masld' && <MASLDHeatmapView />}
-          {viewMode === 'cascade' && <CascadeView />}
           {viewMode === 'trends' && <TrendsView />}
           {viewMode === 'orbital' && <DiseaseOrbital />}
           {viewMode === 'sankey' && <DiseaseSankey />}
@@ -2365,7 +2281,7 @@ export default function DiseaseNetwork() {
             </div>
           )}
           {viewMode === 'cost' && <CostTreemapView />}
-          {viewMode === 'management' && <ManagementComparisonView />}
+          {viewMode === 'management' && <ManagementView />}
           {viewMode === 'survival' && <SurvivalCurvesView />}
         </div>
       </div>
