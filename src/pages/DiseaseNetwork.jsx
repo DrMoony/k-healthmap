@@ -1931,12 +1931,24 @@ function CostTreemapView() {
   const [selectedCost, setSelectedCost] = useState(null);
   const w = 900, h = 500;
 
+  // 출처: KDCA 2025 만성질환 현황 (고혈압/당뇨), KSHF 2024 (심부전), KASL 2023 (MASLD), KSN 2024 (ESKD)
+  // ※ 건보 총진료비 기준. 약제비는 별도 (진료비에 포함되지 않는 경우 있음)
   const costData = [
-    { id: 'htn', name: '본태성 고혈압', cost: 4.5, perPatient: '약 37만원/년', population: '약 1,200만명', trend: '약제비 안정, 총진료비 증가', color: '#ffd60a' },
-    { id: 'eskd', name: 'ESKD 투석', cost: 3.9, perPatient: '약 3,000만원/년', population: '약 13만명', trend: '투석환자 연 8% 증가, 총비용 급증', color: '#9b59b6' },
-    { id: 'dm', name: '2형 당뇨병', cost: 3.2, perPatient: '약 53만원/년', population: '약 600만명', trend: 'GLP-1RA 등 신약 도입으로 약제비 증가', color: '#00d4ff' },
-    { id: 'hf', name: '심부전', cost: 3.2, perPatient: '약 320만원/년', population: '약 100만명', trend: '고령화로 환자수·입원비용 동반 증가', color: '#ff6b6b' },
-    { id: 'masld', name: 'MASLD', cost: 1.6, perPatient: '약 2.1만원/년', population: '약 768만명', trend: '진단 증가에 따라 의료비 확대 예상', color: '#00ff88' },
+    { id: 'htn', name: '고혈압\n(건보 진료비)', cost: 4.5, perPatient: '약 37만원/년', population: '약 1,200만명',
+      trend: '건보 진료비 4.5조원 (2024). 처방액 1위.', color: '#ffd60a',
+      ref: 'KDCA 2025 만성질환 현황' },
+    { id: 'eskd', name: 'ESKD 투석\n(진료비)', cost: 3.9, perPatient: '약 3,000만원/년', population: '약 13만명',
+      trend: '환자당 연 3,000만원. 13만명 × 3,000만 = 3.9조.', color: '#9b59b6',
+      ref: 'KSN ESKD FS 2024' },
+    { id: 'dm', name: '당뇨병\n(건보 진료비)', cost: 3.2, perPatient: '약 53만원/년', population: '약 600만명',
+      trend: '건보 진료비 3.2조원 (2024). 신약(GLP-1RA 등) 도입으로 약제비 별도 증가.', color: '#00d4ff',
+      ref: 'KDCA 2025 만성질환 현황' },
+    { id: 'hf', name: '심부전\n(총 의료비)', cost: 3.2, perPatient: '약 186만원/년', population: '약 132만명',
+      trend: '2020년 총 의료비 3.2조원. 입원비 2.1조+외래 0.3조. 16배 증가(2002→2020).', color: '#ff6b6b',
+      ref: 'KSHF Heart Failure Statistics 2024' },
+    { id: 'masld', name: 'MASLD\n(환자 진료비)', cost: 1.6, perPatient: '약 212만원/년', population: '약 768만명 (진단)',
+      trend: '환자 1인당 진료비 212만원/년 (2022). 대조군 대비 1.8배. ※ 1.6조는 진료이용 환자(~76만명) 기준 추정.', color: '#00ff88',
+      ref: 'KASL MASLD Fact Sheet 2023' },
   ];
 
   const totalCost = costData.reduce((s, d) => s + d.cost, 0);
@@ -1988,13 +2000,18 @@ function CostTreemapView() {
                 <rect x={r.x + 2} y={r.y + 2} width={r.w - 4} height={r.h - 4} rx={8}
                   fill={`${r.color}${isSelected ? '44' : '22'}`}
                   stroke={r.color} strokeWidth={isSelected ? 2 : 1} strokeOpacity={isSelected ? 0.8 : 0.3} />
-                <text x={r.x + r.w / 2} y={r.y + r.h / 2 - 14} textAnchor="middle"
-                  fill={r.color} fontSize={14} fontWeight={700} fontFamily="'Noto Sans KR', sans-serif">{r.name}</text>
-                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 8} textAnchor="middle"
-                  fill="#e0e0ff" fontSize={22} fontWeight={800} fontFamily="'JetBrains Mono', monospace">{r.cost}조</text>
-                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 28} textAnchor="middle"
+                {/* Name — handle \n with tspan */}
+                {r.name.split('\n').map((line, li) => (
+                  <text key={li} x={r.x + r.w / 2} y={r.y + r.h / 2 - 22 + li * 15} textAnchor="middle"
+                    fill={r.color} fontSize={r.w < 200 ? 11 : 13} fontWeight={700} fontFamily="'Noto Sans KR', sans-serif">
+                    {line}
+                  </text>
+                ))}
+                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 14} textAnchor="middle"
+                  fill="#e0e0ff" fontSize={r.w < 200 ? 16 : 22} fontWeight={800} fontFamily="'JetBrains Mono', monospace">{r.cost}조</text>
+                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 32} textAnchor="middle"
                   fill="#8888aa" fontSize={10} fontFamily="'JetBrains Mono', monospace">
-                  총 {totalCost.toFixed(1)}조 중 {((r.cost / totalCost) * 100).toFixed(0)}%
+                  {((r.cost / totalCost) * 100).toFixed(0)}%
                 </text>
               </g>
             );
@@ -2017,6 +2034,7 @@ function CostTreemapView() {
               ['환자당 비용', selectedCost.perPatient],
               ['대상 인구', selectedCost.population],
               ['추이', selectedCost.trend],
+              ['출처', selectedCost.ref],
             ].map(([label, val]) => (
               <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                 <span style={{ color: '#8888aa', fontSize: 11 }}>{label}</span>
@@ -2027,7 +2045,7 @@ function CostTreemapView() {
         )}
       </div>
       <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
-        출처: HIRA 진료비통계, 대한신장학회, KASL MASLD Fact Sheet 2023
+        ※ 건보 총진료비 기준 (약제비 일부 포함). 출처: KDCA 만성질환 현황 2025, KSHF HF Statistics 2024, KASL MASLD FS 2023, KSN ESKD FS 2024
       </div>
     </div>
   );
