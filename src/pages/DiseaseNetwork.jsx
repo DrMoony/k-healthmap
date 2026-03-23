@@ -1807,9 +1807,9 @@ function CostTreemapView() {
     { id: 'hf', name: '심부전', cost: 3.2, indirect: 2.0, indirectBasis: '추정 (한국 연구 미발표)',
       basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
       note: '직접: 입원 2.1조+외래 0.3조. 간접: 간병·재입원·조기사망, 한국 실측 없음.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
-    { id: 'masld', name: 'MASLD', cost: 1.6, indirect: 10.0, indirectBasis: '⚠️ 근거 매우 약 (EU5 비율 적용)',
+    { id: 'masld', name: 'MASLD', cost: 1.6, indirect: 10.0, indirectBasis: '⚠️ 근거 약함 (유럽 5개국 비율 한국 적용)',
       basis: '환자 직접 진료비', perPatient: '약 212만원/년', population: '진료 ~76만명',
-      note: '직접 1.6조. 간접 10조는 EU5 연구(J Hepatol 2023) "간접=직접의 3-10배" 기계적 적용. 한국 실측 데이터 없음. 미진단 ~880만명 + MASH 진행 비용 포함 시 실제 부담은 막대하나 정확한 수치 산출 불가.', color: '#00ff88', ref: 'KASL FS 2023' },
+      note: '직접 1.6조. 간접 10조는 유럽 5개국(영·프·독·이·스) 연구(J Hepatol 2023)의 "간접=직접의 3-10배" 비율을 한국에 기계적 적용. 한국 실측 데이터 없음. 미진단 ~880만명 + MASH 진행 비용 포함 시 실제 부담은 막대하나 정확한 수치 산출 불가.', color: '#00ff88', ref: 'KASL FS 2023' },
   ];
 
   const sorted = [...costData].sort((a, b) => (b.cost + b.indirect) - (a.cost + a.indirect));
