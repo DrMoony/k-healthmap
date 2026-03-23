@@ -1807,9 +1807,9 @@ function CostTreemapView() {
     { id: 'hf', name: '심부전', cost: 3.2, indirect: 2.0, indirectBasis: '추정 (한국 연구 미발표)',
       basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
       note: '직접: 입원 2.1조+외래 0.3조. 간접: 간병·재입원·조기사망, 한국 실측 없음.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
-    { id: 'masld', name: 'MASLD', cost: 16.3, indirect: 10.0, indirectBasis: '⚠️ 근거 약함 (유럽 비율 적용)',
-      basis: '연간 유병환자 × 1인당 진료비', perPatient: '약 212만원/년', population: '유병환자 768만명 (2022)',
-      note: '768만 = 2022년 한 해 K76.0/K75.8 진단코드로 1회 이상 진료받은 실인원(유병환자). 신규 발생은 ~200만/년. 768만 × 212만원 = 16.3조. 추정 유병 ~1,650만(38%) 중 768만만 진료. 간접비는 유럽 연구 비율 적용 추정(한국 실측 없음).', color: '#00ff88', ref: 'KASL MASLD FS 2023 (NHIS 기반)' },
+    { id: 'masld', name: 'MASLD', cost: 7.5, indirect: 10.0, indirectBasis: '⚠️ 근거 약함 (유럽 비율 적용)',
+      basis: 'MASLD 초과 의료비', perPatient: '초과 97만원/년 (총 212만 - 대조군 115만)', population: '유병환자 768만명 (2022)',
+      note: '212만원은 MASLD 환자의 "총" 의료비(지방간 외 포함). 대조군(성별·연령 매칭) 115만원과의 차이 97만원이 MASLD 기인 초과 비용. 768만 × 97만 = 7.5조(초과분). 추정 유병 ~1,650만 중 768만만 진료.', color: '#00ff88', ref: 'KASL MASLD FS 2023 (NHIS, 1:2 매칭)' },
   ];
 
   const sorted = [...costData].sort((a, b) => (b.cost + b.indirect) - (a.cost + a.indirect));
