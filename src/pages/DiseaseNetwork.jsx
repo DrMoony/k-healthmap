@@ -1161,20 +1161,21 @@ function MASLDHeatmapView() {
                 outcome: OUTCOME_LABELS[row], age: AGE_GROUPS[col],
                 value: mat[row][col],
                 rowTrend: rowVals, colTrend: colVals,
+                mx: e.clientX, my: e.clientY,
               });
             } else if (y >= mT && y < mT + cH * OUTCOMES.length && x < marginLeft) {
               // Row label click
               const row2 = Math.floor((y - mT) / cH);
               if (row2 >= 0 && row2 < OUTCOMES.length) {
                 const rowVals = AGE_GROUPS.map((ag, ci) => ({ age: ag, value: mat[row2][ci] }));
-                setClickDetail({ type: 'row', outcome: OUTCOME_LABELS[row2], data: rowVals });
+                setClickDetail({ type: 'row', outcome: OUTCOME_LABELS[row2], data: rowVals, mx: e.clientX, my: e.clientY });
               }
             } else if (y < mT && x >= marginLeft) {
               // Column label click
               const col2 = Math.floor((x - marginLeft) / cW);
               if (col2 >= 0 && col2 < AGE_GROUPS.length) {
                 const colVals = OUTCOME_LABELS.map((lbl, ri) => ({ outcome: lbl, value: mat[ri][col2] }));
-                setClickDetail({ type: 'col', age: AGE_GROUPS[col2], data: colVals });
+                setClickDetail({ type: 'col', age: AGE_GROUPS[col2], data: colVals, mx: e.clientX, my: e.clientY });
               }
             }
           }}
@@ -1194,11 +1195,14 @@ function MASLDHeatmapView() {
         {/* Click detail panel */}
         {clickDetail && (
           <div className="detail-panel" style={{
-            position: 'absolute', top: 10, right: 10,
+            position: 'fixed',
+            left: Math.min(clickDetail.mx + 16, window.innerWidth - 280),
+            top: Math.min(clickDetail.my - 20, window.innerHeight - 300),
             background: '#1a1a2eee', border: '1px solid #00ff8844', borderRadius: 10,
-            padding: '12px 14px', zIndex: 50, minWidth: 200, maxWidth: 260,
-            maxHeight: '280px', overflowY: 'auto',
+            padding: '12px 14px', zIndex: 100, minWidth: 220, maxWidth: 280,
+            maxHeight: '260px', overflowY: 'auto',
             boxShadow: '0 0 20px rgba(0,255,136,0.15)',
+            backdropFilter: 'blur(8px)',
           }}>
             <button onClick={() => setClickDetail(null)} style={{
               position: 'absolute', top: 6, right: 8,
