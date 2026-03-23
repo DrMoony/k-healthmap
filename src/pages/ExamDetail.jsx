@@ -882,13 +882,12 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
       flexDirection: 'row',
       gap: 12,
       height: '100%',
-      overflowX: 'auto',
-      overflowY: 'hidden',
+      overflow: 'hidden',
       paddingBottom: 2,
     }}>
       {/* KPI Cards - Left Section */}
       {hasAbnormal && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4, flexShrink: 0, minWidth: 240 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4, flex: '0 0 200px' }}>
           <KpiCard label="전국 이상치율" value={natAvgProv.toFixed(1) + '%'} color={NEON.magenta} />
           <KpiCard label="최고 시도" value={highest?.rate.toFixed(1) + '%'} sub={highest?.name} color="#ff6b6b" />
           <KpiCard label="최저 시도" value={lowest?.rate.toFixed(1) + '%'} sub={lowest?.name} color={NEON.green} />
@@ -897,17 +896,16 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
       )}
 
       {/* Middle Section: Selected Detail + Disease Correlations */}
-      <div style={{ flex: 1, minWidth: 200, display: 'flex', flexDirection: 'row', gap: 10, overflowX: 'auto' }}>
+      <div style={{ flex: '1 1 0', minWidth: 0, display: 'flex', flexDirection: 'row', gap: 10, overflow: 'hidden' }}>
       {selLabel && hasAbnormal && (
         <div style={{
           background: 'rgba(10,10,20,0.92)',
           border: `1px solid ${hexToRgba(NEON.cyan, 0.25)}`,
           borderRadius: 10,
           padding: '8px 10px',
-          flexShrink: 0,
-          minWidth: 220,
-          maxWidth: 300,
-          overflowY: 'auto',
+          flex: '1 1 0',
+          minWidth: 0,
+          overflow: 'hidden',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
             <span style={{ fontWeight: 700, fontSize: 12, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.cyan) }}>{selLabel}</span>
@@ -944,7 +942,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
 
           {/* Category breakdown */}
           <div style={{ fontSize: 10, color: NEON.dimText, marginBottom: 2 }}>카테고리 분포</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
             {categories.map((cat, ci) => {
               const isAbn = abnormalIndices.includes(ci);
               return (
@@ -977,7 +975,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
               background: hexToRgba(NEON.gold, 0.06),
               border: `1px solid ${hexToRgba(NEON.gold, 0.15)}`,
               borderRadius: 6,
-              fontSize: 10,
+              fontSize: 11,
               color: NEON.gold,
               lineHeight: 1.4,
             }}>
@@ -989,7 +987,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
 
       {/* Disease Correlation */}
       {diseaseLinks.length > 0 && (
-        <div style={{ flexShrink: 0 }}>
+        <div style={{ flex: '1 1 0', minWidth: 0, overflow: 'hidden' }}>
           <div style={{
             fontSize: 11, fontWeight: 700, fontFamily: 'Noto Sans KR',
             color: NEON.bodyText, marginBottom: 4,
@@ -997,9 +995,18 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           }}>
             <span style={{ color: NEON.magenta }}>+</span> 질환 연관성
           </div>
-          {diseaseLinks.map((item, i) => (
-            <DiseaseCard key={i} item={item} />
-          ))}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+            {diseaseLinks.map((item, i) => (
+              <span key={i} title={item.risk} style={{
+                padding: '3px 8px', borderRadius: 12, fontSize: 10,
+                background: `${item.color}15`, border: `1px solid ${item.color}33`,
+                color: item.color, whiteSpace: 'nowrap',
+                fontFamily: 'Noto Sans KR',
+              }}>
+                {item.disease} {item.prevalence}
+              </span>
+            ))}
+          </div>
         </div>
       )}
 
@@ -1011,19 +1018,17 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           border: '1px solid rgba(255,255,255,0.06)',
           borderRadius: 8,
           padding: '6px 8px',
-          flexShrink: 0,
-          minWidth: 200,
-          maxWidth: 260,
-          overflowY: 'auto',
+          flex: '0 0 180px',
+          overflow: 'hidden',
         }}>
           <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Noto Sans KR', color: NEON.bodyText, marginBottom: 4 }}>
             판정 기준
           </div>
-          <div style={{ fontSize: 10, color: NEON.labelText, lineHeight: 1.5 }}>
+          <div style={{ fontSize: 11, color: NEON.labelText, lineHeight: 1.5 }}>
             {examData.ref}
           </div>
           {hasAbnormal && categories.length > 0 && (
-            <div style={{ marginTop: 4, fontSize: 10, lineHeight: 1.5 }}>
+            <div style={{ marginTop: 4, fontSize: 11, lineHeight: 1.5 }}>
               <span style={{ color: NEON.magenta, fontWeight: 600 }}>이상 판정: </span>
               <span style={{ color: NEON.labelText }}>
                 {abnormalIndices.map(idx => categories[idx]).filter(Boolean).join(', ')}
@@ -1143,7 +1148,7 @@ export default function ExamDetail() {
       marginTop: 56,
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
-      gridTemplateRows: 'auto 1fr 180px',
+      gridTemplateRows: 'auto 1fr 220px',
       gap: 10,
       padding: 12,
       overflow: 'hidden',
@@ -1354,7 +1359,7 @@ export default function ExamDetail() {
       </Panel>
 
       {/* ─── Analysis Panel (Bottom Row, Full Width) ──────────────── */}
-      <Panel style={{ gridColumn: '1 / -1', overflow: 'auto' }}>
+      <Panel style={{ gridColumn: '1 / -1', overflow: 'hidden' }}>
         <div style={{ fontSize: 12, fontWeight: 700, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.bodyText), marginBottom: 6, flexShrink: 0 }}>
           분석 패널
         </div>
