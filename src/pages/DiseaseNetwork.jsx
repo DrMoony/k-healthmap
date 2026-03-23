@@ -1190,9 +1190,9 @@ function MASLDHeatmapView() {
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc',
             margin: '4px 0 0', lineHeight: 1.6,
           }}>
-            2010년 MASLD 진단 환자를 10년간 추적하여, 각 연령대에서 해당 질환이 새로 발생한 누적 비율(%).
-            예: 20-29세 남성 MASLD 환자 중 3.6%에서 10년 내 악성종양 발생.
-            ⚠️ 대조군 대비가 아닌 MASLD 코호트 내 절대 발생률. 여성 일부 데이터 검증 필요.
+            2010년 MASLD 진단 환자를 10년간 추적 — 일반 인구 발생률 대비 배수 표시.
+            ⚠️ 교란변수(비만·당뇨·연령 등) 미보정 단순 비율 비교이며, 독립적 위험도(adjusted RR/HR)가 아님.
+            MASLD의 독립적 기여도를 평가하려면 다변량 보정 분석이 필요합니다. 여성 일부 데이터 검증 필요.
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
@@ -1311,8 +1311,8 @@ function MASLDHeatmapView() {
                   )}
                   <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
                     {clickDetail.age}세 {gender === 'male' ? '남성' : '여성'} MASLD 환자 100명 중 약 {v < 1 ? v.toFixed(1) : Math.round(v)}명에서 10년 내 {clickDetail.outcome} 발생.
-                    {ratio && ratio > 3 && ` 일반 인구 대비 ${ratio.toFixed(1)}배로 MASLD가 독립적 위험인자일 가능성 시사.`}
-                    {ratio && ratio > 1.5 && ratio <= 3 && ` 일반 인구 대비 소폭 상승.`}
+                    {ratio && ratio > 3 && ` 일반 인구 대비 ${ratio.toFixed(1)}배 (비보정). 비만·당뇨 등 교란변수 기여 가능성 있어 독립적 인과관계는 별도 분석 필요.`}
+                    {ratio && ratio > 1.5 && ratio <= 3 && ` 일반 인구 대비 소폭 상승 (비보정 비율).`}
                     {v > 10 && ' 적극적 선별검사 필요.'}
                     {v <= 1 && ' 낮은 발생률이나 지속 모니터링 권장.'}
                   </p>
