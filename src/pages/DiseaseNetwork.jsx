@@ -1082,6 +1082,9 @@ function MASLDHeatmapView() {
       ratioMatrix.push(ratioRow);
     }
 
+    // Log scale for color: log2(ratio) maps ×1=0, ×2=1, ×4=2, ×8=3, ×16=4, ×32=5
+    const logMax = Math.log2(Math.max(maxRatio, 2));
+
     for (let row = 0; row < OUTCOMES.length; row++) {
       for (let col = 0; col < AGE_GROUPS.length; col++) {
         const val = matrix[row][col];
@@ -1089,44 +1092,57 @@ function MASLDHeatmapView() {
         const x = marginLeft + col * cellW;
         const y = marginTop + row * cellH;
 
-        // Color by ratio: 1x=dark blue, 5x=yellow, 10x+=red
-        const t = Math.min(ratio / 15, 1);
-        const r = Math.round(20 + t * 235);
-        const g = Math.round(60 + (1 - t) * 50 - t * 40);
-        const b = Math.round(120 * (1 - t));
+        // Log-scale color: ×1=dark navy, ×2=teal, ×4=yellow, ×8=orange, ×16+=red
+        const logR = ratio > 1 ? Math.log2(ratio) : 0;
+        const t = Math.min(logR / logMax, 1);
+        let r, g, b;
+        if (t < 0.33) { // navy → teal
+          const s = t / 0.33;
+          r = Math.round(15 + s * 5);  g = Math.round(25 + s * 160);  b = Math.round(80 + s * 80);
+        } else if (t < 0.66) { // teal → yellow/orange
+          const s = (t - 0.33) / 0.33;
+          r = Math.round(20 + s * 235); g = Math.round(185 + s * 30);  b = Math.round(160 - s * 150);
+        } else { // orange → red
+          const s = (t - 0.66) / 0.34;
+          r = Math.round(255);           g = Math.round(215 - s * 195); b = Math.round(10 - s * 10);
+        }
         ctx.fillStyle = `rgb(${r},${g},${b})`;
         ctx.fillRect(x + 1, y + 1, cellW - 2, cellH - 2);
 
-        // Text: show ratio + absolute %
-        ctx.font = "bold 10px 'JetBrains Mono', monospace";
+        // Text: show ratio (big) + absolute % (small)
+        ctx.font = "bold 11px 'JetBrains Mono', monospace";
         ctx.textAlign = 'center';
-        ctx.fillStyle = ratio > 5 ? '#ffffff' : '#ccccee';
-        ctx.fillText(`×${ratio.toFixed(1)}`, x + cellW / 2, y + cellH / 2 - 2);
+        ctx.fillStyle = t > 0.4 ? '#ffffff' : '#ccccee';
+        ctx.fillText(`×${ratio < 10 ? ratio.toFixed(1) : Math.round(ratio)}`, x + cellW / 2, y + cellH / 2 - 2);
         ctx.font = "9px 'JetBrains Mono', monospace";
-        ctx.fillStyle = '#888';
+        ctx.fillStyle = t > 0.4 ? 'rgba(255,255,255,0.6)' : '#777';
         ctx.fillText(`${val.toFixed(1)}%`, x + cellW / 2, y + cellH / 2 + 12);
       }
     }
 
-    // Color scale legend — ratio-based
+    // Color scale legend — log-scale ratio
     const legendX = W - marginRight + 10;
     const legendY = marginTop;
     const legendH = H - marginTop - marginBottom;
     const legendW = 12;
     for (let i = 0; i < legendH; i++) {
-      const ratio = (1 - i / legendH) * 15;
-      const t = Math.min(ratio / 15, 1);
-      const r = Math.round(20 + t * 235);
-      const g = Math.round(60 + (1 - t) * 50 - t * 40);
-      const b = Math.round(120 * (1 - t));
-      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      const t = 1 - i / legendH;
+      let r2, g2, b2;
+      if (t < 0.33) { const s = t / 0.33; r2 = Math.round(15 + s * 5); g2 = Math.round(25 + s * 160); b2 = Math.round(80 + s * 80); }
+      else if (t < 0.66) { const s = (t - 0.33) / 0.33; r2 = Math.round(20 + s * 235); g2 = Math.round(185 + s * 30); b2 = Math.round(160 - s * 150); }
+      else { const s = (t - 0.66) / 0.34; r2 = 255; g2 = Math.round(215 - s * 195); b2 = Math.round(10 - s * 10); }
+      ctx.fillStyle = `rgb(${r2},${g2},${b2})`;
       ctx.fillRect(legendX, legendY + i, legendW, 1);
     }
     ctx.font = "10px 'JetBrains Mono', monospace";
     ctx.fillStyle = '#aaaacc';
     ctx.textAlign = 'left';
-    ctx.fillText('×15', legendX + legendW + 4, legendY + 8);
-    ctx.fillText('×1', legendX + legendW + 4, legendY + legendH);
+    // Log scale labels
+    const maxR = Math.round(Math.pow(2, logMax));
+    ctx.fillText(`×${maxR}`, legendX + legendW + 3, legendY + 8);
+    ctx.fillText('×4', legendX + legendW + 3, legendY + legendH * 0.4);
+    ctx.fillText('×2', legendX + legendW + 3, legendY + legendH * 0.7);
+    ctx.fillText('×1', legendX + legendW + 3, legendY + legendH);
 
     // Store layout info for hover
     canvas._layout = { marginLeft, marginTop, cellW, cellH, matrix };
