@@ -979,6 +979,25 @@ function MASLDHeatmapView() {
   const OUTCOMES = ['malignancy', 'ischemic_heart_disease', 'ischemic_stroke', 'liver_cirrhosis', 'hepatocellular_carcinoma'];
   const OUTCOME_LABELS = ['악성종양', '허혈성 심질환', '뇌경색', '간경변', '간세포암'];
 
+  // 일반 인구 10년 누적 발생률 추정 (%, 남성 기준, 국가암등록/KDCA 기반 근사)
+  // 연간 발생률(10만명당) × 10년 / 100,000 × 100
+  const GENERAL_POP_10YR = {
+    male: {
+      malignancy:              [0.3, 0.7, 1.6, 5.0, 11.0, 20.0, 25.0], // 암등록 2020 근사
+      ischemic_heart_disease:  [0.1, 0.3, 0.8, 2.0, 4.5,  8.0, 12.0], // KDCA 심뇌혈관 근사
+      ischemic_stroke:         [0.05, 0.1, 0.3, 1.0, 3.0, 7.0, 15.0], // KDCA 뇌졸중 근사
+      liver_cirrhosis:         [0.01, 0.05, 0.2, 0.5, 1.0, 1.5, 2.0], // NHIS 근사
+      hepatocellular_carcinoma:[0.01, 0.02, 0.1, 0.3, 0.5, 0.8, 1.0], // 암등록 간암 근사
+    },
+    female: {
+      malignancy:              [0.5, 1.5, 3.0, 4.5, 6.5, 10.0, 12.0],
+      ischemic_heart_disease:  [0.05, 0.1, 0.3, 0.8, 2.5, 5.0,  9.0],
+      ischemic_stroke:         [0.03, 0.05, 0.2, 0.5, 2.0, 5.5, 12.0],
+      liver_cirrhosis:         [0.01, 0.03, 0.1, 0.3, 0.5, 1.0, 1.5],
+      hepatocellular_carcinoma:[0.005, 0.01, 0.05, 0.1, 0.2, 0.4, 0.6],
+    },
+  };
+
   const getData = useCallback(() => {
     const prog = nafldData.section_4_progression_and_mortality['10_year_progression_2010_baseline'];
     const prefix = gender === 'male' ? 'male_age_' : 'female_age_';
@@ -1046,38 +1065,68 @@ function MASLDHeatmapView() {
       ctx.fillText(label, marginLeft - 12, marginTop + i * cellH + cellH / 2 + 4);
     });
 
-    // Cells
+    // Cells — color by RR (ratio vs general population)
+    const genPopData = GENERAL_POP_10YR[gender] || GENERAL_POP_10YR.male;
+    let maxRatio = 1;
+    // Pre-calculate ratios
+    const ratioMatrix = [];
+    for (let row = 0; row < OUTCOMES.length; row++) {
+      const ratioRow = [];
+      for (let col = 0; col < AGE_GROUPS.length; col++) {
+        const val = matrix[row][col];
+        const genVal = genPopData[OUTCOMES[row]]?.[col] || 0.01;
+        const ratio = genVal > 0 ? val / genVal : 1;
+        ratioRow.push(ratio);
+        if (ratio > maxRatio) maxRatio = ratio;
+      }
+      ratioMatrix.push(ratioRow);
+    }
+
     for (let row = 0; row < OUTCOMES.length; row++) {
       for (let col = 0; col < AGE_GROUPS.length; col++) {
         const val = matrix[row][col];
+        const ratio = ratioMatrix[row][col];
         const x = marginLeft + col * cellW;
         const y = marginTop + row * cellH;
-        ctx.fillStyle = getColor(val, maxVal);
+
+        // Color by ratio: 1x=dark blue, 5x=yellow, 10x+=red
+        const t = Math.min(ratio / 15, 1);
+        const r = Math.round(20 + t * 235);
+        const g = Math.round(60 + (1 - t) * 50 - t * 40);
+        const b = Math.round(120 * (1 - t));
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
         ctx.fillRect(x + 1, y + 1, cellW - 2, cellH - 2);
 
-        // Value text
-        ctx.font = "bold 11px 'JetBrains Mono', monospace";
+        // Text: show ratio + absolute %
+        ctx.font = "bold 10px 'JetBrains Mono', monospace";
         ctx.textAlign = 'center';
-        ctx.fillStyle = val > maxVal * 0.5 ? '#ffffff' : '#aaaacc';
-        ctx.fillText(val.toFixed(1) + '%', x + cellW / 2, y + cellH / 2 + 4);
+        ctx.fillStyle = ratio > 5 ? '#ffffff' : '#ccccee';
+        ctx.fillText(`×${ratio.toFixed(1)}`, x + cellW / 2, y + cellH / 2 - 2);
+        ctx.font = "9px 'JetBrains Mono', monospace";
+        ctx.fillStyle = '#888';
+        ctx.fillText(`${val.toFixed(1)}%`, x + cellW / 2, y + cellH / 2 + 12);
       }
     }
 
-    // Color scale legend
-    const legendX = W - marginRight + 20;
+    // Color scale legend — ratio-based
+    const legendX = W - marginRight + 10;
     const legendY = marginTop;
     const legendH = H - marginTop - marginBottom;
-    const legendW = 14;
+    const legendW = 12;
     for (let i = 0; i < legendH; i++) {
-      const t = i / legendH;
-      ctx.fillStyle = getColor(t * maxVal, maxVal);
+      const ratio = (1 - i / legendH) * 15;
+      const t = Math.min(ratio / 15, 1);
+      const r = Math.round(20 + t * 235);
+      const g = Math.round(60 + (1 - t) * 50 - t * 40);
+      const b = Math.round(120 * (1 - t));
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
       ctx.fillRect(legendX, legendY + i, legendW, 1);
     }
     ctx.font = "10px 'JetBrains Mono', monospace";
-    ctx.fillStyle = '#6666aa';
+    ctx.fillStyle = '#aaaacc';
     ctx.textAlign = 'left';
-    ctx.fillText('0%', legendX + legendW + 4, legendY + 8);
-    ctx.fillText(maxVal.toFixed(0) + '%', legendX + legendW + 4, legendY + legendH);
+    ctx.fillText('×15', legendX + legendW + 4, legendY + 8);
+    ctx.fillText('×1', legendX + legendW + 4, legendY + legendH);
 
     // Store layout info for hover
     canvas._layout = { marginLeft, marginTop, cellW, cellH, matrix };
@@ -1095,7 +1144,13 @@ function MASLDHeatmapView() {
     if (col >= 0 && col < AGE_GROUPS.length && row >= 0 && row < OUTCOMES.length) {
       setTooltip({
         x: e.clientX, y: e.clientY,
-        text: `${AGE_GROUPS[col]}세 MASLD 환자 중 ${matrix[row][col].toFixed(1)}%에서 10년 내 ${OUTCOME_LABELS[row]} 발생`,
+        text: (() => {
+          const v = matrix[row][col];
+          const genPop = GENERAL_POP_10YR[gender]?.[OUTCOMES[row]]?.[col];
+          const ratio = genPop && genPop > 0 ? (v / genPop).toFixed(1) : null;
+          return `${AGE_GROUPS[col]}세 MASLD: ${v.toFixed(1)}%` +
+            (ratio ? ` (일반인구 ${genPop}% 대비 ${ratio}배)` : '');
+        })(),
       });
     } else {
       setTooltip(null);
@@ -1213,6 +1268,10 @@ function MASLDHeatmapView() {
             }}>x</button>
             {clickDetail.type === 'cell' && (() => {
               const v = clickDetail.value;
+              const colIdx = AGE_GROUPS.indexOf(clickDetail.age);
+              const outcomeKey = OUTCOMES[OUTCOME_LABELS.indexOf(clickDetail.outcome)];
+              const genPop = GENERAL_POP_10YR[gender]?.[outcomeKey]?.[colIdx];
+              const ratio = genPop && genPop > 0 ? (v / genPop) : null;
               const risk = v > 15 ? '매우 높음' : v > 5 ? '높음' : v > 1 ? '중등도' : '낮음';
               const riskColor = v > 15 ? '#ff4444' : v > 5 ? '#ffd60a' : v > 1 ? '#00d4ff' : '#00ff88';
               return (
@@ -1220,16 +1279,29 @@ function MASLDHeatmapView() {
                   <h4 style={{ color: '#00ff88', margin: '0 0 4px', fontSize: 13 }}>
                     {clickDetail.age}세 · {clickDetail.outcome}
                   </h4>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
                     <span style={{ color: '#e0e0ff', fontSize: 22, fontWeight: 800, fontFamily: "'JetBrains Mono'" }}>{v.toFixed(1)}%</span>
                     <span style={{ color: riskColor, fontSize: 11, fontWeight: 600, padding: '2px 6px', background: `${riskColor}15`, borderRadius: 4 }}>{risk}</span>
                   </div>
+                  {ratio && (
+                    <div style={{ marginBottom: 8, padding: '4px 8px', background: 'rgba(255,214,10,0.08)', borderRadius: 6, border: '1px solid rgba(255,214,10,0.15)' }}>
+                      <span style={{ color: '#ffd60a', fontSize: 11, fontWeight: 600 }}>
+                        일반 인구 대비 {ratio.toFixed(1)}배
+                      </span>
+                      <span style={{ color: '#888', fontSize: 10, marginLeft: 6 }}>
+                        (일반: {genPop}%)
+                      </span>
+                    </div>
+                  )}
                   <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
-                    {clickDetail.age}세에 MASLD 진단받은 {gender === 'male' ? '남성' : '여성'} 환자 100명 중 약 {v < 1 ? v.toFixed(1) : Math.round(v)}명에서 10년 내 {clickDetail.outcome}이 발생.
-                    {v > 10 && ' 고위험군으로 적극적 선별검사 및 관리 필요.'}
-                    {v > 5 && v <= 10 && ' 정기적 추적관찰 권장.'}
-                    {v <= 5 && v > 1 && ' 기본 추적관찰 권장.'}
-                    {v <= 1 && ' 낮은 발생률이나 지속 모니터링 필요.'}
+                    {clickDetail.age}세 {gender === 'male' ? '남성' : '여성'} MASLD 환자 100명 중 약 {v < 1 ? v.toFixed(1) : Math.round(v)}명에서 10년 내 {clickDetail.outcome} 발생.
+                    {ratio && ratio > 3 && ` 일반 인구 대비 ${ratio.toFixed(1)}배로 MASLD가 독립적 위험인자일 가능성 시사.`}
+                    {ratio && ratio > 1.5 && ratio <= 3 && ` 일반 인구 대비 소폭 상승.`}
+                    {v > 10 && ' 적극적 선별검사 필요.'}
+                    {v <= 1 && ' 낮은 발생률이나 지속 모니터링 권장.'}
+                  </p>
+                  <p style={{ color: '#555', fontSize: 9, marginTop: 6 }}>
+                    ※ 일반 인구 발생률은 국가암등록/KDCA 기반 근사치. 정확한 비교에는 연령표준화 분석 필요.
                   </p>
                 </>
               );
