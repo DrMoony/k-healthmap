@@ -819,7 +819,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
         <svg
           viewBox="0 0 840 600"
           style={{ width: '100%', height: '100%' }}
-          preserveAspectRatio="xMidYMid meet"
+          preserveAspectRatio="xMidYMin meet"
         >
           <defs>
             <marker id="arrowhead" viewBox="0 0 10 7" refX="10" refY="3.5"
@@ -1266,7 +1266,7 @@ function CascadeView() {
   const [cascadeDetail, setCascadeDetail] = useState(null);
 
   // Fixed viewBox 900x420
-  const w = 900, h = 420;
+  const w = 900, h = 340;
 
   // Overall cascade (30+)
   const overall = [
@@ -1325,7 +1325,7 @@ function CascadeView() {
       </div>
       <div style={{ flex: 1, padding: '0 8px 0', position: 'relative' }} ref={containerRef}>
         <svg ref={svgRef} viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }}
-          preserveAspectRatio="xMidYMid meet">
+          preserveAspectRatio="xMidYMin meet">
           <defs>
             <pattern id="cascGrid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
@@ -1509,7 +1509,7 @@ function TrendsView() {
   const [pointDetail, setPointDetail] = useState(null);
 
   // Fixed viewBox — reduced height to prevent bottom clipping
-  const w = 900, h = 380;
+  const w = 900, h = 340;
   const marginL = 50;
   const marginR = 30;
   const marginT = 40;
@@ -1746,7 +1746,7 @@ function TrendsView() {
       </div>
       <div style={{ flex: 1, minHeight: 0, padding: '0 8px 0', position: 'relative', overflow: 'visible' }} ref={containerRef}>
         <svg ref={svgRef} viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', display: 'block' }}
-          preserveAspectRatio="xMidYMid meet"
+          preserveAspectRatio="xMidYMin meet"
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const svgX = (e.clientX - rect.left) / rect.width * w;
@@ -1929,7 +1929,7 @@ function TrendsView() {
 // ── Healthcare Cost Treemap View ─────────────────────────────
 function CostTreemapView() {
   const [selectedCost, setSelectedCost] = useState(null);
-  const w = 900, h = 420;
+  const w = 900, h = 340;
 
   const costData = [
     { id: 'htn', name: '고혈압', cost: 4.5, basis: '건보 직접 진료비', perPatient: '약 37만원/년', population: '약 1,200만명',
@@ -1965,7 +1965,7 @@ function CostTreemapView() {
         </p>
       </div>
       <div style={{ flex: 1, display: 'flex', position: 'relative', minHeight: 0 }}>
-        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', display: 'block' }} preserveAspectRatio="xMidYMid meet">
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', display: 'block' }} preserveAspectRatio="xMidYMin meet">
           {sorted.map((d, i) => {
             const y = startY + i * (barH + gap);
             const barW = (d.cost / maxCost) * barAreaW;
@@ -2037,7 +2037,7 @@ function CostTreemapView() {
 // ── Management Comparison View ───────────────────────────────
 function ManagementComparisonView() {
   const [selectedFunnel, setSelectedFunnel] = useState(null);
-  const w = 900, h = 500;
+  const w = 900, h = 340;
 
   const diseases = [
     { id: 'htn', name: '고혈압', color: '#ffd60a',
@@ -2076,7 +2076,7 @@ function ManagementComparisonView() {
         </p>
       </div>
       <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
-        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMin meet">
           <defs>
             <pattern id="mgmtGrid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
@@ -2150,7 +2150,7 @@ function ManagementComparisonView() {
 function SurvivalCurvesView() {
   const [selectedCurve, setSelectedCurve] = useState(null);
   const [hoveredCurve, setHoveredCurve] = useState(null);
-  const w = 900, h = 500;
+  const w = 900, h = 340;
 
   const curves = [
     { id: 'hf_all', name: '심부전 (전체)', color: '#ff6b6b',
@@ -2201,7 +2201,7 @@ function SurvivalCurvesView() {
         </p>
       </div>
       <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
-        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMin meet">
           <defs>
             <pattern id="survGrid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
