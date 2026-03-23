@@ -1023,10 +1023,10 @@ function MASLDHeatmapView() {
     const matrix = getData();
     const maxVal = Math.max(...matrix.flat());
 
-    const marginLeft = 100;
-    const marginTop = 45;
-    const marginRight = 50;
-    const marginBottom = 25;
+    const marginLeft = 90;
+    const marginTop = 30;
+    const marginRight = 40;
+    const marginBottom = 10;
     const cellW = (W - marginLeft - marginRight) / AGE_GROUPS.length;
     const cellH = (H - marginTop - marginBottom) / OUTCOMES.length;
 
@@ -1207,46 +1207,53 @@ function MASLDHeatmapView() {
               width: 22, height: 22, borderRadius: '50%',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>x</button>
-            {clickDetail.type === 'cell' && (
-              <>
-                <h4 style={{ color: '#00ff88', margin: '0 0 6px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-                  {clickDetail.outcome} ({clickDetail.age})
-                </h4>
-                <p style={{ color: '#e0e0ff', fontSize: 20, fontWeight: 700, margin: '0 0 10px', fontFamily: "'JetBrains Mono', monospace" }}>
-                  {clickDetail.value.toFixed(2)}%
-                </p>
-                <p style={{ color: '#8888aa', fontSize: 10, margin: '0 0 4px' }}>연령대별 추이:</p>
-                {clickDetail.rowTrend.map((d, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#aaaacc', padding: '2px 0' }}>
-                    <span>{d.age}</span><span style={{ color: '#00ff88' }}>{d.value.toFixed(2)}%</span>
+            {clickDetail.type === 'cell' && (() => {
+              const v = clickDetail.value;
+              const risk = v > 15 ? '매우 높음' : v > 5 ? '높음' : v > 1 ? '중등도' : '낮음';
+              const riskColor = v > 15 ? '#ff4444' : v > 5 ? '#ffd60a' : v > 1 ? '#00d4ff' : '#00ff88';
+              return (
+                <>
+                  <h4 style={{ color: '#00ff88', margin: '0 0 4px', fontSize: 13 }}>
+                    {clickDetail.age}세 · {clickDetail.outcome}
+                  </h4>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}>
+                    <span style={{ color: '#e0e0ff', fontSize: 22, fontWeight: 800, fontFamily: "'JetBrains Mono'" }}>{v.toFixed(1)}%</span>
+                    <span style={{ color: riskColor, fontSize: 11, fontWeight: 600, padding: '2px 6px', background: `${riskColor}15`, borderRadius: 4 }}>{risk}</span>
                   </div>
-                ))}
-              </>
-            )}
-            {clickDetail.type === 'row' && (
-              <>
-                <h4 style={{ color: '#00ff88', margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-                  {clickDetail.outcome} — 전 연령대
-                </h4>
-                {clickDetail.data.map((d, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#aaaacc', padding: '3px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <span>{d.age}</span><span style={{ color: '#00ff88', fontWeight: 600 }}>{d.value.toFixed(2)}%</span>
-                  </div>
-                ))}
-              </>
-            )}
-            {clickDetail.type === 'col' && (
-              <>
-                <h4 style={{ color: '#00ff88', margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-                  {clickDetail.age} — 전 질환
-                </h4>
-                {clickDetail.data.map((d, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#aaaacc', padding: '3px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <span>{d.outcome}</span><span style={{ color: '#00ff88', fontWeight: 600 }}>{d.value.toFixed(2)}%</span>
-                  </div>
-                ))}
-              </>
-            )}
+                  <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
+                    {clickDetail.age}세에 MASLD 진단받은 {gender === 'male' ? '남성' : '여성'} 환자 100명 중 약 {v < 1 ? v.toFixed(1) : Math.round(v)}명에서 10년 내 {clickDetail.outcome}이 발생.
+                    {v > 10 && ' 고위험군으로 적극적 선별검사 및 관리 필요.'}
+                    {v > 5 && v <= 10 && ' 정기적 추적관찰 권장.'}
+                    {v <= 5 && v > 1 && ' 기본 추적관찰 권장.'}
+                    {v <= 1 && ' 낮은 발생률이나 지속 모니터링 필요.'}
+                  </p>
+                </>
+              );
+            })()}
+            {clickDetail.type === 'row' && (() => {
+              const maxAge = clickDetail.data.reduce((a, b) => b.value > a.value ? b : a, clickDetail.data[0]);
+              return (
+                <>
+                  <h4 style={{ color: '#00ff88', margin: '0 0 6px', fontSize: 13 }}>{clickDetail.outcome}</h4>
+                  <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
+                    MASLD 코호트에서 {clickDetail.outcome} 10년 누적 발생률은 연령 증가에 따라 상승하며, {maxAge.age}세에서 {maxAge.value.toFixed(1)}%로 가장 높음.
+                    {clickDetail.outcome === '간경변' || clickDetail.outcome === '간세포암' ? ' MASLD와 직접적 인과관계가 있는 합병증.' : ' MASLD와의 독립적 인과관계는 추가 연구 필요.'}
+                  </p>
+                </>
+              );
+            })()}
+            {clickDetail.type === 'col' && (() => {
+              const maxOutcome = clickDetail.data.reduce((a, b) => b.value > a.value ? b : a, clickDetail.data[0]);
+              return (
+                <>
+                  <h4 style={{ color: '#00ff88', margin: '0 0 6px', fontSize: 13 }}>{clickDetail.age}세 MASLD 환자</h4>
+                  <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
+                    이 연령대에서 10년 내 가장 높은 누적 발생률은 {maxOutcome.outcome} ({maxOutcome.value.toFixed(1)}%).
+                    {parseInt(clickDetail.age) >= 60 ? ' 고령에서 다장기 합병증 위험이 급격히 증가하므로 다학제 관리 필요.' : ' 비교적 젊은 연령이나 장기 추적 시 합병증 부담 증가 가능.'}
+                  </p>
+                </>
+              );
+            })()}
           </div>
         )}
       </div>
