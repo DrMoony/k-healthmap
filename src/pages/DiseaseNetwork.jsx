@@ -1929,89 +1929,72 @@ function TrendsView() {
 // ── Healthcare Cost Treemap View ─────────────────────────────
 function CostTreemapView() {
   const [selectedCost, setSelectedCost] = useState(null);
-  const w = 900, h = 500;
+  const w = 900, h = 420;
 
-  // 출처: KDCA 2025 만성질환 현황 (고혈압/당뇨), KSHF 2024 (심부전), KASL 2023 (MASLD), KSN 2024 (ESKD)
-  // ※ 건보 총진료비 기준. 약제비는 별도 (진료비에 포함되지 않는 경우 있음)
   const costData = [
-    { id: 'htn', name: '고혈압\n(건보 진료비)', cost: 4.5, perPatient: '약 37만원/년', population: '약 1,200만명',
-      trend: '건보 진료비 4.5조원 (2024). 처방액 1위.', color: '#ffd60a',
-      ref: 'KDCA 2025 만성질환 현황' },
-    { id: 'eskd', name: 'ESKD 투석\n(진료비)', cost: 3.9, perPatient: '약 3,000만원/년', population: '약 13만명',
-      trend: '환자당 연 3,000만원. 13만명 × 3,000만 = 3.9조.', color: '#9b59b6',
-      ref: 'KSN ESKD FS 2024' },
-    { id: 'dm', name: '당뇨병\n(건보 진료비)', cost: 3.2, perPatient: '약 53만원/년', population: '약 600만명',
-      trend: '건보 진료비 3.2조원 (2024). 신약(GLP-1RA 등) 도입으로 약제비 별도 증가.', color: '#00d4ff',
-      ref: 'KDCA 2025 만성질환 현황' },
-    { id: 'hf', name: '심부전\n(총 의료비)', cost: 3.2, perPatient: '약 186만원/년', population: '약 132만명',
-      trend: '2020년 총 의료비 3.2조원. 입원비 2.1조+외래 0.3조. 16배 증가(2002→2020).', color: '#ff6b6b',
-      ref: 'KSHF Heart Failure Statistics 2024' },
-    { id: 'masld', name: 'MASLD\n(환자 진료비)', cost: 1.6, perPatient: '약 212만원/년', population: '약 768만명 (진단)',
-      trend: '환자 1인당 진료비 212만원/년 (2022). 대조군 대비 1.8배. ※ 1.6조는 진료이용 환자(~76만명) 기준 추정.', color: '#00ff88',
-      ref: 'KASL MASLD Fact Sheet 2023' },
+    { id: 'htn', name: '고혈압', cost: 4.5, basis: '건보 직접 진료비', perPatient: '약 37만원/년', population: '약 1,200만명',
+      note: '건보 청구코드 기준 직접 진료비.', color: '#ffd60a', ref: 'KDCA 만성질환 현황 2025' },
+    { id: 'eskd', name: 'ESKD 투석', cost: 3.9, basis: '건보 직접 진료비', perPatient: '약 3,000만원/년', population: '약 13만명',
+      note: '혈액투석+복막투석 환자당 직접 진료비 × 환자 수.', color: '#9b59b6', ref: 'KSN ESKD FS 2024' },
+    { id: 'dm', name: '당뇨병', cost: 3.2, basis: '건보 직접 진료비', perPatient: '약 53만원/년', population: '약 600만명',
+      note: '건보 청구코드 기준. 약제비(OHA/인슐린) 별도 약 1.5조 추정.', color: '#00d4ff', ref: 'KDCA 만성질환 현황 2025' },
+    { id: 'hf', name: '심부전', cost: 3.2, basis: '건보 직접 의료비', perPatient: '약 186만원/년', population: '약 132만명',
+      note: '입원 2.1조 + 외래 0.3조. 2002→2020 16배 증가.', color: '#ff6b6b', ref: 'KSHF HF Statistics 2024' },
+    { id: 'masld', name: 'MASLD', cost: 1.6, basis: '환자 직접 진료비 (추정)', perPatient: '약 212만원/년', population: '진료이용 ~76만명',
+      note: '환자 1인당 212만원 × 진료이용 ~76만명. 전체 768만명 중 진단+진료 환자만.', color: '#00ff88', ref: 'KASL MASLD FS 2023' },
   ];
 
-  const totalCost = costData.reduce((s, d) => s + d.cost, 0);
-
-  const margin = { top: 60, left: 40, right: 40, bottom: 40 };
-  const innerW = w - margin.left - margin.right;
-  const innerH = h - margin.top - margin.bottom;
-
-  const rects = [];
-  let y = margin.top;
   const sorted = [...costData].sort((a, b) => b.cost - a.cost);
-  const rows = [sorted.slice(0, 2), sorted.slice(2)];
-  const rowHeights = [innerH * 0.55, innerH * 0.45];
+  const maxCost = sorted[0].cost;
 
-  rows.forEach((row, ri) => {
-    const rowTotal = row.reduce((s, d) => s + d.cost, 0);
-    let x = margin.left;
-    const rh = rowHeights[ri];
-    row.forEach(d => {
-      const rw = (d.cost / rowTotal) * innerW;
-      rects.push({ ...d, x, y, w: rw, h: rh });
-      x += rw;
-    });
-    y += rh;
-  });
+  const barH = 52;
+  const gap = 12;
+  const labelW = 130;
+  const rightInfo = 180;
+  const barAreaW = w - labelW - rightInfo - 20;
+  const startY = 70;
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '12px 24px 4px' }}>
         <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
-          질환별 의료비 규모
+          질환별 직접 의료비 규모
         </h2>
-        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a', margin: '2px 0 0' }}>
-          HEALTHCARE COST TREEMAP — 단위: 조원/년
+        <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#8888aa', margin: '4px 0 0' }}>
+          건보 청구코드 기준 직접 진료비 (간접비용·생산성 손실 미포함) — 단위: 조원/년
         </p>
       </div>
-      <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
-        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <pattern id="costGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141430" strokeWidth="0.5" opacity="0.3" />
-            </pattern>
-          </defs>
-          <rect width={w} height={h} fill="url(#costGrid)" />
-          {rects.map((r) => {
-            const isSelected = selectedCost?.id === r.id;
+      <div style={{ flex: 1, display: 'flex', position: 'relative', minHeight: 0 }}>
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', display: 'block' }} preserveAspectRatio="xMidYMid meet">
+          {sorted.map((d, i) => {
+            const y = startY + i * (barH + gap);
+            const barW = (d.cost / maxCost) * barAreaW;
+            const isSelected = selectedCost?.id === d.id;
+            const opacity = 0.4 + (d.cost / maxCost) * 0.55;
             return (
-              <g key={r.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedCost(isSelected ? null : r)}>
-                <rect x={r.x + 2} y={r.y + 2} width={r.w - 4} height={r.h - 4} rx={8}
-                  fill={`${r.color}${isSelected ? '44' : '22'}`}
-                  stroke={r.color} strokeWidth={isSelected ? 2 : 1} strokeOpacity={isSelected ? 0.8 : 0.3} />
-                {/* Name — handle \n with tspan */}
-                {r.name.split('\n').map((line, li) => (
-                  <text key={li} x={r.x + r.w / 2} y={r.y + r.h / 2 - 22 + li * 15} textAnchor="middle"
-                    fill={r.color} fontSize={r.w < 200 ? 11 : 13} fontWeight={700} fontFamily="'Noto Sans KR', sans-serif">
-                    {line}
-                  </text>
-                ))}
-                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 14} textAnchor="middle"
-                  fill="#e0e0ff" fontSize={r.w < 200 ? 16 : 22} fontWeight={800} fontFamily="'JetBrains Mono', monospace">{r.cost}조</text>
-                <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 32} textAnchor="middle"
-                  fill="#8888aa" fontSize={10} fontFamily="'JetBrains Mono', monospace">
-                  {((r.cost / totalCost) * 100).toFixed(0)}%
+              <g key={d.id} style={{ cursor: 'pointer' }} onClick={() => setSelectedCost(isSelected ? null : d)}>
+                <text x={labelW - 8} y={y + barH / 2 - 4} textAnchor="end" dominantBaseline="middle"
+                  fill={isSelected ? d.color : '#ccccee'} fontSize={14} fontWeight={700} fontFamily="'Noto Sans KR', sans-serif">
+                  {d.name}
+                </text>
+                <text x={labelW - 8} y={y + barH / 2 + 12} textAnchor="end"
+                  fill="#555" fontSize={9} fontFamily="'JetBrains Mono', monospace">
+                  {d.basis}
+                </text>
+                <rect x={labelW} y={y + 6} width={barW} height={barH - 12} rx={6}
+                  fill={d.color} opacity={opacity}
+                  stroke={isSelected ? '#fff' : 'none'} strokeWidth={isSelected ? 1.5 : 0} />
+                <text x={labelW + barW - 8} y={y + barH / 2} textAnchor="end" dominantBaseline="middle"
+                  fill="#fff" fontSize={20} fontWeight={800} fontFamily="'JetBrains Mono', monospace">
+                  {d.cost}조
+                </text>
+                <text x={labelW + barAreaW + 14} y={y + barH / 2 - 6}
+                  fill="#aaaacc" fontSize={11} fontFamily="'JetBrains Mono', monospace">
+                  {d.perPatient}
+                </text>
+                <text x={labelW + barAreaW + 14} y={y + barH / 2 + 10}
+                  fill="#666" fontSize={10} fontFamily="'Noto Sans KR', sans-serif">
+                  {d.population}
                 </text>
               </g>
             );
@@ -2019,33 +2002,33 @@ function CostTreemapView() {
         </svg>
         {selectedCost && (
           <div style={{
-            position: 'absolute', right: 24, top: 24, width: 260,
-            background: 'rgba(10,10,20,0.95)', border: `1px solid ${selectedCost.color}44`,
-            borderRadius: 12, padding: 16, backdropFilter: 'blur(12px)',
-            animation: 'fadeInUp 0.3s ease-out',
+            position: 'absolute', top: 10, right: 10,
+            background: '#1a1a2eee', border: `1px solid ${selectedCost.color}44`, borderRadius: 10,
+            padding: '14px 16px', zIndex: 50, minWidth: 240, maxWidth: 300, maxHeight: 280, overflowY: 'auto',
           }}>
             <button onClick={() => setSelectedCost(null)} style={{
               position: 'absolute', top: 8, right: 8, background: 'none', border: 'none',
               color: '#666', fontSize: 14, cursor: 'pointer',
             }}>x</button>
-            <h4 style={{ color: selectedCost.color, margin: '0 0 10px', fontSize: 14 }}>{selectedCost.name}</h4>
+            <h4 style={{ color: selectedCost.color, margin: '0 0 8px', fontSize: 14 }}>{selectedCost.name}</h4>
             {[
-              ['연간 총 의료비', `${selectedCost.cost}조원`],
+              ['비용 기준', selectedCost.basis],
+              ['연간 직접 의료비', `${selectedCost.cost}조원`],
               ['환자당 비용', selectedCost.perPatient],
               ['대상 인구', selectedCost.population],
-              ['추이', selectedCost.trend],
+              ['비고', selectedCost.note],
               ['출처', selectedCost.ref],
             ].map(([label, val]) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <span style={{ color: '#8888aa', fontSize: 11 }}>{label}</span>
-                <span style={{ color: '#e0e0ff', fontSize: 12, fontWeight: 600, textAlign: 'right', maxWidth: 160 }}>{val}</span>
+              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', gap: 8 }}>
+                <span style={{ color: '#8888aa', fontSize: 11, flexShrink: 0 }}>{label}</span>
+                <span style={{ color: '#e0e0ff', fontSize: 11, textAlign: 'right' }}>{val}</span>
               </div>
             ))}
           </div>
         )}
       </div>
-      <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
-        ※ 건보 총진료비 기준 (약제비 일부 포함). 출처: KDCA 만성질환 현황 2025, KSHF HF Statistics 2024, KASL MASLD FS 2023, KSN ESKD FS 2024
+      <div style={{ padding: '4px 24px 8px', fontSize: 10, color: '#4a4a6a', fontFamily: "'Noto Sans KR', sans-serif" }}>
+        ※ 건보 청구코드 기준 직접 진료비. 간접비용(생산성 손실, 간병비) 미포함. 약제비 기준 질환별 상이. 출처: KDCA 2025, KSHF 2024, KASL 2023, KSN 2024
       </div>
     </div>
   );
