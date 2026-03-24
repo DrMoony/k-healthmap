@@ -1,0 +1,188 @@
+{
+  "source": "질병관리청(KDCA) 심뇌혈관질환 발생통계 2022",
+  "publication": "공중보건주간동향 Public Health Weekly Report 2025; 18(22): 797-813",
+  "last_updated": "2024-12-31",
+  "data_period": "2011-2022",
+  "note": "이 자료는 국민건강보험공단의 건강정보 및 사망원인 데이터베이스를 분석하여 산출되었습니다",
+  "myocardial_infarction": {
+    "description": "심근경색증 발생통계",
+    "incidence_by_year": {
+      "2011": {
+        "total_cases": 22398,
+        "age_standardized_rate_per_100k": null
+      },
+      "2012": {
+        "total_cases": 23509,
+        "age_standardized_rate_per_100k": null
+      },
+      "2021": {
+        "total_cases": 34612,
+        "age_standardized_rate_per_100k": 57.1
+      },
+      "2022": {
+        "total_cases": 34969,
+        "crude_rate_per_100k": 68.2,
+        "age_standardized_rate_per_100k": 38.6
+      }
+    },
+    "ten_year_change": {
+      "percent_increase_2011_to_2022": 54.5,
+      "ratio_2011_to_2022": 1.5
+    },
+    "by_gender_2022": {
+      "male": {
+        "total_cases": 25944,
+        "crude_rate_per_100k": 101.6
+      },
+      "female": {
+        "total_cases": 9025,
+        "crude_rate_per_100k": 35.1
+      },
+      "male_to_female_ratio": 2.8
+    },
+    "by_gender_trend": {
+      "male_2011": {
+        "age_standardized_rate": 48.5
+      },
+      "male_2021": {
+        "age_standardized_rate": 57.1
+      },
+      "male_change_percent": 17.7,
+      "female_2011": {
+        "age_standardized_rate": 22.2
+      },
+      "female_2021": {
+        "age_standardized_rate": 18.9
+      },
+      "female_change_percent": -14.9
+    },
+    "by_age_group_2022": {
+      "80_plus": {
+        "crude_rate_per_100k": 327.5,
+        "note": "최고 발생률"
+      },
+      "65_plus": {
+        "30day_fatality_rate_percent": 14.3
+      }
+    },
+    "mortality": {
+      "2022": {
+        "30day_case_fatality_rate_percent": 9.0,
+        "1year_case_fatality_rate_percent": 15.8,
+        "male_30day_rate": 7.5,
+        "female_30day_rate": 13.2,
+        "65plus_30day_rate": 14.3
+      }
+    },
+    "first_vs_recurrent_2022": {
+      "note": "First occurrence: 0-79세에서는 남자 > 여자, 80세 이상에서는 여자 > 남자",
+      "recurrent": "모든 연령대에서 남자 발생건수 > 여자"
+    }
+  },
+  "stroke": {
+    "description": "뇌졸중 발생통계",
+    "incidence_by_year": {
+      "2011": {
+        "total_cases": 101162,
+        "age_standardized_rate_per_100k": 164.1
+      },
+      "2012": {
+        "total_cases": null,
+        "age_standardized_rate_per_100k": 152.7
+      },
+      "2019": {
+        "note": "peak before declining trend"
+      },
+      "2020": {
+        "note": "trend reversal, increase began"
+      },
+      "2021": {
+        "total_cases": 108950,
+        "crude_rate_per_100k": 212.2
+      },
+      "2022": {
+        "total_cases": 110574,
+        "crude_rate_per_100k": 215.7,
+        "age_standardized_rate_per_100k": 114.6
+      }
+    },
+    "ten_year_change": {
+      "percent_increase_2011_to_2022": 9.5,
+      "absolute_increase": 9412
+    },
+    "age_standardized_rate_change": {
+      "2012": 152.7,
+      "2022": 114.6,
+      "percent_decrease": -25.0
+    },
+    "by_gender_2022": {
+      "male": {
+        "total_cases": 61988,
+        "crude_rate_per_100k": 242.7
+      },
+      "female": {
+        "total_cases": 48586,
+        "crude_rate_per_100k": 188.9
+      },
+      "male_to_female_ratio": 1.2
+    },
+    "by_gender_trend": {
+      "male_2011": {
+        "age_standardized_rate": 164.1
+      },
+      "male_2021": {
+        "age_standardized_rate": 127.3
+      },
+      "male_change_percent": -22.5,
+      "female_2011": {
+        "age_standardized_rate": 149.8
+      },
+      "female_2021": {
+        "age_standardized_rate": 103.2
+      },
+      "female_change_percent": -31.1
+    },
+    "by_age_group_2022": {
+      "80_plus": {
+        "crude_rate_per_100k": 1515.7,
+        "note": "최고 발생률"
+      },
+      "65_plus": {
+        "1year_fatality_rate_percent": 32.1
+      }
+    },
+    "recurrent_stroke": {
+      "2012_percent": 17.5,
+      "2022_percent": 20.4,
+      "increase": 2.9
+    },
+    "mortality": {
+      "2022": {
+        "30day_case_fatality_rate_percent": 8.2,
+        "1year_case_fatality_rate_percent": 20.1,
+        "male_1year_rate": 18.5,
+        "female_1year_rate": 22.1,
+        "65plus_1year_rate": 32.1
+      },
+      "trend": "2020년 이후 증가세"
+    }
+  },
+  "summary_findings": {
+    "myocardial_infarction": "2011-2022년 사이 심근경색증 발생 규모가 54.5% 증가했으며, 남자의 발생이 지속 증가하는 반면 여자는 감소 추세",
+    "stroke": "2011-2022년 사이 뇌졸중 발생 건수는 9.5% 증가했으나, 연령표준화 발생률은 25% 감소. 2019년까지 감소하다가 2020년 이후 다시 증가 추세",
+    "gender_disparity": "두 질환 모두 남자 발생률이 높음. 심근경색증은 남자 2.8배, 뇌졸중은 남자 1.2배",
+    "age_pattern": "연령이 높을수록 두 질환 모두 발생률 증가. 80세 이상 그룹에서 가장 높은 발생률",
+    "mortality_trend": "심근경색증 치명률은 감소 추세인 반면, 뇌졸중 치명률은 2020년 이후 증가 추세"
+  },
+  "data_sources": [
+    "질병관리청 보도자료 (2024년 4월)",
+    "질병관리청 보도자료 (2024년 12월)",
+    "공중보건주간동향 (Public Health Weekly Report)",
+    "국민건강보험공단 건강정보 및 사망원인 데이터베이스"
+  ],
+  "access_information": {
+    "kdca_website": "https://www.kdca.go.kr",
+    "kosis_database": "https://kosis.kr (2025년 1월부터 통계표 확인 가능)",
+    "availability": "질병관리청 누리집에서 자료 열람 및 내려받기 가능"
+  }
+}

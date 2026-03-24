@@ -1,0 +1,288 @@
+{
+  "document": {
+    "title": "Dyslipidemia Fact Sheet - Korea 2024",
+    "source": "Korean Society of Lipid and Atherosclerosis (KSoLA)",
+    "year": 2024,
+    "extraction_date": "2026-03-19"
+  },
+  "prevalence_data": {
+    "overall_dyslipidemia": {
+      "standard_criteria_2016_2022": {
+        "value": 40.9,
+        "unit": "percent",
+        "criteria": "standard"
+      },
+      "modified_hdl_c_criteria_women_2016_2022": {
+        "value": 47.4,
+        "unit": "percent",
+        "criteria": "modified HDL-C for women"
+      }
+    },
+    "hypercholesterolemia": {
+      "crude_prevalence_2022": {
+        "value": 27.4,
+        "unit": "percent",
+        "type": "crude"
+      },
+      "age_standardized_2007": {
+        "value": 8.8,
+        "unit": "percent",
+        "year": 2007,
+        "type": "age-standardized"
+      },
+      "age_standardized_2022": {
+        "value": 22.4,
+        "unit": "percent",
+        "year": 2022,
+        "type": "age-standardized"
+      }
+    },
+    "hyper_ldl_cholesterolemia": {
+      "age_standardized_2007": {
+        "value": 8.8,
+        "unit": "percent",
+        "year": 2007,
+        "type": "age-standardized"
+      },
+      "age_standardized_2022": {
+        "value": 23.4,
+        "unit": "percent",
+        "year": 2022,
+        "type": "age-standardized"
+      }
+    }
+  },
+  "prevalence_by_gender_and_age": {
+    "dyslipidemia_type_1": {
+      "men": {
+        "value": 47.1,
+        "unit": "percent"
+      },
+      "women": {
+        "value": 34.7,
+        "unit": "percent"
+      }
+    },
+    "dyslipidemia_type_2": {
+      "men": {
+        "value": 47.1,
+        "unit": "percent"
+      },
+      "women": {
+        "value": 47.7,
+        "unit": "percent"
+      }
+    },
+    "women_age_70s": {
+      "value": 74.4,
+      "unit": "percent",
+      "note": "versus 51.4% in men same age"
+    },
+    "men_age_70s": {
+      "value": 51.4,
+      "unit": "percent"
+    }
+  },
+  "lipid_profiles": {
+    "total_cholesterol": {
+      "2007": {
+        "value": 186.2,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      },
+      "2022": {
+        "value": 192.7,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      }
+    },
+    "hdl_cholesterol": {
+      "2007": {
+        "value": 48.1,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      },
+      "2022": {
+        "value": 57.7,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      }
+    },
+    "ldl_cholesterol": {
+      "2007": {
+        "value": 112.1,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      },
+      "2022": {
+        "value": 118.5,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      }
+    },
+    "triglycerides": {
+      "2007": {
+        "value": 130.2,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      },
+      "2022": {
+        "value": 129.3,
+        "unit": "mg/dL",
+        "type": "age-standardized"
+      }
+    }
+  },
+  "treatment_and_management": {
+    "awareness_treatment_control_2022": {
+      "awareness_rate": {
+        "value": 68.0,
+        "unit": "percent",
+        "year": 2022
+      },
+      "treatment_rate": {
+        "value": 61.2,
+        "unit": "percent",
+        "year": 2022
+      },
+      "control_rate_overall": {
+        "value": 54.1,
+        "unit": "percent",
+        "year": 2022
+      },
+      "control_rate_among_treated": {
+        "value": 87.4,
+        "unit": "percent",
+        "year": 2022
+      }
+    },
+    "historical_trends_2007_to_2022": {
+      "awareness": {
+        "2007": {
+          "value": 38.3,
+          "unit": "percent"
+        },
+        "2022": {
+          "value": 68.0,
+          "unit": "percent"
+        }
+      },
+      "treatment": {
+        "2007": {
+          "value": 25.8,
+          "unit": "percent"
+        },
+        "2022": {
+          "value": 61.2,
+          "unit": "percent"
+        }
+      },
+      "control": {
+        "2007": {
+          "value": 19.1,
+          "unit": "percent"
+        },
+        "2022": {
+          "value": 54.1,
+          "unit": "percent"
+        }
+      }
+    },
+    "ldl_cholesterol_targets_achievement": {
+      "diabetes_patients": {
+        "ldl_below_100": {
+          "value": 56.3,
+          "unit": "percent",
+          "target": "<100 mg/dL"
+        },
+        "ldl_below_70": {
+          "value": 24.6,
+          "unit": "percent",
+          "target": "<70 mg/dL"
+        }
+      },
+      "hypertension_patients": {
+        "ldl_below_130": {
+          "value": 74.4,
+          "unit": "percent",
+          "target": "<130 mg/dL"
+        },
+        "ldl_below_100": {
+          "value": 44.9,
+          "unit": "percent",
+          "target": "<100 mg/dL"
+        }
+      }
+    }
+  },
+  "comorbidity_associations": {
+    "study_period": "2016-2022",
+    "with_diabetes": {
+      "value": 87.0,
+      "unit": "percent"
+    },
+    "with_hypertension": {
+      "value": 72.4,
+      "unit": "percent"
+    },
+    "with_obesity_bmi_25_or_above": {
+      "value": 55.2,
+      "unit": "percent"
+    },
+    "with_abdominal_obesity": {
+      "value": 59.0,
+      "unit": "percent"
+    }
+  },
+  "health_behaviors": {
+    "study_period": "among adults with dyslipidemia",
+    "physical_inactivity": {
+      "men": {
+        "value": 51.8,
+        "unit": "percent"
+      },
+      "women": {
+        "value": 58.6,
+        "unit": "percent"
+      }
+    },
+    "current_smoking": {
+      "men": {
+        "value": 32.3,
+        "unit": "percent"
+      },
+      "women": {
+        "value": 5.5,
+        "unit": "percent"
+      }
+    },
+    "regular_alcohol_use": {
+      "men": {
+        "value": 69.8,
+        "unit": "percent"
+      },
+      "women": {
+        "value": 41.8,
+        "unit": "percent"
+      }
+    },
+    "adequate_vegetable_intake": {
+      "men": {
+        "value": 31.1,
+        "unit": "percent"
+      },
+      "women": {
+        "value": 27.2,
+        "unit": "percent"
+      }
+    }
+  },
+  "document_metadata": {
+    "total_pages": 58,
+    "primary_source": "Korean Society of Lipid and Atherosclerosis",
+    "urls_used": [
+      "https://e-jla.org/DOIx.php?id=10.12997/jla.2025.14.3.298"
+    ],
+    "data_extraction_status": "Successfully extracted comprehensive numerical data"
+  }
+}

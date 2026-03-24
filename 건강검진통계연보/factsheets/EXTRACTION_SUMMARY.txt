@@ -1,0 +1,117 @@
+NAFLD FACT SHEET 2023 - NUMERICAL DATA EXTRACTION SUMMARY
+=========================================================
+Source: Korean Association for the Study of the Liver (KASL)
+URL: https://kasl.org/eng/html/file/NAFLD%20FACT%20SHEET%202023.pdf
+Extraction Date: 2026-03-19
+
+DOCUMENT OVERVIEW
+=================
+- Title: NAFLD Fact Sheet 2023 (비알코올 지방간질환 팩트시트)
+- Organization: KASL (Korean Association for the Study of the Liver)
+- Data Source: National Health Insurance Service (국민건강보험공단)
+- Pages: 26
+- Language: Korean with English sections
+
+DATA EXTRACTED BY SECTION
+=========================
+
+SECTION 1: PREVALENCE (유병환자 현황)
+------------------------------------
+Period: 2012 vs 2022 (10-year comparison)
+- Age groups: 20-29, 30-39, 40-49, 50-59, 60-69, 70-79, 80+
+- Gender breakdown: Male and Female
+- Data points: ~56 prevalence percentages by age/gender/year
+- Key finding: All age groups and genders showed increased prevalence from 2012 to 2022
+
+SECTION 2: INCIDENCE (발생환자 현황)
+-----------------------------------
+Period: 2010-2023 (14-year trend)
+- Incident cases by year: 14 data points (733,291 to 1,978,847 patients)
+- Incident rates by age/gender: 5 time periods (2010, 2015, 2020, 2021, 2022)
+- Age groups: 7 categories for each gender
+- Regional data: 16 provinces with incidence rates and medical costs
+- Data points: ~150+ incidence-related figures
+
+SECTION 3: COMORBIDITIES & MEDICAL COSTS (동반질환 및 사회적 비용)
+--------------------------------------------------------------
+Single comorbidities (2012 vs 2022):
+- Total NAFLD patients: 4.2M (2012) vs 7.7M (2022)
+- Hypertension: 1.46M (34.5%) vs 1.47M (42.3%)
+- Diabetes: 618K (14.6%) vs 1.12M (14.6%)
+- Hyperlipidemia: 148K (1.9%) vs 345K (8.1%)
+- Chronic Kidney Disease: 45K (1.1%) vs 618K (19.1%)
+
+Two comorbidities (6 combinations, 2012 vs 2022):
+- Diabetes + Hypertension: highest (163,977 to 287,993 patients)
+- Hypertension + Hyperlipidemia, Diabetes + Hyperlipidemia, CKD + Diabetes, etc.
+
+Three comorbidities (4 combinations, 2012 vs 2022):
+- Diabetes + Hypertension + Hyperlipidemia: most common
+
+Four comorbidities (1 combination, 2012 vs 2022):
+- All four diseases combination: 178 to 688 patients
+
+Medical costs (KRW - Korean Won):
+- NAFLD patients medical costs: 787,579 (2012) vs 2,124,312 (2022)
+- Control group medical costs: 532,943 (2012) vs 1,153,861 (2022)
+- Pharmaceutical costs similar trends
+
+SECTION 4: PROGRESSION & MORTALITY (세부 상병 및 사망 발전 비율)
+-------------------------------------------------------------
+2-year follow-up progression rates:
+
+Malignancy progression:
+- Male: 0.55% (20-29) to 16.97% (80+) in 2010
+- Female: 0.89% (20-29) to 6.08% (80+) in 2010
+- Tracked for 2010, 2015, 2020 periods
+
+Ischemic Heart Disease:
+- Male: 0.56% (20-29) to 13.88% (80+)
+- Female: 0.36% (20-29) to 10.46% (80+)
+
+Ischemic Stroke:
+- Male: 0.09% (20-29) to 12.95% (80+)
+- Female: 0.09% (20-29) to 10.08% (80+)
+
+Liver Cirrhosis:
+- Male: 0.10% (20-29) to 1.54% (60-69)
+- Female: 0.09% (20-29) to 10.08% (80+)
+
+Hepatocellular Carcinoma (HCC):
+- Male: 0.01% (20-29) to 0.69% (80+)
+- Female: 0.01% (20-29) to 0.26% (70-79)
+
+10-year progression (2010 baseline):
+- 14 age-gender combinations × 5 conditions = 70 data points
+- Examples: Males 50-59: 7.92% malignancy, 13.84% ischemic heart disease
+
+Mortality (10-year follow-up from 2010 baseline):
+- Male: 1.02% (20-29) to 7.41% (60-69)
+- Female: 0.80% (20-29) to 1.25% (30-39)
+- Note: Ages 70+ excluded due to natural mortality
+
+SUMMARY STATISTICS
+==================
+Total numerical data points extracted: 300+
+Age groups covered: 8 (20-29, 30-39, 40-49, 50-59, 60-69, 70-79, 80+, and combined)
+Gender breakdowns: Male/Female for all prevalence and incidence data
+Time periods: 2010-2023 (14 years of trend data)
+Regions: 16 Korean provinces (시도별)
+Comorbidity combinations: 11 unique combinations (single, dual, triple, and quadruple)
+Conditions tracked: 5 main complications (malignancy, MI, stroke, cirrhosis, HCC)
+
+DATA QUALITY NOTES
+==================
+- Text extraction successful from 26-page PDF
+- All percentages are clearly labeled with unit markers
+- Patient counts are provided for major categories
+- Time series data shows consistent tracking from 2010-2023
+- Regional variations documented for prevalence and costs
+- Gender stratification available for all prevalence measures
+- Comorbidity data shows both absolute numbers and percentages
+
+FILE LOCATION
+=============
+/sessions/amazing-zen-fermi/factsheets/nafld_2023.json
+File size: 17.3 KB
+Format: JSON (structured, machine-readable)

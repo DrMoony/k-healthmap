@@ -1,0 +1,174 @@
+{
+  "source": "Diabetes Fact Sheets in Korea 2024",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11788544/",
+  "data_source": "Korea National Health and Nutrition Examination Survey (KNHANES) 2019-2022; Korean National Health Insurance Service (NHIS)",
+  "reference_year": "2021-2022",
+  "prevalence_overall": {
+    "adults_30_plus_years": {
+      "total_percentage": 15.5,
+      "population_millions": 5.3,
+      "men_percentage": 18.1,
+      "women_percentage": 13.0
+    },
+    "adults_19_plus_years": {
+      "total_percentage": 13.1,
+      "men_percentage": 15.2,
+      "women_percentage": 11.0
+    },
+    "adults_65_plus_years": {
+      "total_percentage": 29.3,
+      "men_percentage": 30.4,
+      "women_percentage": 28.5
+    }
+  },
+  "prevalence_by_age_group": {
+    "age_19_29": 2.2,
+    "age_30_39": 3.3,
+    "age_40_49": 8.4,
+    "age_50_59": 16.7,
+    "age_60_69": 22.7,
+    "age_70_plus": 30.6
+  },
+  "prediabetes": {
+    "adults_30_plus_years": {
+      "total_percentage": 41.1,
+      "population_millions": 14.09,
+      "men_percentage": 43.8,
+      "women_percentage": 38.5
+    },
+    "adults_19_plus_years": 36.1,
+    "adults_65_plus_years": 47.7,
+    "young_adults_19_39": {
+      "overall_percentage": 26.5,
+      "population_millions": 3.03,
+      "men_percentage": 26.5,
+      "women_percentage": 16.7
+    }
+  },
+  "type_1_vs_type_2": {
+    "note": "Type 1 vs Type 2 breakdown not explicitly provided in fact sheet"
+  },
+  "awareness_treatment_control": {
+    "overall_adults_30_plus": {
+      "awareness_percentage": 74.7,
+      "treatment_percentage": 70.9,
+      "control_hba1c_less_6_5_percentage": 32.4
+    },
+    "young_adults_19_39": {
+      "awareness_percentage": 43.3,
+      "treatment_percentage": 34.6,
+      "control_hba1c_less_6_5_percentage": 29.6
+    },
+    "older_adults_65_plus": {
+      "awareness_percentage": 78.8,
+      "treatment_percentage": 75.7,
+      "control_hba1c_less_6_5_percentage": 31.2,
+      "control_hba1c_less_7_5_percentage": 79.8
+    }
+  },
+  "hba1c_control_distribution": {
+    "less_than_6_5_percentage": 32.4,
+    "less_than_7_0_percentage": 60.6,
+    "less_than_8_0_percentage": 84.2,
+    "less_than_9_0_percentage": 91.8
+  },
+  "treatment_approaches": {
+    "oral_hypoglycemic_agents_only_percentage": 89.0,
+    "insulin_with_without_oral_agents_percentage": 6.0,
+    "no_treatment_percentage": 4.8
+  },
+  "comorbidities": {
+    "hypertension": {
+      "prevalence_percentage": 59.6,
+      "men_percentage": 57.7,
+      "women_percentage": 62.1,
+      "controlled_bp_less_140_85_percentage": 60.8
+    },
+    "high_ldl_cholesterolemia": {
+      "prevalence_percentage": 74.2,
+      "men_percentage": 69.7,
+      "women_percentage": 80.4,
+      "controlled_ldl_less_100_percentage": 65.3
+    },
+    "integrated_management_all_three_targets": {
+      "overall_percentage": 15.9,
+      "men_percentage": 16.1,
+      "women_percentage": 15.7,
+      "note": "All three: HbA1c <6.5%, BP <140/85, LDL-C <100"
+    },
+    "young_adults_19_39_with_diabetes": {
+      "hypertension_and_hypercholesterolemia_percentage": 26.9,
+      "integrated_management_percentage": 9.2
+    },
+    "older_adults_65_plus_with_diabetes": {
+      "hypertension_coexistence_percentage": 72.6,
+      "hypercholesterolemia_percentage": 70.5,
+      "integrated_management_hba1c_less_7_5_percentage": 40.1
+    }
+  },
+  "obesity_metrics": {
+    "general_diabetic_population": {
+      "obesity_prevalence_percentage": 53.8,
+      "men_percentage": 56.0,
+      "women_percentage": 50.9,
+      "class_i_obesity_bmi_25_29_9_percentage": 42.2,
+      "abdominal_obesity_percentage": 61.2,
+      "abdominal_obesity_men_percentage": 60.3,
+      "abdominal_obesity_women_percentage": 62.4
+    },
+    "young_adults_19_39_with_diabetes": {
+      "obesity_rate_percentage": 87.1,
+      "abdominal_obesity_percentage": 84.0,
+      "normal_body_weight_percentage": 4.9,
+      "overweight_obese_combined_percentage": 95.1
+    },
+    "older_adults_65_plus_with_diabetes": {
+      "obesity_percentage": 43.5,
+      "abdominal_obesity_percentage": 62.9
+    }
+  },
+  "lifestyle_behaviors_diabetic_population": {
+    "smoking": {
+      "current_smoking_percentage": 20.8,
+      "men_percentage": 32.9,
+      "women_percentage": 4.1
+    },
+    "alcohol": {
+      "high_risk_consumption_percentage": 22.3,
+      "men_percentage": 28.5,
+      "women_percentage": 7.8
+    },
+    "physical_activity": {
+      "regular_walking_30_min_5_days_week_percentage": 40.2,
+      "men_percentage": 38.4,
+      "women_percentage": 42.7
+    }
+  },
+  "dietary_patterns": {
+    "energy_intake_from_carbohydrates_percentage": 64.5,
+    "note": "Higher carbohydrate but lower overall energy intake compared to non-diabetic population"
+  },
+  "key_findings": [
+    "Diabetes prevalence increases significantly with age, from 2.2% in ages 19-29 to 30.6% in ages 70+",
+    "Overall diabetes prevalence in adults 30+ years is 15.5% (5.3 million individuals)",
+    "Prediabetes affects 41.1% of adults 30+ years (14.09 million individuals)",
+    "Awareness of diabetes is suboptimal at 74.7% overall, and only 43.3% in young adults aged 19-39",
+    "Glycemic control (HbA1c <6.5%) is achieved in only 32.4% of diabetic patients",
+    "Young adults with diabetes show concerning patterns: 87.1% obesity rate and only 43.3% awareness",
+    "Hypertension coexists in 59.6% of diabetic population; only 60.8% achieve BP control",
+    "High LDL cholesterolemia affects 74.2% of diabetics; 65.3% achieve LDL control",
+    "Only 15.9% of diabetics meet all integrated management targets (HbA1c, BP, and LDL)",
+    "Oral hypoglycemic agents are used in 89% of previously diagnosed diabetics; insulin in 6%",
+    "Gender differences: men have higher diabetes prevalence (18.1% vs 13.0%) but women have higher cholesterolemia rates",
+    "Lifestyle factors: 20.8% current smoking, 22.3% high-risk alcohol consumption in diabetic population",
+    "Only 40.2% of diabetics engage in regular physical activity (≥30 min walking, ≥5 days/week)"
+  ],
+  "gaps_in_data": [
+    "Type 1 vs Type 2 diabetes breakdown not explicitly provided",
+    "Specific diabetic complications rates (retinopathy, nephropathy, neuropathy) not detailed",
+    "Economic burden and healthcare costs not provided",
+    "International comparisons not included in fact sheet",
+    "Time series trend data (year-over-year changes) not provided"
+  ],
+  "extraction_date": "2026-03-19"
+}

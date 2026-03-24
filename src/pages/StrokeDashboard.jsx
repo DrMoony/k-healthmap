@@ -9,10 +9,14 @@ const PROVINCES = [
   '경기','강원','충북','충남','전북','전남','경북','경남','제주',
 ];
 
-const TRANSPORT_KEYS = ['1시간 미만','1~2시간 미만','2~3시간 미만','3~6시간 미만','6시간 이상'];
+const TRANSPORT_KEYS = ['1시간미만','1~2시간','2~3시간','3~6시간','6시간이상'];
 const TRANSPORT_LABELS = ['<1h','1-2h','2-3h','3-6h','6h+'];
 
-const AGE_GROUPS_KOSIS = ['1세 미만','1~9세','10~19세','20~29세','30~39세','40~49세','50~59세','60~69세','70~79세','80세 이상'];
+// Grouped transport keys for dashboard display
+const TRANSPORT_GROUPED_KEYS = ['3시간미만','3~6시간','6시간이상','미상'];
+const TRANSPORT_GROUPED_LABELS = ['<3h','3-6h','6h+','미상'];
+
+const AGE_GROUPS_KOSIS = ['1세미만','1~9세','10~19세','20~29세','30~39세','40~49세','50~59세','60~69세','70~79세','80세이상'];
 const AGE_LABELS = ['<1','1-9','10-19','20-29','30-39','40-49','50-59','60-69','70-79','80+'];
 
 // ── Utilities ────────────────────────────────────
@@ -66,22 +70,24 @@ function getPatientCount(provName) {
 }
 
 function getTransportDist(provName) {
-  const result = [];
-  const total = STROKE_KOSIS?.transportByRegion?.['계']?.[provName]?.['2024']
-    || STROKE_KOSIS?.transportByRegion?.['계']?.[provName]?.['2023'] || 1;
-  for (const key of TRANSPORT_KEYS) {
-    const v = STROKE_KOSIS?.transportByRegion?.[key]?.[provName]?.['2024']
-      || STROKE_KOSIS?.transportByRegion?.[key]?.[provName]?.['2023'] || 0;
-    result.push(v);
-  }
+  const regionData = STROKE_KOSIS?.transportByRegion?.[provName];
+  if (!regionData) return { counts: TRANSPORT_KEYS.map(() => 0), total: 1 };
+  const total = regionData['계']?.['2024'] || regionData['계']?.['2023'] || 1;
+  const result = TRANSPORT_KEYS.map(key => {
+    const v = regionData[key]?.['2024'] || regionData[key]?.['2023'] || 0;
+    return v;
+  });
   return { counts: result, total };
 }
 
-function getAgeDistribution(gender = '전체') {
-  const data = STROKE_KOSIS?.transportByGenderAge?.['계'];
+function getTransportGrouped(provName) {
+  const data = STROKE_KOSIS?.transportGrouped?.[provName];
   if (!data) return null;
-  const genderKey = gender === '남자' ? '남자' : gender === '여자' ? '여자' : '전체';
-  const genderData = data[genderKey];
+  return data;
+}
+
+function getAgeDistribution(gender = '전체') {
+  const genderData = STROKE_KOSIS?.byGenderAge?.[gender];
   if (!genderData) return null;
   return AGE_GROUPS_KOSIS.map(ag => {
     const v = genderData[ag];
@@ -327,8 +333,16 @@ export default function StrokeDashboard() {
 
   const transportDist = useMemo(() => {
     if (selectedProv) return getTransportDist(selectedProv);
-    // National
     return getTransportDist('전체');
+  }, [selectedProv]);
+
+  const transportGrouped = useMemo(() => {
+    const prov = selectedProv || '전체';
+    const data = getTransportGrouped(prov);
+    if (!data) return { counts: [0, 0, 0, 0], total: 1 };
+    const counts = TRANSPORT_GROUPED_KEYS.map(k => data[k] || 0);
+    const total = counts.reduce((a, b) => a + b, 0);
+    return { counts, total };
   }, [selectedProv]);
 
   // ── Rankings ────────────────
@@ -487,21 +501,21 @@ export default function StrokeDashboard() {
           </div>
         </Panel>
 
-        {/* Bottom: Transport time */}
+        {/* Bottom: Transport time (grouped) */}
         <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '6px', flexShrink: 0 }}>
-            이송 소요시간 분포 {selectedProv ? `(${selectedProv})` : '(전국)'}
+            이송 소요시간 분포 {selectedProv ? `(${selectedProv})` : '(전국)'} <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>2023</span>
           </div>
           <div style={{ flex: 1, minHeight: 0 }}>
             <VerticalBarChart
-              data={transportDist.counts}
-              labels={TRANSPORT_LABELS}
+              data={transportGrouped.counts}
+              labels={TRANSPORT_GROUPED_LABELS}
               title=""
               color="#ffaa00"
             />
           </div>
           <div style={{ fontSize: '10px', color: '#555', marginTop: '4px', textAlign: 'right', flexShrink: 0 }}>
-            총 {transportDist.total?.toLocaleString()}건
+            총 {transportGrouped.total?.toLocaleString()}건 (3시간미만: {((transportGrouped.counts[0] / transportGrouped.total) * 100).toFixed(1)}%)
           </div>
         </Panel>
       </div>
