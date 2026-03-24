@@ -1376,6 +1376,19 @@ export default function ExamDetail() {
           natAvgAge={natAvgAge}
         />
       </Panel>
+
+      {/* Reference footer */}
+      <div style={{
+        gridColumn: '1 / -1',
+        padding: '4px 12px',
+        fontSize: 10,
+        color: '#4a4a6a',
+        fontFamily: "'JetBrains Mono', monospace",
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+        flexShrink: 0,
+      }}>
+        출처: 건강검진통계연보(NHIS 2024) — 18개 검진항목 x 17시도 x 15연령대 x 3성별
+      </div>
     </div>
   );
 }

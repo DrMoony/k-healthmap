@@ -141,6 +141,19 @@ export default function Overview() {
           metric={metric}
         />
       </div>
+
+      {/* Reference footer */}
+      <div style={{
+        gridColumn: '1 / -1',
+        padding: '4px 12px',
+        fontSize: 10,
+        color: '#4a4a6a',
+        fontFamily: "'JetBrains Mono', monospace",
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+        flexShrink: 0,
+      }}>
+        출처: 건강검진통계연보 2015-2024, 행안부 주민등록인구 2024, 통계청 GRDP 2023, 각 학회 팩트시트
+      </div>
     </div>
   );
 }

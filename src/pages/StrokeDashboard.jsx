@@ -235,7 +235,7 @@ function Panel({ children, style = {} }) {
 
 // ── KPI Mini Card ────────────────────────────────────
 
-function KPIMini({ label, value, unit, icon, color = '#00d4ff' }) {
+function KPIMini({ label, value, unit, icon, color = '#00d4ff', source }) {
   return (
     <div style={{
       background: 'linear-gradient(145deg, #1a1a2e 0%, #12121a 100%)',
@@ -256,6 +256,11 @@ function KPIMini({ label, value, unit, icon, color = '#00d4ff' }) {
         </span>
         <span style={{ fontSize: '10px', color: '#666' }}>{unit}</span>
       </div>
+      {source && (
+        <div style={{ fontSize: '8px', color: '#555', marginTop: '3px', fontFamily: "'JetBrains Mono', monospace" }}>
+          {source}
+        </div>
+      )}
     </div>
   );
 }
@@ -384,10 +389,10 @@ export default function StrokeDashboard() {
         </Panel>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-          <KPIMini label="전국 발생률" value={NATIONAL_AVG.strokeIncidence} unit="/10만" icon="📊" color="#00d4ff" />
-          <KPIMini label="30일 치명률" value={NATIONAL_AVG.strokeMortality} unit="/10만" icon="💀" color="#ff6b6b" />
-          <KPIMini label="골든타임 도착" value={NATIONAL_AVG.goldenTimeRate} unit="%" icon="⏱️" color="#ffaa00" />
-          <KPIMini label="tPA 시행률" value={NATIONAL_AVG.tpaRate} unit="%" icon="💉" color="#b388ff" />
+          <KPIMini label="전국 발생률" value={NATIONAL_AVG.strokeIncidence} unit="/10만" icon="📊" color="#00d4ff" source="KDCA 2022" />
+          <KPIMini label="30일 치명률" value={NATIONAL_AVG.strokeMortality} unit="/10만" icon="💀" color="#ff6b6b" source="KOSIS 2023" />
+          <KPIMini label="골든타임 도착" value={NATIONAL_AVG.goldenTimeRate} unit="%" icon="⏱️" color="#ffaa00" source="연구 기반 추정" />
+          <KPIMini label="tPA 시행률" value={NATIONAL_AVG.tpaRate} unit="%" icon="💉" color="#b388ff" source="심평원 (추정)" />
         </div>
       </div>
 
@@ -663,10 +668,14 @@ export default function StrokeDashboard() {
 
         {/* Footer */}
         <div style={{
-          fontSize: '9px', color: '#444', textAlign: 'center', padding: '4px',
-          borderTop: '1px solid rgba(255,255,255,0.04)', flexShrink: 0,
+          padding: '4px 12px',
+          fontSize: 10,
+          color: '#4a4a6a',
+          fontFamily: "'JetBrains Mono', monospace",
+          borderTop: '1px solid rgba(255,255,255,0.04)',
+          flexShrink: 0,
         }}>
-          출처: KDCA 심뇌혈관질환 발생통계 2022, KOSIS, 심평원
+          출처: KOSIS 심뇌혈관질환통계 (orgId=411, 2022-2024), KDCA 심뇌혈관질환 발생통계 2022, 심평원 급성기 뇌졸중 적정성 평가. tPA 시행률·골든타임 도착률은 추정치.
         </div>
       </div>
     </div>

@@ -1,5 +1,8 @@
+// 출처: KOSIS 국가통계포털 — 심뇌혈관질환통계 (orgId=411)
+// API: statisticsBigData.do
+// 기간: 2019-2024
+// 접근일: 2026-03-24
 // Auto-generated from KOSIS XLS files by parse_kosis.py
-// Source: KOSIS 심뇌혈관질환통계 (orgId=411)
 
 export const STROKE_KOSIS = {
   // 시도별 허혈성 뇌졸중 환자수 (2022, 2023, 2024)

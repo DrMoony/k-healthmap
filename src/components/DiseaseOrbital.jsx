@@ -660,6 +660,17 @@ export default function DiseaseOrbital() {
           질환 노드를 클릭하면 상세 정보와 연결 관계를 확인할 수 있습니다
         </div>
       )}
+
+      {/* ── Source Footer ── */}
+      <div style={{
+        position: 'absolute', bottom: 4, left: 16,
+        fontSize: 10,
+        color: '#4a4a6a',
+        fontFamily: "'JetBrains Mono', monospace",
+        pointerEvents: 'none',
+      }}>
+        출처: 각 학회 팩트시트 2022-2025
+      </div>
     </div>
   );
 }

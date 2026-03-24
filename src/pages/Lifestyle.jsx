@@ -818,6 +818,19 @@ export default function Lifestyle() {
           />
         </div>
       </div>
+
+      {/* Reference footer */}
+      <div style={{
+        gridColumn: '1 / -1',
+        padding: '4px 12px',
+        fontSize: 10,
+        color: '#4a4a6a',
+        fontFamily: "'JetBrains Mono', monospace",
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+        flexShrink: 0,
+      }}>
+        출처: 건강검진통계연보(NHIS 2024) 흡연·음주·운동 현황
+      </div>
     </div>
   );
 }

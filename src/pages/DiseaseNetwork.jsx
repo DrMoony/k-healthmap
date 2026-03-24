@@ -963,6 +963,19 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
       {edgeDetail && !selectedDisease && (
         <EdgeDetailPopup edge={edgeDetail} onClose={() => setEdgeDetail(null)} />
       )}
+
+      {/* Source footer */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '4px 12px',
+        fontSize: 10,
+        color: '#4a4a6a',
+        fontFamily: "'JetBrains Mono', monospace",
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+        background: 'rgba(10,10,15,0.85)',
+      }}>
+        출처: 각 학회 팩트시트 (KOSSO/KDA/KSoLA/KASL/KDCA/KSH/KSHF 2022-2025)
+      </div>
     </div>
   );
 }
@@ -2177,7 +2190,7 @@ function ManagementView() {
           {/* Instruction */}
           <text x={w / 2} y={h - 8} textAnchor="middle" fill="#4a4a6a" fontSize={9}
             fontFamily="'JetBrains Mono', monospace">
-            클릭하여 상세 정보 확인 | 출처: 각 학회 Fact Sheet 2024
+            클릭하여 상세 정보 확인 | 출처: KSH 2024, KDA 2024, KSoLA 2024, KSN 2024
           </text>
         </svg>
         {renderDetail()}
@@ -2325,7 +2338,7 @@ function SurvivalCurvesView() {
         )}
       </div>
       <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
-        출처: 대한심부전학회 2023, KASL MASLD Fact Sheet 2023, 국가암등록통계 2022
+        출처: KSHF HF Statistics 2024, KASL MASLD FS 2023, 국가암등록통계 2022
       </div>
     </div>
   );
@@ -2387,7 +2400,21 @@ export default function DiseaseNetwork() {
           )}
           {viewMode === 'masld' && <MASLDHeatmapView />}
           {viewMode === 'trends' && <TrendsView />}
-          {viewMode === 'orbital' && <DiseaseOrbital />}
+          {viewMode === 'orbital' && (
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ flex: 1, minHeight: 0 }}><DiseaseOrbital /></div>
+              <div style={{
+                padding: '4px 12px',
+                fontSize: 10,
+                color: '#4a4a6a',
+                fontFamily: "'JetBrains Mono', monospace",
+                borderTop: '1px solid rgba(255,255,255,0.04)',
+                flexShrink: 0,
+              }}>
+                출처: 각 학회 팩트시트 2022-2025
+              </div>
+            </div>
+          )}
           {viewMode === 'sankey' && <DiseaseSankey />}
           {viewMode === 'upset' && (
             <div>

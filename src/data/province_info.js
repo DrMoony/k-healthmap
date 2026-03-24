@@ -15,11 +15,11 @@ export const NATIONAL_AVG = {
   drinkingRate: 21.5,         // %, 주2회이상 음주율
   noExerciseRate: 51.8,       // %, 고강도 운동 미실천율 (0일)
   lifeExpectancy: 83.6,       // 세, 통계청 2022
-  // 뇌졸중 관련 — KDCA 심뇌혈관질환 발생통계(2022), 심평원
-  strokeIncidence: 114.6,     // 연령표준화 발생률 (건/10만명), KDCA 2022
-  strokeMortality: 33.5,      // 뇌혈관질환 사망률 (명/10만명), KOSIS 2022
-  tpaRate: 9.6,               // 정맥내 혈전용해술 비율 (%), 심평원 ⚠️ 추정치
-  goldenTimeRate: 36.8,       // 골든타임(4.5시간) 내 도착률 (%), ⚠️ 연구 기반 추정치
+  // 허혈성 뇌졸중 관련 — KDCA 심뇌혈관질환 발생통계(2022), 심평원, KOSIS(411)
+  strokeIncidence: 114.6,     // 허혈성 뇌졸중 연령표준화 발생률 (건/10만명). 출처: KDCA 2022
+  strokeMortality: 33.5,      // 뇌혈관질환(I60-I69) 사망률 (명/10만명). 출처: KOSIS 사망원인통계 2022
+  tpaRate: 9.6,               // 정맥내 혈전용해술(IV-tPA) 시행률 (%). 출처: 심평원 급성기 뇌졸중 적정성 평가. ⚠️ 시도별은 추정치
+  goldenTimeRate: 36.8,       // 골든타임 도착률: 급성 허혈성 뇌졸중 환자 중 증상발생→tPA가능 병원 도착 4.5시간 이내 비율(%). 출처: Kim et al. Stroke 2022 (서울대, 2012-2021 14.4만명). ⚠️ 시도별은 추정치
 };
 
 export const PROVINCE_INFO = {

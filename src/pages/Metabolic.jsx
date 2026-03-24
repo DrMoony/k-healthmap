@@ -1109,6 +1109,23 @@ export default function Metabolic() {
           {tooltip.text}
         </div>
       )}
+
+      {/* Reference footer */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: '4px 12px',
+        fontSize: 10,
+        color: '#4a4a6a',
+        fontFamily: "'JetBrains Mono', monospace",
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+        background: '#0a0a0f',
+        zIndex: 10,
+      }}>
+        출처: 건강검진통계연보(NHIS 2015-2024), KOSSO 비만 팩트시트 2025, KDA 당뇨 팩트시트 2024
+      </div>
     </div>
   );
 }
