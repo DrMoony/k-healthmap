@@ -4,6 +4,7 @@ import { KOREA_PATHS } from '../data/korea_paths';
 import { PROV_LABELS } from '../data/prov_labels';
 import { BMI_PROV } from '../data/bmi_prov';
 import { MET_PROV } from '../data/met_prov';
+import { PROVINCE_INFO } from '../data/province_info';
 
 function interpolateColor(value, min, max, colors) {
   const t = Math.max(0, Math.min(1, (value - min) / (max - min)));
@@ -26,6 +27,10 @@ const METABOLIC_COLORS = [
   [220, 240, 255], [160, 210, 255], [100, 170, 240],
   [50, 120, 200], [20, 70, 160], [5, 30, 100],
 ];
+const STROKE_COLORS = [
+  [255, 235, 230], [255, 200, 180], [240, 150, 120],
+  [220, 100, 70], [190, 50, 30], [140, 15, 5],
+];
 
 export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceClick }) {
   const [hovered, setHovered] = useState(null);
@@ -34,14 +39,19 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
   const containerRef = useRef(null);
 
   const yearIndex = year - 2015;
-  const colors = metric === 'obesity' ? OBESITY_COLORS : METABOLIC_COLORS;
-  const data = metric === 'obesity' ? BMI_PROV : MET_PROV;
-  const range = metric === 'obesity' ? [30, 44] : [62, 78];
+  const colors = metric === 'stroke' ? STROKE_COLORS : metric === 'obesity' ? OBESITY_COLORS : METABOLIC_COLORS;
+  const range = metric === 'stroke' ? [95, 140] : metric === 'obesity' ? [30, 44] : [62, 78];
 
   const provinces = useMemo(() => {
     return Object.entries(KOREA_PATHS).map(([name, path]) => {
-      const values = data[name];
-      const val = values ? values[yearIndex] : null;
+      let val;
+      if (metric === 'stroke') {
+        val = PROVINCE_INFO[name]?.strokeIncidence ?? null;
+      } else {
+        const data = metric === 'obesity' ? BMI_PROV : MET_PROV;
+        const values = data[name];
+        val = values ? values[yearIndex] : null;
+      }
       const color = val != null ? interpolateColor(val, range[0], range[1], colors) : '#2a2a3a';
       return { name, path, value: val, color };
     });
@@ -182,13 +192,13 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
         <g transform="translate(82, 160)">
           <rect x="0" y="0" width="8" height="160" rx="4" fill="url(#legendGrad)" />
           <text x="12" y="8" fontSize="9" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
-            {range[1]}%
+            {range[1]}{metric === 'stroke' ? '' : '%'}
           </text>
           <text x="12" y="160" fontSize="9" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
-            {range[0]}%
+            {range[0]}{metric === 'stroke' ? '' : '%'}
           </text>
           <text x="4" y="-10" fontSize="9" fill="#555570" fontFamily="'Noto Sans KR'" textAnchor="start">
-            {metric === 'obesity' ? '비만율' : '대사증후군'}
+            {metric === 'obesity' ? '비만율' : metric === 'stroke' ? '뇌졸중 발생률' : '대사증후군'}
           </text>
         </g>
       </svg>
@@ -217,7 +227,7 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
           >
             <span style={{ fontSize: '11px', fontWeight: 700, color: '#00d4ff' }}>{hovered}</span>
             <span style={{ fontSize: '14px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: '#e8e8f0', marginLeft: '6px' }}>
-              {provinces.find(p => p.name === hovered)?.value?.toFixed(1) ?? 'N/A'}%
+              {provinces.find(p => p.name === hovered)?.value?.toFixed(1) ?? 'N/A'}{metric === 'stroke' ? '' : '%'}
             </span>
           </motion.div>
         )}

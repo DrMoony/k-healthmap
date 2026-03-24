@@ -205,6 +205,10 @@ function getRankedList(metricKey) {
     smokingRate: { getter: (info) => info.smokingRate, format: (v) => `${v}%`, unit: '', ascending: true },
     drinkingRate: { getter: (info) => info.drinkingRate, format: (v) => `${v}%`, unit: '', ascending: true },
     noExerciseRate: { getter: (info) => info.noExerciseRate, format: (v) => `${v}%`, unit: '', ascending: true },
+    strokeIncidence: { getter: (info) => info.strokeIncidence, format: (v) => `${v}`, unit: '/10만', ascending: true },
+    strokeMortality: { getter: (info) => info.strokeMortality, format: (v) => `${v}`, unit: '/10만', ascending: true },
+    tpaRate: { getter: (info) => info.tpaRate, format: (v) => `${v}%`, unit: '', ascending: false },
+    goldenTimeRate: { getter: (info) => info.goldenTimeRate, format: (v) => `${v}%`, unit: '', ascending: false },
   };
   const cfg = configs[metricKey];
   if (!cfg) return [];
@@ -215,7 +219,7 @@ function getRankedList(metricKey) {
   return entries;
 }
 
-export default function DetailPanel({ selectedKPI, selectedProvince, years, year }) {
+export default function DetailPanel({ selectedKPI, selectedProvince, years, year, metric }) {
   const [expandedBadge, setExpandedBadge] = useState(null);
   const hasSelection = selectedKPI || selectedProvince;
   const provInfo = selectedProvince ? PROVINCE_INFO[selectedProvince.name] : null;
@@ -287,58 +291,115 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                   color: selectedKPI.color,
                   textShadow: `0 0 16px ${selectedKPI.color}44`,
                 }}>
-                  {selectedKPI.value.toFixed(1)}%
+                  {selectedKPI.value.toFixed(1)}{selectedKPI.unit || '%'}
                 </div>
               </div>
 
-              <div style={{
-                background: 'rgba(255,255,255,0.02)',
-                borderRadius: '10px',
-                padding: '14px',
-                border: '1px solid rgba(255,255,255,0.04)',
-                marginBottom: '12px',
-              }}>
-                <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '10px' }}>
-                  10년 추세 (2015–2024)
-                </div>
-                <SparkChart
-                  data={selectedKPI.data}
-                  labels={years}
-                  color={selectedKPI.color}
-                  height={120}
-                  showLabels
-                />
-              </div>
-
-              <div style={{
-                background: 'rgba(255,255,255,0.02)',
-                borderRadius: '10px',
-                padding: '10px',
-                border: '1px solid rgba(255,255,255,0.04)',
-              }}>
-                <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>연도별</div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
-                  {years.map((y, i) => (
-                    <div key={y} style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '3px 8px',
-                      borderRadius: '5px',
-                      background: y === 2024 ? `${selectedKPI.color}11` : 'transparent',
-                      fontSize: '11px',
-                    }}>
-                      <span style={{ color: '#8888aa', fontFamily: "'JetBrains Mono'" }}>{y}</span>
-                      <span style={{
-                        color: y === 2024 ? selectedKPI.color : '#e8e8f0',
-                        fontFamily: "'JetBrains Mono'",
-                        fontWeight: y === 2024 ? 700 : 400,
-                      }}>
-                        {selectedKPI.data[i].toFixed(1)}
-                      </span>
+              {selectedKPI.id === 'stroke' ? (
+                <>
+                  <div style={{
+                    background: 'rgba(231,76,60,0.06)',
+                    border: '1px solid rgba(231,76,60,0.15)',
+                    borderRadius: '10px',
+                    padding: '14px',
+                    marginBottom: '12px',
+                  }}>
+                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '10px' }}>
+                      전국 뇌졸중 주요 지표 (2022)
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <CompareBar label="발생률 (건/10만)" value={NATIONAL_AVG.strokeIncidence} avg={NATIONAL_AVG.strokeIncidence} min={95} max={140} color="#e74c3c" higherIsBetter={false} />
+                    <CompareBar label="사망률 (명/10만)" value={NATIONAL_AVG.strokeMortality} avg={NATIONAL_AVG.strokeMortality} min={25} max={45} color="#c0392b" higherIsBetter={false} />
+                    <CompareBar label="tPA 시술률 (%)" value={NATIONAL_AVG.tpaRate} avg={NATIONAL_AVG.tpaRate} min={3} max={16} color="#3498db" unit="%" higherIsBetter={true} />
+                    <CompareBar label="골든타임 도착률 (%)" value={NATIONAL_AVG.goldenTimeRate} avg={NATIONAL_AVG.goldenTimeRate} min={20} max={55} color="#2ecc71" unit="%" higherIsBetter={true} />
+                  </div>
+                  <div style={{
+                    background: 'rgba(255,255,255,0.02)',
+                    borderRadius: '10px',
+                    padding: '10px',
+                    border: '1px solid rgba(255,255,255,0.04)',
+                  }}>
+                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>지역별 발생률 순위</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                      {Object.entries(PROVINCE_INFO)
+                        .map(([name, info]) => ({ name, val: info.strokeIncidence }))
+                        .sort((a, b) => b.val - a.val)
+                        .map((entry, i) => (
+                          <div key={entry.name} style={{
+                            display: 'flex', justifyContent: 'space-between',
+                            padding: '3px 8px', borderRadius: '5px',
+                            background: i < 3 ? 'rgba(231,76,60,0.1)' : 'transparent',
+                            fontSize: '11px',
+                          }}>
+                            <span style={{ color: i < 3 ? '#e74c3c' : '#8888aa', fontFamily: "'JetBrains Mono'" }}>
+                              {i + 1}. {entry.name}
+                            </span>
+                            <span style={{
+                              color: i < 3 ? '#e74c3c' : '#e8e8f0',
+                              fontFamily: "'JetBrains Mono'",
+                              fontWeight: i < 3 ? 700 : 400,
+                            }}>
+                              {entry.val}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                    <div style={{ fontSize: '9px', color: '#555570', marginTop: '6px' }}>
+                      출처: KDCA 심뇌혈관질환 발생통계(2022) | tPA·골든타임: 추정치
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div style={{
+                    background: 'rgba(255,255,255,0.02)',
+                    borderRadius: '10px',
+                    padding: '14px',
+                    border: '1px solid rgba(255,255,255,0.04)',
+                    marginBottom: '12px',
+                  }}>
+                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '10px' }}>
+                      10년 추세 (2015–2024)
+                    </div>
+                    <SparkChart
+                      data={selectedKPI.data}
+                      labels={years}
+                      color={selectedKPI.color}
+                      height={120}
+                      showLabels
+                    />
+                  </div>
+
+                  <div style={{
+                    background: 'rgba(255,255,255,0.02)',
+                    borderRadius: '10px',
+                    padding: '10px',
+                    border: '1px solid rgba(255,255,255,0.04)',
+                  }}>
+                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>연도별</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                      {years.map((y, i) => (
+                        <div key={y} style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          padding: '3px 8px',
+                          borderRadius: '5px',
+                          background: y === 2024 ? `${selectedKPI.color}11` : 'transparent',
+                          fontSize: '11px',
+                        }}>
+                          <span style={{ color: '#8888aa', fontFamily: "'JetBrains Mono'" }}>{y}</span>
+                          <span style={{
+                            color: y === 2024 ? selectedKPI.color : '#e8e8f0',
+                            fontFamily: "'JetBrains Mono'",
+                            fontWeight: y === 2024 ? 700 : 400,
+                          }}>
+                            {selectedKPI.data[i].toFixed(1)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </motion.div>
           )}
 
@@ -508,8 +569,30 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                 );
               })()}
 
+              {/* Stroke detail panel — shown when metric is stroke */}
+              {provInfo && metric === 'stroke' && (
+                <div style={{
+                  background: 'rgba(231,76,60,0.06)',
+                  border: '1px solid rgba(231,76,60,0.15)',
+                  borderRadius: '8px',
+                  padding: '10px 12px',
+                  marginBottom: '8px',
+                }}>
+                  <div style={{ fontSize: '11px', color: '#e74c3c', fontWeight: 700, marginBottom: '8px' }}>
+                    뇌졸중 지표 — {selectedProvince.name}
+                  </div>
+                  <CompareBar label="발생률 (건/10만)" value={provInfo.strokeIncidence} avg={NATIONAL_AVG.strokeIncidence} min={95} max={140} color="#e74c3c" higherIsBetter={false} />
+                  <CompareBar label="사망률 (명/10만)" value={provInfo.strokeMortality} avg={NATIONAL_AVG.strokeMortality} min={25} max={45} color="#c0392b" higherIsBetter={false} />
+                  <CompareBar label="tPA 시술률 (%)" value={provInfo.tpaRate} avg={NATIONAL_AVG.tpaRate} min={3} max={16} color="#3498db" unit="%" higherIsBetter={true} />
+                  <CompareBar label="골든타임 도착률 (%)" value={provInfo.goldenTimeRate} avg={NATIONAL_AVG.goldenTimeRate} min={20} max={55} color="#2ecc71" unit="%" higherIsBetter={true} />
+                  <div style={{ fontSize: '9px', color: '#555570', marginTop: '4px' }}>
+                    출처: KDCA 심뇌혈관질환 발생통계(2022), 심평원 | tPA·골든타임: 추정치
+                  </div>
+                </div>
+              )}
+
               {/* Obesity comorbidity OR info box */}
-              {provInfo && (
+              {provInfo && metric !== 'stroke' && (
                 <div style={{
                   background: 'rgba(255,0,110,0.06)',
                   border: '1px solid rgba(255,0,110,0.15)',

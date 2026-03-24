@@ -100,7 +100,7 @@ export default function KPICard({ label, value, unit = '%', delta, icon, color =
           <span style={{ color: '#8888aa', fontSize: compact ? '12px' : '16px' }}>{unit}</span>
         </div>
 
-        {delta !== undefined && (
+        {delta != null && (
           <div style={{
             fontSize: '11px',
             color: isPositive ? '#ff006e' : '#00ff88',

@@ -7,6 +7,7 @@ import DetailPanel from '../components/DetailPanel';
 import { TRENDS } from '../data/trends';
 import { BMI_PROV } from '../data/bmi_prov';
 import { MET_PROV } from '../data/met_prov';
+import { NATIONAL_AVG } from '../data/province_info';
 
 export default function Overview() {
   const [year, setYear] = useState(2024);
@@ -22,6 +23,7 @@ export default function Overview() {
     { id: 'cancer', label: '암검진 수검률', value: TRENDS.cancer[latest], icon: '🔬', color: '#b388ff', delta: TRENDS.cancer[latest] - TRENDS.cancer[first], data: TRENDS.cancer },
     { id: 'obesity', label: '비만율', value: TRENDS.obesity[latest], icon: '⚖️', color: '#ff006e', delta: TRENDS.obesity[latest] - TRENDS.obesity[first], data: TRENDS.obesity },
     { id: 'metabolic', label: '대사증후군 위험군', value: TRENDS.metabolic[latest], icon: '💉', color: '#ffd60a', delta: TRENDS.metabolic[latest] - TRENDS.metabolic[first], data: TRENDS.metabolic },
+    { id: 'stroke', label: '뇌졸중 발생률', value: NATIONAL_AVG.strokeIncidence, icon: '🧠', color: '#e74c3c', delta: null, data: null, unit: '/10만' },
   ];
 
   // Province detail data
@@ -46,7 +48,7 @@ export default function Overview() {
       <div style={{
         gridColumn: '1 / -1',
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateColumns: 'repeat(5, 1fr)',
         gap: '10px',
       }}>
         {kpis.map((kpi, i) => (
@@ -58,8 +60,8 @@ export default function Overview() {
             active={selectedKPI === kpi.id}
             onClick={() => {
               setSelectedKPI(selectedKPI === kpi.id ? null : kpi.id);
-              // Switch map metric when clicking obesity or metabolic KPI
-              if (kpi.id === 'obesity' || kpi.id === 'metabolic') setMetric(kpi.id);
+              // Switch map metric when clicking obesity, metabolic, or stroke KPI
+              if (kpi.id === 'obesity' || kpi.id === 'metabolic' || kpi.id === 'stroke') setMetric(kpi.id);
             }}
           />
         ))}
@@ -83,6 +85,7 @@ export default function Overview() {
           {[
             { id: 'obesity', label: '비만율', color: '#ff006e' },
             { id: 'metabolic', label: '대사증후군', color: '#00d4ff' },
+            { id: 'stroke', label: '뇌졸중', color: '#e74c3c' },
           ].map(m => (
             <button
               key={m.id}
@@ -135,6 +138,7 @@ export default function Overview() {
           selectedProvince={provDetail}
           years={TRENDS.years}
           year={year}
+          metric={metric}
         />
       </div>
     </div>
