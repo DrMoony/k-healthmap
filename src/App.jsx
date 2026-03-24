@@ -5,6 +5,7 @@ import Metabolic from './pages/Metabolic';
 import ExamDetail from './pages/ExamDetail';
 import Lifestyle from './pages/Lifestyle';
 import DiseaseNetwork from './pages/DiseaseNetwork';
+import StrokeDashboard from './pages/StrokeDashboard';
 import './styles/global.css';
 
 // Error boundary to prevent white screen crashes
@@ -56,6 +57,7 @@ function App() {
         {activeTab === 'exam' && <ExamDetail />}
         {activeTab === 'lifestyle' && <Lifestyle />}
         {activeTab === 'disease' && <DiseaseNetwork />}
+        {activeTab === 'stroke' && <StrokeDashboard />}
       </ErrorBoundary>
     </div>
   );

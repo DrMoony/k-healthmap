@@ -1,0 +1,2353 @@
+	<?xml version="1.0"  encoding="UTF-8" ?>	
+	<?mso-application progid="Excel.Sheet"?>	
+	<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"	
+	xmlns:o="urn:schemas-microsoft-com:office:office"	
+	xmlns:x="urn:schemas-microsoft-com:office:excel"	
+	xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"	
+	xmlns:s="uuid:BDC6E3F0-6DA3-11d1-A2A3-00AA00C14882"	
+	xmlns:rs="urn:schemas-microsoft-com:rowset" xmlns:z="#RowsetSchema"	
+	xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"	
+	xmlns:html="http://www.w3.org/TR/REC-html40"	
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">	
+	<DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">	
+	<Title>Regional production structure by SIC'93</Title>	
+	<Author>CBS</Author>	
+	<LastAuthor>Registered User</LastAuthor>	
+	<LastSaved>2013-08-09T06:29:16Z</LastSaved>	
+	<Company>CBS</Company>	
+	<Version>12.00</Version>	
+	</DocumentProperties>	
+	<ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">	
+	<WindowHeight>10005</WindowHeight>	
+	<WindowWidth>10005</WindowWidth>	
+	<WindowTopX>120</WindowTopX>	
+	<WindowTopY>135</WindowTopY>	
+	<ProtectStructure>False</ProtectStructure>	
+	<ProtectWindows>False</ProtectWindows>	
+	</ExcelWorkbook>	
+	<Styles>	
+	<Style ss:ID="Default" ss:Name="Normal">	
+	<Alignment ss:Vertical="Bottom"/>	
+	<Font ss:FontName="Arial" x:Family="Swiss" ss:Size="8"/>	
+	</Style>	
+	<Style ss:ID="s62" ss:Name="Header">	
+	<Alignment ss:Vertical="Bottom"/>	
+	<Font ss:FontName="Arial" x:Family="Swiss" ss:Size="8" ss:Bold="0"/>	
+	</Style>	
+	<Style ss:ID="s63" ss:Name="Hyperlink">	
+	<Alignment ss:Vertical="Bottom"/>	
+	<Font ss:FontName="Arial" x:Family="Swiss" ss:Size="8" ss:Color="#0000FF"	
+	ss:Underline="Single"/>	
+	</Style>	
+	<Style ss:ID="s64" ss:Name="Title">	
+	<Alignment ss:Vertical="Bottom"/>	
+	<Font ss:FontName="Arial" x:Family="Swiss" ss:Bold="1"/>	
+	</Style>	
+	</Styles>	
+	<Worksheet ss:Name="데이터">	
+	<Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="176" x:FullColumns="1"	
+	x:FullRows="1" ss:DefaultColumnWidth="42" ss:DefaultRowHeight="11.25">	
+		<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>	
+	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">[A13]소요시간별</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">소요시간별</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">[A2]성별</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">성별</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">[A3]연령별</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">연령별</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">[ITEM]항목</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">항목</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2019</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2020</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2021</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">전체</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">120584</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">112874</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">120305</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">67107</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">63320</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">66927</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">36</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">43</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">48</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">99</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">80</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">95</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">216</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">200</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">194</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">568</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">560</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">615</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1831</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1581</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1705</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5496</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4766</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4870</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">13270</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12111</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11936</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">16454</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">16062</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17923</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17544</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">16408</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17047</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11593</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11508</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12494</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">53477</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">49554</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">53378</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">34</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">31</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">32</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">66</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">71</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">92</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">173</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">134</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">152</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">419</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">377</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">477</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1038</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">952</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1041</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3055</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2540</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2791</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6324</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5608</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5583</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8983</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8528</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9319</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">15360</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">13747</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">14564</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">18025</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17566</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">19327</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">전체</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">24025</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">20841</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">19991</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">13309</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11692</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11060</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">21</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">27</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">57</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">59</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">52</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">153</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">152</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">141</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">483</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">406</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">378</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1439</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1100</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1042</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2980</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2498</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2259</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3200</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3049</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2991</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3072</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2666</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2475</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1900</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1729</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1683</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">10716</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9149</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8931</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">10</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">33</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">36</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">28</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">104</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">95</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">98</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">280</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">212</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">228</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">763</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">622</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">645</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1590</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1325</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1231</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1910</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1695</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1617</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2711</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2236</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2191</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3310</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2909</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2866</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">전체</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">16745</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">16955</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">19009</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9094</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9364</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">10347</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">18</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">31</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">27</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">31</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">76</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">84</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">109</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">240</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">252</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">280</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">810</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">768</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">775</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1782</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1823</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1891</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2236</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2354</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2832</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2297</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2393</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2549</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1598</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1645</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1862</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7651</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7591</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8662</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">14</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">29</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">25</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">24</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">54</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">56</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">64</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">126</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">140</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">177</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">456</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">427</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">477</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">976</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">861</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">923</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1237</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1325</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1494</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2091</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2018</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2192</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2666</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2731</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3292</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_021</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~2시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">전체</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9656</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8979</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9362</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5207</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4901</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5074</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">18</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">13</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">48</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">39</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">47</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">167</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">127</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">141</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">399</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">349</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">420</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1054</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">941</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">880</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1213</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1233</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1310</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1372</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1267</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1310</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">923</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">924</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">939</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4449</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4078</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4288</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">10</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">13</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">39</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">26</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">42</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">68</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">83</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">78</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">257</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">219</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">217</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">537</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">478</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">439</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">739</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">683</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">734</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1233</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1090</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1134</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1557</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1484</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1621</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_022</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">2~3시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">전체</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">14870</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">14161</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">14790</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8239</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7780</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7996</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">19</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">14</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">24</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">19</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">22</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">59</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">54</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">73</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">203</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">198</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">188</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">628</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">546</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">566</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1525</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1432</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1321</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2048</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1922</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2038</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2172</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2070</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2188</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1555</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1522</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1579</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6631</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6381</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6794</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">13</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">13</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">24</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">42</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">39</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">58</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">132</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">112</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">114</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">348</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">272</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">335</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">725</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">699</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">687</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1089</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1082</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1151</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1951</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1796</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1899</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2310</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2350</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2514</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">3~6시간 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">전체</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">54775</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">51063</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">56496</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">30950</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">29090</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">32088</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">14</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">20</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">38</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">33</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">31</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">79</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">75</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">75</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">230</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">223</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">240</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">733</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">586</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">712</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2199</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1960</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2039</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5867</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5320</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5530</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7689</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7378</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8671</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8552</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7896</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8416</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5549</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5601</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6354</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">23825</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">21973</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">24408</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">18</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">33</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">38</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">43</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">76</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">51</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">64</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">177</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">157</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">212</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">430</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">401</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">436</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1221</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">980</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1108</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2479</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2213</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2271</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3980</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3685</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4282</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7321</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6487</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7056</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8090</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">7949</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8924</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">6시간 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">전체</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">513</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">875</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">657</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">308</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">493</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">362</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">5</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">12</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">6</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">21</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">43</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">28</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">62</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">97</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">55</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">68</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">126</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">81</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">79</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">116</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">109</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">68</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">87</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">77</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">남자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_00</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">계</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">205</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">382</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">295</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_01</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1세 미만</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_02</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">1~9세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_03</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">10~19세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">1</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_04</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">20~29세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">3</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">30~39세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">2</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">4</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">8</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_06</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">40~49세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">20</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">9</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_07</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">50~59세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">17</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">32</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">32</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_08</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">60~69세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">28</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">58</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">41</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_09</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">70~79세</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">53</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">120</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">92</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_10</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">80세 이상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">92</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">143</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="Number">110</Data></Cell>	
+	</Row>	
+	<Row ss:AutoFitHeight="0" ss:Height="12">	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">TD_05</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상/미입력</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">SE_22</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">여자</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">AG_11</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">미상</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">B323</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">뇌졸중 환자의 발병 후 응급실 도착 소요시간(건)</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	 <Cell ss:StyleID="s62"><Data ss:Type="String">-</Data></Cell>	
+	</Row>	
+	</Table>	
+	</Worksheet>	
+	</Workbook>	

@@ -6,6 +6,7 @@ const tabs = [
   { id: 'exam', label: '검진항목', icon: '🔬' },
   { id: 'lifestyle', label: '생활습관', icon: '🏃' },
   { id: 'disease', label: '질환네트워크', icon: '🧬' },
+  { id: 'stroke', label: '뇌졸중', icon: '🧠' },
 ];
 
 export default function NavBar({ active, onChange }) {
