@@ -795,7 +795,7 @@ export default function StrokeDashboard() {
         </Panel>
 
         {/* Middle: NIHSS 중증도 분포 */}
-        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.15 : 1, position: 'relative', filter: selectedProv ? 'blur(2px) grayscale(0.8)' : 'none', pointerEvents: selectedProv ? 'none' : 'auto' }}>
+        <Panel style={{ flex: '0 0 auto', display: selectedProv ? 'none' : 'block' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
             NIHSS 중증도 분포 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}중앙값 {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
           </div>
@@ -810,7 +810,7 @@ export default function StrokeDashboard() {
         </Panel>
 
         {/* Bottom: 예후 mRS 분포 */}
-        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.15 : 1, position: 'relative', filter: selectedProv ? 'blur(2px) grayscale(0.8)' : 'none', pointerEvents: selectedProv ? 'none' : 'auto' }}>
+        <Panel style={{ flex: '0 0 auto', display: selectedProv ? 'none' : 'block' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
             퇴원 시 예후 (mRS) <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}KSR 2022</span>
           </div>
