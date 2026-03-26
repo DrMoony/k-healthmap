@@ -2461,21 +2461,21 @@ function SurvivalCurvesView() {
   const w = 900, h = 280;
 
   const curves = [
-    { id: 'hf_all', name: '심부전(전체)', color: '#ff6b6b',
+    { id: 'hf_all', name: t('심부전(전체)','HF(Total)'), color: '#00d4ff',
       points: [{ t: 0, s: 100 }, { t: 1, s: 91 }, { t: 5, s: 79 }, { t: 10, s: 66 }, { t: 15, s: 54 }],
-      detail: '심부전 전체 환자 생존율. 1년 91%, 5년 79%, 10년 66%, 15년 54%.' },
-    { id: 'hf_hosp', name: '심부전(입원)', color: '#e74c3c',
+      detail: t('심부전 전체 환자 생존율. 1년 91%, 5년 79%, 10년 66%, 15년 54%. 출처: KSHF HF Statistics 2024 Update (NHIS 2002-2020)','HF total survival. 1yr 91%, 5yr 79%, 10yr 66%, 15yr 54%. Source: KSHF 2024 (NHIS 2002-2020)') },
+    { id: 'hf_hosp', name: t('심부전(입원)','HF(Hosp)'), color: '#ff006e',
       points: [{ t: 0, s: 100 }, { t: 1, s: 84 }, { t: 5, s: 66 }, { t: 10, s: 48 }, { t: 15, s: 34 }],
-      detail: '심부전 입원 환자 생존율. 입원 후 1년 84%, 5년 66%, 10년 48%, 15년 34%. 외래 대비 예후 불량.' },
-    { id: 'hf_out', name: '심부전(외래)', color: '#ff9999',
+      detail: t('심부전 입원 환자. 1년 84%, 5년 66%, 10년 48%, 15년 34%. 외래 대비 예후 불량. 입원 사망률 16%. 출처: KSHF 2024','HF hospitalized. 1yr 84%, 5yr 66%, 10yr 48%, 15yr 34%. Worse vs outpatient. In-hosp mortality 16%. Source: KSHF 2024') },
+    { id: 'hf_out', name: t('심부전(외래)','HF(Outpt)'), color: '#00ff88',
       points: [{ t: 0, s: 100 }, { t: 1, s: 96 }, { t: 5, s: 88 }, { t: 10, s: 79 }, { t: 15, s: 71 }],
-      detail: '심부전 외래 환자 생존율. 1년 96%, 5년 88%, 10년 79%, 15년 71%. 조기 진단·관리의 중요성.' },
-    { id: 'lc', name: '간경변', color: '#e67e22',
+      detail: t('심부전 외래 환자. 1년 96%, 5년 88%, 10년 79%, 15년 71%. 조기 진단·관리가 생존 개선의 핵심. 출처: KSHF 2024','HF outpatient. 1yr 96%, 5yr 88%, 10yr 79%, 15yr 71%. Early dx key to survival. Source: KSHF 2024') },
+    { id: 'lc', name: t('간경변','Cirrhosis'), color: '#ffd60a',
       points: [{ t: 0, s: 100 }, { t: 1, s: 85 }, { t: 3, s: 65 }, { t: 5, s: 50 }, { t: 10, s: 30 }, { t: 15, s: 18 }],
-      detail: '간경변(LC) 5년 생존율 ~50%. MASH 기인 간경변 증가 추세. 비대상성 전환 시 예후 급격 악화.' },
-    { id: 'hcc', name: '간세포암(HCC)', color: '#c0392b',
+      detail: t('간경변 5년 생존율 ~50%. MASH 기인 간경변 증가. 비대상성 전환 시 예후 급격 악화. 출처: KASL NAFLD FS 2023','Cirrhosis 5yr survival ~50%. MASH-driven LC increasing. Decompensation worsens prognosis sharply. Source: KASL 2023') },
+    { id: 'hcc', name: t('간세포암','HCC'), color: '#b388ff',
       points: [{ t: 0, s: 100 }, { t: 1, s: 70 }, { t: 3, s: 48 }, { t: 5, s: 38 }, { t: 10, s: 22 }, { t: 15, s: 14 }],
-      detail: 'HCC 5년 생존율 ~38%. 간경변 배경 HCC는 예후 더 불량. 조기 발견(초음파+AFP) 중요.' },
+      detail: t('HCC 5년 생존율 ~38%. 간경변 배경 HCC 예후 더 불량. 조기 발견(초음파+AFP) 중요. 출처: 국가암등록사업','HCC 5yr survival ~38%. Worse with cirrhosis background. Early detection (US+AFP) crucial. Source: National Cancer Registry') },
   ];
 
   const margin = { top: 50, left: 70, right: 30, bottom: 40 };
@@ -2573,9 +2573,19 @@ function SurvivalCurvesView() {
                 <path d={buildPath(curve.points)} fill="none" stroke={curve.color}
                   strokeWidth={isActive ? 3 : 2} opacity={isOther ? 0.2 : 0.9} />
                 {curve.points.map((p, pi) => (
-                  <circle key={pi} cx={toX(p.t)} cy={toY(p.s)} r={isActive ? 4 : 2.5}
-                    fill={curve.color} opacity={isOther ? 0.2 : 0.9}
-                    stroke={isActive ? '#fff' : 'none'} strokeWidth={1} strokeOpacity={0.3} />
+                  <g key={pi}>
+                    <circle cx={toX(p.t)} cy={toY(p.s)} r={isActive ? 4 : 2.5}
+                      fill={curve.color} opacity={isOther ? 0.2 : 0.9}
+                      stroke={isActive ? '#fff' : 'none'} strokeWidth={1} strokeOpacity={0.3} />
+                    {/* Show value at 5yr and 10yr points when active */}
+                    {isActive && (p.t === 5 || p.t === 10) && (
+                      <text x={toX(p.t)} y={toY(p.s) - 8} textAnchor="middle"
+                        fill={curve.color} fontSize={9} fontWeight={700}
+                        fontFamily="'JetBrains Mono'" opacity={0.9}>
+                        {p.s}%
+                      </text>
+                    )}
+                  </g>
                 ))}
                 {/* End-of-line value only (no name to avoid clipping) */}
                 {(() => {
