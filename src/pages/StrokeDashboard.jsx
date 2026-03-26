@@ -381,7 +381,7 @@ function DonutChart({ segments, size = 120, innerRatio = 0.55, centerLabel, onSe
 function StackedBar({ segments, height = 28, showLabels = true, onClick }) {
   const total = segments.reduce((s, seg) => s + seg.value, 0);
   return (
-    <div>
+    <div style={{ paddingRight: '4px' }}>
       <div style={{ display: 'flex', height: `${height}px`, borderRadius: '6px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}>
         {segments.map((seg, i) => {
           const pct = total > 0 ? (seg.value / total) * 100 : 0;
@@ -392,28 +392,24 @@ function StackedBar({ segments, height = 28, showLabels = true, onClick }) {
               animate={{ width: `${pct}%` }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
               onClick={() => onClick?.(seg)}
+              title={`${seg.label}: ${seg.value}%`}
               style={{
                 background: seg.color,
                 height: '100%',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '9px', fontWeight: 700, color: '#fff',
-                fontFamily: "'JetBrains Mono'",
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
+                minWidth: pct > 0 ? '2px' : 0,
               }}
-            >
-              {pct > 10 ? `${seg.value}%` : ''}
-            </motion.div>
+            />
           );
         })}
       </div>
       {showLabels && (
-        <div style={{ display: 'flex', gap: '8px', marginTop: '6px', flexWrap: 'wrap' }}>
-          {segments.map((seg, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: seg.color }} />
-              <span style={{ fontSize: '10px', color: '#8888aa' }}>{seg.label}</span>
-              <span style={{ fontSize: '10px', color: '#bbb', fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>{seg.value}%</span>
+        <div style={{ display: 'flex', gap: '6px', marginTop: '6px', flexWrap: 'wrap' }}>
+          {segments.filter(s => s.value > 0).map((seg, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '3px', cursor: onClick ? 'pointer' : 'default' }}
+              onClick={() => onClick?.(seg)}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: seg.color, flexShrink: 0 }} />
+              <span style={{ fontSize: '10px', color: '#ccc' }}>{seg.label}</span>
+              <span style={{ fontSize: '11px', color: '#fff', fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>{seg.value}%</span>
             </div>
           ))}
         </div>
