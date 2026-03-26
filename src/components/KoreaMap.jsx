@@ -177,7 +177,7 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
                   fill={isActive ? '#000' : isWorst ? '#ff6666' : isBest ? '#66ffaa' : '#e8e8f0'}
                   fontFamily="'Noto Sans KR', sans-serif"
                 >
-                  {name} {hasValue ? `${prov.value.toFixed(1)}` : ''}
+                  {lang === 'en' ? (T.provinces[name] || name) : name} {hasValue ? `${prov.value.toFixed(1)}` : ''}
                 </text>
               </g>
             );
