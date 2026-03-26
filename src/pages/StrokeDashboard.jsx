@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import KoreaMap from '../components/KoreaMap';
 import { PROVINCE_INFO, NATIONAL_AVG } from '../data/province_info';
+import { FULL_DATA } from '../data/full_data';
 import { STROKE_KOSIS } from '../data/stroke_kosis';
 import { STROKE_KSR } from '../data/stroke_ksr';
 
@@ -77,6 +78,58 @@ function getTransportDist(regionName) {
     const v = data[k];
     return v ? (v[yr] || v['2022'] || 0) : 0;
   });
+}
+
+
+// ── Risk factor helpers from FULL_DATA ────────────────────────
+function getExamRiskFactors(provName) {
+  if (!provName || !FULL_DATA?.exam_items) return null;
+  const bp = FULL_DATA.exam_items.bp_systolic?.province?.[provName]?.total;
+  const fg = FULL_DATA.exam_items.fasting_glucose?.province?.[provName]?.total;
+  const tc = FULL_DATA.exam_items.total_cholesterol?.province?.[provName]?.total;
+  const bmi = FULL_DATA.exam_items.bmi?.province?.[provName]?.total;
+  if (!bp || !fg || !tc || !bmi) return null;
+  return {
+    bpHigh: +(bp.slice(3).reduce((s,v) => s+v, 0).toFixed(1)),      // 90이상 (diastolic hypertension range)
+    glucoseHigh: +(fg.slice(1).reduce((s,v) => s+v, 0).toFixed(1)),  // 100이상
+    cholesterolHigh: +(tc.slice(4).reduce((s,v) => s+v, 0).toFixed(1)), // 200이상
+    obesityRate: +(bmi.slice(2).reduce((s,v) => s+v, 0).toFixed(1)),  // BMI 25이상
+  };
+}
+
+function getExamNationalAvg() {
+  const provinces = ['서울','부산','대구','인천','광주','대전','울산','세종','경기','강원','충북','충남','전북','전남','경북','경남','제주'];
+  const vals = provinces.map(p => getExamRiskFactors(p)).filter(Boolean);
+  if (vals.length === 0) return { bpHigh: 0, glucoseHigh: 0, cholesterolHigh: 0, obesityRate: 0 };
+  const avg = (arr, key) => +(arr.reduce((s,v) => s + v[key], 0) / arr.length).toFixed(1);
+  return {
+    bpHigh: avg(vals, 'bpHigh'),
+    glucoseHigh: avg(vals, 'glucoseHigh'),
+    cholesterolHigh: avg(vals, 'cholesterolHigh'),
+    obesityRate: avg(vals, 'obesityRate'),
+  };
+}
+
+function getOutcomeTrend(regionName) {
+  const data = STROKE_KOSIS?.regionByOutcome?.[regionName];
+  if (!data) return null;
+  const years = ['2022', '2023', '2024'];
+  const result = years.map(yr => {
+    const raw = OUTCOME_KEYS.map(k => {
+      const v = data[k];
+      return v ? (v[yr] || 0) : 0;
+    });
+    const total = raw.reduce((s, v) => s + v, 0);
+    if (total === 0) return null;
+    return {
+      year: yr,
+      입원: +(raw[1] / total * 100).toFixed(1),
+      사망: +(raw[3] / total * 100).toFixed(1),
+      퇴가: +(raw[0] / total * 100).toFixed(1),
+      전원: +(raw[2] / total * 100).toFixed(1),
+    };
+  }).filter(Boolean);
+  return result.length >= 2 ? result : null;
 }
 
 // ── CompareBar component ────────────────────────────────────
@@ -372,7 +425,7 @@ function TrendLineChart({ title, lines, years }) {
   const allVals = lines.flatMap(l => l.data);
   const minV = Math.min(...allVals) * 0.8;
   const maxV = Math.max(...allVals) * 1.1;
-  const w = 260, h = 120, padL = 32, padR = 10, padT = 10, padB = 24;
+  const w = 280, h = 120, padL = 32, padR = 40, padT = 10, padB = 24;
   const plotW = w - padL - padR;
   const plotH = h - padT - padB;
 
@@ -577,9 +630,9 @@ export default function StrokeDashboard() {
       overflow: 'hidden',
     }}>
 
-      {/* Detail popup overlay */}
+      {/* Detail popup — removed overlay, now inline in Column 4 */}
       <AnimatePresence>
-        {detailPopup && (
+        {false && detailPopup && (
           <>
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -717,7 +770,7 @@ export default function StrokeDashboard() {
       </div>
 
       {/* ═══════ COLUMN 3: 연령·중증도·예후 (전국) / 이송·전귀·요약 (시도) ═══════ */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'auto' }}>
         {!selectedProv ? (
           <>
             {/* ── National view ── */}
@@ -794,7 +847,7 @@ export default function StrokeDashboard() {
           <>
             {/* ── Province view ── */}
             {/* 이송시간 분포 */}
-            <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+            <Panel style={{ flex: '0 0 auto' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
                 이송시간 분포 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
               </div>
@@ -846,6 +899,68 @@ export default function StrokeDashboard() {
               })()}
             </Panel>
 
+            {/* 뇌졸중 위험인자 프로파일 */}
+            <Panel style={{ flex: '0 0 auto' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#ff6b6b', marginBottom: '10px' }}>
+                뇌졸중 위험인자 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
+                <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> 검진통계연보</span>
+              </div>
+              {(() => {
+                const examRisk = getExamRiskFactors(selectedProv);
+                const natExam = getExamNationalAvg();
+                const provInfo = PROVINCE_INFO[selectedProv];
+                if (!examRisk || !provInfo) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>데이터 없음</div>;
+                const items = [
+                  { label: '혈압 이상', value: examRisk.bpHigh, national: natExam.bpHigh, unit: '%', src: '수축기BP 90+' },
+                  { label: '혈당 이상', value: examRisk.glucoseHigh, national: natExam.glucoseHigh, unit: '%', src: '공복혈당 100+' },
+                  { label: '콜레스테롤', value: examRisk.cholesterolHigh, national: natExam.cholesterolHigh, unit: '%', src: '총콜레스테롤 200+' },
+                  { label: '비만', value: examRisk.obesityRate, national: natExam.obesityRate, unit: '%', src: 'BMI 25+' },
+                  { label: '흡연', value: provInfo.smokingRate, national: NATIONAL_AVG.smokingRate, unit: '%', src: '현재흡연율' },
+                  { label: '음주', value: provInfo.drinkingRate, national: NATIONAL_AVG.drinkingRate, unit: '%', src: '주2회+' },
+                  { label: '운동부족', value: provInfo.noExerciseRate, national: NATIONAL_AVG.noExerciseRate, unit: '%', src: '고강도 0일' },
+                ];
+                return (
+                  <div>
+                    {items.map(({ label, value, national, unit, src }) => {
+                      const diff = value - national;
+                      const isWorse = diff > 0;
+                      const maxBar = Math.max(value, national, 1);
+                      const barW = (value / maxBar) * 100;
+                      const natW = (national / maxBar) * 100;
+                      return (
+                        <div key={label} style={{ marginBottom: '6px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', marginBottom: '2px' }}>
+                            <span style={{ color: '#8888aa' }}>{label} <span style={{ color: '#555', fontSize: '9px' }}>({src})</span></span>
+                            <span style={{ color: isWorse ? '#ff6b6b' : '#00ff88', fontFamily: "'JetBrains Mono'", fontWeight: 700, fontSize: '11px' }}>
+                              {value}{unit}
+                              <span style={{ color: '#555', fontSize: '9px', marginLeft: '3px' }}>
+                                ({diff >= 0 ? '+' : ''}{diff.toFixed(1)})
+                              </span>
+                            </span>
+                          </div>
+                          <div style={{ position: 'relative', height: '5px', background: 'rgba(255,255,255,0.04)', borderRadius: '3px' }}>
+                            <div style={{
+                              position: 'absolute', height: '100%', borderRadius: '3px',
+                              width: `${barW}%`,
+                              background: isWorse ? 'linear-gradient(90deg, #ff4444, #ff6b6b)' : 'linear-gradient(90deg, #00cc66, #00ff88)',
+                              opacity: 0.7,
+                            }} />
+                            <div style={{
+                              position: 'absolute', left: `${natW}%`, top: '-2px', bottom: '-2px',
+                              width: '1.5px', background: '#00d4ff', borderRadius: '1px', opacity: 0.8,
+                            }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <div style={{ fontSize: '9px', color: '#555', marginTop: '4px', textAlign: 'right' }}>
+                      ━ <span style={{ color: '#00d4ff' }}>전국 평균</span> | <span style={{ color: '#ff6b6b' }}>빨강</span>=전국 이상 <span style={{ color: '#00ff88' }}>초록</span>=전국 이하
+                    </div>
+                  </div>
+                );
+              })()}
+            </Panel>
+
             {/* 전귀결과 */}
             <Panel style={{ flex: '0 0 auto' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
@@ -863,6 +978,83 @@ export default function StrokeDashboard() {
                       color: OUTCOME_COLORS[i],
                     }))}
                   />
+                );
+              })()}
+            </Panel>
+
+            {/* 전귀결과 연도별 추이 */}
+            <Panel style={{ flex: '0 0 auto' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
+                전귀결과 추이 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
+                <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> 2022-2024</span>
+              </div>
+              {(() => {
+                const trend = getOutcomeTrend(selectedProv);
+                if (!trend) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>데이터 없음</div>;
+                const years = trend.map(t => t.year);
+                return (
+                  <div>
+                    <svg width="100%" viewBox="0 0 220 90" style={{ overflow: 'visible' }}>
+                      {/* grid */}
+                      {[0, 25, 50, 75, 100].map((v) => {
+                        const y = 10 + (80 - v * 0.8);
+                        return <line key={v} x1="30" y1={y} x2="210" y2={y} stroke="rgba(255,255,255,0.05)" />;
+                      })}
+                      {/* lines */}
+                      {[
+                        { key: '입원', color: '#00d4ff' },
+                        { key: '퇴가', color: '#00ff88' },
+                        { key: '전원', color: '#ffd60a' },
+                        { key: '사망', color: '#ff4444' },
+                      ].map(({ key, color }) => {
+                        const vals = trend.map(t => t[key]);
+                        const maxV = Math.max(...[
+                          ...trend.map(t => t['입원']),
+                          ...trend.map(t => t['퇴가']),
+                        ], 1);
+                        const pts = vals.map((v, i) => {
+                          const x = 30 + (i / (years.length - 1)) * 180;
+                          const y = 10 + 70 - (v / maxV) * 70;
+                          return `${x},${y}`;
+                        }).join(' ');
+                        const lastVal = vals[vals.length - 1];
+                        const lastX = 30 + ((years.length - 1) / (years.length - 1)) * 180;
+                        const lastY = 10 + 70 - (lastVal / maxV) * 70;
+                        return (
+                          <g key={key}>
+                            <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+                            {vals.map((v, i) => {
+                              const x = 30 + (i / (years.length - 1)) * 180;
+                              const y = 10 + 70 - (v / maxV) * 70;
+                              return <circle key={i} cx={x} cy={y} r="2.5" fill={color} stroke="#12121a" strokeWidth="1" />;
+                            })}
+                            <text x={lastX + 3} y={lastY + 3} fill={color} fontSize="8" fontFamily="'JetBrains Mono'" fontWeight="700">
+                              {lastVal}%
+                            </text>
+                          </g>
+                        );
+                      })}
+                      {/* x labels */}
+                      {years.map((yr, i) => (
+                        <text key={yr} x={30 + (i / (years.length - 1)) * 180} y={88} textAnchor="middle" fill="#666" fontSize="8" fontFamily="'JetBrains Mono'">
+                          {yr}
+                        </text>
+                      ))}
+                    </svg>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '4px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                      {[
+                        { label: '입원', color: '#00d4ff' },
+                        { label: '퇴가', color: '#00ff88' },
+                        { label: '전원', color: '#ffd60a' },
+                        { label: '사망', color: '#ff4444' },
+                      ].map(item => (
+                        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                          <div style={{ width: '10px', height: '2px', background: item.color, borderRadius: '1px' }} />
+                          <span style={{ fontSize: '9px', color: '#8888aa' }}>{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 );
               })()}
             </Panel>
@@ -1058,6 +1250,19 @@ export default function StrokeDashboard() {
           )}
         </AnimatePresence>
 
+        {/* Inline inference panel — shows when any item is clicked */}
+        {detailPopup && (
+          <Panel style={{ flexShrink: 0, borderLeft: '3px solid #00d4ff' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: '#00d4ff' }}>{detailPopup.title}</span>
+              <button onClick={() => setDetailPopup(null)} style={{
+                background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '12px',
+              }}>✕</button>
+            </div>
+            <div style={{ fontSize: '11px', color: '#bbb', lineHeight: 1.7 }}>{detailPopup.content}</div>
+          </Panel>
+        )}
+
         {/* Footer */}
         <div style={{
           padding: '4px 12px',
@@ -1068,7 +1273,7 @@ export default function StrokeDashboard() {
           flexShrink: 0,
           lineHeight: 1.5,
         }}>
-          출처: KSR 한국뇌졸중등록사업 2024 (97개 병원, 171,520건), KOSIS 심뇌혈관질환통계 (orgId=411), KDCA 심뇌혈관질환 발생통계 2022, 심평원
+          출처: KSR 한국뇌졸중등록사업 2024 (97개 병원, 171,520건), KOSIS 심뇌혈관질환통계 (orgId=411), KDCA 심뇌혈관질환 발생통계 2022, 심평원, OECD Health at a Glance 2025
         </div>
       </div>
     </div>
