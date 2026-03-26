@@ -149,9 +149,9 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
                 onMouseLeave={() => setHovered(null)}
               >
                 <rect
-                  x={x - 36}
+                  x={x - (lang === 'en' ? 46 : 36)}
                   y={y - 13}
-                  width={72}
+                  width={lang === 'en' ? 92 : 72}
                   height={26}
                   rx={6}
                   fill={isActive ? 'rgba(0,212,255,0.95)' : 'rgba(10,10,15,0.85)'}
@@ -172,10 +172,10 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
                   x={x}
                   y={y + 5}
                   textAnchor="middle"
-                  fontSize={12}
+                  fontSize={lang === 'en' ? 10 : 12}
                   fontWeight={isActive ? 800 : 600}
                   fill={isActive ? '#000' : isWorst ? '#ff6666' : isBest ? '#66ffaa' : '#e8e8f0'}
-                  fontFamily="'Noto Sans KR', sans-serif"
+                  fontFamily={lang === 'en' ? "'JetBrains Mono', monospace" : "'Noto Sans KR', sans-serif"}
                 >
                   {lang === 'en' ? (T.provinces[name] || name) : name} {hasValue ? `${prov.value.toFixed(1)}` : ''}
                 </text>
