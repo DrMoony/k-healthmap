@@ -149,9 +149,9 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
                 onMouseLeave={() => setHovered(null)}
               >
                 <rect
-                  x={x - (lang === 'en' ? 46 : 36)}
+                  x={x - (lang === 'en' ? 50 : 36)}
                   y={y - 13}
-                  width={lang === 'en' ? 92 : 72}
+                  width={lang === 'en' ? 100 : 72}
                   height={26}
                   rx={6}
                   fill={isActive ? 'rgba(0,212,255,0.95)' : 'rgba(10,10,15,0.85)'}
@@ -162,9 +162,9 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
                 {/* Siren icon for worst 3 — top-right corner */}
                 {isWorst && !isActive && (
                   <text
-                    x={x + 28}
-                    y={y - 8}
-                    fontSize={8}
+                    x={x + (lang === 'en' ? 38 : 28)}
+                    y={y - 10}
+                    fontSize={12}
                     style={{ animation: 'sirenBlink 1s ease-in-out infinite' }}
                   >🚨</text>
                 )}
@@ -172,7 +172,7 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
                   x={x}
                   y={y + 5}
                   textAnchor="middle"
-                  fontSize={lang === 'en' ? 10 : 12}
+                  fontSize={11}
                   fontWeight={isActive ? 800 : 600}
                   fill={isActive ? '#000' : isWorst ? '#ff6666' : isBest ? '#66ffaa' : '#e8e8f0'}
                   fontFamily={lang === 'en' ? "'JetBrains Mono', monospace" : "'Noto Sans KR', sans-serif"}
