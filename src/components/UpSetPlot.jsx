@@ -80,8 +80,8 @@ export default function UpSetPlot({ onIntersectionClick }) {
   }, [intersections]);
 
   // Layout constants
-  const W = 820, H = 540;
-  const marginLeft = 130, marginTop = 40, marginBottom = 10, marginRight = 20;
+  const W = 960, H = 540;
+  const marginLeft = 190, marginTop = 40, marginBottom = 10, marginRight = 20;
   const dotAreaH = 120; // height for dot matrix
   const barAreaH = H - marginTop - dotAreaH - marginBottom - 40; // bar chart area
   const barAreaTop = marginTop + 20;
@@ -159,7 +159,7 @@ export default function UpSetPlot({ onIntersectionClick }) {
         ))}
       </div>
 
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxWidth: 820, display: 'block', margin: '0 auto' }}>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxWidth: 960, display: 'block', margin: '0 auto' }}>
         <defs>
           <filter id="upsetGlow">
             <feGaussianBlur stdDeviation="3" result="blur" />
@@ -179,7 +179,7 @@ export default function UpSetPlot({ onIntersectionClick }) {
         </defs>
 
         {/* ── Left side: Set size bars ── */}
-        <text x={marginLeft - setSizeBarW - 12} y={dotAreaTop - 8} fill="#8892b0" fontSize={9} textAnchor="middle">
+        <text x={marginLeft - setSizeBarW - 30} y={dotAreaTop - 8} fill="#8892b0" fontSize={9} textAnchor="middle">
           전체 유병률 (%)
         </text>
         {DISEASES.map((d, i) => {
@@ -189,13 +189,13 @@ export default function UpSetPlot({ onIntersectionClick }) {
           const show2022 = selectedYear !== '2012';
           return (
             <g key={`setsize-${d}`}>
-              <text x={marginLeft - setSizeBarW - 16} y={cy + 4} fill="#ccd6f6" fontSize={11} textAnchor="end" fontWeight={500}>
+              <text x={marginLeft - setSizeBarW - 34} y={cy + 4} fill="#ccd6f6" fontSize={11} textAnchor="end" fontWeight={500}>
                 {DISEASE_LABELS[d]}
               </text>
               {/* 2022 bar (background) */}
               {show2022 && (
                 <rect
-                  x={marginLeft - setSizeScale(sz.y2022) - 8}
+                  x={marginLeft - setSizeScale(sz.y2022) - 12}
                   y={cy - 5}
                   width={setSizeScale(sz.y2022)}
                   height={show2012 ? 5 : 10}
@@ -207,7 +207,7 @@ export default function UpSetPlot({ onIntersectionClick }) {
               {/* 2012 bar */}
               {show2012 && (
                 <rect
-                  x={marginLeft - setSizeScale(sz.y2012) - 8}
+                  x={marginLeft - setSizeScale(sz.y2012) - 12}
                   y={show2022 ? cy : cy - 5}
                   width={setSizeScale(sz.y2012)}
                   height={show2022 ? 5 : 10}
@@ -218,7 +218,7 @@ export default function UpSetPlot({ onIntersectionClick }) {
               )}
               {/* Value labels */}
               {show2022 && (
-                <text x={marginLeft - setSizeScale(sz.y2022) - 12} y={cy - (show2012 ? 0 : 0)} fill="#00e5ff" fontSize={8} textAnchor="end" dominantBaseline="middle">
+                <text x={marginLeft - setSizeScale(sz.y2022) - 16} y={cy - (show2012 ? 0 : 0)} fill="#00e5ff" fontSize={8} textAnchor="end" dominantBaseline="middle">
                   {sz.y2022}%
                 </text>
               )}
@@ -452,6 +452,44 @@ export default function UpSetPlot({ onIntersectionClick }) {
           </div>
         );
       })()}
+
+      {/* Inference panel */}
+      <div style={{
+        marginTop: 12,
+        padding: '14px 18px',
+        background: 'rgba(10,10,30,0.7)',
+        border: '1px solid rgba(0,229,255,0.12)',
+        borderRadius: 8,
+        fontSize: 12,
+        color: '#a8b2d1',
+        lineHeight: 1.7,
+      }}>
+        <div style={{ fontWeight: 700, fontSize: 13, color: '#ccd6f6', marginBottom: 8 }}>
+          MASLD 동반질환 핵심 요약
+        </div>
+        {selectedIdx !== null ? (() => {
+          const d = sorted[selectedIdx];
+          const change = d.y2022.percent - d.y2012.percent;
+          const changePct = d.y2012.percent > 0 ? ((change / d.y2012.percent) * 100).toFixed(0) : '---';
+          const label = d.sets.map(s => DISEASE_LABELS[s]).join('+');
+          return (
+            <div>
+              <span style={{ color: COLOR_BY_SIZE[d.sets.length], fontWeight: 600 }}>
+                [{label}]
+              </span>{' '}
+              {d.y2012.percent}%({'\u201812'}) → {d.y2022.percent}%({'\u201822'}) | 변화 {change > 0 ? '+' : ''}{change.toFixed(1)}%p
+              ({changePct === '---' ? '신규' : changePct + '% 증가'}) | 2022 환자수 {formatNum(d.y2022.patients)}명
+            </div>
+          );
+        })() : (
+          <ul style={{ margin: 0, paddingLeft: 18 }}>
+            <li>고혈압 동반률 34.5%(2012) → 42.3%(2022) — 가장 흔한 동반질환</li>
+            <li>CKD 1.1% → 19.1% — 10년간 17배 증가, 가장 극적 변화</li>
+            <li>이상지질혈증 1.9% → 8.1% — 4.3배 증가</li>
+            <li>4중 동반(CKD+HL+DM+HTN): 0.01% — 극소수이나 최고위험군</li>
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

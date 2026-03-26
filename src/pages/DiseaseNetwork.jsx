@@ -2458,27 +2458,27 @@ function SurvivalCurvesView() {
   const { lang, t } = useLang();
   const [selectedCurve, setSelectedCurve] = useState(null);
   const [hoveredCurve, setHoveredCurve] = useState(null);
-  const w = 900, h = 340;
+  const w = 900, h = 280;
 
   const curves = [
-    { id: 'hf_all', name: '심부전 (전체)', color: '#ff6b6b',
+    { id: 'hf_all', name: '심부전(전체)', color: '#ff6b6b',
       points: [{ t: 0, s: 100 }, { t: 1, s: 91 }, { t: 5, s: 79 }, { t: 10, s: 66 }, { t: 15, s: 54 }],
       detail: '심부전 전체 환자 생존율. 1년 91%, 5년 79%, 10년 66%, 15년 54%.' },
-    { id: 'hf_hosp', name: '심부전 (입원)', color: '#e74c3c',
+    { id: 'hf_hosp', name: '심부전(입원)', color: '#e74c3c',
       points: [{ t: 0, s: 100 }, { t: 1, s: 84 }, { t: 5, s: 66 }, { t: 10, s: 48 }, { t: 15, s: 34 }],
       detail: '심부전 입원 환자 생존율. 입원 후 1년 84%, 5년 66%, 10년 48%, 15년 34%. 외래 대비 예후 불량.' },
-    { id: 'hf_out', name: '심부전 (외래)', color: '#ff9999',
+    { id: 'hf_out', name: '심부전(외래)', color: '#ff9999',
       points: [{ t: 0, s: 100 }, { t: 1, s: 96 }, { t: 5, s: 88 }, { t: 10, s: 79 }, { t: 15, s: 71 }],
       detail: '심부전 외래 환자 생존율. 1년 96%, 5년 88%, 10년 79%, 15년 71%. 조기 진단·관리의 중요성.' },
     { id: 'lc', name: '간경변', color: '#e67e22',
       points: [{ t: 0, s: 100 }, { t: 1, s: 85 }, { t: 3, s: 65 }, { t: 5, s: 50 }, { t: 10, s: 30 }, { t: 15, s: 18 }],
       detail: '간경변(LC) 5년 생존율 ~50%. MASH 기인 간경변 증가 추세. 비대상성 전환 시 예후 급격 악화.' },
-    { id: 'hcc', name: '간세포암 (HCC)', color: '#c0392b',
+    { id: 'hcc', name: '간세포암(HCC)', color: '#c0392b',
       points: [{ t: 0, s: 100 }, { t: 1, s: 70 }, { t: 3, s: 48 }, { t: 5, s: 38 }, { t: 10, s: 22 }, { t: 15, s: 14 }],
       detail: 'HCC 5년 생존율 ~38%. 간경변 배경 HCC는 예후 더 불량. 조기 발견(초음파+AFP) 중요.' },
   ];
 
-  const margin = { top: 60, left: 70, right: 40, bottom: 50 };
+  const margin = { top: 50, left: 70, right: 30, bottom: 40 };
   const plotW = w - margin.left - margin.right;
   const plotH = h - margin.top - margin.bottom;
   const toX = (t) => margin.left + (t / 15) * plotW;
@@ -2539,6 +2539,29 @@ function SurvivalCurvesView() {
             fontFamily="'Noto Sans KR', sans-serif" transform={`rotate(-90, 16, ${h / 2})`}>
             {t('생존율 (%)','Survival Rate (%)')}
           </text>
+          {/* Compact legend row at top */}
+          {(() => {
+            const legendY = 14;
+            const legendStartX = margin.left;
+            let offsetX = 0;
+            return curves.map((curve, ci) => {
+              const x = legendStartX + ci * 150;
+              const isActive = hoveredCurve === curve.id || selectedCurve?.id === curve.id;
+              const isOther = (hoveredCurve || selectedCurve) && !isActive;
+              return (
+                <g key={`legend-${curve.id}`} style={{ cursor: 'pointer' }}
+                  onMouseEnter={() => setHoveredCurve(curve.id)}
+                  onMouseLeave={() => setHoveredCurve(null)}
+                  onClick={() => setSelectedCurve(selectedCurve?.id === curve.id ? null : curve)}
+                  opacity={isOther ? 0.3 : 1}>
+                  <line x1={x} y1={legendY} x2={x + 16} y2={legendY} stroke={curve.color} strokeWidth={2} />
+                  <circle cx={x + 8} cy={legendY} r={2.5} fill={curve.color} />
+                  <text x={x + 20} y={legendY + 3.5} fill={curve.color} fontSize={9} fontWeight={isActive ? 700 : 500}
+                    fontFamily="'Noto Sans KR', sans-serif">{curve.name}</text>
+                </g>
+              );
+            });
+          })()}
           {curves.map(curve => {
             const isActive = hoveredCurve === curve.id || selectedCurve?.id === curve.id;
             const isOther = (hoveredCurve || selectedCurve) && !isActive;
@@ -2554,13 +2577,14 @@ function SurvivalCurvesView() {
                     fill={curve.color} opacity={isOther ? 0.2 : 0.9}
                     stroke={isActive ? '#fff' : 'none'} strokeWidth={1} strokeOpacity={0.3} />
                 ))}
+                {/* End-of-line value only (no name to avoid clipping) */}
                 {(() => {
                   const last = curve.points[curve.points.length - 1];
                   return (
                     <text x={toX(last.t) + 6} y={toY(last.s) + 4}
-                      fill={curve.color} fontSize={10} fontWeight={600}
-                      fontFamily="'Noto Sans KR', sans-serif" opacity={isOther ? 0.2 : 0.9}>
-                      {curve.name} {last.s}%
+                      fill={curve.color} fontSize={9} fontWeight={600}
+                      fontFamily="'JetBrains Mono', monospace" opacity={isOther ? 0.2 : 0.9}>
+                      {last.s}%
                     </text>
                   );
                 })()}

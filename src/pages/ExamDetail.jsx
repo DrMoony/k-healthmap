@@ -863,6 +863,7 @@ function DiseaseCard({ item }) {
 // ─── Analysis Panel (right column, always visible) ──────────────────────────
 function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, genderProv, genderAge, abnormalIndices, categories, natAvgProv, natAvgAge }) {
   const { lang, t } = useLang();
+  const pn = (name) => lang === 'en' ? (T.provinces[name] || name) : name;
   const hasAbnormal = abnormalIndices.length > 0;
   const diseaseLinks = EXAM_DISEASE_LINKS[selectedExam] || [];
 
