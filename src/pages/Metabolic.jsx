@@ -150,7 +150,7 @@ export default function Metabolic() {
     const rect = container.getBoundingClientRect();
 
     const LABEL_LEFT = 48;
-    const LABEL_TOP = 44;
+    const LABEL_TOP = 56;
     const W = rect.width - 20;
     const H = rect.height - 20;
 
@@ -175,7 +175,7 @@ export default function Metabolic() {
       ctx.rotate(-Math.PI / 4);
       ctx.fillStyle = selectedProv === p ? '#ffd60a' : '#8888aa';
       ctx.font = selectedProv === p ? 'bold 11px "Noto Sans KR", sans-serif' : '11px "Noto Sans KR", sans-serif';
-      ctx.fillText(p, 0, 0);
+      ctx.fillText(pn(p), 0, 0);
       ctx.restore();
     });
 
@@ -245,7 +245,7 @@ export default function Metabolic() {
 
     // Store layout info for mouse interaction
     canvas._layout = { LABEL_LEFT, LABEL_TOP, cellW, cellH, W, H };
-  }, [heatmapMatrix, heatMin, heatMax, hoveredCell, selectedProv, selectedAge, year, gender, metric]);
+  }, [heatmapMatrix, heatMin, heatMax, hoveredCell, selectedProv, selectedAge, year, gender, metric, lang]);
 
   const handleCanvasMove = (e) => {
     const canvas = canvasRef.current;
@@ -380,7 +380,7 @@ export default function Metabolic() {
           letterSpacing: '1px',
           marginRight: '12px',
         }}>
-          대사질환
+          {t('대사질환','Metabolic')}
         </h2>
 
         {/* Metric toggle */}
@@ -761,7 +761,7 @@ export default function Metabolic() {
                     gap: '3px',
                   }}
                 >
-                  {selectedProv}
+                  {pn(selectedProv)}
                   <span style={{ fontSize: '9px', opacity: 0.6 }}>x</span>
                 </span>
               ) : null}
@@ -802,8 +802,8 @@ export default function Metabolic() {
           </div>
 
           {(() => {
-            const provInsight = selectedProv ? getProvinceInsight(selectedProv, metric, yearIdx) : null;
-            const ageInsight = selectedAge ? getAgeInsight(selectedAge, metric, gender) : null;
+            const provInsight = selectedProv ? getProvinceInsight(selectedProv, metric, yearIdx, lang) : null;
+            const ageInsight = selectedAge ? getAgeInsight(selectedAge, metric, gender, lang) : null;
             const BMI_CATS = ['<18.5', '18.5~24.9', '25.0~29.9', '30.0~39.9', '40.0+'];
             const BMI_COLORS = ['#00ff88', '#00d4ff', '#ffd60a', '#ff6e00', '#ff006e'];
 
@@ -871,7 +871,7 @@ export default function Metabolic() {
                       fontWeight: 700,
                       ...glowText('#ffd60a'),
                     }}>
-                      {selectedProv} &middot; {selectedAge}세
+                      {pn(selectedProv)} &middot; {selectedAge}{t('세','')}
                     </span>
                     {cellValue != null && (
                       <span style={{
@@ -940,7 +940,7 @@ export default function Metabolic() {
                       borderLeft: '2px solid #00d4ff44',
                     }}>
                       <div style={{ fontSize: '10px', fontWeight: 600, color: '#00d4ff', marginBottom: '2px' }}>
-                        {selectedAge}{t('세 임상 컨텍스트', ' Clinical Context')}
+                        {selectedAge}{t('세 임상 컨텍스트',' Clinical Context')}
                       </div>
                       <div style={{ color: '#bbbbdd', fontSize: '10px' }}>
                         {ageInsight.note}

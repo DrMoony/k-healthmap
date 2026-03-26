@@ -987,6 +987,127 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
   );
 }
 
+// ── MASLD 2-Year Progression Trend (SVG Line Chart) ─────────
+function Progression2yrView({ gender }) {
+  const { lang, t } = useLang();
+  const prog2yr = DISEASE_EPI.nafld?.progression2yr;
+  if (!prog2yr) return <div style={{ color: '#888', padding: 24 }}>No 2yr data</div>;
+
+  const AGE_GROUPS = ['20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80+'];
+  const YEARS = [2010, 2015, 2020];
+  const AGE_COLORS = ['#00ff88', '#00d4ff', '#ffd60a', '#ff6b6b', '#c084fc', '#ff006e', '#ff8800'];
+
+  const outcomes = [
+    { key: 'cirrhosis', label: t('간경화 2년 진행률 추이', 'Cirrhosis 2yr Progression Trend'), code: 'K702, K703, K717, K74' },
+    { key: 'hcc', label: t('간세포암 2년 진행률 추이', 'HCC 2yr Progression Trend'), code: 'C220' },
+  ];
+
+  const w = 420, h = 240;
+  const mL = 50, mR = 16, mT = 28, mB = 32;
+  const cW = w - mL - mR, cH = h - mT - mB;
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '0 12px 8px', overflow: 'auto' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, flex: 1, minHeight: 0 }}>
+        {outcomes.map(({ key, label, code }) => {
+          const data = prog2yr[key]?.[gender === 'male' ? 'male' : 'female'];
+          if (!data) return null;
+
+          // Calculate y-axis max
+          let maxVal = 0;
+          AGE_GROUPS.forEach(ag => {
+            YEARS.forEach(yr => {
+              const v = data[ag]?.[yr];
+              if (v != null && v > maxVal) maxVal = v;
+            });
+          });
+          maxVal = Math.ceil(maxVal * 1.2 * 10) / 10 || 1;
+
+          const xScale = (yr) => mL + ((yr - 2010) / 10) * cW;
+          const yScale = (v) => mT + cH - (v / maxVal) * cH;
+
+          // Y-axis ticks
+          const yTicks = [];
+          const step = maxVal > 5 ? 2 : maxVal > 1 ? 0.5 : 0.1;
+          for (let v = 0; v <= maxVal; v += step) {
+            yTicks.push(Math.round(v * 100) / 100);
+          }
+
+          return (
+            <div key={key} style={{ flex: '1 1 380px', minWidth: 340 }}>
+              <h4 style={{
+                fontFamily: "'Noto Sans KR', sans-serif", fontSize: 13, fontWeight: 700,
+                color: '#e0e0ff', margin: '0 0 4px', textShadow: '0 0 12px rgba(0,255,136,0.2)',
+              }}>
+                {label}
+                <span style={{ fontSize: 10, color: '#6666aa', marginLeft: 8 }}>({code})</span>
+              </h4>
+              <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', maxHeight: 240, background: '#0a0a0f', borderRadius: 8 }}>
+                {/* Grid */}
+                {yTicks.map(v => (
+                  <g key={v}>
+                    <line x1={mL} y1={yScale(v)} x2={w - mR} y2={yScale(v)} stroke="rgba(255,255,255,0.06)" />
+                    <text x={mL - 6} y={yScale(v) + 3} textAnchor="end" fill="#6666aa" fontSize="9" fontFamily="'JetBrains Mono'">{v.toFixed(step < 1 ? 1 : 0)}%</text>
+                  </g>
+                ))}
+                {/* X-axis labels */}
+                {YEARS.map(yr => (
+                  <text key={yr} x={xScale(yr)} y={h - mB + 16} textAnchor="middle" fill="#8888aa" fontSize="10" fontFamily="'JetBrains Mono'">{yr}</text>
+                ))}
+                {/* Lines per age group */}
+                {AGE_GROUPS.map((ag, i) => {
+                  const pts = YEARS.map(yr => ({ yr, val: data[ag]?.[yr] })).filter(p => p.val != null);
+                  if (pts.length < 2) return null;
+                  const pathD = pts.map((p, j) => `${j === 0 ? 'M' : 'L'}${xScale(p.yr)},${yScale(p.val)}`).join(' ');
+                  return (
+                    <g key={ag}>
+                      <path d={pathD} fill="none" stroke={AGE_COLORS[i]} strokeWidth="2" opacity="0.85" />
+                      {pts.map((p, j) => (
+                        <g key={j}>
+                          <circle cx={xScale(p.yr)} cy={yScale(p.val)} r="3.5" fill={AGE_COLORS[i]} stroke="#0a0a0f" strokeWidth="1" />
+                          <text x={xScale(p.yr)} y={yScale(p.val) - 7} textAnchor="middle" fill={AGE_COLORS[i]} fontSize="8" fontFamily="'JetBrains Mono'" opacity="0.9">
+                            {p.val.toFixed(2)}
+                          </text>
+                        </g>
+                      ))}
+                    </g>
+                  );
+                })}
+              </svg>
+              {/* Legend */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', marginTop: 4, paddingLeft: mL }}>
+                {AGE_GROUPS.map((ag, i) => (
+                  <span key={ag} style={{ fontSize: 9, fontFamily: "'JetBrains Mono'", color: AGE_COLORS[i] }}>
+                    {ag}{t('세','y')}
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {/* Insight box */}
+      <div style={{
+        margin: '8px 0 0', padding: '8px 14px',
+        background: 'rgba(0,255,136,0.04)', border: '1px solid rgba(0,255,136,0.12)', borderRadius: 8,
+      }}>
+        <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc', margin: 0, lineHeight: 1.7 }}>
+          {t(
+            '간경화 진행률은 대부분 연령에서 2010→2020 감소 추세 (치료 발전). 단, 여성 70-79세·80+에서는 여전히 4-10%로 높음. 간세포암은 남성 80+에서 증가 추세 (0.67%→0.71%).',
+            'Cirrhosis progression declining across most age groups (2010→2020). However, female 70-79 & 80+ remain high (4-10%). HCC in male 80+ shows slight increase (0.67%→0.71%).'
+          )}
+        </p>
+      </div>
+      <div style={{
+        padding: '4px 0 2px', fontFamily: "'JetBrains Mono', monospace",
+        fontSize: 10, color: '#4a4a6a',
+      }}>
+        {t('출처: KASL NAFLD Fact Sheet 2023, NHIS 2년 추적 데이터 (2010/2015/2020 코호트)', 'Source: KASL NAFLD Fact Sheet 2023, NHIS 2-Year Follow-up (2010/2015/2020 cohorts)')}
+      </div>
+    </div>
+  );
+}
+
 // ── MASLD Progression Heatmap (Canvas 2D) ───────────────────
 function MASLDHeatmapView() {
   const { lang, t } = useLang();
@@ -994,6 +1115,7 @@ function MASLDHeatmapView() {
   const [gender, setGender] = useState('male');
   const [tooltip, setTooltip] = useState(null);
   const [clickDetail, setClickDetail] = useState(null);
+  const [trackingMode, setTrackingMode] = useState('10yr'); // '10yr' or '2yr'
 
   const AGE_GROUPS = ['20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80+'];
   const AGE_KEYS = ['20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_plus'];
@@ -1205,16 +1327,34 @@ function MASLDHeatmapView() {
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
             color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,255,136,0.3)',
           }}>
-            {t('MASLD 코호트 10년 누적 질환 발생률','MASLD Cohort 10-Year Cumulative Disease Incidence')}
+            {trackingMode === '10yr'
+              ? t('MASLD 코호트 10년 누적 질환 발생률','MASLD Cohort 10-Year Cumulative Disease Incidence')
+              : t('MASLD 2년 추적 진행률 추이 (2010/2015/2020)', 'MASLD 2-Year Progression Trend (2010/2015/2020)')}
           </h2>
           <p style={{
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc',
             margin: '4px 0 0', lineHeight: 1.6,
           }}>
-            {t('2010년 MASLD 진단 환자를 10년간 추적 — 일반 인구 발생률 대비 배수 표시. ⚠️ 교란변수(비만·당뇨·연령 등) 미보정 단순 비율 비교이며, 독립적 위험도(adjusted RR/HR)가 아님. MASLD의 독립적 기여도를 평가하려면 다변량 보정 분석이 필요합니다. 여성 일부 데이터 검증 필요.', 'Tracking 2010 MASLD patients over 10 years — showing ratio vs general population. ⚠️ Unadjusted simple ratios (confounders like obesity, DM, age not controlled). Multivariable analysis needed for independent risk assessment.')}
+            {trackingMode === '10yr'
+              ? t('2010년 MASLD 진단 환자를 10년간 추적 — 일반 인구 발생률 대비 배수 표시. ⚠️ 교란변수(비만·당뇨·연령 등) 미보정 단순 비율 비교이며, 독립적 위험도(adjusted RR/HR)가 아님. MASLD의 독립적 기여도를 평가하려면 다변량 보정 분석이 필요합니다. 여성 일부 데이터 검증 필요.', 'Tracking 2010 MASLD patients over 10 years — showing ratio vs general population. ⚠️ Unadjusted simple ratios (confounders like obesity, DM, age not controlled). Multivariable analysis needed for independent risk assessment.')
+              : t('2010/2015/2020년 MASLD 진단 코호트의 2년 추적 진행률 비교. 간경화·간세포암으로의 진행이 시간에 따라 개선되고 있는지 보여줌.', '2yr follow-up progression rates compared across 2010/2015/2020 MASLD cohorts. Shows whether liver disease progression is improving over time.')}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {/* Tracking mode toggle */}
+          {['10yr', '2yr'].map(m => (
+            <button key={m} onClick={() => { setTrackingMode(m); setClickDetail(null); }} style={{
+              padding: '4px 12px', borderRadius: 14,
+              border: `1px solid ${trackingMode === m ? '#00ff8844' : 'rgba(255,255,255,0.1)'}`,
+              background: trackingMode === m ? 'rgba(0,255,136,0.12)' : 'transparent',
+              color: trackingMode === m ? '#00ff88' : '#6666aa',
+              fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, fontWeight: 600, cursor: 'pointer',
+            }}>
+              {m === '10yr' ? t('10년 추적', '10yr') : t('2년 추적 (연도별)', '2yr Trend')}
+            </button>
+          ))}
+          <span style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.1)', margin: '0 4px' }} />
+          {/* Gender toggle */}
           {['male', 'female'].map(g => (
             <button key={g} onClick={() => setGender(g)} style={{
               padding: '4px 14px', borderRadius: 14,
@@ -1228,6 +1368,7 @@ function MASLDHeatmapView() {
           ))}
         </div>
       </div>
+      {trackingMode === '10yr' ? (<>
       <div style={{ flex: 1, position: 'relative', padding: '0 8px 8px' }}>
         <canvas
           ref={canvasRef}
@@ -1324,19 +1465,21 @@ function MASLDHeatmapView() {
                         일반 인구 대비 {ratio.toFixed(1)}배
                       </span>
                       <span style={{ color: '#888', fontSize: 10, marginLeft: 6 }}>
-                        (일반: {genPop}%)
+                        ({t('일반','Gen pop')}: {genPop}%)
                       </span>
                     </div>
                   )}
                   <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
-                    {clickDetail.age}세 {gender === 'male' ? '남성' : '여성'} MASLD 환자 100명 중 약 {v < 1 ? v.toFixed(1) : Math.round(v)}명에서 10년 내 {clickDetail.outcome} 발생.
-                    {ratio && ratio > 3 && ` 일반 인구 대비 ${ratio.toFixed(1)}배 (비보정). 비만·당뇨 등 교란변수 기여 가능성 있어 독립적 인과관계는 별도 분석 필요.`}
-                    {ratio && ratio > 1.5 && ratio <= 3 && ` 일반 인구 대비 소폭 상승 (비보정 비율).`}
-                    {v > 10 && ' 적극적 선별검사 필요.'}
-                    {v <= 1 && ' 낮은 발생률이나 지속 모니터링 권장.'}
+                    {lang === 'en'
+                      ? `Among 100 ${gender === 'male' ? 'male' : 'female'} MASLD patients aged ${clickDetail.age}, ~${v < 1 ? v.toFixed(1) : Math.round(v)} develop ${clickDetail.outcome} within 10yr.`
+                      : `${clickDetail.age}세 ${gender === 'male' ? '남성' : '여성'} MASLD 환자 100명 중 약 ${v < 1 ? v.toFixed(1) : Math.round(v)}명에서 10년 내 ${clickDetail.outcome} 발생.`}
+                    {ratio && ratio > 3 && (lang === 'en' ? ` ${ratio.toFixed(1)}x vs general population (unadjusted). Confounders (obesity, diabetes) may contribute; independent causality needs separate analysis.` : ` 일반 인구 대비 ${ratio.toFixed(1)}배 (비보정). 비만·당뇨 등 교란변수 기여 가능성 있어 독립적 인과관계는 별도 분석 필요.`)}
+                    {ratio && ratio > 1.5 && ratio <= 3 && (lang === 'en' ? ' Slightly elevated vs general population (unadjusted).' : ' 일반 인구 대비 소폭 상승 (비보정 비율).')}
+                    {v > 10 && (lang === 'en' ? ' Active screening recommended.' : ' 적극적 선별검사 필요.')}
+                    {v <= 1 && (lang === 'en' ? ' Low incidence but continued monitoring recommended.' : ' 낮은 발생률이나 지속 모니터링 권장.')}
                   </p>
                   <p style={{ color: '#555', fontSize: 9, marginTop: 6 }}>
-                    ※ 일반 인구 발생률은 국가암등록/KDCA 기반 근사치. 정확한 비교에는 연령표준화 분석 필요.
+                    {t('※ 일반 인구 발생률은 국가암등록/KDCA 기반 근사치. 정확한 비교에는 연령표준화 분석 필요.','※ General population incidence rates are approximations from National Cancer Registry/KDCA. Age-standardized analysis needed for precise comparison.')}
                   </p>
                 </>
               );
@@ -1374,6 +1517,9 @@ function MASLDHeatmapView() {
       }}>
         {t('출처: KASL MASLD Fact Sheet 2023, NHIS 2010 코호트 10년 추적 데이터', 'Source: KASL MASLD Fact Sheet 2023, NHIS 2010 Cohort 10-Year Follow-up')}
       </div>
+      </>) : (
+      <Progression2yrView gender={gender} />
+      )}
     </div>
   );
 }
@@ -1630,7 +1776,7 @@ function TrendsView() {
               color: mode === m.id ? '#b388ff' : '#6666aa',
               fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, fontWeight: 600, cursor: 'pointer',
             }}>
-              {m.label_ko}
+              {lang === 'en' ? m.label_en : m.label_ko}
             </button>
           ))}
         </div>

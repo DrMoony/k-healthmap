@@ -580,10 +580,10 @@ export default function StrokeDashboard() {
 
   const handleToastClick = (seg) => {
     const toastInfo = {
-      '대혈관 죽상경화': '대동맥 또는 주요 뇌동맥의 죽상경화증. 경동맥 내막절제술, 스텐트, 항혈소판제 이중요법 등이 치료에 사용됨. KSR에서 10년간 감소 추세.',
-      '소혈관 폐색': '소동맥의 경색 (라쿠나 경색). 주로 고혈압, 당뇨와 연관. KSR에서 10년간 증가 추세 - 고혈압/당뇨 관리 강화 필요.',
-      '심인성 색전': '심방세동 등에서 심장 유래 혈전. 항응고제(DOAC) 치료. AF 환자의 46%가 입원 시 첫 진단 - 사전 스크리닝 부족.',
-      '기타/불명': '기타 원인(혈관박리, 혈액질환 등) 또는 원인 불명. 전체의 약 27%를 차지.',
+      '대혈관 죽상경화': t('대동맥 또는 주요 뇌동맥의 죽상경화증. 경동맥 내막절제술, 스텐트, 항혈소판제 이중요법 등이 치료에 사용됨. KSR에서 10년간 감소 추세.','Large artery atherosclerosis. Treated with carotid endarterectomy, stenting, dual antiplatelet therapy. Declining trend over 10yr per KSR.'),
+      '소혈관 폐색': t('소동맥의 경색 (라쿠나 경색). 주로 고혈압, 당뇨와 연관. KSR에서 10년간 증가 추세 - 고혈압/당뇨 관리 강화 필요.','Small vessel occlusion (lacunar infarct). Associated with hypertension, diabetes. Increasing trend over 10yr per KSR — enhanced BP/DM management needed.'),
+      '심인성 색전': t('심방세동 등에서 심장 유래 혈전. 항응고제(DOAC) 치료. AF 환자의 46%가 입원 시 첫 진단 - 사전 스크리닝 부족.','Cardiac embolism from atrial fibrillation. Treated with DOAC. 46% of AF first diagnosed at admission — pre-screening lacking.'),
+      '기타/불명': t('기타 원인(혈관박리, 혈액질환 등) 또는 원인 불명. 전체의 약 27%를 차지.','Other causes (dissection, hematologic) or undetermined. Accounts for ~27% of total.'),
     };
     setDetailPopup({ title: `TOAST: ${seg.label}`, content: toastInfo[seg.label] || seg.label });
   };
@@ -730,15 +730,15 @@ export default function StrokeDashboard() {
           />
           <KPIMini label={t("mRS 0-1","mRS 0-1")} value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88"
             source={selectedProv ? t('전국 기준 (KSR)','National baseline (KSR)') : 'KSR 2024'}
-            onClick={() => setDetailPopup({ title: '좋은 예후 (mRS 0-1)', content: `퇴원 시 mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% 개선. mRS 0-2(독립 생활): 61.2%. 경증 비율↑ + 재관류 발전 기여.` })}
+            onClick={() => setDetailPopup({ title: t('좋은 예후 (mRS 0-1)','Good outcome (mRS 0-1)'), content: t('퇴원 시 mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% 개선. mRS 0-2(독립 생활): 61.2%. 경증 비율↑ + 재관류 발전 기여.','Discharge mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% improvement. mRS 0-2 (independent living): 61.2%. Increased mild cases + revascularization advances.') })}
           />
           <KPIMini label={t("원내사망","In-hospital Death")} value={KSR.outcomes.inHospitalMortality.pct} unit="%" icon="📉" color="#ff6b6b"
             source={selectedProv ? t('전국 기준 (KSR)','National baseline (KSR)') : 'KSR 2024'}
             onClick={() => setDetailPopup({ title: t('원내 사망률','In-hospital Mortality'), content: t('원내 사망 2.6% (KSR 2022). 1.0%→2.6% 증가 — 85세↑ 초고령 환자 2배 증가(6.6%→10.7%)가 주 원인.','In-hospital death 2.6% (KSR 2022). 1.0%→2.6% increase — mainly due to doubling of 85+ patients (6.6%→10.7%).') })}
           />
-          <KPIMini label="AF 첫진단" value="46" unit="%" icon="💔" color="#e74c3c"
+          <KPIMini label={t('AF 첫진단','AF New Dx')} value="46" unit="%" icon="💔" color="#e74c3c"
             source={selectedProv ? t('전국 기준 (KSR)','National baseline (KSR)') : 'KSR 2024'}
-            onClick={() => setDetailPopup({ title: '심방세동 입원 시 첫 진단', content: `뇌졸중 환자 중 심방세동(AF) 20% 동반. 이 중 46%가 입원 시 처음 진단 — 지역사회 AF 선별검사 부족을 시사. AF는 심인성 색전(CE) 뇌졸중의 89.9% 차지. 조기 발견 시 항응고제로 뇌졸중 예방 가능.` })}
+            onClick={() => setDetailPopup({ title: t('심방세동 입원 시 첫 진단','AF First Diagnosed at Admission'), content: t('뇌졸중 환자 중 심방세동(AF) 20% 동반. 이 중 46%가 입원 시 처음 진단 — 지역사회 AF 선별검사 부족을 시사. AF는 심인성 색전(CE) 뇌졸중의 89.9% 차지. 조기 발견 시 항응고제로 뇌졸중 예방 가능.','AF present in 20% of stroke patients. 46% first diagnosed at admission — suggests inadequate community AF screening. AF accounts for 89.9% of CE strokes. Early detection enables anticoagulant prevention.') })}
           />
         </div>
       </div>

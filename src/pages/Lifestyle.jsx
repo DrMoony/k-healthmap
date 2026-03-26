@@ -34,7 +34,6 @@ const METRIC_LABELS_EN = {
   drinking: 'Heavy Drinking Rate (2+/wk, %)',
   exercise: 'No Vigorous Exercise Rate (0 days, %)',
 };
-const METRIC_LABELS = METRIC_LABELS_KO;
 
 function getMetricValue(category, arr) {
   if (category === 'smoking') return arr[2]; // 현재흡연%
@@ -143,7 +142,8 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
       ctx.font = '11px "Noto Sans KR", sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.fillText(d.name, padL, y + barH / 2);
+      const provDisplayName = lang === 'en' ? ({'서울':'Seoul','부산':'Busan','대구':'Daegu','인천':'Incheon','광주':'Gwangju','대전':'Daejeon','울산':'Ulsan','세종':'Sejong','경기':'Gyeonggi','강원':'Gangwon','충북':'Chungbuk','충남':'Chungnam','전북':'Jeonbuk','전남':'Jeonnam','경북':'Gyeongbuk','경남':'Gyeongnam','제주':'Jeju'}[d.name] || d.name) : d.name;
+      ctx.fillText(provDisplayName, padL, y + barH / 2);
 
       // Value
       ctx.fillStyle = isSelected ? '#ffd60a' : '#fff';
@@ -495,6 +495,7 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
 
 // ── Gender Toggle ──
 function GenderToggle({ value, onChange, accentColor }) {
+  const { lang } = useLang();
   return (
     <div style={{ display: 'flex', gap: '4px' }}>
       {GENDERS.map(g => (
@@ -513,7 +514,7 @@ function GenderToggle({ value, onChange, accentColor }) {
             transition: 'all 0.2s',
           }}
         >
-          {g.label_ko}
+          {lang === 'en' ? g.label_en : g.label_ko}
         </button>
       ))}
     </div>
@@ -522,7 +523,7 @@ function GenderToggle({ value, onChange, accentColor }) {
 
 // ── Detail Panel Content ──
 function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGender, ageGender }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const cat = CATEGORIES.find(c => c.key === category);
 
   const SMOKE_CATS = ['비흡연', '현재금연', '현재흡연'];
@@ -555,18 +556,18 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
     return (
       <div style={{ overflowY: 'auto', height: '100%' }}>
         <div style={{ marginBottom: '8px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedProv}</div>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{lang === 'en' ? (T.provinces[selectedProv] || selectedProv) : selectedProv}</div>
           <div style={{ fontSize: '10px', color: '#8888aa' }}>
             {provGender === 'male' ? t('남성','Male') : provGender === 'female' ? t('여성','Female') : t('전체','Total')}
           </div>
-          <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
+          <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{lang === 'en' ? METRIC_LABELS_EN[category] : METRIC_LABELS_KO[category]}</div>
           <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
             {getMetricValue(category, LIFESTYLE_DATA[category].province[selectedProv]?.[provGender] || [0,0,0])}%
           </div>
         </div>
         {CATEGORIES.map(c => {
           const vals = LIFESTYLE_DATA[c.key].province[selectedProv]?.[provGender];
-          return vals ? renderDistBars(`${c.icon} ${c.label_ko}`, vals, c.color) : null;
+          return vals ? renderDistBars(`${c.icon} ${lang === 'en' ? c.label_en : c.label_ko}`, vals, c.color) : null;
         })}
       </div>
     );
@@ -577,18 +578,18 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
     return (
       <div style={{ overflowY: 'auto', height: '100%' }}>
         <div style={{ marginBottom: '8px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedAge}세</div>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedAge}{lang === 'en' ? '' : '세'}</div>
           <div style={{ fontSize: '10px', color: '#8888aa' }}>
             {ageGender === 'male' ? t('남성','Male') : ageGender === 'female' ? t('여성','Female') : t('전체','Total')}
           </div>
-          <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
+          <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{lang === 'en' ? METRIC_LABELS_EN[category] : METRIC_LABELS_KO[category]}</div>
           <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
             {getMetricValue(category, LIFESTYLE_DATA[category].age[selectedAge]?.[ageGender] || [0,0,0])}%
           </div>
         </div>
         {CATEGORIES.map(c => {
           const vals = LIFESTYLE_DATA[c.key].age[selectedAge]?.[ageGender];
-          return vals ? renderDistBars(`${c.icon} ${c.label_ko}`, vals, c.color) : null;
+          return vals ? renderDistBars(`${c.icon} ${lang === 'en' ? c.label_en : c.label_ko}`, vals, c.color) : null;
         })}
       </div>
     );
@@ -604,10 +605,10 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
     const maxV = Math.max(...yearVals.map(d => d.value), 1);
     return (
       <div style={{ overflowY: 'auto', height: '100%' }}>
-        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffd60a', marginBottom: '6px' }}>{selectedYear} {cat.label_ko}</div>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffd60a', marginBottom: '6px' }}>{selectedYear} {lang === 'en' ? cat.label_en : cat.label_ko}</div>
         {yearVals.map((d, i) => (
           <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
-            <span style={{ fontSize: '10px', color: i < 3 ? cat.color : i >= yearVals.length - 3 ? '#00d4ff' : '#8888aa', width: '36px', textAlign: 'right', flexShrink: 0 }}>{d.name}</span>
+            <span style={{ fontSize: '10px', color: i < 3 ? cat.color : i >= yearVals.length - 3 ? '#00d4ff' : '#8888aa', width: '50px', textAlign: 'right', flexShrink: 0 }}>{({'서울':'Seoul','부산':'Busan','대구':'Daegu','인천':'Incheon','광주':'Gwangju','대전':'Daejeon','울산':'Ulsan','세종':'Sejong','경기':'Gyeonggi','강원':'Gangwon','충북':'Chungbuk','충남':'Chungnam','전북':'Jeonbuk','전남':'Jeonnam','경북':'Gyeongbuk','경남':'Gyeongnam','제주':'Jeju'}[d.name] && lang === 'en') ? {'서울':'Seoul','부산':'Busan','대구':'Daegu','인천':'Incheon','광주':'Gwangju','대전':'Daejeon','울산':'Ulsan','세종':'Sejong','경기':'Gyeonggi','강원':'Gangwon','충북':'Chungbuk','충남':'Chungnam','전북':'Jeonbuk','전남':'Jeonnam','경북':'Gyeongbuk','경남':'Gyeongnam','제주':'Jeju'}[d.name] : d.name}</span>
             <div style={{ flex: 1, height: '7px', background: 'rgba(255,255,255,0.04)', borderRadius: '2px', overflow: 'hidden' }}>
               <div style={{ width: `${(d.value / maxV) * 100}%`, height: '100%', background: i < 3 ? cat.color : '#00d4ff', opacity: 0.3 + (d.value / maxV) * 0.7, borderRadius: '2px' }} />
             </div>
@@ -631,12 +632,12 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
           <div key={c.key} style={{ marginBottom: '10px', padding: '6px 8px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
               <span>{c.icon}</span>
-              <span style={{ fontSize: '11px', color: c.color, fontWeight: 600 }}>{c.label_ko}</span>
+              <span style={{ fontSize: '11px', color: c.color, fontWeight: 600 }}>{lang === 'en' ? c.label_en : c.label_ko}</span>
               <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace', marginLeft: 'auto' }}>{avg}%</span>
             </div>
             <div style={{ fontSize: '10px', color: '#8888aa', display: 'flex', justifyContent: 'space-between' }}>
-              <span>{t('최고', 'Top')}: <span style={{ color: c.color }}>{top.name} {top.value}%</span></span>
-              <span>{t('최저', 'Low')}: <span style={{ color: '#00d4ff' }}>{bottom.name} {bottom.value}%</span></span>
+              <span>{t('최고', 'Top')}: <span style={{ color: c.color }}>{lang === 'en' ? (T.provinces[top.name] || top.name) : top.name} {top.value}%</span></span>
+              <span>{t('최저', 'Low')}: <span style={{ color: '#00d4ff' }}>{lang === 'en' ? (T.provinces[bottom.name] || bottom.name) : bottom.name} {bottom.value}%</span></span>
             </div>
           </div>
         );

@@ -73,7 +73,7 @@ const AGE_CLINICAL_NOTES_EN = {
   '80-84': '80-84: Very elderly characteristics to reflect, overdiagnosis concern',
   '85+': '85+: Screening interpretation considering life expectancy, function-focused assessment',
 };
-const AGE_CLINICAL_NOTES = AGE_CLINICAL_NOTES_KO;
+// AGE_CLINICAL_NOTES resolved dynamically with lang
 
 // ─── Disease Correlation Data ────────────────────────────────────────────────
 const EXAM_DISEASE_LINKS = {
@@ -235,6 +235,7 @@ const SORT_OPTIONS = [
 ];
 
 function SortToggle({ value, onChange }) {
+  const { lang } = useLang();
   return (
     <div style={{ display: 'flex', gap: 3 }}>
       {SORT_OPTIONS.map(o => (
@@ -254,7 +255,7 @@ function SortToggle({ value, onChange }) {
             transition: 'all 0.2s',
           }}
         >
-          {o.label_ko}
+          {lang === 'en' ? o.label_en : o.label_ko}
         </button>
       ))}
     </div>
@@ -401,7 +402,8 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
       ctx.fillStyle = NEON.labelText;
       ctx.font = '11px Noto Sans KR';
       ctx.textAlign = 'right';
-      ctx.fillText(d.label, ml - 6, y + barH / 2 + 3.5);
+      const displayLabel = lang === 'en' ? ({'서울':'Seoul','부산':'Busan','대구':'Daegu','인천':'Incheon','광주':'Gwangju','대전':'Daejeon','울산':'Ulsan','세종':'Sejong','경기':'Gyeonggi','강원':'Gangwon','충북':'Chungbuk','충남':'Chungnam','전북':'Jeonbuk','전남':'Jeonnam','경북':'Gyeongbuk','경남':'Gyeongnam','제주':'Jeju'}[d.label] || d.label) : d.label;
+      ctx.fillText(displayLabel, ml - 6, y + barH / 2 + 3.5);
     });
   }, [sortedData, canvasWidth, canvasHeight, maxRate, minRate, nationalAvg]);
 
@@ -580,10 +582,11 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
       ctx.fillStyle = NEON.labelText;
       ctx.font = '11px Noto Sans KR';
       ctx.textAlign = 'right';
-      ctx.fillText(label, 0, 0);
+      const displayLabel2 = lang === 'en' ? ({'서울':'Seoul','부산':'Busan','대구':'Daegu','인천':'Incheon','광주':'Gwangju','대전':'Daejeon','울산':'Ulsan','세종':'Sejong','경기':'Gyeonggi','강원':'Gangwon','충북':'Chungbuk','충남':'Chungnam','전북':'Jeonbuk','전남':'Jeonnam','경북':'Gyeongbuk','경남':'Gyeongnam','제주':'Jeju'}[label] || label) : label;
+      ctx.fillText(displayLabel2, 0, 0);
       ctx.restore();
     });
-  }, [labels, dataObj, categories, gender, abnormalIndices, nationalAvg, canvasWidth, canvasHeight, highlightCat]);
+  }, [labels, dataObj, categories, gender, abnormalIndices, nationalAvg, canvasWidth, canvasHeight, highlightCat, lang]);
 
   useEffect(() => { draw(); }, [draw]);
 
@@ -687,6 +690,7 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
 
 // ─── Gender Toggle ───────────────────────────────────────────────────────────
 function GenderToggle({ value, onChange }) {
+  const { lang } = useLang();
   return (
     <div style={{ display: 'flex', gap: 4 }}>
       {GENDER_OPTIONS.map(g => (
@@ -706,7 +710,7 @@ function GenderToggle({ value, onChange }) {
             transition: 'all 0.2s',
           }}
         >
-          {g.label_ko}
+          {lang === 'en' ? g.label_en : g.label_ko}
         </button>
       ))}
     </div>
@@ -715,6 +719,7 @@ function GenderToggle({ value, onChange }) {
 
 // ─── View Toggle ─────────────────────────────────────────────────────────────
 function ViewToggle({ value, onChange }) {
+  const { lang } = useLang();
   const opts = [
     { key: 'abnormal', label_ko: '이상치율', label_en: 'Abnormality' },
     { key: 'stacked', label_ko: '분포', label_en: 'Distribution' },
@@ -744,7 +749,7 @@ function ViewToggle({ value, onChange }) {
             transition: 'all 0.2s',
           }}
         >
-          {o.label_ko}
+          {lang === 'en' ? o.label_en : o.label_ko}
         </button>
       ))}
     </div>
@@ -898,7 +903,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
   })).sort((a, b) => b.rate - a.rate) : [];
   const selRank = selLabel ? selAllRates.findIndex(d => d.label === selLabel) + 1 : 0;
 
-  const clinicalNote = selType === 'age' ? AGE_CLINICAL_NOTES[selLabel] : null;
+  const clinicalNote = selType === 'age' ? (lang === 'en' ? AGE_CLINICAL_NOTES_EN : AGE_CLINICAL_NOTES_KO)[selLabel] : null;
 
   return (
     <div style={{
@@ -913,9 +918,9 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
       {hasAbnormal && (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4, flex: '0 0 200px' }}>
           <KpiCard label={t("전국 이상치율","National Abnormality")} value={natAvgProv.toFixed(1) + '%'} color={NEON.magenta} />
-          <KpiCard label={t("최고 시도","Highest Province")} value={highest?.rate.toFixed(1) + '%'} sub={highest?.name} color="#ff6b6b" />
-          <KpiCard label={t("최저 시도","Lowest Province")} value={lowest?.rate.toFixed(1) + '%'} sub={lowest?.name} color={NEON.green} />
-          <KpiCard label={t("남녀 격차","Gender Gap")} value={genderGap.toFixed(1) + '%p'} sub={genderHigher + ' 우세'} color={NEON.gold} />
+          <KpiCard label={t("최고 시도","Highest Province")} value={highest?.rate.toFixed(1) + '%'} sub={pn(highest?.name || '')} color="#ff6b6b" />
+          <KpiCard label={t("최저 시도","Lowest Province")} value={lowest?.rate.toFixed(1) + '%'} sub={pn(lowest?.name || '')} color={NEON.green} />
+          <KpiCard label={t("남녀 격차","Gender Gap")} value={genderGap.toFixed(1) + '%p'} sub={genderHigher + (lang === 'en' ? ' higher' : ' 우세')} color={NEON.gold} />
         </div>
       )}
 
@@ -932,7 +937,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           overflow: 'hidden',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-            <span style={{ fontWeight: 700, fontSize: 12, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.cyan) }}>{selLabel}</span>
+            <span style={{ fontWeight: 700, fontSize: 12, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.cyan) }}>{selType === 'province' ? pn(selLabel) : selLabel}</span>
             <span style={{
               fontSize: 10,
               background: hexToRgba(NEON.gold, 0.12),
@@ -1027,7 +1032,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
                 color: item.color, whiteSpace: 'nowrap',
                 fontFamily: 'Noto Sans KR',
               }}>
-                {item.disease} {item.prevalence}
+                {(lang === 'en' && T.diseases[item.disease]) ? T.diseases[item.disease] : item.disease} {item.prevalence}
               </span>
             ))}
           </div>
@@ -1080,7 +1085,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
 }
 
 // ─── Insight Generator ───────────────────────────────────────────────────────
-function generateInsight(examData, selectedExam, abnormalIndices, genderProv, genderAge) {
+function generateInsight(examData, selectedExam, abnormalIndices, genderProv, genderAge, lang = 'ko') {
   if (!abnormalIndices.length) return null;
 
   const provData = examData.province;
@@ -1165,7 +1170,7 @@ export default function ExamDetail() {
   const natAvgProv = getNationalAvg(examData.province, genderProv, abnormalIndices);
   const natAvgAge = getNationalAvg(examData.age, genderAge, abnormalIndices);
 
-  const insight = generateInsight(examData, selectedExam, abnormalIndices, genderProv, genderAge);
+  const insight = generateInsight(examData, selectedExam, abnormalIndices, genderProv, genderAge, lang);
 
 
   return (
