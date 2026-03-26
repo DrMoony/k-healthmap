@@ -174,7 +174,7 @@ function HBar({ data, maxVal, highlightName, nationalAvg, labelWidth = 36, heigh
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', width: '100%' }}>
       {data.map(({ name, value }, i) => {
-        const t = maxVal > 0 ? value / maxVal : 0;
+        const ratio = maxVal > 0 ? value / maxVal : 0;
         const isHighlight = name === highlightName;
         return (
           <div
@@ -194,11 +194,11 @@ function HBar({ data, maxVal, highlightName, nationalAvg, labelWidth = 36, heigh
             <div style={{ flex: 1, position: 'relative', height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px' }}>
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${t * 100}%` }}
+                animate={{ width: `${ratio * 100}%` }}
                 transition={{ duration: 0.6, delay: i * 0.02 }}
                 style={{
                   height: '100%', borderRadius: '3px',
-                  background: `linear-gradient(90deg, ${gradientColor(t * 0.3)}, ${gradientColor(t)})`,
+                  background: `linear-gradient(90deg, ${gradientColor(ratio * 0.3)}, ${gradientColor(ratio)})`,
                   border: isHighlight ? '1px solid rgba(255,214,10,0.5)' : 'none',
                 }}
               />
@@ -233,7 +233,7 @@ function VerticalBarChart({ data, labels, title, color = '#00d4ff', maxOverride 
       {title && <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px', fontWeight: 600 }}>{title}</div>}
       <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', gap: '3px', minHeight: 0 }}>
         {data.map((v, i) => {
-          const t = max > 0 ? v / max : 0;
+          const ratio = max > 0 ? v / max : 0;
           return (
             <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
               <span style={{ fontSize: '9px', color: '#888', fontFamily: "'JetBrains Mono'", marginBottom: '2px' }}>
@@ -241,11 +241,11 @@ function VerticalBarChart({ data, labels, title, color = '#00d4ff', maxOverride 
               </span>
               <motion.div
                 initial={{ height: 0 }}
-                animate={{ height: `${t * 100}%` }}
+                animate={{ height: `${ratio * 100}%` }}
                 transition={{ duration: 0.5, delay: i * 0.03 }}
                 style={{
                   width: '100%', minHeight: '2px', borderRadius: '3px 3px 0 0',
-                  background: typeof color === 'function' ? color(t) : `linear-gradient(180deg, ${gradientColor(t)}, ${gradientColor(t * 0.3)})`,
+                  background: typeof color === 'function' ? color(ratio) : `linear-gradient(180deg, ${gradientColor(ratio)}, ${gradientColor(ratio * 0.3)})`,
                 }}
               />
               <span style={{ fontSize: '9px', color: '#666', marginTop: '3px', whiteSpace: 'nowrap' }}>
