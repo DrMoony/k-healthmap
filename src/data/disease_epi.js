@@ -271,11 +271,11 @@ export const DISEASE_EPI = {
     },
 
     // ──────────────────────────────────────────────
-    // 5. 비알콜성 지방간 (NAFLD)
+    // 5. 대사이상관련 지방간질환 (MASLD, 구 NAFLD)
     // ──────────────────────────────────────────────
-    nafld: {
-      name: '비알콜성 지방간질환',
-      nameEn: 'NAFLD',
+    nafld: {  // key 유지 (하위호환), 명칭은 MASLD로 업데이트
+      name: '대사이상관련 지방간질환 (MASLD)',
+      nameEn: 'MASLD (formerly NAFLD)',
       metricType: 'incidence',
       incidence: {
         peak: { year: 2021, cases: 2001974 },
@@ -841,3 +841,6 @@ export const DISEASE_EPI = {
     ],
   },
 };
+
+// MASLD 별칭 (구 NAFLD) — disease_epi.js 내부 키는 'nafld'이지만 외부에서 'masld'로도 접근 가능
+DISEASE_EPI.diseases.masld = DISEASE_EPI.diseases.nafld;
