@@ -6,14 +6,21 @@ import { PROVINCE_INFO, NATIONAL_AVG } from '../data/province_info';
 import { TRENDS } from '../data/trends';
 import { BMI_PROV } from '../data/bmi_prov';
 import { MET_PROV } from '../data/met_prov';
+import { useLang } from '../i18n';
+import { T } from '../translations';
 
-function formatPop(n) {
+function formatPop(n, lang) {
+  if (lang === 'en') {
+    if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
+    return `${(n / 1000).toFixed(0)}K`;
+  }
   if (n >= 10000000) return `${(n / 10000000).toFixed(0)}천만`;
   if (n >= 1000000) return `${(n / 10000).toFixed(0)}만`;
   return `${(n / 10000).toFixed(0)}만`;
 }
 
 function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, rawValue, higherIsBetter = true, onClick, isExpanded, metricKey }) {
+  const { lang } = useLang();
   const [showTip, setShowTip] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
 
@@ -68,7 +75,7 @@ function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, 
         const diffColor = Math.abs(diff) < 0.3 ? '#8888aa' : isGood ? '#00ff88' : '#ff4444';
         return (
           <div style={{ fontSize: '9px', color: diffColor, marginTop: '2px', fontFamily: "'JetBrains Mono'" }}>
-            {arrow} 전국대비 {isAbove ? '+' : ''}{typeof rawValue === 'number' && rawValue % 1 !== 0 ? diff.toFixed(1) : Math.round(diff)}
+            {arrow} {lang === 'en' ? 'vs Nat\'l' : '전국대비'} {isAbove ? '+' : ''}{typeof rawValue === 'number' && rawValue % 1 !== 0 ? diff.toFixed(1) : Math.round(diff)}
           </div>
         );
       })()}
@@ -125,6 +132,7 @@ function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, 
 
 // Bar showing value position relative to national average
 function CompareBar({ value, avg, min, max, color, label, unit = '', higherIsBetter = true }) {
+  const { lang } = useLang();
   const range = max - min;
   const pos = Math.max(0, Math.min(100, ((value - min) / range) * 100));
   const avgPos = Math.max(0, Math.min(100, ((avg - min) / range) * 100));
@@ -154,7 +162,7 @@ function CompareBar({ value, avg, min, max, color, label, unit = '', higherIsBet
           position: 'absolute', left: `${avgPos}%`, transform: 'translateX(-50%)',
           fontSize: '9px', color: '#8888aa', top: '1px',
         }}>
-          전국 {typeof avg === 'number' && avg % 1 !== 0 ? avg.toFixed(1) : avg}
+          {lang === 'en' ? 'Nat\'l' : '전국'} {typeof avg === 'number' && avg % 1 !== 0 ? avg.toFixed(1) : avg}
         </span>
       </div>
     </div>
@@ -220,6 +228,7 @@ function getRankedList(metricKey) {
 }
 
 export default function DetailPanel({ selectedKPI, selectedProvince, years, year, metric }) {
+  const { t, lang } = useLang();
   const [expandedBadge, setExpandedBadge] = useState(null);
   const hasSelection = selectedKPI || selectedProvince;
   const provInfo = selectedProvince ? PROVINCE_INFO[selectedProvince.name] : null;
@@ -240,7 +249,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
           boxShadow: hasSelection ? '0 0 8px rgba(0,255,136,0.5)' : 'none',
         }} />
         <span style={{ fontSize: '13px', fontWeight: 600, color: '#e8e8f0' }}>
-          {hasSelection ? '상세 분석' : '클릭하여 탐색'}
+          {hasSelection ? t('상세 분석', 'Detailed Analysis') : t('클릭하여 탐색', 'Click to explore')}
         </span>
       </div>
 
@@ -264,8 +273,8 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
             >
               <div style={{ fontSize: '40px', opacity: 0.3 }}>🔍</div>
               <div style={{ textAlign: 'center', lineHeight: 1.8, fontSize: '13px' }}>
-                <div>KPI 카드 또는 지도 지역을 클릭하면</div>
-                <div>상세 데이터가 여기에 표시됩니다</div>
+                <div>{t('KPI 카드 또는 지도 지역을 클릭하면', 'Click a KPI card or map region')}</div>
+                <div>{t('상세 데이터가 여기에 표시됩니다', 'to see detailed data here')}</div>
               </div>
             </motion.div>
           )}
@@ -305,12 +314,12 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     marginBottom: '12px',
                   }}>
                     <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '10px' }}>
-                      전국 뇌졸중 주요 지표 (2022)
+                      {t('전국 뇌졸중 주요 지표 (2022)', 'National Stroke Key Indicators (2022)')}
                     </div>
-                    <CompareBar label="발생률 (건/10만)" value={NATIONAL_AVG.strokeIncidence} avg={NATIONAL_AVG.strokeIncidence} min={95} max={140} color="#e74c3c" higherIsBetter={false} />
-                    <CompareBar label="사망률 (명/10만)" value={NATIONAL_AVG.strokeMortality} avg={NATIONAL_AVG.strokeMortality} min={25} max={45} color="#c0392b" higherIsBetter={false} />
-                    <CompareBar label="tPA 시술률 (%)" value={NATIONAL_AVG.tpaRate} avg={NATIONAL_AVG.tpaRate} min={3} max={16} color="#3498db" unit="%" higherIsBetter={true} />
-                    <CompareBar label="골든타임 도착률 (%)" value={NATIONAL_AVG.goldenTimeRate} avg={NATIONAL_AVG.goldenTimeRate} min={20} max={55} color="#2ecc71" unit="%" higherIsBetter={true} />
+                    <CompareBar label={t("발생률 (건/10만)", "Incidence (/100K)")} value={NATIONAL_AVG.strokeIncidence} avg={NATIONAL_AVG.strokeIncidence} min={95} max={140} color="#e74c3c" higherIsBetter={false} />
+                    <CompareBar label={t("사망률 (명/10만)", "Mortality (/100K)")} value={NATIONAL_AVG.strokeMortality} avg={NATIONAL_AVG.strokeMortality} min={25} max={45} color="#c0392b" higherIsBetter={false} />
+                    <CompareBar label={t("tPA 시술률 (%)", "tPA Rate (%)")} value={NATIONAL_AVG.tpaRate} avg={NATIONAL_AVG.tpaRate} min={3} max={16} color="#3498db" unit="%" higherIsBetter={true} />
+                    <CompareBar label={t("골든타임 도착률 (%)", "Golden Time Arrival (%)")} value={NATIONAL_AVG.goldenTimeRate} avg={NATIONAL_AVG.goldenTimeRate} min={20} max={55} color="#2ecc71" unit="%" higherIsBetter={true} />
                   </div>
                   <div style={{
                     background: 'rgba(255,255,255,0.02)',
@@ -318,7 +327,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     padding: '10px',
                     border: '1px solid rgba(255,255,255,0.04)',
                   }}>
-                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>지역별 발생률 순위</div>
+                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>{t('지역별 발생률 순위', 'Regional Incidence Ranking')}</div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
                       {Object.entries(PROVINCE_INFO)
                         .map(([name, info]) => ({ name, val: info.strokeIncidence }))
@@ -331,7 +340,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                             fontSize: '11px',
                           }}>
                             <span style={{ color: i < 3 ? '#e74c3c' : '#8888aa', fontFamily: "'JetBrains Mono'" }}>
-                              {i + 1}. {entry.name}
+                              {i + 1}. {lang === 'en' ? (T.provinces[entry.name] || entry.name) : entry.name}
                             </span>
                             <span style={{
                               color: i < 3 ? '#e74c3c' : '#e8e8f0',
@@ -344,7 +353,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                         ))}
                     </div>
                     <div style={{ fontSize: '9px', color: '#555570', marginTop: '6px' }}>
-                      출처: KDCA 심뇌혈관질환 발생통계(2022) | tPA·골든타임: 추정치
+                      {t('출처: KDCA 심뇌혈관질환 발생통계(2022) | tPA·골든타임: 추정치', 'Source: KDCA CVD Statistics(2022) | tPA·Golden Time: Estimated')}
                     </div>
                   </div>
                 </>
@@ -358,7 +367,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     marginBottom: '12px',
                   }}>
                     <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '10px' }}>
-                      10년 추세 (2015–2024)
+                      {t('10년 추세 (2015–2024)', '10-Year Trend (2015–2024)')}
                     </div>
                     <SparkChart
                       data={selectedKPI.data}
@@ -375,7 +384,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     padding: '10px',
                     border: '1px solid rgba(255,255,255,0.04)',
                   }}>
-                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>연도별</div>
+                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>{t('연도별', 'By Year')}</div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
                       {years.map((y, i) => (
                         <div key={y} style={{
@@ -414,10 +423,10 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
               {/* Province Header with source */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
                 <span style={{ fontSize: '16px', fontWeight: 900, color: '#e8e8f0' }}>
-                  상세분석 — {selectedProvince.name}
+                  {t('상세분석', 'Analysis')} — {lang === 'en' ? (T.provinces[selectedProvince.name] || selectedProvince.name) : selectedProvince.name}
                 </span>
-                <span style={{ fontSize: '9px', color: '#444460', cursor: 'help' }} title="인구: 행안부(2024) · GRDP: 통계청(2023) · 고령화: 통계청(2024) · 기대수명: 통계청(2022) · 상급종합: 복지부 제5기 · 의사수: KOSIS(2022) · 미충족의료: 지역건강조사(2023) · 흡연/음주/운동: 건강검진통계연보(2024)">
-                  출처 ⓘ
+                <span style={{ fontSize: '9px', color: '#444460', cursor: 'help' }} title={t("인구: 행안부(2024) · GRDP: 통계청(2023) · 고령화: 통계청(2024) · 기대수명: 통계청(2022) · 상급종합: 복지부 제5기 · 의사수: KOSIS(2022) · 미충족의료: 지역건강조사(2023) · 흡연/음주/운동: 건강검진통계연보(2024)", "Pop: MOIS(2024) · GRDP: KOSTAT(2023) · Aging: KOSTAT(2024) · Life Exp: KOSTAT(2022) · Tertiary: MOHW 5th · Doctors: KOSIS(2022) · Unmet: CHS(2023) · Smoking/Drinking/Exercise: Health Screening(2024)")}>
+                  {t('출처 ⓘ', 'Source ⓘ')}
                 </span>
               </div>
 
@@ -450,13 +459,13 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                       }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
                           <span style={{ fontSize: '10px', color: '#ff006e', fontWeight: 600 }}>
-                            {oRankBad ? '🚨' : oRankGood ? '👍' : ''} 비만율
+                            {oRankBad ? '🚨' : oRankGood ? '👍' : ''} {t('비만율', 'Obesity Rate')}
                           </span>
                           <span style={{ fontSize: '16px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: '#ff006e' }}>
                             {selectedProvince.obesity[selectedProvince.obesity.length - 1]?.toFixed(1)}%
                           </span>
                         </div>
-                        <SparkChart data={selectedProvince.obesity} labels={years} color="#ff006e" height={60} showLabels avgLine={nationalObesity} rankText={`${obesityRank}/${totalProvs}위`} />
+                        <SparkChart data={selectedProvince.obesity} labels={years} color="#ff006e" height={60} showLabels avgLine={nationalObesity} rankText={`${obesityRank}/${totalProvs}${t('위', '')}`} />
                       </div>
                     )}
                     {selectedProvince.metabolic && (
@@ -466,7 +475,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                       }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
                           <span style={{ fontSize: '10px', color: '#00d4ff', fontWeight: 600 }}>
-                            {mRankBad ? '🚨' : mRankGood ? '👍' : ''} 대사증후군
+                            {mRankBad ? '🚨' : mRankGood ? '👍' : ''} {t('대사증후군', 'Metabolic Syndrome')}
                           </span>
                           <span style={{ fontSize: '16px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: '#00d4ff' }}>
                             {selectedProvince.metabolic[selectedProvince.metabolic.length - 1]?.toFixed(1)}%
@@ -476,7 +485,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                           data={selectedProvince.metabolic.filter(v => v != null)}
                           labels={years.slice(years.length - selectedProvince.metabolic.filter(v => v != null).length)}
                           color="#00d4ff" height={60} showLabels avgLine={nationalMetabolic}
-                          rankText={metRank > 0 ? `${metRank}/${metEntries.length}위` : ''}
+                          rankText={metRank > 0 ? `${metRank}/${metEntries.length}${t('위', '')}` : ''}
                         />
                       </div>
                     )}
@@ -487,7 +496,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
               {/* Stat badges 2x5 grid */}
               {provInfo && (() => {
                 const perCapita = Math.round(provInfo.grdp * 1e12 / provInfo.population / 1e4);
-                const agingStage = provInfo.agingRate >= 20 ? '초고령' : provInfo.agingRate >= 14 ? '고령' : '고령화';
+                const agingStage = provInfo.agingRate >= 20 ? t('초고령', 'Super-aged') : provInfo.agingRate >= 14 ? t('고령', 'Aged') : t('고령화', 'Aging');
                 return (
                   <div style={{
                     display: 'grid',
@@ -495,73 +504,73 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     gap: '5px',
                     marginBottom: '10px',
                   }}>
-                    <StatBadge label="인구" value={formatPop(provInfo.population)} color="#b388ff"
-                      info="행정안전부 주민등록인구 (2024.12)"
+                    <StatBadge label={t("인구", "Population")} value={formatPop(provInfo.population, lang)} color="#b388ff"
+                      info={t("행정안전부 주민등록인구 (2024.12)", "MOIS Registered Population (2024.12)")}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'population'} metricKey="population"
                     />
-                    <StatBadge label="1인당GRDP" value={`${perCapita}`} unit="만원" color="#ffd60a"
-                      info="GRDP÷인구. 경제 수준 대리지표. 통계청(2023)"
+                    <StatBadge label={t("1인당GRDP", "GRDP/Capita")} value={`${perCapita}`} unit={t("만원", "0K₩")} color="#ffd60a"
+                      info={t("GRDP÷인구. 경제 수준 대리지표. 통계청(2023)", "GRDP÷Population. Economic proxy. KOSTAT(2023)")}
                       rawValue={perCapita} avg={NATIONAL_AVG.grdpPerCapita} higherIsBetter={true}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'grdpPerCapita'} metricKey="grdpPerCapita"
                     />
-                    <StatBadge label="고령화" value={`${provInfo.agingRate}%`} unit={agingStage} color="#ff8c00"
-                      info="65세↑ 비율. 14%↑ 고령사회, 20%↑ 초고령사회. 통계청(2024)"
+                    <StatBadge label={t("고령화", "Aging")} value={`${provInfo.agingRate}%`} unit={agingStage} color="#ff8c00"
+                      info={t("65세↑ 비율. 14%↑ 고령사회, 20%↑ 초고령사회. 통계청(2024)", "Age 65+ ratio. 14%+ aged, 20%+ super-aged. KOSTAT(2024)")}
                       rawValue={provInfo.agingRate} avg={NATIONAL_AVG.agingRate} higherIsBetter={false}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'agingRate'} metricKey="agingRate"
                     />
-                    <StatBadge label="기대수명" value={`${provInfo.lifeExpectancy}`} unit="세" color="#00ff88"
-                      info="출생 시 기대여명. 통계청(2022)"
+                    <StatBadge label={t("기대수명", "Life Expectancy")} value={`${provInfo.lifeExpectancy}`} unit={t("세", "yr")} color="#00ff88"
+                      info={t("출생 시 기대여명. 통계청(2022)", "Life expectancy at birth. KOSTAT(2022)")}
                       rawValue={provInfo.lifeExpectancy} avg={NATIONAL_AVG.lifeExpectancy} higherIsBetter={true}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'lifeExpectancy'} metricKey="lifeExpectancy"
                     />
                     <StatBadge
-                      label="상급종합"
+                      label={t("상급종합", "Tertiary Hosp")}
                       value={`${provInfo.tertiaryHospitals}`}
-                      unit="개소"
+                      unit={t("개소", "")}
                       color="#00ff88"
-                      info="복지부 3차의료기관. 제5기(2024~2026)"
+                      info={t("복지부 3차의료기관. 제5기(2024~2026)", "MOHW tertiary hospitals. 5th period(2024-2026)")}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'tertiaryHospitals'} metricKey="tertiaryHospitals"
                       tooltip={
                         provInfo.tertiaryList?.length > 0 ? (
                           <div>
                             <div style={{ fontSize: '10px', color: '#00ff88', fontWeight: 700, marginBottom: '4px' }}>
-                              상급종합병원 ({provInfo.tertiaryHospitals}개)
+                              {t(`상급종합병원 (${provInfo.tertiaryHospitals}개)`, `Tertiary Hospitals (${provInfo.tertiaryHospitals})`)}
                             </div>
                             {provInfo.tertiaryList.map((h, i) => (
                               <div key={i} style={{ fontSize: '10px', color: '#ccc', lineHeight: 1.6 }}>· {h}</div>
                             ))}
                             <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
-                              인구당 {(provInfo.tertiaryHospitals / (provInfo.population / 1e6)).toFixed(1)}개/백만명
+                              {t(`인구당 ${(provInfo.tertiaryHospitals / (provInfo.population / 1e6)).toFixed(1)}개/백만명`, `${(provInfo.tertiaryHospitals / (provInfo.population / 1e6)).toFixed(1)} per million`)}
                             </div>
                           </div>
                         ) : (
-                          <div style={{ fontSize: '10px', color: '#888' }}>상급종합병원 없음</div>
+                          <div style={{ fontSize: '10px', color: '#888' }}>{t('상급종합병원 없음', 'No tertiary hospitals')}</div>
                         )
                       }
                     />
-                    <StatBadge label="의사밀도" value={provInfo.doctorsPerThousand.toFixed(1)} unit="/천명" color="#00d4ff"
-                      info="인구 1,000명당 의사 수. OECD 평균 3.7명. KOSIS(2022)"
+                    <StatBadge label={t("의사밀도", "Doctor Density")} value={provInfo.doctorsPerThousand.toFixed(1)} unit={t("/천명", "/1K")} color="#00d4ff"
+                      info={t("인구 1,000명당 의사 수. OECD 평균 3.7명. KOSIS(2022)", "Doctors per 1,000 pop. OECD avg 3.7. KOSIS(2022)")}
                       rawValue={provInfo.doctorsPerThousand} avg={NATIONAL_AVG.doctorsPerThousand} higherIsBetter={true}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'doctorsPerThousand'} metricKey="doctorsPerThousand"
                     />
-                    <StatBadge label="미충족의료" value={`${provInfo.unmetMedical}%`}
+                    <StatBadge label={t("미충족의료", "Unmet Medical")} value={`${provInfo.unmetMedical}%`}
                       color={provInfo.unmetMedical >= 9 ? '#ff4444' : provInfo.unmetMedical >= 7 ? '#ffd60a' : '#00ff88'}
-                      info="병의원 못 간 경험 비율. 지역건강조사(2023)"
+                      info={t("병의원 못 간 경험 비율. 지역건강조사(2023)", "Unmet healthcare needs rate. CHS(2023)")}
                       rawValue={provInfo.unmetMedical} avg={NATIONAL_AVG.unmetMedical} higherIsBetter={false}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'unmetMedical'} metricKey="unmetMedical"
                     />
-                    <StatBadge label="흡연율" value={`${provInfo.smokingRate}%`} color="#ff6b6b"
-                      info="현재흡연율. 건강검진통계연보(2024)"
+                    <StatBadge label={t("흡연율", "Smoking")} value={`${provInfo.smokingRate}%`} color="#ff6b6b"
+                      info={t("현재흡연율. 건강검진통계연보(2024)", "Current smoking rate. Health Screening(2024)")}
                       rawValue={provInfo.smokingRate} avg={NATIONAL_AVG.smokingRate} higherIsBetter={false}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'smokingRate'} metricKey="smokingRate"
                     />
-                    <StatBadge label="음주율" value={`${provInfo.drinkingRate}%`} color="#845ef7"
-                      info="주2회이상 음주율. 건강검진통계연보(2024)"
+                    <StatBadge label={t("음주율", "Drinking")} value={`${provInfo.drinkingRate}%`} color="#845ef7"
+                      info={t("주2회이상 음주율. 건강검진통계연보(2024)", "Drinking 2+/week rate. Health Screening(2024)")}
                       rawValue={provInfo.drinkingRate} avg={NATIONAL_AVG.drinkingRate} higherIsBetter={false}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'drinkingRate'} metricKey="drinkingRate"
                     />
-                    <StatBadge label="운동부족" value={`${provInfo.noExerciseRate}%`} color="#fd7e14"
-                      info="고강도 운동 미실천율(0일). 건강검진통계연보(2024)"
+                    <StatBadge label={t("운동부족", "Low Exercise")} value={`${provInfo.noExerciseRate}%`} color="#fd7e14"
+                      info={t("고강도 운동 미실천율(0일). 건강검진통계연보(2024)", "No vigorous exercise rate. Health Screening(2024)")}
                       rawValue={provInfo.noExerciseRate} avg={NATIONAL_AVG.noExerciseRate} higherIsBetter={false}
                       onClick={(k) => setExpandedBadge(expandedBadge === k ? null : k)} isExpanded={expandedBadge === 'noExerciseRate'} metricKey="noExerciseRate"
                     />
@@ -579,14 +588,14 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                   marginBottom: '8px',
                 }}>
                   <div style={{ fontSize: '11px', color: '#e74c3c', fontWeight: 700, marginBottom: '8px' }}>
-                    뇌졸중 지표 — {selectedProvince.name}
+                    {t('뇌졸중 지표', 'Stroke Indicators')} — {lang === 'en' ? (T.provinces[selectedProvince.name] || selectedProvince.name) : selectedProvince.name}
                   </div>
-                  <CompareBar label="발생률 (건/10만)" value={provInfo.strokeIncidence} avg={NATIONAL_AVG.strokeIncidence} min={95} max={140} color="#e74c3c" higherIsBetter={false} />
-                  <CompareBar label="사망률 (명/10만)" value={provInfo.strokeMortality} avg={NATIONAL_AVG.strokeMortality} min={25} max={45} color="#c0392b" higherIsBetter={false} />
-                  <CompareBar label="tPA 시술률 (%)" value={provInfo.tpaRate} avg={NATIONAL_AVG.tpaRate} min={3} max={16} color="#3498db" unit="%" higherIsBetter={true} />
-                  <CompareBar label="골든타임 도착률 (%)" value={provInfo.goldenTimeRate} avg={NATIONAL_AVG.goldenTimeRate} min={20} max={55} color="#2ecc71" unit="%" higherIsBetter={true} />
+                  <CompareBar label={t("발생률 (건/10만)", "Incidence (/100K)")} value={provInfo.strokeIncidence} avg={NATIONAL_AVG.strokeIncidence} min={95} max={140} color="#e74c3c" higherIsBetter={false} />
+                  <CompareBar label={t("사망률 (명/10만)", "Mortality (/100K)")} value={provInfo.strokeMortality} avg={NATIONAL_AVG.strokeMortality} min={25} max={45} color="#c0392b" higherIsBetter={false} />
+                  <CompareBar label={t("tPA 시술률 (%)", "tPA Rate (%)")} value={provInfo.tpaRate} avg={NATIONAL_AVG.tpaRate} min={3} max={16} color="#3498db" unit="%" higherIsBetter={true} />
+                  <CompareBar label={t("골든타임 도착률 (%)", "Golden Time Arrival (%)")} value={provInfo.goldenTimeRate} avg={NATIONAL_AVG.goldenTimeRate} min={20} max={55} color="#2ecc71" unit="%" higherIsBetter={true} />
                   <div style={{ fontSize: '9px', color: '#555570', marginTop: '4px' }}>
-                    출처: KDCA 심뇌혈관질환 발생통계(2022), 심평원 | tPA·골든타임: 추정치
+                    {t('출처: KDCA 심뇌혈관질환 발생통계(2022), 심평원 | tPA·골든타임: 추정치', 'Source: KDCA CVD Statistics(2022), HIRA | tPA·Golden Time: Estimated')}
                   </div>
                 </div>
               )}
@@ -601,14 +610,14 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                   marginBottom: '8px',
                 }}>
                   <div style={{ fontSize: '10px', color: '#ff006e', fontWeight: 700, marginBottom: '4px' }}>
-                    비만 동반질환 위험 (OR)
+                    {t('비만 동반질환 위험 (OR)', 'Obesity Comorbidity Risk (OR)')}
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {[
-                      { label: '당뇨', or: '5.2배', color: '#00d4ff' },
-                      { label: '대사증후군', or: '3.1배', color: '#ffd60a' },
-                      { label: '고혈압', or: '2.1배', color: '#ff6b6b' },
-                      { label: '이상지질혈증', or: '1.9배', color: '#b388ff' },
+                      { label: t('당뇨', 'Diabetes'), or: t('5.2배', '5.2x'), color: '#00d4ff' },
+                      { label: t('대사증후군', 'MetS'), or: t('3.1배', '3.1x'), color: '#ffd60a' },
+                      { label: t('고혈압', 'HTN'), or: t('2.1배', '2.1x'), color: '#ff6b6b' },
+                      { label: t('이상지질혈증', 'Dyslipidemia'), or: t('1.9배', '1.9x'), color: '#b388ff' },
                     ].map(item => (
                       <span key={item.label} style={{
                         fontSize: '10px', padding: '2px 7px', borderRadius: '10px',
@@ -620,7 +629,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     ))}
                   </div>
                   <div style={{ fontSize: '9px', color: '#555570', marginTop: '4px' }}>
-                    출처: 대한비만학회 Fact Sheet 2024
+                    {t('출처: 대한비만학회 Fact Sheet 2024', 'Source: Korean Society for Obesity Fact Sheet 2024')}
                   </div>
                 </div>
               )}
@@ -629,9 +638,9 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
               {expandedBadge && (() => {
                 const ranked = getRankedList(expandedBadge);
                 const badgeLabels = {
-                  population: '인구', grdpPerCapita: '1인당GRDP', agingRate: '고령화율',
-                  lifeExpectancy: '기대수명', tertiaryHospitals: '상급종합', doctorsPerThousand: '의사밀도',
-                  unmetMedical: '미충족의료', smokingRate: '흡연율', drinkingRate: '음주율', noExerciseRate: '운동부족',
+                  population: t('인구', 'Population'), grdpPerCapita: t('1인당GRDP', 'GRDP/Capita'), agingRate: t('고령화율', 'Aging Rate'),
+                  lifeExpectancy: t('기대수명', 'Life Expectancy'), tertiaryHospitals: t('상급종합', 'Tertiary Hosp'), doctorsPerThousand: t('의사밀도', 'Doctor Density'),
+                  unmetMedical: t('미충족의료', 'Unmet Medical'), smokingRate: t('흡연율', 'Smoking'), drinkingRate: t('음주율', 'Drinking'), noExerciseRate: t('운동부족', 'Low Exercise'),
                 };
                 return (
                   <motion.div
@@ -647,7 +656,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     }}
                   >
                     <div style={{ fontSize: '10px', color: '#8888aa', marginBottom: '6px', fontWeight: 600 }}>
-                      {badgeLabels[expandedBadge] || expandedBadge} — 전국 순위
+                      {badgeLabels[expandedBadge] || expandedBadge} — {t('전국 순위', 'National Ranking')}
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 12px' }}>
                       {ranked.map((entry, i) => (
@@ -660,7 +669,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                             {i + 1}.
                           </span>
                           <span style={{ color: entry.name === selectedProvince?.name ? '#e8e8f0' : '#aaa', flex: 1 }}>
-                            {entry.name}
+                            {lang === 'en' ? (T.provinces[entry.name] || entry.name) : entry.name}
                           </span>
                           <span style={{ color: entry.name === selectedProvince?.name ? '#00d4ff' : '#ccc', fontFamily: "'JetBrains Mono'", fontWeight: entry.name === selectedProvince?.name ? 700 : 400 }}>
                             {entry.formatted}
@@ -677,15 +686,15 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                 const perCapita = Math.round(provInfo.grdp * 1e12 / provInfo.population / 1e4);
                 return (
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
-                    <InfoBox title="📊 사회경제" color="#ffd60a">
-                      <CompareBar label="1인당 GRDP" value={perCapita} avg={NATIONAL_AVG.grdpPerCapita} min={2000} max={9000} color="#ffd60a" higherIsBetter={true} />
-                      <CompareBar label="고령화율" value={provInfo.agingRate} avg={NATIONAL_AVG.agingRate} min={10} max={28} color="#ff8c00" unit="%" higherIsBetter={false} />
-                      <CompareBar label="기대수명" value={provInfo.lifeExpectancy} avg={NATIONAL_AVG.lifeExpectancy} min={80} max={86} color="#00ff88" unit="세" higherIsBetter={true} />
+                    <InfoBox title={t("📊 사회경제", "📊 Socioeconomic")} color="#ffd60a">
+                      <CompareBar label={t("1인당 GRDP", "GRDP/Capita")} value={perCapita} avg={NATIONAL_AVG.grdpPerCapita} min={2000} max={9000} color="#ffd60a" higherIsBetter={true} />
+                      <CompareBar label={t("고령화율", "Aging Rate")} value={provInfo.agingRate} avg={NATIONAL_AVG.agingRate} min={10} max={28} color="#ff8c00" unit="%" higherIsBetter={false} />
+                      <CompareBar label={t("기대수명", "Life Expectancy")} value={provInfo.lifeExpectancy} avg={NATIONAL_AVG.lifeExpectancy} min={80} max={86} color="#00ff88" unit={t("세", "yr")} higherIsBetter={true} />
                     </InfoBox>
-                    <InfoBox title="🏥 의료·건강행태" color="#00d4ff">
-                      <CompareBar label="의사밀도" value={provInfo.doctorsPerThousand} avg={NATIONAL_AVG.doctorsPerThousand} min={1.0} max={3.8} color="#00d4ff" higherIsBetter={true} />
-                      <CompareBar label="미충족의료" value={provInfo.unmetMedical} avg={NATIONAL_AVG.unmetMedical} min={4} max={12} color="#ff4444" unit="%" higherIsBetter={false} />
-                      <CompareBar label="흡연율" value={provInfo.smokingRate} avg={NATIONAL_AVG.smokingRate} min={12} max={24} color="#ff6b6b" unit="%" higherIsBetter={false} />
+                    <InfoBox title={t("🏥 의료·건강행태", "🏥 Healthcare & Behavior")} color="#00d4ff">
+                      <CompareBar label={t("의사밀도", "Doctor Density")} value={provInfo.doctorsPerThousand} avg={NATIONAL_AVG.doctorsPerThousand} min={1.0} max={3.8} color="#00d4ff" higherIsBetter={true} />
+                      <CompareBar label={t("미충족의료", "Unmet Medical")} value={provInfo.unmetMedical} avg={NATIONAL_AVG.unmetMedical} min={4} max={12} color="#ff4444" unit="%" higherIsBetter={false} />
+                      <CompareBar label={t("흡연율", "Smoking")} value={provInfo.smokingRate} avg={NATIONAL_AVG.smokingRate} min={12} max={24} color="#ff6b6b" unit="%" higherIsBetter={false} />
                     </InfoBox>
                   </div>
                 );
@@ -701,7 +710,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                   marginBottom: '8px',
                 }}>
                   <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '4px', fontWeight: 600 }}>
-                    건강 프로필 레이더
+                    {t('건강 프로필 레이더', 'Health Profile Radar')}
                   </div>
                   <div style={{ height: '220px' }}>
                     <RadarProfile

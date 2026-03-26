@@ -5,6 +5,8 @@ import { PROV_LABELS } from '../data/prov_labels';
 import { BMI_PROV } from '../data/bmi_prov';
 import { MET_PROV } from '../data/met_prov';
 import { PROVINCE_INFO } from '../data/province_info';
+import { useLang } from '../i18n';
+import { T } from '../translations';
 
 function interpolateColor(value, min, max, colors) {
   const t = Math.max(0, Math.min(1, (value - min) / (max - min)));
@@ -37,6 +39,7 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
   const [selected, setSelected] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
+  const { t, lang } = useLang();
 
   const yearIndex = year - 2015;
   const colors = metric === 'stroke' ? STROKE_COLORS : metric === 'obesity' ? OBESITY_COLORS : METABOLIC_COLORS;
@@ -100,11 +103,11 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
 
         {/* Ulleungdo */}
         <circle cx="385" cy="120" r="5" fill="#2a2a3a" stroke="rgba(255,255,255,0.4)" strokeWidth={0.8} />
-        <text x="385" y="134" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>울릉도</text>
+        <text x="385" y="134" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>{t('울릉도', 'Ulleungdo')}</text>
 
         {/* Dokdo */}
         <circle cx="408" cy="115" r="2.5" fill="#2a2a3a" stroke="rgba(255,255,255,0.4)" strokeWidth={0.8} />
-        <text x="408" y="106" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>독도</text>
+        <text x="408" y="106" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>{t('독도', 'Dokdo')}</text>
 
         {/* Siren animation */}
         <style>{`
@@ -198,7 +201,7 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
             {range[0]}{metric === 'stroke' ? '' : '%'}
           </text>
           <text x="4" y="-10" fontSize="9" fill="#555570" fontFamily="'Noto Sans KR'" textAnchor="start">
-            {metric === 'obesity' ? '비만율' : metric === 'stroke' ? '뇌졸중 발생률' : '대사증후군'}
+            {metric === 'obesity' ? t('비만율', 'Obesity Rate') : metric === 'stroke' ? t('뇌졸중 발생률', 'Stroke Incidence') : t('대사증후군', 'Metabolic Syndrome')}
           </text>
         </g>
       </svg>
@@ -225,7 +228,7 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
               whiteSpace: 'nowrap',
             }}
           >
-            <span style={{ fontSize: '11px', fontWeight: 700, color: '#00d4ff' }}>{hovered}</span>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#00d4ff' }}>{lang === 'en' ? (T.provinces[hovered] || hovered) : hovered}</span>
             <span style={{ fontSize: '14px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: '#e8e8f0', marginLeft: '6px' }}>
               {provinces.find(p => p.name === hovered)?.value?.toFixed(1) ?? 'N/A'}{metric === 'stroke' ? '' : '%'}
             </span>

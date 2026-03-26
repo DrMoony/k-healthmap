@@ -5,6 +5,8 @@ import { MET_PROV } from '../data/met_prov';
 import { TRENDS } from '../data/trends';
 import { getProvinceInsight, getAgeInsight } from '../data/insights';
 import DumbbellChart from '../components/DumbbellChart';
+import { useLang } from '../i18n';
+import { T } from '../translations';
 
 const PROVINCES = [
   '서울','부산','대구','인천','광주','대전','울산','세종',
@@ -79,6 +81,8 @@ const glowText = (color) => ({
 });
 
 export default function Metabolic() {
+  const { lang, t } = useLang();
+  const pn = (name) => lang === 'en' ? (T.provinces[name] || name) : name;
   const [year, setYear] = useState(2024);
   const [gender, setGender] = useState('total');
   const [metric, setMetric] = useState('obesity'); // obesity | metabolic
@@ -110,7 +114,7 @@ export default function Metabolic() {
     .sort((a, b) => b.value - a.value);
 
   const nationalAvg = metric === 'obesity' ? TRENDS.obesity[yearIdx] : TRENDS.metabolic[yearIdx];
-  const genderLabel = gender === 'male' ? '남성' : gender === 'female' ? '여성' : '전체';
+  const genderLabel = gender === 'male' ? t('남성','Male') : gender === 'female' ? t('여성','Female') : t('전체','Total');
 
   // Build heatmap matrix: rows=age, cols=province
   const ageRates = AGE_GROUPS.map(a => getAgeObesityByGender(a, gender));
@@ -260,7 +264,7 @@ export default function Metabolic() {
       setTooltip({
         x: e.clientX,
         y: e.clientY,
-        text: `${PROVINCES[pi]} · ${AGE_GROUPS[ai]}세 — ${val != null ? val + '%' : 'N/A'}`,
+        text: `${pn(PROVINCES[pi])} · ${AGE_GROUPS[ai]}${t('세','y/o')} — ${val != null ? val + '%' : 'N/A'}`,
       });
     } else {
       setHoveredCell(null);
@@ -382,8 +386,8 @@ export default function Metabolic() {
         {/* Metric toggle */}
         <div style={{ display: 'flex', gap: '6px' }}>
           {[
-            { id: 'obesity', label: '비만율', color: '#ff006e' },
-            { id: 'metabolic', label: '대사증후군', color: '#ffd60a' },
+            { id: 'obesity', label: t('비만율','Obesity Rate'), color: '#ff006e' },
+            { id: 'metabolic', label: t('대사증후군','Metabolic Syndrome'), color: '#ffd60a' },
           ].map(m => (
             <button key={m.id} onClick={() => setMetric(m.id)} style={{
               background: metric === m.id ? `${m.color}22` : 'transparent',
@@ -407,7 +411,7 @@ export default function Metabolic() {
 
         {/* Year selector */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ fontSize: '11px', color: '#8888aa' }}>연도</span>
+          <span style={{ fontSize: '11px', color: '#8888aa' }}>{t('연도','Year')}</span>
           <select
             value={year}
             onChange={e => setYear(+e.target.value)}
@@ -433,9 +437,9 @@ export default function Metabolic() {
         {/* Gender toggle */}
         <div style={{ display: 'flex', gap: '4px' }}>
           {[
-            { id: 'total', label: '전체' },
-            { id: 'male', label: '남' },
-            { id: 'female', label: '여' },
+            { id: 'total', label: t('전체','Total') },
+            { id: 'male', label: t('남','M') },
+            { id: 'female', label: t('여','F') },
           ].map(g => (
             <button key={g.id} onClick={() => setGender(g.id)} style={{
               background: gender === g.id ? '#00d4ff22' : 'transparent',
@@ -458,7 +462,7 @@ export default function Metabolic() {
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '16px', alignItems: 'center' }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '10px', color: '#8888aa' }}>
-              {year}년 전국 {metric === 'obesity' ? '비만율' : '대사증후군'}
+              {year} {t('전국','National')} {metric === 'obesity' ? t('비만율','Obesity Rate') : t('대사증후군','Metabolic Syndrome')}
             </div>
             <div style={{
               fontSize: '20px',
@@ -488,20 +492,20 @@ export default function Metabolic() {
           alignItems: 'center',
         }}>
           <span>
-            <span style={glowText('#00d4ff')}>연령 x 시도</span> {metric === 'obesity' ? '비만율' : '대사증후군'} 히트맵
+            <span style={glowText('#00d4ff')}>{t('연령 x 시도','Age x Province')}</span> {metric === 'obesity' ? t('비만율','Obesity Rate') : t('대사증후군','Metabolic Syndrome')} {t('히트맵','Heatmap')}
             <span style={{ display: 'block', color: '#ffd60a', fontSize: '10px', fontWeight: 400, marginTop: '2px' }}>
-              ※ 추정값: 연령별·시도별 비만율의 교차 추정치입니다. 실측 교차데이터가 아닌 통계적 근사값으로 해석에 주의가 필요합니다.
+              {t('※ 추정값: 연령별·시도별 비만율의 교차 추정치입니다. 실측 교차데이터가 아닌 통계적 근사값으로 해석에 주의가 필요합니다.', '※ Estimated: Cross-estimated values from age and province obesity rates. Statistical approximations, not actual cross-tabulated data.')}
             </span>
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '10px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
               <div style={{ width: 12, height: 8, background: heatColor(heatMin, heatMin, heatMax), borderRadius: 2 }} />
-              <span>낮음</span>
+              <span>{t('낮음','Low')}</span>
             </div>
             <div style={{ width: 60, height: 8, borderRadius: 4, background: `linear-gradient(90deg, ${heatColor(heatMin, heatMin, heatMax)}, ${heatColor((heatMin+heatMax)/2, heatMin, heatMax)}, ${heatColor(heatMax, heatMin, heatMax)})` }} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
               <div style={{ width: 12, height: 8, background: heatColor(heatMax, heatMin, heatMax), borderRadius: 2 }} />
-              <span>높음</span>
+              <span>{t('높음','High')}</span>
             </div>
           </div>
         </div>
@@ -524,9 +528,9 @@ export default function Metabolic() {
         flexDirection: 'column',
       }}>
         <div style={{ fontSize: '12px', color: '#8888aa', marginBottom: '8px' }}>
-          <span style={glowText('#00ff88')}>시도별 순위</span>
+          <span style={glowText('#00ff88')}>{t('시도별 순위','Provincial Ranking')}</span>
           <span style={{ marginLeft: '6px', fontSize: '10px' }}>
-            ({year}년 {genderLabel} {metric === 'obesity' ? '비만율' : '대사증후군'})
+            ({year} {genderLabel} {metric === 'obesity' ? t('비만율','Obesity Rate') : t('대사증후군','Metabolic Syndrome')})
           </span>
         </div>
         <svg viewBox={`0 0 ${rankChartW} ${provRanking.length * (barH + barGap) + 20}`} style={{ width: '100%', height: 'auto', flexShrink: 0 }}>
@@ -552,7 +556,7 @@ export default function Metabolic() {
                 textAnchor="middle"
                 opacity={0.8}
               >
-                전국 {nationalAvg}%
+                {t('전국','Nat\'l')} {nationalAvg}%
               </text>
             </>
           )}
@@ -579,7 +583,7 @@ export default function Metabolic() {
                   textAnchor="end"
                   dominantBaseline="middle"
                 >
-                  {p.name}
+                  {pn(p.name)}
                 </text>
                 <rect
                   x={60} y={y + 2}
@@ -639,14 +643,14 @@ export default function Metabolic() {
           overflow: 'hidden',
         }}>
           <div style={{ fontSize: '12px', color: '#8888aa', marginBottom: '6px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-            <span style={glowText('#ff006e')}>성별 비교</span>
+            <span style={glowText('#ff006e')}>{t('성별 비교','Gender Comparison')}</span>
             <span style={{ fontSize: '10px' }}>
-              ({metric === 'obesity' ? '비만율 (BMI 25+)' : '대사증후군 위험군'})
+              ({metric === 'obesity' ? t('비만율 (BMI 25+)','Obesity Rate (BMI 25+)') : t('대사증후군 위험군','Metabolic Syndrome Risk')})
             </span>
             <div style={{ display: 'flex', gap: '3px', marginLeft: '8px' }}>
               {[
-                { key: 'bar', label: '바' },
-                { key: 'dumbbell', label: '덤벨' },
+                { key: 'bar', label: t('바','Bar') },
+                { key: 'dumbbell', label: t('덤벨','Dumbbell') },
               ].map(v => (
                 <button key={v.key} onClick={() => setGenderView(v.key)} style={{
                   padding: '2px 7px', fontSize: '10px', borderRadius: '4px',
@@ -658,15 +662,15 @@ export default function Metabolic() {
               ))}
             </div>
             <div style={{ display: 'flex', gap: '12px', marginLeft: 'auto', fontSize: '10px' }}>
-              <span style={{ color: '#00d4ff' }}>● 남성</span>
-              <span style={{ color: '#ff006e' }}>● 여성</span>
+              <span style={{ color: '#00d4ff' }}>{t('● 남성','● Male')}</span>
+              <span style={{ color: '#ff006e' }}>{t('● 여성','● Female')}</span>
             </div>
           </div>
           <div style={{ flex: 1, minHeight: 0, overflowX: 'auto', overflowY: 'hidden' }}>
             {genderView === 'dumbbell' ? (
               <DumbbellChart
                 data={genderCompData}
-                label={metric === 'obesity' ? '비만율 성별 격차' : '대사증후군 성별 격차'}
+                label={metric === 'obesity' ? t('비만율 성별 격차','Obesity Rate Gender Gap') : t('대사증후군 성별 격차','Metabolic Syndrome Gender Gap')}
                 onItemClick={(name) => {
                   setSelectedProv(prev => prev === name ? null : name);
                 }}
@@ -695,7 +699,7 @@ export default function Metabolic() {
                     <text x={x + 9} y={maxBarH - maleH} fill="#00d4ff" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.9}>{d.male}</text>
                     <rect x={x + 22} y={maxBarH - femaleH + 5} width={18} height={femaleH} rx={3} fill="#ff006e" opacity={femaleOpacity} />
                     <text x={x + 31} y={maxBarH - femaleH} fill="#ff006e" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" opacity={0.9}>{d.female}</text>
-                    <text x={x + 20} y={maxBarH + 20} fill={isSelected ? '#ffd60a' : '#8888aa'} fontSize="10" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">{d.name}</text>
+                    <text x={x + 20} y={maxBarH + 20} fill={isSelected ? '#ffd60a' : '#8888aa'} fontSize="10" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">{pn(d.name)}</text>
                     {isSelected && (
                       <rect x={x - 2} y={2} width={44} height={maxBarH + 24} rx={6} fill="none" stroke="#ffd60a44" strokeWidth={1} />
                     )}
@@ -732,7 +736,7 @@ export default function Metabolic() {
             paddingBottom: '6px',
             borderBottom: '1px solid rgba(255,255,255,0.06)',
           }}>
-            <span style={{ fontSize: '10px', color: '#555577', flexShrink: 0 }}>선택:</span>
+            <span style={{ fontSize: '10px', color: '#555577', flexShrink: 0 }}>{t('선택:','Selection:')}</span>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -785,14 +789,14 @@ export default function Metabolic() {
                     gap: '3px',
                   }}
                 >
-                  {selectedAge}세
+                  {selectedAge}{t('세','y/o')}
                   <span style={{ fontSize: '9px', opacity: 0.6 }}>x</span>
                 </span>
               ) : null}
 
               {/* Nothing selected */}
               {!selectedProv && !selectedAge && (
-                <span style={{ fontSize: '10px', color: '#555577' }}>전국</span>
+                <span style={{ fontSize: '10px', color: '#555577' }}>{t('전국','National')}</span>
               )}
             </div>
           </div>
@@ -817,7 +821,7 @@ export default function Metabolic() {
                   padding: '12px',
                   lineHeight: 1.6,
                 }}>
-                  시도 또는 연령대를 클릭하면<br />분석 결과가 표시됩니다
+                  {t('시도 또는 연령대를 클릭하면','Click a province or age group')}<br />{t('분석 결과가 표시됩니다','to see analysis results')}
                 </div>
               );
             }
@@ -893,7 +897,7 @@ export default function Metabolic() {
                       borderRadius: '6px',
                       border: '1px solid rgba(255,255,255,0.05)',
                     }}>
-                      {selectedAge}세 연령대에서 {selectedProv}은 <strong>{rankInfo.rank}위</strong>/{rankInfo.total}개 시도
+                      {t(`${selectedAge}세 연령대에서 ${selectedProv}은`, `In the ${selectedAge} age group, ${pn(selectedProv)} is`)} <strong>{t(`${rankInfo.rank}위`,`#${rankInfo.rank}`)}</strong>/{rankInfo.total} {t('개 시도','provinces')}
                       {rankInfo.rank <= 3 && ' \u2014 상위권 (관리 필요)'}
                       {rankInfo.rank >= rankInfo.total - 2 && ' \u2014 양호 수준'}
                     </div>
@@ -936,7 +940,7 @@ export default function Metabolic() {
                       borderLeft: '2px solid #00d4ff44',
                     }}>
                       <div style={{ fontSize: '10px', fontWeight: 600, color: '#00d4ff', marginBottom: '2px' }}>
-                        {selectedAge}세 임상 컨텍스트
+                        {selectedAge}{t('세 임상 컨텍스트', ' Clinical Context')}
                       </div>
                       <div style={{ color: '#bbbbdd', fontSize: '10px' }}>
                         {ageInsight.note}
@@ -946,14 +950,14 @@ export default function Metabolic() {
 
                   {/* BMI distributions */}
                   <div style={{ marginTop: '6px' }}>
-                    {renderBmiDist(`${selectedProv} BMI 분포`, provVals)}
-                    {renderBmiDist(`${selectedAge}세 BMI 분포`, ageVals)}
+                    {renderBmiDist(`${pn(selectedProv)} ${t('BMI 분포','BMI Distribution')}`, provVals)}
+                    {renderBmiDist(`${selectedAge}${t('세 BMI 분포',' BMI Distribution')}`, ageVals)}
                   </div>
 
                   {/* Correlations if available */}
                   {provInsight?.correlations?.length > 0 && (
                     <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
-                      <div style={{ color: '#8888aa', fontSize: '9px', marginBottom: '2px', fontWeight: 600 }}>연관 요인</div>
+                      <div style={{ color: '#8888aa', fontSize: '9px', marginBottom: '2px', fontWeight: 600 }}>{t('연관 요인','Related Factors')}</div>
                       {provInsight.correlations.slice(0, 2).map((c, i) => (
                         <div key={i} style={{ color: '#aaaacc', fontSize: '9px', marginBottom: '1px', paddingLeft: '6px' }}>
                           {'• '}{c}
@@ -998,15 +1002,15 @@ export default function Metabolic() {
 
                       {/* Gender summary */}
                       <div style={{ display: 'flex', gap: '8px', marginTop: '4px', marginBottom: '4px', fontSize: '10px' }}>
-                        <span style={{ color: '#00d4ff' }}>남 {getProvObesityByGender(selectedProv, 'male')}%</span>
-                        <span style={{ color: '#ff006e' }}>여 {getProvObesityByGender(selectedProv, 'female')}%</span>
+                        <span style={{ color: '#00d4ff' }}>{t('남','M')} {getProvObesityByGender(selectedProv, 'male')}%</span>
+                        <span style={{ color: '#ff006e' }}>{t('여','F')} {getProvObesityByGender(selectedProv, 'female')}%</span>
                       </div>
 
-                      {renderBmiDist(`${selectedProv} BMI 분포`, provVals)}
+                      {renderBmiDist(`${pn(selectedProv)} ${t('BMI 분포','BMI Distribution')}`, provVals)}
 
                       {provInsight.correlations.length > 0 && (
                         <div style={{ marginTop: '6px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
-                          <div style={{ color: '#8888aa', fontSize: '9px', marginBottom: '3px', fontWeight: 600 }}>연관 요인</div>
+                          <div style={{ color: '#8888aa', fontSize: '9px', marginBottom: '3px', fontWeight: 600 }}>{t('연관 요인','Related Factors')}</div>
                           {provInsight.correlations.map((c, i) => (
                             <div key={i} style={{ color: '#aaaacc', fontSize: '9px', marginBottom: '1px', paddingLeft: '8px' }}>
                               {'• '}{c}
@@ -1068,14 +1072,14 @@ export default function Metabolic() {
 
                       {/* Gender comparison for this age */}
                       <div style={{ display: 'flex', gap: '8px', marginBottom: '4px', fontSize: '10px' }}>
-                        <span style={{ color: '#00d4ff' }}>남 {getAgeObesityByGender(selectedAge, 'male')}%</span>
-                        <span style={{ color: '#ff006e' }}>여 {getAgeObesityByGender(selectedAge, 'female')}%</span>
+                        <span style={{ color: '#00d4ff' }}>{t('남','M')} {getAgeObesityByGender(selectedAge, 'male')}%</span>
+                        <span style={{ color: '#ff006e' }}>{t('여','F')} {getAgeObesityByGender(selectedAge, 'female')}%</span>
                         <span style={{ color: '#ffd60a' }}>
-                          차이 {Math.abs(getAgeObesityByGender(selectedAge, 'male') - getAgeObesityByGender(selectedAge, 'female')).toFixed(1)}%p
+                          {t('차이','Gap')} {Math.abs(getAgeObesityByGender(selectedAge, 'male') - getAgeObesityByGender(selectedAge, 'female')).toFixed(1)}%p
                         </span>
                       </div>
 
-                      {renderBmiDist(`${selectedAge}세 BMI 분포`, ageVals)}
+                      {renderBmiDist(`${selectedAge}${t('세 BMI 분포',' BMI Distribution')}`, ageVals)}
                     </div>
                   )}
                 </div>
@@ -1124,7 +1128,7 @@ export default function Metabolic() {
         background: '#0a0a0f',
         zIndex: 10,
       }}>
-        출처: 건강검진통계연보(NHIS 2015-2024), KOSSO 비만 팩트시트 2025, KDA 당뇨 팩트시트 2024
+        {t('출처: 건강검진통계연보(NHIS 2015-2024), KOSSO 비만 팩트시트 2025, KDA 당뇨 팩트시트 2024', 'Source: Health Screening Statistics (NHIS 2015-2024), KOSSO Obesity Fact Sheet 2025, KDA Diabetes Fact Sheet 2024')}
       </div>
     </div>
   );

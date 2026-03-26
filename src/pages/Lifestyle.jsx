@@ -2,17 +2,19 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { LIFESTYLE_DATA } from '../data/lifestyle_data';
 import { LIFESTYLE_TRENDS } from '../data/lifestyle_trends';
 import BumpChart from '../components/BumpChart';
+import { useLang } from '../i18n';
+import { T } from '../translations';
 
 const CATEGORIES = [
-  { key: 'smoking', label: '흡연', icon: '🚬', color: '#ff006e' },
-  { key: 'drinking', label: '음주', icon: '🍺', color: '#ffd60a' },
-  { key: 'exercise', label: '운동', icon: '🏃', color: '#00ff88' },
+  { key: 'smoking', label_ko: '흡연', label_en: 'Smoking', icon: '🚬', color: '#ff006e' },
+  { key: 'drinking', label_ko: '음주', label_en: 'Drinking', icon: '🍺', color: '#ffd60a' },
+  { key: 'exercise', label_ko: '운동', label_en: 'Exercise', icon: '🏃', color: '#00ff88' },
 ];
 
 const GENDERS = [
-  { key: 'total', label: '전체' },
-  { key: 'male', label: '남' },
-  { key: 'female', label: '여' },
+  { key: 'total', label_ko: '전체', label_en: 'Total' },
+  { key: 'male', label_ko: '남', label_en: 'M' },
+  { key: 'female', label_ko: '여', label_en: 'F' },
 ];
 
 const PANEL = {
@@ -22,11 +24,17 @@ const PANEL = {
   padding: '14px',
 };
 
-const METRIC_LABELS = {
+const METRIC_LABELS_KO = {
   smoking: '현재흡연율 (%)',
   drinking: '고빈도음주율 (주2회 이상, %)',
   exercise: '고강도운동 미실천율 (0일, %)',
 };
+const METRIC_LABELS_EN = {
+  smoking: 'Current Smoking Rate (%)',
+  drinking: 'Heavy Drinking Rate (2+/wk, %)',
+  exercise: 'No Vigorous Exercise Rate (0 days, %)',
+};
+const METRIC_LABELS = METRIC_LABELS_KO;
 
 function getMetricValue(category, arr) {
   if (category === 'smoking') return arr[2]; // 현재흡연%
@@ -160,7 +168,7 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
     ctx.fillStyle = '#00d4ff';
     ctx.font = '11px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`평균 ${avg}`, avgX, h - padB + 16);
+    ctx.fillText(`Avg ${avg}`, avgX, h - padB + 16);
   }, [category, gender, selectedProv]);
 
   useEffect(() => {
@@ -346,7 +354,7 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
     return (
       <div ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <span style={{ color: '#666', fontSize: '12px', fontFamily: '"Noto Sans KR", sans-serif' }}>
-          운동 트렌드 데이터는 추후 업데이트 예정
+          Exercise trend data coming soon
         </span>
       </div>
     );
@@ -431,7 +439,7 @@ function TrendChart({ category, onYearClick, selectedYear, selectedProv }) {
               <polyline fill="none" stroke="#ffffff" strokeWidth={2} strokeDasharray="6,4" strokeOpacity={0.5}
                 points={avgValues.map((v, i) => `${xScale(i)},${yScale(v)}`).join(' ')} />
               <text x={xScale(years.length - 1) + 6} y={yScale(avgValues[avgValues.length - 1]) + 3}
-                fill="#ffffff" fontSize="10" fontFamily="JetBrains Mono" fontWeight={600} opacity={0.7}>전국</text>
+                fill="#ffffff" fontSize="10" fontFamily="JetBrains Mono" fontWeight={600} opacity={0.7}>Nat'l</text>
             </g>
           );
         })()}
@@ -504,7 +512,7 @@ function GenderToggle({ value, onChange, accentColor }) {
             transition: 'all 0.2s',
           }}
         >
-          {g.label}
+          {g.label_ko}
         </button>
       ))}
     </div>
@@ -547,7 +555,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
         <div style={{ marginBottom: '8px' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedProv}</div>
           <div style={{ fontSize: '10px', color: '#8888aa' }}>
-            {provGender === 'male' ? '남성' : provGender === 'female' ? '여성' : '전체'} 기준
+            {provGender === 'male' ? 'Male' : provGender === 'female' ? 'Female' : 'Total'}
           </div>
           <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
           <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
@@ -556,7 +564,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
         </div>
         {CATEGORIES.map(c => {
           const vals = LIFESTYLE_DATA[c.key].province[selectedProv]?.[provGender];
-          return vals ? renderDistBars(`${c.icon} ${c.label}`, vals, c.color) : null;
+          return vals ? renderDistBars(`${c.icon} ${c.label_ko}`, vals, c.color) : null;
         })}
       </div>
     );
@@ -569,7 +577,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
         <div style={{ marginBottom: '8px' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedAge}세</div>
           <div style={{ fontSize: '10px', color: '#8888aa' }}>
-            {ageGender === 'male' ? '남성' : ageGender === 'female' ? '여성' : '전체'} 기준
+            {ageGender === 'male' ? 'Male' : ageGender === 'female' ? 'Female' : 'Total'}
           </div>
           <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
           <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
@@ -578,7 +586,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
         </div>
         {CATEGORIES.map(c => {
           const vals = LIFESTYLE_DATA[c.key].age[selectedAge]?.[ageGender];
-          return vals ? renderDistBars(`${c.icon} ${c.label}`, vals, c.color) : null;
+          return vals ? renderDistBars(`${c.icon} ${c.label_ko}`, vals, c.color) : null;
         })}
       </div>
     );
@@ -587,14 +595,14 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
   // Year selected
   if (selectedYear) {
     const trendKey = category === 'exercise' ? null : category;
-    if (!trendKey) return <div style={{ color: '#666', fontSize: '11px' }}>운동 트렌드 데이터 없음</div>;
+    if (!trendKey) return <div style={{ color: '#666', fontSize: '11px' }}>No exercise trend data</div>;
     const yearIdx = LIFESTYLE_TRENDS.years.indexOf(selectedYear);
     const trendData = LIFESTYLE_TRENDS[trendKey];
     const yearVals = Object.entries(trendData).map(([p, vals]) => ({ name: p, value: vals[yearIdx] })).sort((a, b) => b.value - a.value);
     const maxV = Math.max(...yearVals.map(d => d.value), 1);
     return (
       <div style={{ overflowY: 'auto', height: '100%' }}>
-        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffd60a', marginBottom: '6px' }}>{selectedYear}년 {cat.label}</div>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffd60a', marginBottom: '6px' }}>{selectedYear} {cat.label_ko}</div>
         {yearVals.map((d, i) => (
           <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
             <span style={{ fontSize: '10px', color: i < 3 ? cat.color : i >= yearVals.length - 3 ? '#00d4ff' : '#8888aa', width: '36px', textAlign: 'right', flexShrink: 0 }}>{d.name}</span>
@@ -611,7 +619,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
   // Default: national summary
   return (
     <div style={{ overflowY: 'auto', height: '100%' }}>
-      <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '8px' }}>전국 평균 요약</div>
+      <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '8px' }}>National Summary</div>
       {CATEGORIES.map(c => {
         const avg = getNationalAvg(c.key, 'total');
         const ranking = getProvinceRanking(c.key, 'total');
@@ -621,23 +629,26 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
           <div key={c.key} style={{ marginBottom: '10px', padding: '6px 8px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
               <span>{c.icon}</span>
-              <span style={{ fontSize: '11px', color: c.color, fontWeight: 600 }}>{c.label}</span>
+              <span style={{ fontSize: '11px', color: c.color, fontWeight: 600 }}>{c.label_ko}</span>
               <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace', marginLeft: 'auto' }}>{avg}%</span>
             </div>
             <div style={{ fontSize: '10px', color: '#8888aa', display: 'flex', justifyContent: 'space-between' }}>
-              <span>최고: <span style={{ color: c.color }}>{top.name} {top.value}%</span></span>
-              <span>최저: <span style={{ color: '#00d4ff' }}>{bottom.name} {bottom.value}%</span></span>
+              <span>Top: <span style={{ color: c.color }}>{top.name} {top.value}%</span></span>
+              <span>Low: <span style={{ color: '#00d4ff' }}>{bottom.name} {bottom.value}%</span></span>
             </div>
           </div>
         );
       })}
-      <div style={{ fontSize: '10px', color: '#555', marginTop: '4px' }}>차트를 클릭하면 상세 정보가 표시됩니다</div>
+      <div style={{ fontSize: '10px', color: '#555', marginTop: '4px' }}>Click charts for details</div>
     </div>
   );
 }
 
 // ── Main Export ──
 export default function Lifestyle() {
+  const { lang, t } = useLang();
+  const pn = (name) => lang === 'en' ? (T.provinces[name] || name) : name;
+  const ml = (labels) => lang === 'en' ? labels.label_en : labels.label_ko;
   const [category, setCategory] = useState('smoking');
   const [provGender, setProvGender] = useState('total');
   const [ageGender, setAgeGender] = useState('total');
@@ -685,7 +696,7 @@ export default function Lifestyle() {
         alignItems: 'center',
         gap: '8px',
       }}>
-        <span style={{ color: '#666', fontSize: '12px', marginRight: '4px' }}>생활습관</span>
+        <span style={{ color: '#666', fontSize: '12px', marginRight: '4px' }}>{t('생활습관','Lifestyle')}</span>
         {CATEGORIES.map(c => (
           <button
             key={c.key}
@@ -708,19 +719,19 @@ export default function Lifestyle() {
             }}
           >
             <span>{c.icon}</span>
-            <span>{c.label}</span>
+            <span>{ml(c)}</span>
           </button>
         ))}
         <div style={{ flex: 1 }} />
         <span style={{ color: '#555', fontSize: '11px', fontFamily: '"JetBrains Mono", monospace' }}>
-          {METRIC_LABELS[category]}
+          {lang === 'en' ? METRIC_LABELS_EN[category] : METRIC_LABELS_KO[category]}
         </span>
       </div>
 
       {/* Row 2 Left: Province Comparison */}
       <div style={{ ...PANEL, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
-          <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>시도별 비교</span>
+          <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>{t('시도별 비교','Provincial Comparison')}</span>
           <GenderToggle value={provGender} onChange={setProvGender} accentColor={cat.color} />
         </div>
         <div style={{ flex: 1, minHeight: 0 }}>
@@ -731,7 +742,7 @@ export default function Lifestyle() {
       {/* Row 2 Right: Age Distribution */}
       <div style={{ ...PANEL, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
-          <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>연령별 분포</span>
+          <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>{t('연령별 분포','Age Distribution')}</span>
           <GenderToggle value={ageGender} onChange={setAgeGender} accentColor={cat.color} />
         </div>
         <div style={{ flex: 1, minHeight: 0 }}>
@@ -744,12 +755,12 @@ export default function Lifestyle() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ color: '#ccc', fontSize: '13px', fontWeight: 600 }}>
-              {trendView === 'line' ? `10년 추이` : '순위 변동'}
+              {trendView === 'line' ? t('10년 추이','10-Year Trend') : t('순위 변동','Rank Change')}
             </span>
             <div style={{ display: 'flex', gap: '3px' }}>
               {[
-                { key: 'line', label: '추이' },
-                { key: 'bump', label: '순위' },
+                { key: 'line', label: t('추이','Trend') },
+                { key: 'bump', label: t('순위','Rank') },
               ].map(v => (
                 <button key={v.key} onClick={() => setTrendView(v.key)} style={{
                   padding: '2px 8px', fontSize: '10px', borderRadius: '4px',
@@ -764,15 +775,15 @@ export default function Lifestyle() {
           </div>
           {trendView === 'line' && (
             <span style={{ color: '#555', fontSize: '9px' }}>
-              <span style={{ color: cat.color }}>●</span> 상위3 &nbsp;
-              <span style={{ color: '#00d4ff' }}>●</span> 하위3
+              <span style={{ color: cat.color }}>●</span> {t('상위3','Top 3')} &nbsp;
+              <span style={{ color: '#00d4ff' }}>●</span> {t('하위3','Bottom 3')}
             </span>
           )}
           {trendView === 'bump' && (
             <div style={{ display: 'flex', gap: '4px' }}>
               {[
-                { key: 'obesity', label: '비만율', color: '#ff006e' },
-                { key: 'metabolic', label: '대사증후군', color: '#ffd60a' },
+                { key: 'obesity', label: t('비만율','Obesity'), color: '#ff006e' },
+                { key: 'metabolic', label: t('대사증후군','MetS'), color: '#ffd60a' },
               ].map(m => (
                 <button key={m.key} onClick={() => setBumpMetric(m.key)} style={{
                   padding: '2px 8px', fontSize: '10px', borderRadius: '4px',
@@ -805,7 +816,7 @@ export default function Lifestyle() {
         borderColor: (selectedProv || selectedAge || selectedYear) ? `${cat.color}33` : 'rgba(255,255,255,0.06)',
       }}>
         <div style={{ fontSize: '11px', color: '#888', marginBottom: '6px', flexShrink: 0, fontWeight: 600 }}>
-          {selectedProv ? '지역 상세' : selectedAge ? '연령 상세' : selectedYear ? '연도 상세' : '요약'}
+          {selectedProv ? t('지역 상세','Province Detail') : selectedAge ? t('연령 상세','Age Detail') : selectedYear ? t('연도 상세','Year Detail') : t('요약','Summary')}
         </div>
         <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
           <DetailPanel
@@ -829,7 +840,7 @@ export default function Lifestyle() {
         borderTop: '1px solid rgba(255,255,255,0.04)',
         flexShrink: 0,
       }}>
-        출처: 건강검진통계연보(NHIS 2024) 흡연·음주·운동 현황
+        {t('출처: 건강검진통계연보(NHIS 2024) 흡연·음주·운동 현황', 'Source: Health Screening Statistics (NHIS 2024) Smoking/Drinking/Exercise')}
       </div>
     </div>
   );

@@ -8,8 +8,10 @@ import { TRENDS } from '../data/trends';
 import { BMI_PROV } from '../data/bmi_prov';
 import { MET_PROV } from '../data/met_prov';
 import { NATIONAL_AVG } from '../data/province_info';
+import { useLang } from '../i18n';
 
 export default function Overview() {
+  const { t } = useLang();
   const [year, setYear] = useState(2024);
   const [metric, setMetric] = useState('obesity');
   const [selectedKPI, setSelectedKPI] = useState(null);
@@ -19,11 +21,11 @@ export default function Overview() {
   const first = 0;
 
   const kpis = [
-    { id: 'screening', label: '일반검진 수검률', value: TRENDS.screening[latest], icon: '🏥', color: '#00d4ff', delta: TRENDS.screening[latest] - TRENDS.screening[first], data: TRENDS.screening },
-    { id: 'cancer', label: '암검진 수검률', value: TRENDS.cancer[latest], icon: '🔬', color: '#b388ff', delta: TRENDS.cancer[latest] - TRENDS.cancer[first], data: TRENDS.cancer },
-    { id: 'obesity', label: '비만율', value: TRENDS.obesity[latest], icon: '⚖️', color: '#ff006e', delta: TRENDS.obesity[latest] - TRENDS.obesity[first], data: TRENDS.obesity },
-    { id: 'metabolic', label: '대사증후군 위험군', value: TRENDS.metabolic[latest], icon: '💉', color: '#ffd60a', delta: TRENDS.metabolic[latest] - TRENDS.metabolic[first], data: TRENDS.metabolic },
-    { id: 'stroke', label: '뇌졸중 발생률', value: NATIONAL_AVG.strokeIncidence, icon: '🧠', color: '#e74c3c', delta: null, data: null, unit: '/10만' },
+    { id: 'screening', label: t('일반검진 수검률', 'General Screening Rate'), value: TRENDS.screening[latest], icon: '🏥', color: '#00d4ff', delta: TRENDS.screening[latest] - TRENDS.screening[first], data: TRENDS.screening },
+    { id: 'cancer', label: t('암검진 수검률', 'Cancer Screening Rate'), value: TRENDS.cancer[latest], icon: '🔬', color: '#b388ff', delta: TRENDS.cancer[latest] - TRENDS.cancer[first], data: TRENDS.cancer },
+    { id: 'obesity', label: t('비만율', 'Obesity Rate'), value: TRENDS.obesity[latest], icon: '⚖️', color: '#ff006e', delta: TRENDS.obesity[latest] - TRENDS.obesity[first], data: TRENDS.obesity },
+    { id: 'metabolic', label: t('대사증후군 위험군', 'Metabolic Syndrome Risk'), value: TRENDS.metabolic[latest], icon: '💉', color: '#ffd60a', delta: TRENDS.metabolic[latest] - TRENDS.metabolic[first], data: TRENDS.metabolic },
+    { id: 'stroke', label: t('허혈성 뇌졸중 발생률', 'Ischemic Stroke Incidence'), value: NATIONAL_AVG.strokeIncidence, icon: '🧠', color: '#e74c3c', delta: null, data: null, unit: t('/10만', '/100K') },
   ];
 
   // Province detail data
@@ -83,9 +85,9 @@ export default function Overview() {
         {/* Metric toggle — in flow, not absolute */}
         <div style={{ display: 'flex', gap: '8px', alignSelf: 'flex-start', flexShrink: 0, zIndex: 2 }}>
           {[
-            { id: 'obesity', label: '비만율', color: '#ff006e' },
-            { id: 'metabolic', label: '대사증후군', color: '#00d4ff' },
-            { id: 'stroke', label: '뇌졸중', color: '#e74c3c' },
+            { id: 'obesity', label: t('비만율', 'Obesity'), color: '#ff006e' },
+            { id: 'metabolic', label: t('대사증후군', 'Metabolic Syndrome'), color: '#00d4ff' },
+            { id: 'stroke', label: t('뇌졸중', 'Stroke'), color: '#e74c3c' },
           ].map(m => (
             <button
               key={m.id}
@@ -152,7 +154,8 @@ export default function Overview() {
         borderTop: '1px solid rgba(255,255,255,0.04)',
         flexShrink: 0,
       }}>
-        출처: 건강검진통계연보 2015-2024, 행안부 주민등록인구 2024, 통계청 GRDP 2023, 각 학회 팩트시트
+        {t('출처: 건강검진통계연보 2015-2024, 행안부 주민등록인구 2024, 통계청 GRDP 2023, 각 학회 팩트시트',
+           'Source: Health Screening Statistics 2015-2024, MOIS Population 2024, KOSTAT GRDP 2023, Society Fact Sheets')}
       </div>
     </div>
   );

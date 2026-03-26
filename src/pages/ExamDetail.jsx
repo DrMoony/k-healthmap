@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { FULL_DATA } from '../data/full_data';
+import { useLang } from '../i18n';
+import { T } from '../translations';
 
 const EXAM_KEYS = [
   'bmi','waist','sight','bp_systolic','bp_diastolic','urine_protein',
@@ -11,9 +13,9 @@ const PROVINCES = ['서울','부산','대구','인천','광주','대전','울산
 const AGE_GROUPS = ['≤19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80-84','85+'];
 
 const GENDER_OPTIONS = [
-  { key: 'total', label: '전체' },
-  { key: 'male', label: '남' },
-  { key: 'female', label: '여' },
+  { key: 'total', label_ko: '전체', label_en: 'Total' },
+  { key: 'male', label_ko: '남', label_en: 'M' },
+  { key: 'female', label_ko: '여', label_en: 'F' },
 ];
 
 const ABNORMAL_INDICES = {
@@ -37,7 +39,7 @@ const ABNORMAL_INDICES = {
   chest_xray: [1],
 };
 
-const AGE_CLINICAL_NOTES = {
+const AGE_CLINICAL_NOTES_KO = {
   '≤19': '소아/청소년: 성장기 기준치 별도 적용, 비만 조기선별 중요',
   '20-24': '20-24세: 건강행태 형성기, 음주·흡연 시작 영향',
   '25-29': '25-29세: 직장인 초기, 신체활동 감소 시작',
@@ -54,6 +56,24 @@ const AGE_CLINICAL_NOTES = {
   '80-84': '80-84세: 초고령 특성 반영 필요, 과잉진단 우려',
   '85+': '85+세: 기대여명 고려한 검진 해석, 기능 중심 평가',
 };
+const AGE_CLINICAL_NOTES_EN = {
+  '≤19': 'Pediatric/Adolescent: Separate growth-phase criteria apply, early obesity screening important',
+  '20-24': '20-24: Health behavior formation period, impact of alcohol/smoking initiation',
+  '25-29': '25-29: Early career, physical activity decline begins',
+  '30-34': '30-34: Metabolic syndrome risk factors start accumulating',
+  '35-39': '35-39: Hypertension/dyslipidemia prevalence starts rising',
+  '40-44': '40-44: Obesity prevalence nearing peak, HTN/DM comorbidity surging',
+  '45-49': '45-49: Cardiovascular risk sharply rising, enhanced national screening target',
+  '50-54': '50-54: Metabolic disease prevalence at peak, complication management needed',
+  '55-59': '55-59: Chronic disease multimorbidity increasing, watch GFR decline',
+  '60-64': '60-64: Aging-related marker changes accelerating, sarcopenia co-occurrence',
+  '65-69': '65-69: Geriatric disease transition period, polypharmacy increasing',
+  '70-74': '70-74: Renal/hepatic function decline accelerating, criteria reassessment needed',
+  '75-79': '75-79: Frailty comorbidity surging, screening interpretation caution',
+  '80-84': '80-84: Very elderly characteristics to reflect, overdiagnosis concern',
+  '85+': '85+: Screening interpretation considering life expectancy, function-focused assessment',
+};
+const AGE_CLINICAL_NOTES = AGE_CLINICAL_NOTES_KO;
 
 // ─── Disease Correlation Data ────────────────────────────────────────────────
 const EXAM_DISEASE_LINKS = {
@@ -209,9 +229,9 @@ function getNationalAvg(dataObj, gender, abnormalIndices) {
 
 // ─── Sort options ────────────────────────────────────────────────────────────
 const SORT_OPTIONS = [
-  { key: 'rate', label: '이상치율순' },
-  { key: 'alpha', label: '가나다순' },
-  { key: 'diff', label: '전국대비순' },
+  { key: 'rate', label_ko: '이상치율순', label_en: 'By Rate' },
+  { key: 'alpha', label_ko: '가나다순', label_en: 'Alphabetical' },
+  { key: 'diff', label_ko: '전국대비순', label_en: 'vs National' },
 ];
 
 function SortToggle({ value, onChange }) {
@@ -234,7 +254,7 @@ function SortToggle({ value, onChange }) {
             transition: 'all 0.2s',
           }}
         >
-          {o.label}
+          {o.label_ko}
         </button>
       ))}
     </div>
@@ -444,9 +464,9 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
           minWidth: 120,
         }}>
           <div style={{ fontWeight: 700, color: NEON.cyan, marginBottom: 2 }}>{tooltip.label}</div>
-          <div>이상치율: <span style={{ fontFamily: 'JetBrains Mono', fontWeight: 600 }}>{tooltip.rate.toFixed(1)}%</span></div>
+          <div>Abnormality: <span style={{ fontFamily: 'JetBrains Mono', fontWeight: 600 }}>{tooltip.rate.toFixed(1)}%</span></div>
           <div style={{ color: tooltip.diff > 0 ? NEON.magenta : NEON.green, fontSize: 10 }}>
-            전국 대비 {tooltip.diff > 0 ? '+' : ''}{tooltip.diff.toFixed(1)}%p
+            vs Nat'l {tooltip.diff > 0 ? '+' : ''}{tooltip.diff.toFixed(1)}%p
           </div>
         </div>
       )}
@@ -684,7 +704,7 @@ function GenderToggle({ value, onChange }) {
             transition: 'all 0.2s',
           }}
         >
-          {g.label}
+          {g.label_ko}
         </button>
       ))}
     </div>
@@ -694,8 +714,8 @@ function GenderToggle({ value, onChange }) {
 // ─── View Toggle ─────────────────────────────────────────────────────────────
 function ViewToggle({ value, onChange }) {
   const opts = [
-    { key: 'abnormal', label: '이상치율' },
-    { key: 'stacked', label: '분포' },
+    { key: 'abnormal', label_ko: '이상치율', label_en: 'Abnormality' },
+    { key: 'stacked', label_ko: '분포', label_en: 'Distribution' },
   ];
   return (
     <div style={{ display: 'flex', gap: 4 }}>
@@ -722,7 +742,7 @@ function ViewToggle({ value, onChange }) {
             transition: 'all 0.2s',
           }}
         >
-          {o.label}
+          {o.label_ko}
         </button>
       ))}
     </div>
@@ -781,7 +801,7 @@ function Legend({ categories, abnormalIndices, highlightCat, onCatClick }) {
         display: 'flex', alignItems: 'center', gap: 3, fontSize: 11, color: NEON.gold, marginLeft: 6,
       }}>
         <span style={{ width: 14, height: 0, borderTop: `1.5px dashed ${NEON.gold}`, display: 'inline-block' }} />
-        전국 평균
+        National Avg
       </div>
     </div>
   );
@@ -834,6 +854,7 @@ function DiseaseCard({ item }) {
 
 // ─── Analysis Panel (right column, always visible) ──────────────────────────
 function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, genderProv, genderAge, abnormalIndices, categories, natAvgProv, natAvgAge }) {
+  const { lang, t } = useLang();
   const hasAbnormal = abnormalIndices.length > 0;
   const diseaseLinks = EXAM_DISEASE_LINKS[selectedExam] || [];
 
@@ -853,7 +874,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
   const maleAvg = getNationalAvg(examData.province, 'male', abnormalIndices);
   const femaleAvg = getNationalAvg(examData.province, 'female', abnormalIndices);
   const genderGap = Math.abs(maleAvg - femaleAvg);
-  const genderHigher = maleAvg > femaleAvg ? '남' : '여';
+  const genderHigher = maleAvg > femaleAvg ? 'M' : 'F';
 
   // Selected detail data
   const selLabel = selectedProv || selectedAge;
@@ -888,10 +909,10 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
       {/* KPI Cards - Left Section */}
       {hasAbnormal && (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4, flex: '0 0 200px' }}>
-          <KpiCard label="전국 이상치율" value={natAvgProv.toFixed(1) + '%'} color={NEON.magenta} />
-          <KpiCard label="최고 시도" value={highest?.rate.toFixed(1) + '%'} sub={highest?.name} color="#ff6b6b" />
-          <KpiCard label="최저 시도" value={lowest?.rate.toFixed(1) + '%'} sub={lowest?.name} color={NEON.green} />
-          <KpiCard label="남녀 격차" value={genderGap.toFixed(1) + '%p'} sub={genderHigher + ' 우세'} color={NEON.gold} />
+          <KpiCard label={t("전국 이상치율","National Abnormality")} value={natAvgProv.toFixed(1) + '%'} color={NEON.magenta} />
+          <KpiCard label={t("최고 시도","Highest Province")} value={highest?.rate.toFixed(1) + '%'} sub={highest?.name} color="#ff6b6b" />
+          <KpiCard label={t("최저 시도","Lowest Province")} value={lowest?.rate.toFixed(1) + '%'} sub={lowest?.name} color={NEON.green} />
+          <KpiCard label={t("남녀 격차","Gender Gap")} value={genderGap.toFixed(1) + '%p'} sub={genderHigher + ' 우세'} color={NEON.gold} />
         </div>
       )}
 
@@ -925,7 +946,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
 
           <div style={{ display: 'flex', gap: 10, marginBottom: 4 }}>
             <div>
-              <div style={{ fontSize: 10, color: NEON.dimText }}>이상치율</div>
+              <div style={{ fontSize: 10, color: NEON.dimText }}>Abnormality</div>
               <div style={{
                 fontFamily: 'JetBrains Mono', fontWeight: 700, fontSize: 15,
                 color: selAllRates.length > 0
@@ -935,13 +956,13 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
                 {selRate.toFixed(1)}%
               </div>
               <div style={{ fontSize: 10, color: selDiff > 0 ? NEON.magenta : NEON.green }}>
-                전국 대비 {selDiff > 0 ? '+' : ''}{selDiff.toFixed(1)}%p
+                vs Nat'l {selDiff > 0 ? '+' : ''}{selDiff.toFixed(1)}%p
               </div>
             </div>
           </div>
 
           {/* Category breakdown */}
-          <div style={{ fontSize: 10, color: NEON.dimText, marginBottom: 2 }}>카테고리 분포</div>
+          <div style={{ fontSize: 10, color: NEON.dimText, marginBottom: 2 }}>Categories</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
             {categories.map((cat, ci) => {
               const isAbn = abnormalIndices.includes(ci);
@@ -993,7 +1014,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
             color: NEON.bodyText, marginBottom: 4,
             display: 'flex', alignItems: 'center', gap: 4,
           }}>
-            <span style={{ color: NEON.magenta }}>+</span> 질환 연관성
+            <span style={{ color: NEON.magenta }}>+</span> Disease Correlation
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {diseaseLinks.map((item, i) => (
@@ -1022,14 +1043,14 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           overflow: 'hidden',
         }}>
           <div style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Noto Sans KR', color: NEON.bodyText, marginBottom: 4 }}>
-            판정 기준
+            {t('판정 기준','Clinical Threshold')}
           </div>
           <div style={{ fontSize: 11, color: NEON.labelText, lineHeight: 1.5 }}>
             {examData.ref}
           </div>
           {hasAbnormal && categories.length > 0 && (
             <div style={{ marginTop: 4, fontSize: 11, lineHeight: 1.5 }}>
-              <span style={{ color: NEON.magenta, fontWeight: 600 }}>이상 판정: </span>
+              <span style={{ color: NEON.magenta, fontWeight: 600 }}>{t('이상 판정: ','Abnormal Criteria: ')}</span>
               <span style={{ color: NEON.labelText }}>
                 {abnormalIndices.map(idx => categories[idx]).filter(Boolean).join(', ')}
               </span>
@@ -1048,7 +1069,7 @@ function AnalysisPanel({ selectedExam, examData, selectedProv, selectedAge, gend
           alignSelf: 'center',
           minWidth: 180,
         }}>
-          차트에서 시도 또는 연령대를 클릭하면<br />상세 분석이 여기에 표시됩니다
+          {t('차트에서 시도 또는 연령대를 클릭하면','Click a province or age group on the chart')}<br />{t('상세 분석이 여기에 표시됩니다','to see detailed analysis here')}
         </div>
       )}
     </div>
@@ -1107,6 +1128,8 @@ function generateInsight(examData, selectedExam, abnormalIndices, genderProv, ge
 
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function ExamDetail() {
+  const { lang, t } = useLang();
+  const pn = (name) => lang === 'en' ? (T.provinces[name] || name) : name;
   const [selectedExam, setSelectedExam] = useState('bmi');
   const [genderProv, setGenderProv] = useState('total');
   const [genderAge, setGenderAge] = useState('total');
@@ -1248,7 +1271,7 @@ export default function ExamDetail() {
             padding: '5px 10px',
             border: `1px solid ${hexToRgba(NEON.magenta, 0.2)}`,
           }}>
-            전국 이상치율 <span style={{ fontWeight: 700, fontSize: 13 }}>{natAvgProv.toFixed(1)}%</span>
+            {t('전국 이상치율','National Abnormality')} <span style={{ fontWeight: 700, fontSize: 13 }}>{natAvgProv.toFixed(1)}%</span>
           </div>
         )}
 
@@ -1263,7 +1286,7 @@ export default function ExamDetail() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ fontSize: 12, fontWeight: 700, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.bodyText) }}>
-              시도별 {viewMode === 'abnormal' ? '이상치율' : '분포'}
+              {t('시도별','By Province')} {viewMode === 'abnormal' ? t('이상치율','Abnormality Rate') : t('분포','Distribution')}
             </div>
             {viewMode === 'abnormal' && hasAbnormal && (
               <SortToggle value={sortProv} onChange={setSortProv} />
@@ -1321,7 +1344,7 @@ export default function ExamDetail() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ fontSize: 12, fontWeight: 700, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.bodyText) }}>
-              연령대별 {viewMode === 'abnormal' ? '이상치율' : '분포'}
+              {t('연령대별','By Age Group')} {viewMode === 'abnormal' ? t('이상치율','Abnormality Rate') : t('분포','Distribution')}
             </div>
             {viewMode === 'abnormal' && hasAbnormal && (
               <SortToggle value={sortAge} onChange={setSortAge} />
@@ -1361,7 +1384,7 @@ export default function ExamDetail() {
       {/* ─── Analysis Panel (Bottom Row, Full Width) ──────────────── */}
       <Panel style={{ gridColumn: '1 / -1', overflow: 'hidden' }}>
         <div style={{ fontSize: 12, fontWeight: 700, fontFamily: 'Noto Sans KR', ...glowStyle(NEON.bodyText), marginBottom: 6, flexShrink: 0 }}>
-          분석 패널
+          {t('분석 패널','Analysis Panel')}
         </div>
         <AnalysisPanel
           selectedExam={selectedExam}
@@ -1387,7 +1410,7 @@ export default function ExamDetail() {
         borderTop: '1px solid rgba(255,255,255,0.04)',
         flexShrink: 0,
       }}>
-        출처: 건강검진통계연보(NHIS 2024) — 18개 검진항목 x 17시도 x 15연령대 x 3성별
+        {t('출처: 건강검진통계연보(NHIS 2024) — 18개 검진항목 x 17시도 x 15연령대 x 3성별', 'Source: Health Screening Statistics (NHIS 2024) — 18 items x 17 provinces x 15 age groups x 3 genders')}
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ import { DISEASE_TIMESERIES } from '../data/disease_epi';
 import DiseaseOrbital from '../components/DiseaseOrbital';
 import DiseaseSankey from '../components/DiseaseSankey';
 import UpSetPlot from '../components/UpSetPlot';
+import { useLang } from '../i18n';
+import { T } from '../translations';
 
 // ── Disease Data ──────────────────────────────────────────────
 const DISEASES = {
@@ -221,7 +223,9 @@ const PATHWAY_COLORS = {
   mixed: '#aaaacc',
 };
 
-const LEVEL_LABELS = ['위험인자', '1차 질환', '2차 합병증', '3차 결과'];
+const LEVEL_LABELS_KO = ['위험인자', '1차 질환', '2차 합병증', '3차 결과'];
+const LEVEL_LABELS_EN = ['Risk Factor', 'Primary Disease', 'Secondary Complication', 'Terminal Outcome'];
+const LEVEL_LABELS = LEVEL_LABELS_KO;
 const LEVEL_ZONE_COLORS = [
   'rgba(255, 0, 80, 0.04)',
   'rgba(255, 180, 0, 0.04)',
@@ -237,15 +241,15 @@ const LEVEL_ZONE_BORDERS = [
 
 // ── View Modes ───────────────────────────────────────────────
 const VIEW_MODES = [
-  { id: 'network', label: '질환 네트워크' },
-  { id: 'masld', label: 'MASLD 진행' },
-  { id: 'management', label: '관리 현황' },
-  { id: 'trends', label: '추이 비교' },
-  { id: 'orbital', label: '궤도 뷰' },
-  { id: 'sankey', label: '질환 흐름' },
-  { id: 'upset', label: '동반질환' },
-  { id: 'cost', label: '의료비' },
-  { id: 'survival', label: '생존 곡선' },
+  { id: 'network', label_ko: '질환 네트워크', label_en: 'Disease Network' },
+  { id: 'masld', label_ko: 'MASLD 진행', label_en: 'MASLD Progression' },
+  { id: 'management', label_ko: '관리 현황', label_en: 'Management Status' },
+  { id: 'trends', label_ko: '추이 비교', label_en: 'Trend Comparison' },
+  { id: 'orbital', label_ko: '궤도 뷰', label_en: 'Orbital View' },
+  { id: 'sankey', label_ko: '질환 흐름', label_en: 'Disease Flow' },
+  { id: 'upset', label_ko: '동반질환', label_en: 'Comorbidity' },
+  { id: 'cost', label_ko: '의료비', label_en: 'Healthcare Cost' },
+  { id: 'survival', label_ko: '생존 곡선', label_en: 'Survival Curves' },
 ];
 
 // ── CSS Animations ───────────────────────────────────────────
@@ -515,6 +519,7 @@ function DiseaseNode({ disease, pos, isSelected, onClick, dimmed }) {
 
 // ── Detail Panel ─────────────────────────────────────────────
 function DiseaseDetail({ disease, onClose }) {
+  const { lang, t } = useLang();
   if (!disease) return null;
 
   const levelColors = ['#ff006e', '#ffb400', '#0078ff', '#7800ff'];
@@ -568,15 +573,15 @@ function DiseaseDetail({ disease, onClose }) {
         border: '1px solid rgba(255,255,255,0.04)',
       }}>
         <div className="stat-row">
-          <span className="stat-label">유병률</span>
+          <span className="stat-label">{t('유병률','Prevalence')}</span>
           <span className="stat-value" style={{ color: disease.color }}>{disease.prevalence}</span>
         </div>
         <div className="stat-row">
-          <span className="stat-label">환자규모</span>
+          <span className="stat-label">{t('환자규모','Patients')}</span>
           <span className="stat-value">{disease.population}</span>
         </div>
         <div className="stat-row" style={{ borderBottom: 'none' }}>
-          <span className="stat-label">추이</span>
+          <span className="stat-label">{t('추이','Trend')}</span>
           <span className="stat-value" style={{ fontSize: 11, textAlign: 'right', maxWidth: '65%' }}>{disease.trend}</span>
         </div>
       </div>
@@ -598,7 +603,7 @@ function DiseaseDetail({ disease, onClose }) {
           color: '#8888aa', fontSize: 11, margin: '0 0 4px',
           fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600,
         }}>
-          동반질환/합병증
+          {t('동반질환/합병증','Comorbidities/Complications')}
         </p>
         <p style={{
           color: '#ccccee', fontSize: 12, lineHeight: 1.6,
@@ -613,7 +618,7 @@ function DiseaseDetail({ disease, onClose }) {
           color: '#8888aa', fontSize: 11, margin: '0 0 6px',
           fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600,
         }}>
-          위험인자
+          {t('위험인자','Risk Factors')}
         </p>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {disease.riskFactors.map((rf, i) => (
@@ -627,7 +632,7 @@ function DiseaseDetail({ disease, onClose }) {
           color: '#8888aa', fontSize: 11, margin: '0 0 8px',
           fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600,
         }}>
-          연결된 질환
+          {t('연결된 질환','Connected Diseases')}
         </p>
         {connectedEdges.map((e, i) => {
           const otherId = e.from === disease.id ? e.to : e.from;
@@ -688,9 +693,9 @@ function DiseaseDetail({ disease, onClose }) {
                 background: 'rgba(0,0,0,0.2)', borderRadius: 6, padding: '8px 10px',
                 marginBottom: 10, fontSize: 10, lineHeight: 1.8, color: '#aaa',
               }}>
-                <div>인지율 <span style={{ color: '#ffd60a', fontWeight: 700 }}>{epi.awareness}%</span></div>
-                {epi.treatment && <div>치료율 <span style={{ color: '#00ff88', fontWeight: 700 }}>{epi.treatment}%</span></div>}
-                {epi.control && <div>조절률 <span style={{ color: '#00d4ff', fontWeight: 700 }}>{epi.control.value}%</span> <span style={{ color: '#666' }}>({epi.control.criteria})</span></div>}
+                <div>{t('인지율','Awareness')} <span style={{ color: '#ffd60a', fontWeight: 700 }}>{epi.awareness}%</span></div>
+                {epi.treatment && <div>{t('치료율','Treatment')} <span style={{ color: '#00ff88', fontWeight: 700 }}>{epi.treatment}%</span></div>}
+                {epi.control && <div>{t('조절률','Control')} <span style={{ color: '#00d4ff', fontWeight: 700 }}>{epi.control.value}%</span> <span style={{ color: '#666' }}>({epi.control.criteria})</span></div>}
               </div>
             )}
             <div style={{
@@ -718,6 +723,7 @@ function DiseaseDetail({ disease, onClose }) {
 
 // ── Edge Detail Popup ────────────────────────────────────────
 function EdgeDetailPopup({ edge, onClose }) {
+  const { lang, t } = useLang();
   if (!edge) return null;
   const evidence = EDGE_EVIDENCE[`${edge.from}-${edge.to}`];
   if (!evidence) return null;
@@ -741,11 +747,11 @@ function EdgeDetailPopup({ edge, onClose }) {
         {evidence.from} → {evidence.to}
       </h3>
       <div className="stat-row">
-        <span className="stat-label">연결 강도</span>
+        <span className="stat-label">{t('연결 강도','Connection Strength')}</span>
         <span className="stat-value" style={{ color: pColor }}>{evidence.strength}/3</span>
       </div>
       <div className="stat-row">
-        <span className="stat-label">경로</span>
+        <span className="stat-label">{t('경로','Pathway')}</span>
         <span className="stat-value" style={{ color: pColor, textTransform: 'capitalize' }}>{evidence.pathway}</span>
       </div>
       <div style={{ marginTop: 10 }}>
@@ -762,6 +768,7 @@ function EdgeDetailPopup({ edge, onClose }) {
 
 // ── Network View (original skill tree) ──────────────────────
 function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selectedDisease }) {
+  const { lang, t } = useLang();
   const [highlightLevel, setHighlightLevel] = useState(null);
   const [edgeDetail, setEdgeDetail] = useState(null);
   const highlightId = selectedId || hoveredId;
@@ -781,7 +788,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
             fontSize: 20, fontWeight: 800, color: '#e0e0ff', margin: 0,
             textShadow: '0 0 30px rgba(0,212,255,0.3)',
           }}>
-            비만 질환 네트워크
+            {t('비만 질환 네트워크','Obesity Disease Network')}
           </h1>
           <p style={{
             fontFamily: "'JetBrains Mono', monospace",
@@ -974,7 +981,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
         borderTop: '1px solid rgba(255,255,255,0.04)',
         background: 'rgba(10,10,15,0.85)',
       }}>
-        출처: 각 학회 팩트시트 (KOSSO/KDA/KSoLA/KASL/KDCA/KSH/KSHF 2022-2025)
+        {t('출처: 각 학회 팩트시트 (KOSSO/KDA/KSoLA/KASL/KDCA/KSH/KSHF 2022-2025)','Source: Medical Society Fact Sheets (KOSSO/KDA/KSoLA/KASL/KDCA/KSH/KSHF 2022-2025)')}
       </div>
     </div>
   );
@@ -982,6 +989,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
 
 // ── MASLD Progression Heatmap (Canvas 2D) ───────────────────
 function MASLDHeatmapView() {
+  const { lang, t } = useLang();
   const canvasRef = useRef(null);
   const [gender, setGender] = useState('male');
   const [tooltip, setTooltip] = useState(null);
@@ -1197,15 +1205,13 @@ function MASLDHeatmapView() {
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
             color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,255,136,0.3)',
           }}>
-            MASLD 코호트 10년 누적 질환 발생률
+            {t('MASLD 코호트 10년 누적 질환 발생률','MASLD Cohort 10-Year Cumulative Disease Incidence')}
           </h2>
           <p style={{
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc',
             margin: '4px 0 0', lineHeight: 1.6,
           }}>
-            2010년 MASLD 진단 환자를 10년간 추적 — 일반 인구 발생률 대비 배수 표시.
-            ⚠️ 교란변수(비만·당뇨·연령 등) 미보정 단순 비율 비교이며, 독립적 위험도(adjusted RR/HR)가 아님.
-            MASLD의 독립적 기여도를 평가하려면 다변량 보정 분석이 필요합니다. 여성 일부 데이터 검증 필요.
+            {t('2010년 MASLD 진단 환자를 10년간 추적 — 일반 인구 발생률 대비 배수 표시. ⚠️ 교란변수(비만·당뇨·연령 등) 미보정 단순 비율 비교이며, 독립적 위험도(adjusted RR/HR)가 아님. MASLD의 독립적 기여도를 평가하려면 다변량 보정 분석이 필요합니다. 여성 일부 데이터 검증 필요.', 'Tracking 2010 MASLD patients over 10 years — showing ratio vs general population. ⚠️ Unadjusted simple ratios (confounders like obesity, DM, age not controlled). Multivariable analysis needed for independent risk assessment.')}
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
@@ -1217,7 +1223,7 @@ function MASLDHeatmapView() {
               color: gender === g ? (g === 'male' ? '#00d4ff' : '#ff006e') : '#6666aa',
               fontFamily: "'Noto Sans KR', sans-serif", fontSize: 12, fontWeight: 600, cursor: 'pointer',
             }}>
-              {g === 'male' ? '남' : '여'}
+              {g === 'male' ? t('남','M') : t('여','F')}
             </button>
           ))}
         </div>
@@ -1366,7 +1372,7 @@ function MASLDHeatmapView() {
         padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
         fontSize: 10, color: '#4a4a6a',
       }}>
-        출처: KASL MASLD Fact Sheet 2023, NHIS 2010 코호트 10년 추적 데이터
+        {t('출처: KASL MASLD Fact Sheet 2023, NHIS 2010 코호트 10년 추적 데이터', 'Source: KASL MASLD Fact Sheet 2023, NHIS 2010 Cohort 10-Year Follow-up')}
       </div>
     </div>
   );
@@ -1375,6 +1381,7 @@ function MASLDHeatmapView() {
 // ── Diabetes Control Cascade (SVG Funnel) ────────────────────
 // ── Multi-Disease Trend Comparison (SVG) ────────────────────
 function TrendsView() {
+  const { lang, t } = useLang();
   const svgRef = useRef(null);
   const containerRef = useRef(null);
   const [mode, setMode] = useState('prevalence');
@@ -1401,12 +1408,18 @@ function TrendsView() {
     diabetes: '당뇨',
     dyslipidemia: '이상지질혈증',
   };
+  const LABELS_EN = {
+    hypertension: 'Hypertension',
+    diabetes: 'Diabetes',
+    dyslipidemia: 'Dyslipidemia',
+  };
 
   const isIncidenceMode = mode === 'incidence';
 
   // Different colors/labels for incidence mode (MI, Stroke, NAFLD)
   const INCIDENCE_COLORS = { mi: '#ff4444', stroke: '#ff8800', nafld: '#66ff66' };
   const INCIDENCE_LABELS = { mi: '심근경색', stroke: '뇌졸중', nafld: 'MASLD' };
+  const INCIDENCE_LABELS_EN = { mi: 'MI', stroke: 'Stroke', nafld: 'MASLD' };
 
   const activeColors = isIncidenceMode ? INCIDENCE_COLORS : COLORS;
   const activeLabels = isIncidenceMode ? INCIDENCE_LABELS : LABELS;
@@ -1538,16 +1551,20 @@ function TrendsView() {
   };
 
   const TREND_MODES = [
-    { id: 'prevalence', label: '유병률' },
-    { id: 'awareness', label: '인지율' },
-    { id: 'treatment', label: '치료율' },
-    { id: 'control', label: '조절률' },
-    { id: 'incidence', label: '발생건수' },
+    { id: 'prevalence', label_ko: '유병률', label_en: 'Prevalence' },
+    { id: 'awareness', label_ko: '인지율', label_en: 'Awareness' },
+    { id: 'treatment', label_ko: '치료율', label_en: 'Treatment' },
+    { id: 'control', label_ko: '조절률', label_en: 'Control' },
+    { id: 'incidence', label_ko: '발생건수', label_en: 'Incidence' },
   ];
 
   const MODE_LABELS = {
     prevalence: '유병률', awareness: '인지율', treatment: '치료율',
     control: '조절률', incidence: '발생건수',
+  };
+  const MODE_LABELS_EN = {
+    prevalence: 'Prevalence', awareness: 'Awareness', treatment: 'Treatment',
+    control: 'Control', incidence: 'Incidence',
   };
 
   const buildSeries = () => {
@@ -1595,7 +1612,7 @@ function TrendsView() {
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
             color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(179,136,255,0.3)',
           }}>
-            대사질환 추이 비교
+            {t('대사질환 추이 비교','Metabolic Disease Trend Comparison')}
           </h2>
           <p style={{
             fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a',
@@ -1613,7 +1630,7 @@ function TrendsView() {
               color: mode === m.id ? '#b388ff' : '#6666aa',
               fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, fontWeight: 600, cursor: 'pointer',
             }}>
-              {m.label}
+              {m.label_ko}
             </button>
           ))}
         </div>
@@ -1794,7 +1811,7 @@ function TrendsView() {
         padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
         fontSize: 10, color: '#4a4a6a',
       }}>
-        출처: 고혈압학회, 당뇨병학회, 지질동맥경화학회 Fact Sheet 2024, 질병관리청 심뇌혈관 발생통계 2022, KASL NAFLD Fact Sheet 2023
+        {t('출처: 고혈압학회, 당뇨병학회, 지질동맥경화학회 Fact Sheet 2024, 질병관리청 심뇌혈관 발생통계 2022, KASL NAFLD Fact Sheet 2023', 'Source: KSH, KDA, KSoLA Fact Sheet 2024, KDCA CVD Statistics 2022, KASL NAFLD FS 2023')}
       </div>
     </div>
   );
@@ -1802,6 +1819,7 @@ function TrendsView() {
 
 // ── Healthcare Cost Treemap View ─────────────────────────────
 function CostTreemapView() {
+  const { lang, t } = useLang();
   const [selectedCost, setSelectedCost] = useState(null);
   const w = 900, h = 340;
 
@@ -1839,7 +1857,7 @@ function CostTreemapView() {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '12px 24px 4px' }}>
         <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
-          질환별 사회경제적 부담
+          {t('질환별 사회경제적 부담','Socioeconomic Burden by Disease')}
         </h2>
         <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#8888aa', margin: '4px 0 0' }}>
           ■ 진한 색 = 직접 의료비 (건보 진료비)　■ 옅은 색 = 간접비 추정 (생산성 손실·미인지·진행 비용) — 조원/년
@@ -1906,14 +1924,14 @@ function CostTreemapView() {
             }}>x</button>
             <h4 style={{ color: selectedCost.color, margin: '0 0 8px', fontSize: 14 }}>{selectedCost.name}</h4>
             {[
-              ['비용 기준', selectedCost.basis],
-              ['직접 의료비', `${selectedCost.cost}조원`],
-              ['간접비 추정', `${selectedCost.indirect}조원 (${selectedCost.indirectBasis})`],
-              ['총 사회적 부담', `${(selectedCost.cost + selectedCost.indirect).toFixed(1)}조원`],
-              ['환자당 비용', selectedCost.perPatient],
-              ['대상 인구', selectedCost.population],
-              ['비고', selectedCost.note],
-              ['출처', selectedCost.ref],
+              [t('비용 기준','Cost Basis'), selectedCost.basis],
+              [t('직접 의료비','Direct Medical Cost'), `${selectedCost.cost}${t('조원','T KRW')}`],
+              [t('간접비 추정','Indirect Cost Est.'), `${selectedCost.indirect}${t('조원','T KRW')} (${selectedCost.indirectBasis})`],
+              [t('총 사회적 부담','Total Societal Burden'), `${(selectedCost.cost + selectedCost.indirect).toFixed(1)}${t('조원','T KRW')}`],
+              [t('환자당 비용','Cost per Patient'), selectedCost.perPatient],
+              [t('대상 인구','Target Population'), selectedCost.population],
+              [t('비고','Note'), selectedCost.note],
+              [t('출처','Source'), selectedCost.ref],
             ].map(([label, val]) => (
               <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', gap: 8 }}>
                 <span style={{ color: '#8888aa', fontSize: 11, flexShrink: 0 }}>{label}</span>
@@ -1924,7 +1942,7 @@ function CostTreemapView() {
         )}
       </div>
       <div style={{ padding: '4px 24px 8px', fontSize: 10, color: '#4a4a6a', fontFamily: "'Noto Sans KR', sans-serif" }}>
-        ※ 직접비: 건보 청구코드 기준. 간접비: 한국 실측 데이터 대부분 미발표, 해외 연구 비율 기반 추정. 근거 수준은 질환별 상이. 출처: KDCA 2025, KSHF 2024, KASL 2023, KSN 2024, J Hepatol 2023
+        {t('※ 직접비: 건보 청구코드 기준. 간접비: 한국 실측 데이터 대부분 미발표, 해외 연구 비율 기반 추정. 근거 수준은 질환별 상이. 출처: KDCA 2025, KSHF 2024, KASL 2023, KSN 2024, J Hepatol 2023', '※ Direct: NHI claim codes. Indirect: Mostly unpublished in Korea, estimated from international ratios. Source: KDCA 2025, KSHF 2024, KASL 2023, KSN 2024, J Hepatol 2023')}
       </div>
     </div>
   );
@@ -1932,6 +1950,7 @@ function CostTreemapView() {
 
 // ── Management Comparison View ───────────────────────────────
 function ManagementView() {
+  const { lang, t } = useLang();
   const [selectedDisease, setSelectedDisease] = useState(null);
   const w = 900, h = 340;
 
@@ -2100,7 +2119,7 @@ function ManagementView() {
           alignItems: 'center', justifyContent: 'center',
         }}>x</button>
         <h4 style={{ color: d.color, margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-          {d.name} 관리 현황
+          {d.name} {t('관리 현황','Management Status')}
         </h4>
         <p style={{ color: '#bbb', fontSize: 11, lineHeight: 1.7, margin: '0 0 10px' }}>{d.detail}</p>
 
@@ -2136,7 +2155,7 @@ function ManagementView() {
         {d.youngAdult && (
           <div style={{ marginTop: 10 }}>
             <p style={{ color: '#ff006e', fontSize: 9, margin: '0 0 4px', fontFamily: "'JetBrains Mono', monospace" }}>
-              19-39세 청년층 비교
+              19-39 {t('청년층 비교','Young Adult Comparison')}
             </p>
             {d.extendedCascade.map((step, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
@@ -2168,7 +2187,7 @@ function ManagementView() {
           fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800,
           color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,212,255,0.3)',
         }}>
-          질환별 관리 현황
+          {t('질환별 관리 현황','Disease Management Status')}
         </h2>
         <p style={{
           fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a',
@@ -2190,7 +2209,7 @@ function ManagementView() {
           {/* Instruction */}
           <text x={w / 2} y={h - 8} textAnchor="middle" fill="#4a4a6a" fontSize={9}
             fontFamily="'JetBrains Mono', monospace">
-            클릭하여 상세 정보 확인 | 출처: KSH 2024, KDA 2024, KSoLA 2024, KSN 2024
+            {t('클릭하여 상세 정보 확인','Click for details')} | Source: KSH 2024, KDA 2024, KSoLA 2024, KSN 2024
           </text>
         </svg>
         {renderDetail()}
@@ -2201,6 +2220,7 @@ function ManagementView() {
 
 // ── Survival Curves View ─────────────────────────────────────
 function SurvivalCurvesView() {
+  const { lang, t } = useLang();
   const [selectedCurve, setSelectedCurve] = useState(null);
   const [hoveredCurve, setHoveredCurve] = useState(null);
   const w = 900, h = 340;
@@ -2247,7 +2267,7 @@ function SurvivalCurvesView() {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '12px 24px 4px' }}>
         <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
-          질환별 생존 곡선
+          {t('질환별 생존 곡선','Disease Survival Curves')}
         </h2>
         <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a', margin: '2px 0 0' }}>
           KAPLAN-MEIER STYLE SURVIVAL CURVES
@@ -2278,11 +2298,11 @@ function SurvivalCurvesView() {
             </g>
           ))}
           <text x={w / 2} y={h - 6} textAnchor="middle" fill="#8888aa" fontSize={11} fontFamily="'Noto Sans KR', sans-serif">
-            추적 기간 (년)
+            {t('추적 기간 (년)','Follow-up Period (years)')}
           </text>
           <text x={16} y={h / 2} textAnchor="middle" fill="#8888aa" fontSize={11}
             fontFamily="'Noto Sans KR', sans-serif" transform={`rotate(-90, 16, ${h / 2})`}>
-            생존율 (%)
+            {t('생존율 (%)','Survival Rate (%)')}
           </text>
           {curves.map(curve => {
             const isActive = hoveredCurve === curve.id || selectedCurve?.id === curve.id;
@@ -2328,7 +2348,7 @@ function SurvivalCurvesView() {
             <div style={{ marginBottom: 8 }}>
               {selectedCurve.points.filter(p => p.t > 0).map(p => (
                 <div key={p.t} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                  <span style={{ color: '#8888aa', fontSize: 11 }}>{p.t}년 생존율</span>
+                  <span style={{ color: '#8888aa', fontSize: 11 }}>{p.t}{t('년 생존율','yr Survival')}</span>
                   <span style={{ color: '#e0e0ff', fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{p.s}%</span>
                 </div>
               ))}
@@ -2338,7 +2358,7 @@ function SurvivalCurvesView() {
         )}
       </div>
       <div style={{ padding: '4px 24px 10px', fontSize: 10, color: '#4a4a6a', fontFamily: "'JetBrains Mono', monospace" }}>
-        출처: KSHF HF Statistics 2024, KASL MASLD FS 2023, 국가암등록통계 2022
+        {t('출처: KSHF HF Statistics 2024, KASL MASLD FS 2023, 국가암등록통계 2022', 'Source: KSHF HF Statistics 2024, KASL MASLD FS 2023, National Cancer Registry 2022')}
       </div>
     </div>
   );
@@ -2346,6 +2366,7 @@ function SurvivalCurvesView() {
 
 // ── Main Component ───────────────────────────────────────────
 export default function DiseaseNetwork() {
+  const { lang, t } = useLang();
   const [selectedId, setSelectedId] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
   const [viewMode, setViewMode] = useState('network');
@@ -2382,7 +2403,7 @@ export default function DiseaseNetwork() {
                 }
               }}
             >
-              {vm.label}
+              {lang === 'en' ? vm.label_en : vm.label_ko}
             </button>
           ))}
         </div>
@@ -2411,7 +2432,7 @@ export default function DiseaseNetwork() {
                 borderTop: '1px solid rgba(255,255,255,0.04)',
                 flexShrink: 0,
               }}>
-                출처: 각 학회 팩트시트 2022-2025
+                {t('출처: 각 학회 팩트시트 2022-2025','Source: Medical Society Fact Sheets 2022-2025')}
               </div>
             </div>
           )}
@@ -2419,14 +2440,14 @@ export default function DiseaseNetwork() {
           {viewMode === 'upset' && (
             <div>
               <h3 style={{ color: '#ccd6f6', fontSize: 18, fontWeight: 600, marginBottom: 4, textAlign: 'center' }}>
-                MASLD 동반질환 교차 분석
+                {t('MASLD 동반질환 교차 분석','MASLD Comorbidity Cross-Analysis')}
               </h3>
               <p style={{ color: '#8892b0', fontSize: 13, textAlign: 'center', marginBottom: 16 }}>
-                2012 vs 2022 동반이환 패턴 변화
+                {t('2012 vs 2022 동반이환 패턴 변화','2012 vs 2022 Comorbidity Pattern Change')}
               </p>
               <UpSetPlot />
               <p style={{ color: '#556', fontSize: 10, textAlign: 'right', marginTop: 8 }}>
-                출처: KASL MASLD Fact Sheet 2023, NHIS 2012-2022
+                {t('출처: KASL MASLD Fact Sheet 2023, NHIS 2012-2022','Source: KASL MASLD Fact Sheet 2023, NHIS 2012-2022')}
               </p>
             </div>
           )}

@@ -1,15 +1,19 @@
 import { motion } from 'framer-motion';
+import { useLang } from '../i18n';
+import { T } from '../translations';
 
 const tabs = [
-  { id: 'overview', label: '종합현황', icon: '🏠' },
-  { id: 'metabolic', label: '대사질환', icon: '🗺️' },
-  { id: 'exam', label: '검진항목', icon: '🔬' },
-  { id: 'lifestyle', label: '생활습관', icon: '🏃' },
-  { id: 'disease', label: '질환네트워크', icon: '🧬' },
-  { id: 'stroke', label: '뇌졸중', icon: '🧠' },
+  { id: 'overview', icon: '🏠' },
+  { id: 'metabolic', icon: '🗺️' },
+  { id: 'exam', icon: '🔬' },
+  { id: 'lifestyle', icon: '🏃' },
+  { id: 'disease', icon: '🧬' },
+  { id: 'stroke', icon: '🧠' },
 ];
 
 export default function NavBar({ active, onChange }) {
+  const { lang, setLang } = useLang();
+
   return (
     <nav style={{
       position: 'fixed',
@@ -75,7 +79,7 @@ export default function NavBar({ active, onChange }) {
             }}
           >
             <span style={{ fontSize: '14px' }}>{tab.icon}</span>
-            {tab.label}
+            {T.tabs[tab.id][lang]}
             {active === tab.id && (
               <motion.div
                 layoutId="navIndicator"
@@ -92,6 +96,54 @@ export default function NavBar({ active, onChange }) {
             )}
           </motion.button>
         ))}
+
+        {/* Spacer */}
+        <div style={{ flex: 1 }} />
+
+        {/* Language Toggle */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: 'rgba(255,255,255,0.05)',
+          borderRadius: '20px',
+          padding: '2px',
+          border: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <button
+            onClick={() => setLang('ko')}
+            style={{
+              padding: '4px 10px',
+              borderRadius: '16px',
+              border: 'none',
+              fontSize: '11px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              background: lang === 'ko' ? 'rgba(0,212,255,0.2)' : 'transparent',
+              color: lang === 'ko' ? '#00d4ff' : '#666',
+              fontFamily: "'JetBrains Mono', monospace",
+            }}
+          >
+            KO
+          </button>
+          <button
+            onClick={() => setLang('en')}
+            style={{
+              padding: '4px 10px',
+              borderRadius: '16px',
+              border: 'none',
+              fontSize: '11px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              background: lang === 'en' ? 'rgba(0,212,255,0.2)' : 'transparent',
+              color: lang === 'en' ? '#00d4ff' : '#666',
+              fontFamily: "'JetBrains Mono', monospace",
+            }}
+          >
+            EN
+          </button>
+        </div>
       </div>
     </nav>
   );

@@ -1,4 +1,5 @@
 import { useState, Component } from 'react';
+import { LangProvider } from './i18n';
 import NavBar from './components/NavBar';
 import Overview from './pages/Overview';
 import Metabolic from './pages/Metabolic';
@@ -48,18 +49,20 @@ function App() {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f' }}>
-      <NavBar active={activeTab} onChange={setActiveTab} />
+    <LangProvider>
+      <div style={{ minHeight: '100vh', background: '#0a0a0f' }}>
+        <NavBar active={activeTab} onChange={setActiveTab} />
 
-      <ErrorBoundary key={activeTab}>
-        {activeTab === 'overview' && <Overview />}
-        {activeTab === 'metabolic' && <Metabolic />}
-        {activeTab === 'exam' && <ExamDetail />}
-        {activeTab === 'lifestyle' && <Lifestyle />}
-        {activeTab === 'disease' && <DiseaseNetwork />}
-        {activeTab === 'stroke' && <StrokeDashboard />}
-      </ErrorBoundary>
-    </div>
+        <ErrorBoundary key={activeTab}>
+          {activeTab === 'overview' && <Overview />}
+          {activeTab === 'metabolic' && <Metabolic />}
+          {activeTab === 'exam' && <ExamDetail />}
+          {activeTab === 'lifestyle' && <Lifestyle />}
+          {activeTab === 'disease' && <DiseaseNetwork />}
+          {activeTab === 'stroke' && <StrokeDashboard />}
+        </ErrorBoundary>
+      </div>
+    </LangProvider>
   );
 }
 
