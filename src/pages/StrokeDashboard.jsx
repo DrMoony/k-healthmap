@@ -278,43 +278,46 @@ function Panel({ children, style = {}, onClick }) {
 // ── KPI Mini Card ────────────────────────────────────
 
 function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning, onClick, provinceName, nationalValue }) {
+  const isProvince = !!provinceName;
   return (
     <div
       onClick={onClick}
       style={{
-        background: 'linear-gradient(145deg, #1a1a2e 0%, #12121a 100%)',
-        border: provinceName ? '1px solid rgba(255,214,10,0.25)' : '1px solid rgba(255,255,255,0.06)',
+        background: isProvince
+          ? 'linear-gradient(145deg, #1a1a10 0%, #12120a 100%)'
+          : 'linear-gradient(145deg, #1a1a2e 0%, #12121a 100%)',
+        border: isProvince
+          ? '2px solid rgba(255,214,10,0.4)'
+          : '1px solid rgba(255,255,255,0.08)',
         borderRadius: '10px',
-        padding: '10px 12px',
+        padding: '8px 10px',
         position: 'relative',
         overflow: 'hidden',
         cursor: onClick ? 'pointer' : 'default',
       }}
     >
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: provinceName ? 'linear-gradient(90deg, transparent, #ffd60a, transparent)' : `linear-gradient(90deg, transparent, ${color}, transparent)`, opacity: 0.5 }} />
-      {provinceName && <div style={{ fontSize: '9px', color: '#ffd60a', fontWeight: 600, marginBottom: '2px' }}>{provinceName}</div>}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-        <span style={{ fontSize: '13px' }}>{icon}</span>
-        <span style={{ fontSize: '10px', color: '#8888aa' }}>{label}</span>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: isProvince ? 'linear-gradient(90deg, transparent, #ffd60a, transparent)' : `linear-gradient(90deg, transparent, ${color}, transparent)`, opacity: 0.6 }} />
+      {isProvince && <div style={{ fontSize: '9px', color: '#ffd60a', fontWeight: 700, marginBottom: '2px' }}>{provinceName}</div>}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '3px' }}>
+        <span style={{ fontSize: '12px' }}>{icon}</span>
+        <span style={{ fontSize: '10px', color: '#ccccdd', fontWeight: 500 }}>{label}</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
-        <span style={{ fontSize: '20px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: provinceName ? '#ffd60a' : color, textShadow: `0 0 12px ${provinceName ? '#ffd60a' : color}44` }}>
+        <span style={{ fontSize: '18px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: isProvince ? '#ffd60a' : '#ffffff', textShadow: `0 0 10px ${isProvince ? '#ffd60a' : color}44` }}>
           {value}
         </span>
-        <span style={{ fontSize: '10px', color: '#666' }}>{unit}</span>
+        <span style={{ fontSize: '10px', color: '#aaa' }}>{unit}</span>
       </div>
-      {provinceName && nationalValue != null && (
-        <div style={{ fontSize: '9px', color: '#666', marginTop: '1px', fontFamily: "'JetBrains Mono', monospace" }}>
-          전국 {nationalValue}{unit}
+      {isProvince && nationalValue != null && (
+        <div style={{ fontSize: '9px', color: '#aaa', marginTop: '2px', fontFamily: "'JetBrains Mono'" }}>
+          전국 <span style={{ color: '#00d4ff' }}>{nationalValue}</span>{unit}
         </div>
       )}
       {warning && (
-        <div style={{ fontSize: '8px', color: '#ffaa00', marginTop: '2px' }}>{warning}</div>
+        <div style={{ fontSize: '9px', color: '#ffaa00', marginTop: '2px', fontWeight: 600 }}>⚠ {warning}</div>
       )}
-      {source && (
-        <div style={{ fontSize: '8px', color: '#555', marginTop: '3px', fontFamily: "'JetBrains Mono', monospace" }}>
-          {source}
-        </div>
+      {source && !isProvince && (
+        <div style={{ fontSize: '8px', color: '#666', marginTop: '2px' }}>{source}</div>
       )}
     </div>
   );
@@ -648,7 +651,24 @@ export default function StrokeDashboard() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
         <Panel style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', padding: '8px' }}>
           <div style={{ width: '100%', maxWidth: '260px' }}>
-            <KoreaMap metric="stroke" onProvinceClick={(name) => setSelectedProv(prev => prev === name ? null : name)} />
+            <KoreaMap metric="stroke" onProvinceClick={(name) => {
+              const next = selectedProv === name ? null : name;
+              setSelectedProv(next);
+              if (next && PROVINCE_INFO[next]) {
+                const p = PROVINCE_INFO[next];
+                const lines = [];
+                if (p.goldenTimeRate < 35) lines.push(`골든타임 도착률 ${p.goldenTimeRate}%로 전국 평균(${NATIONAL_AVG.goldenTimeRate}%) 대비 낮음.`);
+                if (p.agingRate > 22) lines.push(`고령화율 ${p.agingRate}%로 뇌졸중 고위험 인구 집중.`);
+                if (p.doctorsPerThousand < 1.8) lines.push(`의사밀도 ${p.doctorsPerThousand}명/천명으로 의료 인프라 부족.`);
+                if (p.unmetMedical > 8) lines.push(`미충족의료 ${p.unmetMedical}%로 접근성 취약.`);
+                if (p.strokeIncidence > 125) lines.push(`발생률 ${p.strokeIncidence}/10만으로 전국 상위 — 위험인자(고혈압·당뇨·흡연) 관리 필요.`);
+                if (p.tpaRate < 8) lines.push(`tPA 시행률 ${p.tpaRate}%로 낮음 — 급성기 치료 인프라 확충 필요.`);
+                if (p.smokingRate > 20) lines.push(`흡연율 ${p.smokingRate}%로 뇌졸중 위험 가중.`);
+                setDetailPopup({ title: `${next} 허혈성 뇌졸중 분석`, content: lines.length > 0 ? lines.join(' ') : `${next}의 뇌졸중 지표가 전국 평균 수준이거나 양호합니다.` });
+              } else {
+                setDetailPopup(null);
+              }
+            }} />
           </div>
         </Panel>
 
@@ -769,7 +789,7 @@ export default function StrokeDashboard() {
         </Panel>
       </div>
 
-      {/* ═══════ COLUMN 3: 연령·중증도·예후 (전국) / 이송·전귀·요약 (시도) ═══════ */}
+      {/* ═══════ COLUMN 3: 연령·중증도·예후 (전국) / 이송·퇴원·위험인자 (시도) ═══════ */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'auto' }}>
         {!selectedProv ? (
           <>
@@ -961,10 +981,10 @@ export default function StrokeDashboard() {
               })()}
             </Panel>
 
-            {/* 전귀결과 */}
+            {/* 퇴원 결과 */}
             <Panel style={{ flex: '0 0 auto' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-                전귀결과 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
+                퇴원 결과 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
                 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> KOSIS 2023</span>
               </div>
               {(() => {
@@ -982,10 +1002,10 @@ export default function StrokeDashboard() {
               })()}
             </Panel>
 
-            {/* 전귀결과 연도별 추이 */}
+            {/* 퇴원 결과 연도별 추이 */}
             <Panel style={{ flex: '0 0 auto' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-                전귀결과 추이 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
+                퇴원 결과 추이 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
                 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> 2022-2024</span>
               </div>
               {(() => {
