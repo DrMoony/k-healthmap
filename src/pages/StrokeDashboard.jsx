@@ -48,6 +48,20 @@ function getAgeDistribution(gender = '전체') {
   });
 }
 
+const TRANSPORT_LABELS = ['<1h', '1-2h', '2-3h', '3-6h', '6h+'];
+const TRANSPORT_KEYS = ['1시간미만', '1~2시간', '2~3시간', '3~6시간', '6시간이상'];
+
+function getTransportDist(regionName) {
+  const region = regionName || '전체';
+  const data = STROKE_KOSIS?.transportByRegion?.[region];
+  if (!data) return null;
+  const yr = '2023';
+  return TRANSPORT_KEYS.map(k => {
+    const v = data[k];
+    return v ? (v[yr] || v['2022'] || 0) : 0;
+  });
+}
+
 // ── CompareBar component ────────────────────────────────────
 
 function CompareBar({ label, value, national, unit = '', higherIsWorse = true, width = '100%' }) {
@@ -98,12 +112,12 @@ function HBar({ data, maxVal, highlightName, nationalAvg, labelWidth = 36, heigh
             style={{
               display: 'flex', alignItems: 'center', gap: '4px', height: `${height}px`,
               cursor: 'pointer', padding: '0 2px', borderRadius: '4px',
-              background: isHighlight ? 'rgba(0,212,255,0.08)' : 'transparent',
+              background: isHighlight ? 'rgba(255,214,10,0.1)' : 'transparent',
             }}
           >
             <span style={{
               width: `${labelWidth}px`, fontSize: '11px', textAlign: 'right',
-              color: isHighlight ? '#00d4ff' : '#8888aa', fontWeight: isHighlight ? 700 : 400,
+              color: isHighlight ? '#ffd60a' : '#8888aa', fontWeight: isHighlight ? 700 : 400,
               flexShrink: 0, fontFamily: "'Noto Sans KR'",
             }}>{name}</span>
             <div style={{ flex: 1, position: 'relative', height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px' }}>
@@ -114,7 +128,7 @@ function HBar({ data, maxVal, highlightName, nationalAvg, labelWidth = 36, heigh
                 style={{
                   height: '100%', borderRadius: '3px',
                   background: `linear-gradient(90deg, ${gradientColor(t * 0.3)}, ${gradientColor(t)})`,
-                  border: isHighlight ? '1px solid rgba(0,212,255,0.5)' : 'none',
+                  border: isHighlight ? '1px solid rgba(255,214,10,0.5)' : 'none',
                 }}
               />
               {nationalAvg != null && (
@@ -128,7 +142,7 @@ function HBar({ data, maxVal, highlightName, nationalAvg, labelWidth = 36, heigh
             <span style={{
               width: '48px', fontSize: '11px', textAlign: 'right',
               fontFamily: "'JetBrains Mono'", fontWeight: isHighlight ? 800 : 500,
-              color: isHighlight ? '#00d4ff' : '#bbb', flexShrink: 0,
+              color: isHighlight ? '#ffd60a' : '#bbb', flexShrink: 0,
             }}>
               {typeof value === 'number' ? (value >= 1000 ? value.toLocaleString() : value.toFixed(1)) : value}
             </span>
@@ -193,13 +207,13 @@ function Panel({ children, style = {}, onClick }) {
 
 // ── KPI Mini Card ────────────────────────────────────
 
-function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning, onClick }) {
+function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning, onClick, provinceName, nationalValue }) {
   return (
     <div
       onClick={onClick}
       style={{
         background: 'linear-gradient(145deg, #1a1a2e 0%, #12121a 100%)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: provinceName ? '1px solid rgba(255,214,10,0.25)' : '1px solid rgba(255,255,255,0.06)',
         borderRadius: '10px',
         padding: '10px 12px',
         position: 'relative',
@@ -207,17 +221,23 @@ function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning,
         cursor: onClick ? 'pointer' : 'default',
       }}
     >
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(90deg, transparent, ${color}, transparent)`, opacity: 0.5 }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: provinceName ? 'linear-gradient(90deg, transparent, #ffd60a, transparent)' : `linear-gradient(90deg, transparent, ${color}, transparent)`, opacity: 0.5 }} />
+      {provinceName && <div style={{ fontSize: '9px', color: '#ffd60a', fontWeight: 600, marginBottom: '2px' }}>{provinceName}</div>}
       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
         <span style={{ fontSize: '13px' }}>{icon}</span>
         <span style={{ fontSize: '10px', color: '#8888aa' }}>{label}</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
-        <span style={{ fontSize: '20px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color, textShadow: `0 0 12px ${color}44` }}>
+        <span style={{ fontSize: '20px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: provinceName ? '#ffd60a' : color, textShadow: `0 0 12px ${provinceName ? '#ffd60a' : color}44` }}>
           {value}
         </span>
         <span style={{ fontSize: '10px', color: '#666' }}>{unit}</span>
       </div>
+      {provinceName && nationalValue != null && (
+        <div style={{ fontSize: '9px', color: '#666', marginTop: '1px', fontFamily: "'JetBrains Mono', monospace" }}>
+          전국 {nationalValue}{unit}
+        </div>
+      )}
       {warning && (
         <div style={{ fontSize: '8px', color: '#ffaa00', marginTop: '2px' }}>{warning}</div>
       )}
@@ -558,37 +578,68 @@ export default function StrokeDashboard() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
         <Panel style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', padding: '8px' }}>
           <div style={{ width: '100%', maxWidth: '260px' }}>
-            <KoreaMap metric="stroke" onProvinceClick={(name) => setSelectedProv(name)} />
+            <KoreaMap metric="stroke" onProvinceClick={(name) => setSelectedProv(prev => prev === name ? null : name)} />
           </div>
         </Panel>
 
+        {selectedProv && (
+          <div style={{ background: '#ffd60a22', border: '1px solid #ffd60a44', borderRadius: 8, padding: '6px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: '#ffd60a', fontWeight: 700, fontSize: 14 }}>{selectedProv}</span>
+            <button onClick={() => setSelectedProv(null)} style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: 12 }}>✕ 전국으로</button>
+          </div>
+        )}
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
-          <KPIMini label="발생률" value={NATIONAL_AVG.strokeIncidence} unit="/10만" icon="📊" color="#00d4ff" source="KDCA 2022"
+          <KPIMini label="발생률"
+            value={selectedProv && prov ? prov.strokeIncidence : NATIONAL_AVG.strokeIncidence}
+            unit="/10만" icon="📊" color="#00d4ff" source="KDCA 2022"
+            provinceName={selectedProv && prov ? selectedProv : null}
+            nationalValue={selectedProv && prov ? NATIONAL_AVG.strokeIncidence : null}
             onClick={() => { setCol2Metric('incidence'); setDetailPopup({ title: '허혈성 뇌졸중 발생률', content: `연령표준화 발생률 ${NATIONAL_AVG.strokeIncidence}/10만명 (KDCA 2022). 시도별 최대 134.5(전북)~최소 101.6(서울).` }); }}
           />
-          <KPIMini label="연간 환자" value="100,088" unit="명" icon="🏥" color="#e0e0ff" source="KOSIS 2023"
+          <KPIMini label="연간 환자"
+            value={selectedProv && prov ? (prov.strokePatients2023 || getPatientCount(selectedProv) || '-').toLocaleString() : '100,088'}
+            unit="명" icon="🏥" color="#e0e0ff" source="KOSIS 2023"
+            provinceName={selectedProv && prov ? selectedProv : null}
+            nationalValue={selectedProv && prov ? '100,088' : null}
             onClick={() => { setCol2Metric('patients'); setDetailPopup({ title: '연간 허혈성 뇌졸중 환자수', content: `2023년 KOSIS 100,088명. 경기(24,243) > 서울(21,138) > 부산(5,798).` }); }}
           />
-          <KPIMini label="30일 사망" value="3.3" unit="%" icon="🇰🇷" color="#ffd60a" source="OECD 2025"
-            onClick={() => { setCol2Metric('mortality'); setDetailPopup({ title: 'OECD 비교: 30일 치명률', content: `한국 3.3% vs OECD 평균 7.7% — OECD 최상위. '도착 후 치료 품질'은 세계 최고이나 '도착까지'(26.2%) 과제. OECD Health at a Glance 2025.` }); }}
+          <KPIMini label="사망률"
+            value={selectedProv && prov ? prov.strokeMortality : NATIONAL_AVG.strokeMortality}
+            unit="/10만" icon="🇰🇷" color="#ffd60a" source={selectedProv && prov ? 'KOSIS 2022' : 'OECD 2025'}
+            provinceName={selectedProv && prov ? selectedProv : null}
+            nationalValue={selectedProv && prov ? NATIONAL_AVG.strokeMortality : null}
+            onClick={() => { setCol2Metric('mortality'); setDetailPopup({ title: selectedProv ? `${selectedProv} 뇌혈관질환 사망률` : 'OECD 비교: 30일 치명률', content: selectedProv && prov ? `${selectedProv} 사망률 ${prov.strokeMortality}/10만명 (전국 ${NATIONAL_AVG.strokeMortality}/10만명)` : `한국 3.3% vs OECD 평균 7.7% — OECD 최상위. '도착 후 치료 품질'은 세계 최고이나 '도착까지'(26.2%) 과제.` }); }}
           />
-          <KPIMini label="3.5h 도착" value={KSR.arrivalTime.within3_5h} unit="%" icon="⏱️" color="#ffaa00" source="KSR 2024"
-            warning="10년 무개선"
+          <KPIMini label="3.5h 도착"
+            value={selectedProv && prov ? prov.goldenTimeRate : KSR.arrivalTime.within3_5h}
+            unit="%" icon="⏱️" color="#ffaa00" source={selectedProv ? 'KDCA 추정' : 'KSR 2024'}
+            warning={!selectedProv ? '10년 무개선' : null}
+            provinceName={selectedProv && prov ? selectedProv : null}
+            nationalValue={selectedProv && prov ? KSR.arrivalTime.within3_5h : null}
             onClick={() => { setCol2Metric('goldenTime'); setDetailPopup({ title: '3.5시간 내 도착률', content: `26.2% (KSR 2022). 2012년 26.0%→2022년 26.2% 10년 무개선. 중앙값 12시간. 증상 인지 지연 주 원인.` }); }}
           />
-          <KPIMini label="IV-tPA" value={KSR.revascularization.ivTpa.pct} unit="%" icon="💉" color="#b388ff" source="KSR 2024"
+          <KPIMini label="IV-tPA"
+            value={selectedProv && prov ? prov.tpaRate : KSR.revascularization.ivTpa.pct}
+            unit="%" icon="💉" color="#b388ff" source={selectedProv ? 'KDCA 추정' : 'KSR 2024'}
+            provinceName={selectedProv && prov ? selectedProv : null}
+            nationalValue={selectedProv && prov ? KSR.revascularization.ivTpa.pct : null}
             onClick={() => { setCol2Metric('tpa'); setDetailPopup({ title: 'IV-tPA 시행률', content: `6.1% (KSR 2022). 10.2%→6.1% 하락 — 도착률 26.2%로 적응 환자 제한. 혈전제거술 3.0%→6.5% 2배↑ 대체.` }); }}
           />
           <KPIMini label="혈전제거" value={KSR.revascularization.thrombectomy.pct} unit="%" icon="🔧" color="#00ff88" source="KSR 2024"
+            provinceName={selectedProv ? null : null}
             onClick={() => setDetailPopup({ title: '혈전제거술', content: `6.5% (KSR 2022). 3.0%→6.5% 2배↑. 지역: 전북 26.1%(최고)~서울 12.9%(최저). LVO에 효과적. 시도별 데이터는 KSR 전국만.` })}
           />
-          <KPIMini label="mRS 0-1" value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88" source="KSR 2024"
+          <KPIMini label="mRS 0-1" value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88"
+            source={selectedProv ? '전국 기준 (KSR)' : 'KSR 2024'}
             onClick={() => setDetailPopup({ title: '좋은 예후 (mRS 0-1)', content: `퇴원 시 mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% 개선. mRS 0-2(독립 생활): 61.2%. 경증 비율↑ + 재관류 발전 기여.` })}
           />
-          <KPIMini label="원내사망" value={KSR.outcomes.inHospitalMortality.pct} unit="%" icon="📉" color="#ff6b6b" source="KSR 2024"
+          <KPIMini label="원내사망" value={KSR.outcomes.inHospitalMortality.pct} unit="%" icon="📉" color="#ff6b6b"
+            source={selectedProv ? '전국 기준 (KSR)' : 'KSR 2024'}
             onClick={() => setDetailPopup({ title: '원내 사망률', content: `원내 사망 2.6% (KSR 2022). 1.0%→2.6% 증가 — 85세↑ 초고령 환자 2배 증가(6.6%→10.7%)가 주 원인.` })}
           />
-          <KPIMini label="AF 첫진단" value="46" unit="%" icon="💔" color="#e74c3c" source="KSR 2024"
+          <KPIMini label="AF 첫진단" value="46" unit="%" icon="💔" color="#e74c3c"
+            source={selectedProv ? '전국 기준 (KSR)' : 'KSR 2024'}
             onClick={() => setDetailPopup({ title: '심방세동 입원 시 첫 진단', content: `뇌졸중 환자 중 심방세동(AF) 20% 동반. 이 중 46%가 입원 시 처음 진단 — 지역사회 AF 선별검사 부족을 시사. AF는 심인성 색전(CE) 뇌졸중의 89.9% 차지. 조기 발견 시 항응고제로 뇌졸중 예방 가능.` })}
           />
         </div>
@@ -653,7 +704,7 @@ export default function StrokeDashboard() {
         {/* Top: 연령별 환자분포 */}
         <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', flexShrink: 0 }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>연령별 허혈성 뇌졸중 환자수</span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>연령별 허혈성 뇌졸중 환자수 {!selectedProv && <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>(전국)</span>}{selectedProv && <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>(전국 기준)</span>}</span>
             <div style={{ display: 'flex', gap: '4px' }}>
               {['전체','남자','여자'].map(g => (
                 <button
@@ -682,10 +733,65 @@ export default function StrokeDashboard() {
           </div>
         </Panel>
 
-        {/* Middle: NIHSS 중증도 분포 */}
+        {/* Transport time distribution */}
         <Panel style={{ flex: '0 0 auto' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-            NIHSS 중증도 분포 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>중앙값 {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
+            이송시간 분포 {selectedProv ? <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span> : <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>(전국)</span>}
+          </div>
+          {(() => {
+            const tDist = getTransportDist(selectedProv);
+            const natDist = getTransportDist(null);
+            if (!tDist) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>데이터 없음</div>;
+            const total = tDist.reduce((s, v) => s + v, 0);
+            const natTotal = natDist ? natDist.reduce((s, v) => s + v, 0) : 1;
+            return (
+              <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-end', height: '80px' }}>
+                {tDist.map((v, i) => {
+                  const pct = total > 0 ? (v / total) * 100 : 0;
+                  const natPct = natTotal > 0 && natDist ? (natDist[i] / natTotal) * 100 : 0;
+                  const colors = ['#00ff88', '#00d4ff', '#ffaa00', '#ff6b6b', '#ff4444'];
+                  return (
+                    <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
+                      <span style={{ fontSize: '9px', color: '#bbb', fontFamily: "'JetBrains Mono'", marginBottom: '2px', fontWeight: 700 }}>
+                        {pct.toFixed(0)}%
+                      </span>
+                      <div style={{
+                        width: '100%', borderRadius: '3px 3px 0 0',
+                        height: `${Math.max(pct, 2)}%`,
+                        background: colors[i],
+                        opacity: 0.8,
+                        position: 'relative',
+                      }} />
+                      <span style={{ fontSize: '9px', color: '#666', marginTop: '3px', whiteSpace: 'nowrap' }}>
+                        {TRANSPORT_LABELS[i]}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          {selectedProv && (() => {
+            const tDist = getTransportDist(selectedProv);
+            const natDist = getTransportDist(null);
+            if (!tDist || !natDist) return null;
+            const total = tDist.reduce((s, v) => s + v, 0);
+            const natTotal = natDist.reduce((s, v) => s + v, 0);
+            const prov3h = total > 0 ? ((tDist[0] + tDist[1] + tDist[2]) / total * 100).toFixed(1) : 0;
+            const nat3h = natTotal > 0 ? ((natDist[0] + natDist[1] + natDist[2]) / natTotal * 100).toFixed(1) : 0;
+            return (
+              <div style={{ fontSize: '9px', color: '#888', marginTop: '6px', textAlign: 'right' }}>
+                3시간 내 도착: <span style={{ color: '#ffd60a', fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{prov3h}%</span>
+                <span style={{ color: '#555', marginLeft: '6px' }}>전국 {nat3h}%</span>
+              </div>
+            );
+          })()}
+        </Panel>
+
+        {/* Middle: NIHSS 중증도 분포 */}
+        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.6 : 1 }}>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
+            NIHSS 중증도 분포 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}중앙값 {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
           </div>
           <StackedBar
             segments={[
@@ -698,9 +804,9 @@ export default function StrokeDashboard() {
         </Panel>
 
         {/* Bottom: 예후 mRS 분포 */}
-        <Panel style={{ flex: '0 0 auto' }}>
+        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.6 : 1 }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-            퇴원 시 예후 (mRS) <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>KSR 2022</span>
+            퇴원 시 예후 (mRS) <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}KSR 2022</span>
           </div>
           <StackedBar
             segments={[
