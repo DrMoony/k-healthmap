@@ -557,25 +557,34 @@ export default function StrokeDashboard() {
           </div>
         </Panel>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-          <KPIMini label="전국 발생률" value={NATIONAL_AVG.strokeIncidence} unit="/10만" icon="📊" color="#00d4ff" source="KDCA 2022"
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
+          <KPIMini label="발생률" value={NATIONAL_AVG.strokeIncidence} unit="/10만" icon="📊" color="#00d4ff" source="KDCA 2022"
             onClick={() => setDetailPopup({ title: '허혈성 뇌졸중 발생률', content: `연령표준화 발생률 ${NATIONAL_AVG.strokeIncidence}/10만명 (KDCA 2022). 시도별 최대 134.5(전북)~최소 101.6(서울)으로 약 1.3배 격차.` })}
           />
-          <KPIMini label="3.5h 내 도착" value={KSR.arrivalTime.within3_5h} unit="%" icon="⏱️" color="#ffaa00" source="KSR 2024"
-            warning="10년간 개선 없음"
-            onClick={() => setDetailPopup({ title: '3.5시간 내 도착률', content: `tPA 투여 가능 시간 내 도착: 26.2% (KSR 2022). 2012년 26.0% → 2022년 26.2%로 10년간 사실상 변화 없음. 24시간 내 도착 67.3%. 중앙값 12시간. 환자/보호자의 증상 인지 지연이 주 원인.` })}
+          <KPIMini label="연간 환자" value="100,088" unit="명" icon="🏥" color="#e0e0ff" source="KOSIS 2023"
+            onClick={() => setDetailPopup({ title: '연간 허혈성 뇌졸중 환자수', content: `2023년 KOSIS 기준 허혈성 뇌졸중(K76.0/K75.8) 진료 환자 100,088명. 2022년 94,916명 대비 5.4% 증가. 경기(24,243) > 서울(21,138) > 부산(5,798) 순.` })}
+          />
+          <KPIMini label="30일 사망" value="3.3" unit="%" icon="🇰🇷" color="#ffd60a" source="OECD 2025"
+            onClick={() => setDetailPopup({ title: 'OECD 비교: 30일 치명률', content: `허혈성 뇌졸중 30일 치명률 한국 3.3% vs OECD 평균 7.7% — OECD 최상위 수준. 한국은 '도착 후 치료 품질'은 세계 최고이나, '도착까지 시간'(26.2%만 3.5시간 내)이 과제. 출처: OECD Health at a Glance 2025.` })}
+          />
+          <KPIMini label="3.5h 도착" value={KSR.arrivalTime.within3_5h} unit="%" icon="⏱️" color="#ffaa00" source="KSR 2024"
+            warning="10년 무개선"
+            onClick={() => setDetailPopup({ title: '3.5시간 내 도착률', content: `tPA 투여 가능 시간 내 도착: 26.2% (KSR 2022). 2012년 26.0% → 2022년 26.2%로 10년간 사실상 변화 없음. 도착 중앙값 12시간. 24시간 내 도착 67.3%. 증상 인지 지연이 주 원인.` })}
           />
           <KPIMini label="IV-tPA" value={KSR.revascularization.ivTpa.pct} unit="%" icon="💉" color="#b388ff" source="KSR 2024"
-            onClick={() => setDetailPopup({ title: 'IV-tPA 시행률', content: `정맥내 혈전용해술 6.1% (KSR 2022). 2012년 10.2%에서 지속 하락. 3.5시간 내 도착률이 26.2%에 불과하여 tPA 적응 환자 자체가 제한적. 대신 혈전제거술이 3.0%→6.5%로 2배 증가.` })}
+            onClick={() => setDetailPopup({ title: 'IV-tPA 시행률', content: `정맥내 혈전용해술 6.1% (KSR 2022). 2012년 10.2%에서 하락 — 3.5시간 도착률 26.2%로 적응 환자 제한. 대신 혈전제거술 3.0%→6.5% 2배↑.` })}
           />
-          <KPIMini label="혈전제거술" value={KSR.revascularization.thrombectomy.pct} unit="%" icon="🔧" color="#00ff88" source="KSR 2024"
-            onClick={() => setDetailPopup({ title: '혈전제거술 시행률', content: `기계적 혈전제거술 6.5% (KSR 2022). 2012년 3.0%에서 2배 이상 증가. 전북 26.1%(최고)~서울 12.9%(최저)로 지역 편차 큼. 대혈관 폐색(LVO)에 효과적. tPA 단독 대비 우수한 예후.` })}
+          <KPIMini label="혈전제거" value={KSR.revascularization.thrombectomy.pct} unit="%" icon="🔧" color="#00ff88" source="KSR 2024"
+            onClick={() => setDetailPopup({ title: '혈전제거술', content: `기계적 혈전제거술 6.5% (KSR 2022). 3.0%→6.5% (2배↑). 지역 편차: 전북 26.1%(최고)~서울 12.9%(최저). 대혈관 폐색(LVO)에 효과적.` })}
           />
-          <KPIMini label="mRS 0-1 예후" value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88" source="KSR 2024"
-            onClick={() => setDetailPopup({ title: '좋은 예후 (mRS 0-1)', content: `퇴원 시 mRS 0-1: 44.1% (KSR 2022). 2012년 39.7%에서 개선. mRS 0-2(독립적 생활): 61.2%. 재관류 치료 발전과 경증 환자 비율 증가가 기여.` })}
+          <KPIMini label="mRS 0-1" value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88" source="KSR 2024"
+            onClick={() => setDetailPopup({ title: '좋은 예후 (mRS 0-1)', content: `퇴원 시 mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% 개선. mRS 0-2(독립 생활): 61.2%. 경증 비율↑ + 재관류 발전 기여.` })}
           />
-          <KPIMini label="원내 사망률" value={KSR.outcomes.inHospitalMortality.pct} unit="%" icon="📉" color="#ff6b6b" source="KSR 2024"
-            onClick={() => setDetailPopup({ title: '원내 사망률', content: `허혈성 뇌졸중 원내 사망률 2.6% (KSR 2022). 2012년 1.0%에서 증가. 주 원인: 85세 이상 초고령 환자 비율 2배 증가(6.6%→10.7%). 고령 환자의 중증도와 합병증이 사망률 상승에 기여.` })}
+          <KPIMini label="원내사망" value={KSR.outcomes.inHospitalMortality.pct} unit="%" icon="📉" color="#ff6b6b" source="KSR 2024"
+            onClick={() => setDetailPopup({ title: '원내 사망률', content: `원내 사망 2.6% (KSR 2022). 1.0%→2.6% 증가 — 85세↑ 초고령 환자 2배 증가(6.6%→10.7%)가 주 원인.` })}
+          />
+          <KPIMini label="AF 첫진단" value="46" unit="%" icon="💔" color="#e74c3c" source="KSR 2024"
+            onClick={() => setDetailPopup({ title: '심방세동 입원 시 첫 진단', content: `뇌졸중 환자 중 심방세동(AF) 20% 동반. 이 중 46%가 입원 시 처음 진단 — 지역사회 AF 선별검사 부족을 시사. AF는 심인성 색전(CE) 뇌졸중의 89.9% 차지. 조기 발견 시 항응고제로 뇌졸중 예방 가능.` })}
           />
         </div>
       </div>
