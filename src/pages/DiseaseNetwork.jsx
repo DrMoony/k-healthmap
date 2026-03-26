@@ -990,7 +990,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
 // ── MASLD 2-Year Progression Trend (SVG Line Chart) ─────────
 function Progression2yrView({ gender }) {
   const { lang, t } = useLang();
-  const prog2yr = DISEASE_EPI.nafld?.progression2yr;
+  const prog2yr = DISEASE_EPI.diseases?.nafld?.progression2yr;
   if (!prog2yr) return <div style={{ color: '#888', padding: 24 }}>No 2yr data</div>;
 
   const AGE_GROUPS = ['20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80+'];
@@ -1102,7 +1102,10 @@ function Progression2yrView({ gender }) {
         padding: '4px 0 2px', fontFamily: "'JetBrains Mono', monospace",
         fontSize: 10, color: '#4a4a6a',
       }}>
-        {t('출처: KASL NAFLD Fact Sheet 2023, NHIS 2년 추적 데이터 (2010/2015/2020 코호트)', 'Source: KASL NAFLD Fact Sheet 2023, NHIS 2-Year Follow-up (2010/2015/2020 cohorts)')}
+        {t(
+          '출처: 대한간학회(KASL) NAFLD Fact Sheet 2023, Section IV "연도별 간경화(K702/K703/K717/K74) 및 간세포암(C220) 발전비율 (2년 추적관찰)". NHIS 2010/2015/2020년 MASLD 진단 코호트 각 2년 추적. ⚠️ 여성 일부 연령대 데이터 확인 필요.',
+          'Source: KASL NAFLD Fact Sheet 2023, Section IV "Liver Cirrhosis (K702/K703/K717/K74) & HCC (C220) 2-Year Progression Rates by Year". NHIS 2010/2015/2020 MASLD cohorts, 2yr follow-up each. ⚠️ Some female age group data needs verification.'
+        )}
       </div>
     </div>
   );
@@ -1515,7 +1518,10 @@ function MASLDHeatmapView() {
         padding: '4px 24px 10px', fontFamily: "'JetBrains Mono', monospace",
         fontSize: 10, color: '#4a4a6a',
       }}>
-        {t('출처: KASL MASLD Fact Sheet 2023, NHIS 2010 코호트 10년 추적 데이터', 'Source: KASL MASLD Fact Sheet 2023, NHIS 2010 Cohort 10-Year Follow-up')}
+        {t(
+          '출처: 대한간학회(KASL) NAFLD Fact Sheet 2023, Section IV "비알코올지방간질환 진행 및 사망(추적관찰)". 국민건강보험공단(NHIS) 2010년 MASLD 진단 코호트 10년 추적(2010→2020). 일반 인구 발생률은 국가암등록사업/KDCA 기반 근사치.',
+          'Source: KASL NAFLD Fact Sheet 2023, Section IV "NAFLD Progression & Mortality (Follow-up)". NHIS 2010 MASLD cohort 10-year tracking (2010→2020). General population rates are approximate estimates from National Cancer Registry/KDCA.'
+        )}
       </div>
       </>) : (
       <Progression2yrView gender={gender} />
