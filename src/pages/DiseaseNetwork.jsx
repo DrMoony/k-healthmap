@@ -240,6 +240,35 @@ const LEVEL_ZONE_BORDERS = [
 ];
 
 // ── View Modes ───────────────────────────────────────────────
+
+// ── InfoTip (hover tooltip) ────────────────────────────────
+function InfoTip({ text }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span style={{ position: 'relative', display: 'inline-flex', marginLeft: '4px', verticalAlign: 'middle' }}
+      onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      <span style={{
+        width: '14px', height: '14px', borderRadius: '50%', border: '1px solid #555',
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '9px', color: '#888', cursor: 'help',
+      }}>?</span>
+      {show && (
+        <div style={{
+          position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
+          marginBottom: '6px', background: 'rgba(10,10,20,0.97)', border: '1px solid rgba(0,212,255,0.3)',
+          borderRadius: '8px', padding: '8px 14px', zIndex: 100,
+          minWidth: '280px', maxWidth: '400px',
+          fontSize: '11px', color: '#ccc', lineHeight: 1.6,
+          backdropFilter: 'blur(8px)', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+          pointerEvents: 'none', whiteSpace: 'normal',
+        }}>
+          {text}
+        </div>
+      )}
+    </span>
+  );
+}
+
 const VIEW_MODES = [
   { id: 'network', label_ko: '질환 네트워크', label_en: 'Disease Network' },
   { id: 'masld', label_ko: 'MASLD 진행', label_en: 'MASLD Progression' },
@@ -1333,6 +1362,9 @@ function MASLDHeatmapView() {
             {trackingMode === '10yr'
               ? t('MASLD 코호트 10년 누적 질환 발생률','MASLD Cohort 10-Year Cumulative Disease Incidence')
               : t('MASLD 2년 추적 진행률 추이 (2010/2015/2020)', 'MASLD 2-Year Progression Trend (2010/2015/2020)')}
+            <InfoTip text={trackingMode === '10yr'
+              ? t('일반 인구 대비 배수(×) 표시. 색이 붉을수록 MASLD 환자의 해당 질환 발생이 일반인보다 높음. 비보정 단순비율이므로 교란변수(비만·당뇨) 영향 포함.','Shows ratio (×) vs general population. Redder = higher incidence in MASLD vs general pop. Unadjusted ratios — confounders (obesity, DM) included.')
+              : t('2010/2015/2020년 MASLD 코호트의 2년 추적 시 간경화·간세포암 진행률을 비교. 시간에 따른 진행률 변화를 파악.','Compares 2yr progression to cirrhosis/HCC across 2010/2015/2020 MASLD cohorts.')} />
           </h2>
           <p style={{
             fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc',
@@ -1426,7 +1458,32 @@ function MASLDHeatmapView() {
             {tooltip.text}
           </div>
         )}
-        {/* Click detail panel */}
+        {/* Click detail panel — always visible with default */}
+        {(() => {
+          const showDefault = !clickDetail;
+          const panelStyle = {
+            position: showDefault ? 'absolute' : 'fixed',
+            ...(showDefault ? { right: 16, bottom: 50 } : { left: Math.min(clickDetail.mx + 16, window.innerWidth - 280), top: Math.min(clickDetail.my - 20, window.innerHeight - 300) }),
+            background: '#1a1a2eee', border: '1px solid #00ff8844', borderRadius: 10,
+            padding: '12px 14px', zIndex: 100, minWidth: 220, maxWidth: 280,
+            maxHeight: '260px', overflowY: 'auto',
+            boxShadow: '0 0 20px rgba(0,255,136,0.15)',
+            backdropFilter: 'blur(8px)',
+          };
+          return showDefault ? (
+            <div style={panelStyle}>
+              <h4 style={{ color: '#00ff88', margin: '0 0 6px', fontSize: 12, fontWeight: 700 }}>
+                {t('MASLD 합병증 요약', 'MASLD Complication Summary')}
+              </h4>
+              <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.7, margin: 0 }}>
+                {t(
+                  'MASLD 환자는 일반 인구 대비 간경변 최대 ×30, 간세포암 ×10, 심혈관질환 ×2-4배 높은 발생률. 특히 50세 이상 남성에서 악성종양 발생이 현저히 증가. 셀을 클릭하면 상세 분석을 확인할 수 있습니다.',
+                  'MASLD patients show up to ×30 higher cirrhosis, ×10 HCC, ×2-4 CVD incidence vs general population. Malignancy risk notably elevated in males 50+. Click a cell for detailed analysis.'
+                )}
+              </p>
+            </div>
+          ) : null;
+        })()}
         {clickDetail && (
           <div className="detail-panel" style={{
             position: 'fixed',
@@ -2252,9 +2309,31 @@ function ManagementView() {
     );
   };
 
+  const defaultMgmtInference = {
+    title: t('관리 현황 핵심 요약', 'Management Status Key Summary'),
+    detail: t(
+      '고혈압·당뇨·이상지질혈증은 인지율 68-77%로 비교적 양호하나, 당뇨 조절률(HbA1c<6.5%)은 32%에 불과. CKD 인지율은 6.3%로 극히 낮아 대부분 투석 직전까지 모름. MASLD·비만은 관리 캐스케이드 자체가 부재. 퍼널을 클릭하면 상세 정보를 확인할 수 있습니다.',
+      'HTN/DM/dyslipidemia awareness is 68-77%, relatively good, but DM control (HbA1c<6.5%) only 32%. CKD awareness is extremely low at 6.3%. MASLD/obesity lack formal management cascades. Click a funnel for details.'
+    ),
+    color: '#00d4ff',
+  };
+
   // Detail panel content
   const renderDetail = () => {
-    if (!selectedDisease) return null;
+    if (!selectedDisease) return (
+      <div style={{
+        position: 'absolute', right: 16, top: 60, width: 280,
+        background: 'rgba(10,10,20,0.96)', border: '1px solid rgba(0,212,255,0.2)',
+        borderRadius: 12, padding: 16, backdropFilter: 'blur(12px)',
+        maxHeight: 260, overflowY: 'auto',
+        boxShadow: '0 0 20px rgba(0,212,255,0.1)',
+      }}>
+        <h4 style={{ color: '#8888aa', margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 13 }}>
+          {defaultMgmtInference.title}
+        </h4>
+        <p style={{ color: '#bbb', fontSize: 11, lineHeight: 1.7, margin: 0 }}>{defaultMgmtInference.detail}</p>
+      </div>
+    );
     const d = selectedDisease;
     return (
       <div style={{
@@ -2340,6 +2419,10 @@ function ManagementView() {
           color: '#e0e0ff', margin: 0, textShadow: '0 0 20px rgba(0,212,255,0.3)',
         }}>
           {t('질환별 관리 현황','Disease Management Status')}
+          <InfoTip text={t(
+            '인지율 = 본인이 해당 질환이 있다고 아는 비율. 치료율 = 진단받은 환자 중 약물/비약물 치료를 받는 비율. 조절률 = 치료 환자 중 목표치를 달성한 비율. 세 지표의 곱이 실질 관리율.',
+            'Awareness = knows they have the disease. Treatment = receiving therapy among diagnosed. Control = meeting target among treated. Product of all three = effective management rate.'
+          )} />
         </h2>
         <p style={{
           fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#4a4a6a',
@@ -2593,6 +2676,10 @@ export default function DiseaseNetwork() {
             <div>
               <h3 style={{ color: '#ccd6f6', fontSize: 18, fontWeight: 600, marginBottom: 4, textAlign: 'center' }}>
                 {t('MASLD 동반질환 교차 분석','MASLD Comorbidity Cross-Analysis')}
+                <InfoTip text={t(
+                  'UpSet Plot — 다수 질환의 동반이환 조합별 빈도를 시각화. 하단 점 행렬은 동반 질환 조합, 상단 막대는 해당 조합의 환자 비율. 벤 다이어그램의 확장형.',
+                  'UpSet Plot — visualizes comorbidity combination frequencies. Bottom dot matrix shows disease combinations, top bars show patient proportion per combination. Extended Venn diagram.'
+                )} />
               </h3>
               <p style={{ color: '#8892b0', fontSize: 13, textAlign: 'center', marginBottom: 16 }}>
                 {t('2012 vs 2022 동반이환 패턴 변화','2012 vs 2022 Comorbidity Pattern Change')}

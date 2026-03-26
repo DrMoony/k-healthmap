@@ -276,9 +276,38 @@ function Panel({ children, style = {}, onClick }) {
   );
 }
 
+
+// ── InfoTip (hover tooltip) ────────────────────────────────
+function InfoTip({ text }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span style={{ position: 'relative', display: 'inline-flex', marginLeft: '4px', verticalAlign: 'middle' }}
+      onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      <span style={{
+        width: '14px', height: '14px', borderRadius: '50%', border: '1px solid #555',
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '9px', color: '#888', cursor: 'help',
+      }}>?</span>
+      {show && (
+        <div style={{
+          position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
+          marginBottom: '6px', background: 'rgba(10,10,20,0.97)', border: '1px solid rgba(0,212,255,0.3)',
+          borderRadius: '8px', padding: '8px 14px', zIndex: 100,
+          minWidth: '280px', maxWidth: '400px',
+          fontSize: '11px', color: '#ccc', lineHeight: 1.6,
+          backdropFilter: 'blur(8px)', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+          pointerEvents: 'none', whiteSpace: 'normal',
+        }}>
+          {text}
+        </div>
+      )}
+    </span>
+  );
+}
+
 // ── KPI Mini Card ────────────────────────────────────
 
-function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning, onClick, provinceName, nationalValue }) {
+function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning, onClick, provinceName, nationalValue, infoTip }) {
   const isProvince = !!provinceName;
   return (
     <div
@@ -302,6 +331,7 @@ function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning,
       <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '3px' }}>
         <span style={{ fontSize: '12px' }}>{icon}</span>
         <span style={{ fontSize: '10px', color: '#ccccdd', fontWeight: 500 }}>{label}</span>
+        {infoTip && <InfoTip text={infoTip} />}
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
         <span style={{ fontSize: '18px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: isProvince ? '#ffd60a' : '#ffffff', textShadow: `0 0 10px ${isProvince ? '#ffd60a' : color}44` }}>
@@ -529,6 +559,14 @@ export default function StrokeDashboard() {
   const [gender, setGender] = useState('전체');
   const [detailPopup, setDetailPopup] = useState(null);
 
+  const defaultInference = {
+    title: t('허혈성 뇌졸중 핵심 요약', 'Ischemic Stroke Key Summary'),
+    content: t(
+      '한국의 허혈성 뇌졸중 30일 치명률은 3.3%로 OECD 최상위(평균 7.7%). 그러나 3.5시간 내 도착률은 26.2%로 10년간 개선 없음. IV-tPA는 6.1%로 하락 중이나 혈전제거술은 6.5%로 2배 증가. 뇌졸중 환자의 46%에서 심방세동이 입원 시 첫 진단되어 사전 선별 부족을 시사.',
+      "Korea's 30-day ischemic stroke fatality rate is 3.3%, among the best in OECD (avg 7.7%). However, only 26.2% arrive within the 3.5h tPA window — no improvement in 10 years. IV-tPA declining (6.1%) while thrombectomy doubled (6.5%). 46% of AF in stroke patients is first diagnosed at admission, suggesting inadequate pre-screening."
+    ),
+  };
+
   const prov = selectedProv ? PROVINCE_INFO[selectedProv] : null;
   const KSR = STROKE_KSR;
 
@@ -689,6 +727,7 @@ export default function StrokeDashboard() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
           <KPIMini label={t("발생률","Incidence Rate")}
+            infoTip={t("연령표준화 발생률 — 인구 구조 차이를 보정한 허혈성 뇌졸중 신규 발생 건수 (건/10만명/년)","Age-standardized incidence — new ischemic stroke cases adjusted for population structure (per 100K/yr)")}
             value={selectedProv && prov ? prov.strokeIncidence : NATIONAL_AVG.strokeIncidence}
             unit="/10만" icon="📊" color="#00d4ff" source="KDCA 2022"
             provinceName={selectedProv && prov ? selectedProv : null}
@@ -696,6 +735,7 @@ export default function StrokeDashboard() {
             onClick={() => { setCol2Metric('incidence'); setDetailPopup({ title: t('허혈성 뇌졸중 발생률','Ischemic Stroke Incidence'), content: t(`연령표준화 발생률 ${NATIONAL_AVG.strokeIncidence}/10만명 (KDCA 2022). 시도별 최대 134.5(전북)~최소 101.6(서울).`, `Age-standardized incidence ${NATIONAL_AVG.strokeIncidence}/100k (KDCA 2022). Range: 134.5 (Jeonbuk) ~ 101.6 (Seoul).`) }); }}
           />
           <KPIMini label={t("연간 환자","Annual Patients")}
+            infoTip={t("KOSIS 기준 연간 허혈성 뇌졸중(I63) 퇴원환자 수. 주진단 기준 집계.","Annual ischemic stroke (I63) discharged patients per KOSIS. Based on primary diagnosis.")}
             value={selectedProv && prov ? (prov.strokePatients2023 || getPatientCount(selectedProv) || '-').toLocaleString() : '100,088'}
             unit="명" icon="🏥" color="#e0e0ff" source="KOSIS 2023"
             provinceName={selectedProv && prov ? selectedProv : null}
@@ -703,6 +743,7 @@ export default function StrokeDashboard() {
             onClick={() => { setCol2Metric('patients'); setDetailPopup({ title: t('연간 허혈성 뇌졸중 환자수','Annual Ischemic Stroke Patients'), content: t('2023년 KOSIS 100,088명. 경기(24,243) > 서울(21,138) > 부산(5,798).','2023 KOSIS 100,088 patients. Gyeonggi(24,243) > Seoul(21,138) > Busan(5,798).') }); }}
           />
           <KPIMini label={t("사망률","Mortality")}
+            infoTip={t("OECD 표준화 지표 — 허혈성 뇌졸중 입원 후 30일 이내 사망률. 치료 품질 국제 비교에 사용","OECD standardized indicator — 30-day case fatality after ischemic stroke admission. Used for international care quality comparison")}
             value={selectedProv && prov ? prov.strokeMortality : NATIONAL_AVG.strokeMortality}
             unit="/10만" icon="🇰🇷" color="#ffd60a" source={selectedProv && prov ? 'KOSIS 2022' : 'OECD 2025'}
             provinceName={selectedProv && prov ? selectedProv : null}
@@ -710,6 +751,7 @@ export default function StrokeDashboard() {
             onClick={() => { setCol2Metric('mortality'); setDetailPopup({ title: selectedProv ? t(`${selectedProv} 뇌혈관질환 사망률`, `${provName(selectedProv)} Cerebrovascular Mortality`) : t('OECD 비교: 30일 치명률','OECD Comparison: 30-day Case Fatality'), content: selectedProv && prov ? t(`${selectedProv} 사망률 ${prov.strokeMortality}/10만명 (전국 ${NATIONAL_AVG.strokeMortality}/10만명)`, `${provName(selectedProv)} mortality ${prov.strokeMortality}/100k (national ${NATIONAL_AVG.strokeMortality}/100k)`) : t(`한국 3.3% vs OECD 평균 7.7% — OECD 최상위. '도착 후 치료 품질'은 세계 최고이나 '도착까지'(26.2%) 과제.`, `Korea 3.3% vs OECD avg 7.7% — top tier. Post-arrival care quality world-best, but pre-arrival (26.2%) remains a challenge.`) }); }}
           />
           <KPIMini label={t("3.5h 도착","3.5h Arrival Rate")}
+            infoTip={t("tPA 투여 가능 시간(3.5시간) 내 병원 도착 비율. 이 시간을 넘기면 혈전용해술 적응증이 제한됨","Percentage arriving within the 3.5h tPA window. Beyond this time, thrombolysis eligibility is restricted")}
             value={selectedProv && prov ? prov.goldenTimeRate : KSR.arrivalTime.within3_5h}
             unit="%" icon="⏱️" color="#ffaa00" source={selectedProv ? 'KDCA 추정' : 'KSR 2024'}
             warning={!selectedProv ? t('10년 무개선','No improvement in 10yr') : null}
@@ -718,25 +760,30 @@ export default function StrokeDashboard() {
             onClick={() => { setCol2Metric('goldenTime'); setDetailPopup({ title: t('3.5시간 내 도착률','3.5h Arrival Rate'), content: t('26.2% (KSR 2022). 2012년 26.0%→2022년 26.2% 10년 무개선. 중앙값 12시간. 증상 인지 지연 주 원인.','26.2% (KSR 2022). 26.0% in 2012 → 26.2% in 2022, no improvement in 10yr. Median 12hr. Delayed symptom recognition is main cause.') }); }}
           />
           <KPIMini label={t("IV-tPA","IV-tPA")}
+            infoTip={t("정맥내 혈전용해술(Intravenous tissue Plasminogen Activator) — 급성 허혈성 뇌졸중의 1차 재관류 치료","Intravenous tissue Plasminogen Activator — first-line reperfusion therapy for acute ischemic stroke")}
             value={selectedProv && prov ? prov.tpaRate : KSR.revascularization.ivTpa.pct}
             unit="%" icon="💉" color="#b388ff" source={selectedProv ? 'KDCA 추정' : 'KSR 2024'}
             provinceName={selectedProv && prov ? selectedProv : null}
             nationalValue={selectedProv && prov ? KSR.revascularization.ivTpa.pct : null}
             onClick={() => { setCol2Metric('tpa'); setDetailPopup({ title: t('IV-tPA 시행률','IV-tPA Rate'), content: t('6.1% (KSR 2022). 10.2%→6.1% 하락 — 도착률 26.2%로 적응 환자 제한. 혈전제거술 3.0%→6.5% 2배↑ 대체.','6.1% (KSR 2022). 10.2%→6.1% decline — limited eligible patients due to 26.2% arrival rate. Thrombectomy 3.0%→6.5% doubled as substitute.') }); }}
           />
-          <KPIMini label={t("혈전제거","Thrombectomy")} value={KSR.revascularization.thrombectomy.pct} unit="%" icon="🔧" color="#00ff88" source="KSR 2024"
+          <KPIMini label={t("혈전제거","Thrombectomy")}
+            infoTip={t("기계적 혈전제거술(Mechanical Thrombectomy) — 대혈관 폐색(LVO) 시 카테터로 혈전을 물리적으로 제거","Mechanical Thrombectomy — physically removes clot via catheter in large vessel occlusion (LVO)")} value={KSR.revascularization.thrombectomy.pct} unit="%" icon="🔧" color="#00ff88" source="KSR 2024"
             provinceName={selectedProv ? null : null}
             onClick={() => setDetailPopup({ title: t('혈전제거술','Thrombectomy'), content: t('6.5% (KSR 2022). 3.0%→6.5% 2배↑. 지역: 전북 26.1%(최고)~서울 12.9%(최저). LVO에 효과적. 시도별 데이터는 KSR 전국만.','6.5% (KSR 2022). 3.0%→6.5% doubled. Regional: Jeonbuk 26.1% (highest) ~ Seoul 12.9% (lowest). Effective for LVO. Only national KSR data available.') })}
           />
-          <KPIMini label={t("mRS 0-1","mRS 0-1")} value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88"
+          <KPIMini label={t("mRS 0-1","mRS 0-1")}
+            infoTip={t("Modified Rankin Scale 0-1 — 증상 없음~유의한 장애 없음. 독립적 일상생활 가능","Modified Rankin Scale 0-1 — no symptoms to no significant disability. Independent in daily activities")} value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88"
             source={selectedProv ? t('전국 기준 (KSR)','National baseline (KSR)') : 'KSR 2024'}
             onClick={() => setDetailPopup({ title: t('좋은 예후 (mRS 0-1)','Good outcome (mRS 0-1)'), content: t('퇴원 시 mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% 개선. mRS 0-2(독립 생활): 61.2%. 경증 비율↑ + 재관류 발전 기여.','Discharge mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% improvement. mRS 0-2 (independent living): 61.2%. Increased mild cases + revascularization advances.') })}
           />
-          <KPIMini label={t("원내사망","In-hospital Death")} value={KSR.outcomes.inHospitalMortality.pct} unit="%" icon="📉" color="#ff6b6b"
+          <KPIMini label={t("원내사망","In-hospital Death")}
+            infoTip={t("입원 기간 중 사망한 환자 비율","Proportion of patients who died during hospitalization")} value={KSR.outcomes.inHospitalMortality.pct} unit="%" icon="📉" color="#ff6b6b"
             source={selectedProv ? t('전국 기준 (KSR)','National baseline (KSR)') : 'KSR 2024'}
             onClick={() => setDetailPopup({ title: t('원내 사망률','In-hospital Mortality'), content: t('원내 사망 2.6% (KSR 2022). 1.0%→2.6% 증가 — 85세↑ 초고령 환자 2배 증가(6.6%→10.7%)가 주 원인.','In-hospital death 2.6% (KSR 2022). 1.0%→2.6% increase — mainly due to doubling of 85+ patients (6.6%→10.7%).') })}
           />
-          <KPIMini label={t('AF 첫진단','AF New Dx')} value="46" unit="%" icon="💔" color="#e74c3c"
+          <KPIMini label={t('AF 첫진단','AF New Dx')}
+            infoTip={t("심방세동(Atrial Fibrillation) — 심인성 색전 뇌졸중의 89.9% 원인. 항응고제로 예방 가능","Atrial Fibrillation — causes 89.9% of cardioembolism strokes. Preventable with anticoagulants")} value="46" unit="%" icon="💔" color="#e74c3c"
             source={selectedProv ? t('전국 기준 (KSR)','National baseline (KSR)') : 'KSR 2024'}
             onClick={() => setDetailPopup({ title: t('심방세동 입원 시 첫 진단','AF First Diagnosed at Admission'), content: t('뇌졸중 환자 중 심방세동(AF) 20% 동반. 이 중 46%가 입원 시 처음 진단 — 지역사회 AF 선별검사 부족을 시사. AF는 심인성 색전(CE) 뇌졸중의 89.9% 차지. 조기 발견 시 항응고제로 뇌졸중 예방 가능.','AF present in 20% of stroke patients. 46% first diagnosed at admission — suggests inadequate community AF screening. AF accounts for 89.9% of CE strokes. Early detection enables anticoagulant prevention.') })}
           />
@@ -1278,18 +1325,25 @@ export default function StrokeDashboard() {
           )}
         </AnimatePresence>
 
-        {/* Inline inference panel — shows when any item is clicked */}
-        {detailPopup && (
-          <Panel style={{ flexShrink: 0, borderLeft: '3px solid #00d4ff' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 700, color: '#00d4ff' }}>{detailPopup.title}</span>
-              <button onClick={() => setDetailPopup(null)} style={{
-                background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '12px',
-              }}>✕</button>
-            </div>
-            <div style={{ fontSize: '11px', color: '#bbb', lineHeight: 1.7 }}>{detailPopup.content}</div>
-          </Panel>
-        )}
+        {/* Inline inference panel — always visible */}
+        <Panel style={{ flexShrink: 0, borderLeft: `3px solid ${detailPopup ? '#00d4ff' : '#4a4a6a'}` }}>
+          {(() => {
+            const info = detailPopup || defaultInference;
+            return (
+              <>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: detailPopup ? '#00d4ff' : '#8888aa' }}>{info.title}</span>
+                  {detailPopup && (
+                    <button onClick={() => setDetailPopup(null)} style={{
+                      background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '12px',
+                    }}>✕</button>
+                  )}
+                </div>
+                <div style={{ fontSize: '11px', color: '#bbb', lineHeight: 1.7 }}>{info.content}</div>
+              </>
+            );
+          })()}
+        </Panel>
 
         {/* Footer */}
         <div style={{
