@@ -69,6 +69,7 @@ function getNationalAvg(category, gender) {
 
 // ── Province Bar Chart (Canvas 2D) ──
 function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
+  const { lang } = useLang();
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const layoutRef = useRef(null);
@@ -168,7 +169,7 @@ function ProvinceChart({ category, gender, selectedProv, onProvClick }) {
     ctx.fillStyle = '#00d4ff';
     ctx.font = '11px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`Avg ${avg}`, avgX, h - padB + 16);
+    ctx.fillText(lang === 'ko' ? `평균 ${avg}` : `Avg ${avg}`, avgX, h - padB + 16);
   }, [category, gender, selectedProv]);
 
   useEffect(() => {
@@ -521,6 +522,7 @@ function GenderToggle({ value, onChange, accentColor }) {
 
 // ── Detail Panel Content ──
 function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGender, ageGender }) {
+  const { t } = useLang();
   const cat = CATEGORIES.find(c => c.key === category);
 
   const SMOKE_CATS = ['비흡연', '현재금연', '현재흡연'];
@@ -555,7 +557,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
         <div style={{ marginBottom: '8px' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedProv}</div>
           <div style={{ fontSize: '10px', color: '#8888aa' }}>
-            {provGender === 'male' ? 'Male' : provGender === 'female' ? 'Female' : 'Total'}
+            {provGender === 'male' ? t('남성','Male') : provGender === 'female' ? t('여성','Female') : t('전체','Total')}
           </div>
           <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
           <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
@@ -577,7 +579,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
         <div style={{ marginBottom: '8px' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '2px' }}>{selectedAge}세</div>
           <div style={{ fontSize: '10px', color: '#8888aa' }}>
-            {ageGender === 'male' ? 'Male' : ageGender === 'female' ? 'Female' : 'Total'}
+            {ageGender === 'male' ? t('남성','Male') : ageGender === 'female' ? t('여성','Female') : t('전체','Total')}
           </div>
           <div style={{ fontSize: '10px', color: cat.color, marginTop: '4px', fontWeight: 600 }}>{METRIC_LABELS[category]}</div>
           <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace' }}>
@@ -595,7 +597,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
   // Year selected
   if (selectedYear) {
     const trendKey = category === 'exercise' ? null : category;
-    if (!trendKey) return <div style={{ color: '#666', fontSize: '11px' }}>No exercise trend data</div>;
+    if (!trendKey) return <div style={{ color: '#666', fontSize: '11px' }}>{t('운동 트렌드 데이터 없음', 'No exercise trend data')}</div>;
     const yearIdx = LIFESTYLE_TRENDS.years.indexOf(selectedYear);
     const trendData = LIFESTYLE_TRENDS[trendKey];
     const yearVals = Object.entries(trendData).map(([p, vals]) => ({ name: p, value: vals[yearIdx] })).sort((a, b) => b.value - a.value);
@@ -619,7 +621,7 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
   // Default: national summary
   return (
     <div style={{ overflowY: 'auto', height: '100%' }}>
-      <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '8px' }}>National Summary</div>
+      <div style={{ fontSize: '12px', fontWeight: 700, color: '#e0e0ff', marginBottom: '8px' }}>{t('전국 요약', 'National Summary')}</div>
       {CATEGORIES.map(c => {
         const avg = getNationalAvg(c.key, 'total');
         const ranking = getProvinceRanking(c.key, 'total');
@@ -633,13 +635,13 @@ function DetailPanel({ category, selectedProv, selectedAge, selectedYear, provGe
               <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', fontFamily: '"JetBrains Mono", monospace', marginLeft: 'auto' }}>{avg}%</span>
             </div>
             <div style={{ fontSize: '10px', color: '#8888aa', display: 'flex', justifyContent: 'space-between' }}>
-              <span>Top: <span style={{ color: c.color }}>{top.name} {top.value}%</span></span>
-              <span>Low: <span style={{ color: '#00d4ff' }}>{bottom.name} {bottom.value}%</span></span>
+              <span>{t('최고', 'Top')}: <span style={{ color: c.color }}>{top.name} {top.value}%</span></span>
+              <span>{t('최저', 'Low')}: <span style={{ color: '#00d4ff' }}>{bottom.name} {bottom.value}%</span></span>
             </div>
           </div>
         );
       })}
-      <div style={{ fontSize: '10px', color: '#555', marginTop: '4px' }}>Click charts for details</div>
+      <div style={{ fontSize: '10px', color: '#555', marginTop: '4px' }}>{t('차트 클릭 시 상세 보기', 'Click charts for details')}</div>
     </div>
   );
 }

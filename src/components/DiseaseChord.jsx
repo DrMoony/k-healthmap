@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ResponsiveChord } from '@nivo/chord';
+import { useLang } from '../i18n';
 
 // ── Disease labels (order matches matrix rows/columns) ───────
 const DISEASES = [
@@ -84,6 +85,7 @@ details.forEach(([a, b, text, ref]) => {
 });
 
 export default function DiseaseChord() {
+  const { t } = useLang();
   const [selected, setSelected] = useState(null);
 
   return (
@@ -163,12 +165,12 @@ export default function DiseaseChord() {
                   <span style={{ color: ribbon.target.color }}>{ribbon.target.id}</span>
                 </div>
                 <div style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>
-                  동반이환율: {ribbon.source.value}% / {ribbon.target.value}%
+                  {t('동반이환율', 'Comorbidity rate')}: {ribbon.source.value}% / {ribbon.target.value}%
                 </div>
                 {detail && (
                   <>
                     <div style={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, marginTop: 6 }}>{detail.text}</div>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>출처: {detail.ref}</div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>{t('출처', 'Source')}: {detail.ref}</div>
                   </>
                 )}
               </div>
@@ -249,11 +251,11 @@ export default function DiseaseChord() {
           {selected.type === 'ribbon' && (
             <>
               <div style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 6 }}>
-                동반이환율: {selected.sourceValue}% / {selected.targetValue}%
+                {t('동반이환율', 'Comorbidity rate')}: {selected.sourceValue}% / {selected.targetValue}%
               </div>
               <div style={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}>{selected.text}</div>
               {selected.ref && (
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 6 }}>출처: {selected.ref}</div>
+                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 6 }}>{t('출처', 'Source')}: {selected.ref}</div>
               )}
             </>
           )}

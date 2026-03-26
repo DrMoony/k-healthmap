@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { DISEASE_EPI } from '../data/disease_epi';
+import { useLang } from '../i18n';
 
 // ── Orbital Disease Nodes ───────────────────────────────────
 const diseaseNodes = [
@@ -170,6 +171,7 @@ const ORBITAL_STYLES = `
 `;
 
 export default function DiseaseOrbital() {
+  const { t } = useLang();
   const containerRef = useRef(null);
   const animRef = useRef(null);
   const [dims, setDims] = useState({ w: 800, h: 600 });
@@ -613,7 +615,7 @@ export default function DiseaseOrbital() {
               borderTop: '1px solid rgba(255,255,255,0.06)',
               paddingTop: 8, marginTop: 8,
             }}>
-              출처: KNHANES / NHIS / 각 학회 Fact Sheet
+              {t('출처: KNHANES / NHIS / 각 학회 Fact Sheet', 'Source: KNHANES / NHIS / Medical Society Fact Sheets')}
             </div>
           </div>
         );
@@ -669,7 +671,7 @@ export default function DiseaseOrbital() {
         fontFamily: "'JetBrains Mono', monospace",
         pointerEvents: 'none',
       }}>
-        출처: 각 학회 팩트시트 2022-2025
+        {t('출처: 각 학회 팩트시트 2022-2025', 'Source: Medical Society Fact Sheets 2022-2025')}
       </div>
     </div>
   );

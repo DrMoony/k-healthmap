@@ -1788,7 +1788,7 @@ function TrendsView() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>x</button>
             <h4 style={{ color: '#b388ff', margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-              {pointDetail.year}년 {MODE_LABELS[mode] || mode}
+              {pointDetail.year}{lang === 'ko' ? '년' : ''} {lang === 'en' ? (MODE_LABELS_EN[mode] || mode) : (MODE_LABELS[mode] || mode)}
             </h4>
             {Object.entries(pointDetail.allDiseases).map(([key, val]) => {
               const color = activeColors[key] || '#888';
@@ -2127,7 +2127,7 @@ function ManagementView() {
         {d.extendedCascade && (
           <div style={{ marginTop: 8 }}>
             <p style={{ color: '#6666aa', fontSize: 9, margin: '0 0 6px', fontFamily: "'JetBrains Mono', monospace" }}>
-              EXTENDED CASCADE (30+)
+              {t('확장 캐스케이드 (30세+)', 'EXTENDED CASCADE (30+)')}
             </p>
             {d.extendedCascade.map((step, i) => {
               const barW = (step.value / 100) * 200;

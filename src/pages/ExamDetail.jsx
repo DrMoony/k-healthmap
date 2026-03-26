@@ -263,6 +263,7 @@ function SortToggle({ value, onChange }) {
 
 // ─── Horizontal Abnormality Bar Chart (Canvas 2D) ────────────────────────────
 function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAvg, height = 300, sortMode = 'rate', onBarClick }) {
+  const { lang } = useLang();
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [canvasWidth, setCanvasWidth] = useState(600);
@@ -351,7 +352,7 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
     ctx.fillStyle = NEON.gold;
     ctx.font = '11px JetBrains Mono';
     ctx.textAlign = 'center';
-    ctx.fillText('\uC804\uAD6D ' + nationalAvg.toFixed(1) + '%', avgX, mt - 1);
+    ctx.fillText((lang === 'ko' ? '전국 ' : 'Nat\'l ') + nationalAvg.toFixed(1) + '%', avgX, mt - 1);
 
     // Bars with gradient colors
     sortedData.forEach((d, i) => {
@@ -476,6 +477,7 @@ function AbnormalBarChart({ labels, dataObj, gender, abnormalIndices, nationalAv
 
 // ─── Stacked Bar Chart (Canvas 2D) ──────────────────────────────────────────
 function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices, nationalAvg, height = 300, highlightCat, onSegmentClick }) {
+  const { lang } = useLang();
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
@@ -543,7 +545,7 @@ function StackedBarChart({ labels, dataObj, categories, gender, abnormalIndices,
       ctx.fillStyle = NEON.gold;
       ctx.font = '11px JetBrains Mono';
       ctx.textAlign = 'left';
-      ctx.fillText('\uC804\uAD6D ' + nationalAvg.toFixed(1) + '%', w - mr + 2, avgY - 3);
+      ctx.fillText((lang === 'ko' ? '전국 ' : 'Nat\'l ') + nationalAvg.toFixed(1) + '%', w - mr + 2, avgY - 3);
     }
 
     // Bars
@@ -769,6 +771,7 @@ function Panel({ children, style }) {
 
 // ─── Legend (stacked mode only) ──────────────────────────────────────────────
 function Legend({ categories, abnormalIndices, highlightCat, onCatClick }) {
+  const { t } = useLang();
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px 8px', marginTop: 4 }}>
       {categories.map((cat, i) => {
@@ -801,7 +804,7 @@ function Legend({ categories, abnormalIndices, highlightCat, onCatClick }) {
         display: 'flex', alignItems: 'center', gap: 3, fontSize: 11, color: NEON.gold, marginLeft: 6,
       }}>
         <span style={{ width: 14, height: 0, borderTop: `1.5px dashed ${NEON.gold}`, display: 'inline-block' }} />
-        National Avg
+        {t('전국 평균', 'National Avg')}
       </div>
     </div>
   );
