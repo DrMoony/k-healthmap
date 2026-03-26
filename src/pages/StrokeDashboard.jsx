@@ -704,7 +704,13 @@ export default function StrokeDashboard() {
         {/* Top: 연령별 환자분포 */}
         <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', flexShrink: 0 }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>연령별 허혈성 뇌졸중 환자수 {!selectedProv && <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>(전국)</span>}{selectedProv && <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>(전국 기준)</span>}</span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>
+              연령별 허혈성 뇌졸중 환자수
+              {selectedProv
+                ? <span style={{ fontSize: '10px', color: '#ffd60a', fontWeight: 600, marginLeft: 6, padding: '1px 6px', background: '#ffd60a15', borderRadius: 4 }}>⚠ 전국 기준 (시도별 연령 데이터 없음)</span>
+                : <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> (전국)</span>
+              }
+            </span>
             <div style={{ display: 'flex', gap: '4px' }}>
               {['전체','남자','여자'].map(g => (
                 <button
@@ -789,7 +795,7 @@ export default function StrokeDashboard() {
         </Panel>
 
         {/* Middle: NIHSS 중증도 분포 */}
-        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.6 : 1 }}>
+        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.35 : 1, position: 'relative', filter: selectedProv ? 'grayscale(0.5)' : 'none' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
             NIHSS 중증도 분포 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}중앙값 {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
           </div>
@@ -804,7 +810,7 @@ export default function StrokeDashboard() {
         </Panel>
 
         {/* Bottom: 예후 mRS 분포 */}
-        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.6 : 1 }}>
+        <Panel style={{ flex: '0 0 auto', opacity: selectedProv ? 0.35 : 1, position: 'relative', filter: selectedProv ? 'grayscale(0.5)' : 'none' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
             퇴원 시 예후 (mRS) <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}KSR 2022</span>
           </div>
