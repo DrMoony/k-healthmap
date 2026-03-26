@@ -51,6 +51,23 @@ function getAgeDistribution(gender = '전체') {
 const TRANSPORT_LABELS = ['<1h', '1-2h', '2-3h', '3-6h', '6h+'];
 const TRANSPORT_KEYS = ['1시간미만', '1~2시간', '2~3시간', '3~6시간', '6시간이상'];
 
+const OUTCOME_KEYS = ['퇴가', '입원', '전원', '사망', '기타'];
+const OUTCOME_COLORS = ['#00ff88', '#00d4ff', '#ffd60a', '#ff4444', '#888'];
+const OUTCOME_LABELS = ['퇴가', '입원', '전원', '사망', '기타'];
+
+function getOutcomeDist(regionName) {
+  const data = STROKE_KOSIS?.regionByOutcome?.[regionName];
+  if (!data) return null;
+  const yr = '2023';
+  const raw = OUTCOME_KEYS.map(k => {
+    const v = data[k];
+    return v ? (v[yr] || v['2022'] || 0) : 0;
+  });
+  const total = raw.reduce((s, v) => s + v, 0);
+  if (total === 0) return null;
+  return raw.map(v => Math.round((v / total) * 1000) / 10);
+}
+
 function getTransportDist(regionName) {
   const region = regionName || '전체';
   const data = STROKE_KOSIS?.transportByRegion?.[region];
@@ -699,134 +716,187 @@ export default function StrokeDashboard() {
         </Panel>
       </div>
 
-      {/* ═══════ COLUMN 3: 연령·중증도·예후 ═══════ */}
+      {/* ═══════ COLUMN 3: 연령·중증도·예후 (전국) / 이송·전귀·요약 (시도) ═══════ */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
-        {/* Top: 연령별 환자분포 */}
-        <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', flexShrink: 0 }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>
-              연령별 허혈성 뇌졸중 환자수
-              {selectedProv
-                ? <span style={{ fontSize: '10px', color: '#ffd60a', fontWeight: 600, marginLeft: 6, padding: '1px 6px', background: '#ffd60a15', borderRadius: 4 }}>⚠ 전국 기준 (시도별 연령 데이터 없음)</span>
-                : <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> (전국)</span>
-              }
-            </span>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {['전체','남자','여자'].map(g => (
-                <button
-                  key={g}
-                  onClick={() => setGender(g)}
-                  style={{
-                    padding: '3px 8px', fontSize: '10px', borderRadius: '6px', cursor: 'pointer',
-                    border: gender === g ? '1px solid rgba(0,212,255,0.5)' : '1px solid rgba(255,255,255,0.1)',
-                    background: gender === g ? 'rgba(0,212,255,0.15)' : 'transparent',
-                    color: gender === g ? '#00d4ff' : '#666',
-                    fontFamily: "'Noto Sans KR'",
-                  }}
-                >{g}</button>
-              ))}
-            </div>
-          </div>
-          <div style={{ flex: 1, minHeight: 0 }}>
-            {ageDist ? (
-              <VerticalBarChart data={ageDist} labels={AGE_LABELS} title="" />
-            ) : (
-              <div style={{ color: '#555', fontSize: '12px', textAlign: 'center', paddingTop: '40px' }}>데이터 없음</div>
-            )}
-          </div>
-          <div style={{ fontSize: '9px', color: '#555', marginTop: '4px', textAlign: 'right', flexShrink: 0 }}>
-            평균연령 {KSR.demographics.meanAge}세 | 남성 {KSR.demographics.maleRatio}% | 85세+ {KSR.demographics.elderly85plus.pct}%
-          </div>
-        </Panel>
-
-        {/* Transport time distribution */}
-        <Panel style={{ flex: '0 0 auto' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-            이송시간 분포 {selectedProv ? <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span> : <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>(전국)</span>}
-          </div>
-          {(() => {
-            const tDist = getTransportDist(selectedProv);
-            const natDist = getTransportDist(null);
-            if (!tDist) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>데이터 없음</div>;
-            const total = tDist.reduce((s, v) => s + v, 0);
-            const natTotal = natDist ? natDist.reduce((s, v) => s + v, 0) : 1;
-            return (
-              <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-end', height: '80px' }}>
-                {tDist.map((v, i) => {
-                  const pct = total > 0 ? (v / total) * 100 : 0;
-                  const natPct = natTotal > 0 && natDist ? (natDist[i] / natTotal) * 100 : 0;
-                  const colors = ['#00ff88', '#00d4ff', '#ffaa00', '#ff6b6b', '#ff4444'];
-                  return (
-                    <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
-                      <span style={{ fontSize: '9px', color: '#bbb', fontFamily: "'JetBrains Mono'", marginBottom: '2px', fontWeight: 700 }}>
-                        {pct.toFixed(0)}%
-                      </span>
-                      <div style={{
-                        width: '100%', borderRadius: '3px 3px 0 0',
-                        height: `${Math.max(pct, 2)}%`,
-                        background: colors[i],
-                        opacity: 0.8,
-                        position: 'relative',
-                      }} />
-                      <span style={{ fontSize: '9px', color: '#666', marginTop: '3px', whiteSpace: 'nowrap' }}>
-                        {TRANSPORT_LABELS[i]}
-                      </span>
-                    </div>
-                  );
-                })}
+        {!selectedProv ? (
+          <>
+            {/* ── National view ── */}
+            {/* 연령별 환자분포 */}
+            <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', flexShrink: 0 }}>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>
+                  연령별 허혈성 뇌졸중 환자수
+                  <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> (전국)</span>
+                </span>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  {['전체','남자','여자'].map(g => (
+                    <button
+                      key={g}
+                      onClick={() => setGender(g)}
+                      style={{
+                        padding: '3px 8px', fontSize: '10px', borderRadius: '6px', cursor: 'pointer',
+                        border: gender === g ? '1px solid rgba(0,212,255,0.5)' : '1px solid rgba(255,255,255,0.1)',
+                        background: gender === g ? 'rgba(0,212,255,0.15)' : 'transparent',
+                        color: gender === g ? '#00d4ff' : '#666',
+                        fontFamily: "'Noto Sans KR'",
+                      }}
+                    >{g}</button>
+                  ))}
+                </div>
               </div>
-            );
-          })()}
-          {selectedProv && (() => {
-            const tDist = getTransportDist(selectedProv);
-            const natDist = getTransportDist(null);
-            if (!tDist || !natDist) return null;
-            const total = tDist.reduce((s, v) => s + v, 0);
-            const natTotal = natDist.reduce((s, v) => s + v, 0);
-            const prov3h = total > 0 ? ((tDist[0] + tDist[1] + tDist[2]) / total * 100).toFixed(1) : 0;
-            const nat3h = natTotal > 0 ? ((natDist[0] + natDist[1] + natDist[2]) / natTotal * 100).toFixed(1) : 0;
-            return (
-              <div style={{ fontSize: '9px', color: '#888', marginTop: '6px', textAlign: 'right' }}>
-                3시간 내 도착: <span style={{ color: '#ffd60a', fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{prov3h}%</span>
-                <span style={{ color: '#555', marginLeft: '6px' }}>전국 {nat3h}%</span>
+              <div style={{ flex: 1, minHeight: 0 }}>
+                {ageDist ? (
+                  <VerticalBarChart data={ageDist} labels={AGE_LABELS} title="" />
+                ) : (
+                  <div style={{ color: '#555', fontSize: '12px', textAlign: 'center', paddingTop: '40px' }}>데이터 없음</div>
+                )}
               </div>
-            );
-          })()}
-        </Panel>
+              <div style={{ fontSize: '9px', color: '#555', marginTop: '4px', textAlign: 'right', flexShrink: 0 }}>
+                평균연령 {KSR.demographics.meanAge}세 | 남성 {KSR.demographics.maleRatio}% | 85세+ {KSR.demographics.elderly85plus.pct}%
+              </div>
+            </Panel>
 
-        {/* Middle: NIHSS 중증도 분포 */}
-        <Panel style={{ flex: '0 0 auto', display: selectedProv ? 'none' : 'block' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-            NIHSS 중증도 분포 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}중앙값 {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
-          </div>
-          <StackedBar
-            segments={[
-              { label: 'NIHSS 0-3 경증', value: KSR.severity.minor.pct, color: '#00ff88' },
-              { label: 'NIHSS 4-14 중등도', value: KSR.severity.moderate.pct, color: '#ffaa00' },
-              { label: 'NIHSS 15+ 중증', value: KSR.severity.severe.pct, color: '#ff4444' },
-            ]}
-            onClick={handleSeverityClick}
-          />
-        </Panel>
+            {/* NIHSS 중증도 분포 */}
+            <Panel style={{ flex: '0 0 auto' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
+                NIHSS 중증도 분포 <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>중앙값 {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
+              </div>
+              <StackedBar
+                segments={[
+                  { label: 'NIHSS 0-3 경증', value: KSR.severity.minor.pct, color: '#00ff88' },
+                  { label: 'NIHSS 4-14 중등도', value: KSR.severity.moderate.pct, color: '#ffaa00' },
+                  { label: 'NIHSS 15+ 중증', value: KSR.severity.severe.pct, color: '#ff4444' },
+                ]}
+                onClick={handleSeverityClick}
+              />
+            </Panel>
 
-        {/* Bottom: 예후 mRS 분포 */}
-        <Panel style={{ flex: '0 0 auto', display: selectedProv ? 'none' : 'block' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-            퇴원 시 예후 (mRS) <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{selectedProv ? '전국 기준 · ' : ''}KSR 2022</span>
-          </div>
-          <StackedBar
-            segments={[
-              { label: 'mRS 0-1 좋은예후', value: KSR.outcomes.mrs01.pct, color: '#00ff88' },
-              { label: 'mRS 2 경미장애', value: 17.1, color: '#00d4ff' },
-              { label: 'mRS 3-5 장애', value: 36.2, color: '#ffaa00' },
-              { label: 'mRS 6 원내사망', value: KSR.outcomes.inHospitalMortality.pct, color: '#ff4444' },
-            ]}
-            onClick={handleMrsClick}
-          />
-          <div style={{ fontSize: '10px', color: '#8888aa', marginTop: '6px' }}>
-            독립적 생활 (mRS 0-2): <span style={{ color: '#00ff88', fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{KSR.outcomes.mrs02.pct}%</span>
-          </div>
-        </Panel>
+            {/* 예후 mRS 분포 */}
+            <Panel style={{ flex: '0 0 auto' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
+                퇴원 시 예후 (mRS) <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>KSR 2022</span>
+              </div>
+              <StackedBar
+                segments={[
+                  { label: 'mRS 0-1 좋은예후', value: KSR.outcomes.mrs01.pct, color: '#00ff88' },
+                  { label: 'mRS 2 경미장애', value: 17.1, color: '#00d4ff' },
+                  { label: 'mRS 3-5 장애', value: 36.2, color: '#ffaa00' },
+                  { label: 'mRS 6 원내사망', value: KSR.outcomes.inHospitalMortality.pct, color: '#ff4444' },
+                ]}
+                onClick={handleMrsClick}
+              />
+              <div style={{ fontSize: '10px', color: '#8888aa', marginTop: '6px' }}>
+                독립적 생활 (mRS 0-2): <span style={{ color: '#00ff88', fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{KSR.outcomes.mrs02.pct}%</span>
+              </div>
+            </Panel>
+          </>
+        ) : (
+          <>
+            {/* ── Province view ── */}
+            {/* 이송시간 분포 */}
+            <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
+                이송시간 분포 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
+              </div>
+              {(() => {
+                const tDist = getTransportDist(selectedProv);
+                const natDist = getTransportDist(null);
+                if (!tDist) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>데이터 없음</div>;
+                const total = tDist.reduce((s, v) => s + v, 0);
+                const natTotal = natDist ? natDist.reduce((s, v) => s + v, 0) : 1;
+                return (
+                  <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-end', height: '80px' }}>
+                    {tDist.map((v, i) => {
+                      const pct = total > 0 ? (v / total) * 100 : 0;
+                      const colors = ['#00ff88', '#00d4ff', '#ffaa00', '#ff6b6b', '#ff4444'];
+                      return (
+                        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
+                          <span style={{ fontSize: '9px', color: '#bbb', fontFamily: "'JetBrains Mono'", marginBottom: '2px', fontWeight: 700 }}>
+                            {pct.toFixed(0)}%
+                          </span>
+                          <div style={{
+                            width: '100%', borderRadius: '3px 3px 0 0',
+                            height: `${Math.max(pct, 2)}%`,
+                            background: colors[i],
+                            opacity: 0.8,
+                          }} />
+                          <span style={{ fontSize: '9px', color: '#666', marginTop: '3px', whiteSpace: 'nowrap' }}>
+                            {TRANSPORT_LABELS[i]}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+              {(() => {
+                const tDist = getTransportDist(selectedProv);
+                const natDist = getTransportDist(null);
+                if (!tDist || !natDist) return null;
+                const total = tDist.reduce((s, v) => s + v, 0);
+                const natTotal = natDist.reduce((s, v) => s + v, 0);
+                const prov3h = total > 0 ? ((tDist[0] + tDist[1] + tDist[2]) / total * 100).toFixed(1) : 0;
+                const nat3h = natTotal > 0 ? ((natDist[0] + natDist[1] + natDist[2]) / natTotal * 100).toFixed(1) : 0;
+                return (
+                  <div style={{ fontSize: '9px', color: '#888', marginTop: '6px', textAlign: 'right' }}>
+                    3시간 내 도착: <span style={{ color: '#ffd60a', fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{prov3h}%</span>
+                    <span style={{ color: '#555', marginLeft: '6px' }}>전국 {nat3h}%</span>
+                  </div>
+                );
+              })()}
+            </Panel>
+
+            {/* 전귀결과 */}
+            <Panel style={{ flex: '0 0 auto' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
+                전귀결과 <span style={{ color: '#ffd60a', fontSize: '11px' }}>{selectedProv}</span>
+                <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> KOSIS 2023</span>
+              </div>
+              {(() => {
+                const outcomePcts = getOutcomeDist(selectedProv);
+                if (!outcomePcts) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>데이터 없음</div>;
+                return (
+                  <StackedBar
+                    segments={outcomePcts.map((pct, i) => ({
+                      label: OUTCOME_LABELS[i],
+                      value: pct,
+                      color: OUTCOME_COLORS[i],
+                    }))}
+                  />
+                );
+              })()}
+            </Panel>
+
+            {/* 시도 요약 */}
+            <Panel style={{ flex: '0 0 auto' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#b388ff', marginBottom: '8px' }}>시도 요약</div>
+              {prov && (
+                <div style={{ fontSize: '11px', color: '#ccc', lineHeight: 1.8 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ color: '#8888aa' }}>인구</span>
+                    <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: '#e8e8f0' }}>{(prov.population / 10000).toFixed(0)}만명</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ color: '#8888aa' }}>고령화율</span>
+                    <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: prov.agingRate > NATIONAL_AVG.agingRate ? '#ff6b6b' : '#00ff88' }}>{prov.agingRate}%</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ color: '#8888aa' }}>의사밀도</span>
+                    <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: prov.doctorsPerThousand < NATIONAL_AVG.doctorsPerThousand ? '#ff6b6b' : '#00ff88' }}>{prov.doctorsPerThousand}/천명</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ color: '#8888aa' }}>상급종합병원</span>
+                    <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: '#00d4ff' }}>{prov.tertiaryHospitals}개</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8888aa' }}>미충족의료</span>
+                    <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: prov.unmetMedical > NATIONAL_AVG.unmetMedical ? '#ff6b6b' : '#00ff88' }}>{prov.unmetMedical}%</span>
+                  </div>
+                </div>
+              )}
+            </Panel>
+          </>
+        )}
       </div>
 
       {/* ═══════ COLUMN 4: 인사이트 ═══════ */}
