@@ -433,24 +433,29 @@ export default function StrokeDashboard() {
 
   // ── Column 2 data: sorted province bars ────────────────
 
+  const metricConfig = {
+    patients:    { label: '환자수', unit: '명', field: null, natAvg: null, higherIsWorse: true },
+    incidence:   { label: '발생률', unit: '/10만', field: 'strokeIncidence', natAvg: NATIONAL_AVG.strokeIncidence, higherIsWorse: true },
+    mortality:   { label: '사망률', unit: '/10만', field: 'strokeMortality', natAvg: NATIONAL_AVG.strokeMortality, higherIsWorse: true },
+    tpa:         { label: 'tPA 시행률', unit: '%', field: 'tpaRate', natAvg: NATIONAL_AVG.tpaRate, higherIsWorse: false },
+    goldenTime:  { label: '3.5h 도착률', unit: '%', field: 'goldenTimeRate', natAvg: NATIONAL_AVG.goldenTimeRate, higherIsWorse: false },
+  };
+
   const col2Data = useMemo(() => {
     if (col2Metric === 'patients') {
       return PROVINCES
         .map(name => ({ name, value: getPatientCount(name) || Math.round(PROVINCE_INFO[name].strokeIncidence * PROVINCE_INFO[name].population / 100000) }))
         .sort((a, b) => b.value - a.value);
     }
-    if (col2Metric === 'tpa') {
-      return PROVINCES
-        .map(name => ({ name, value: PROVINCE_INFO[name].tpaRate }))
-        .sort((a, b) => b.value - a.value);
-    }
+    const cfg = metricConfig[col2Metric];
+    if (!cfg?.field) return [];
     return PROVINCES
-      .map(name => ({ name, value: PROVINCE_INFO[name].goldenTimeRate }))
+      .map(name => ({ name, value: PROVINCE_INFO[name][cfg.field] || 0 }))
       .sort((a, b) => b.value - a.value);
   }, [col2Metric]);
 
   const col2Max = useMemo(() => Math.max(...col2Data.map(d => d.value), 1), [col2Data]);
-  const col2NatAvg = col2Metric === 'patients' ? null : col2Metric === 'tpa' ? NATIONAL_AVG.tpaRate : NATIONAL_AVG.goldenTimeRate;
+  const col2NatAvg = metricConfig[col2Metric]?.natAvg || null;
 
   // ── Age distribution ────────────────
 
@@ -468,7 +473,7 @@ export default function StrokeDashboard() {
     };
   }, [selectedProv]);
 
-  const metricLabels = { patients: '환자수', tpa: 'tPA 시행률', goldenTime: '3.5h 내 도착률' };
+  const metricLabels = Object.fromEntries(Object.entries(metricConfig).map(([k, v]) => [k, v.label]));
 
   // ── TOAST click handler ────────────────
 
@@ -559,23 +564,23 @@ export default function StrokeDashboard() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
           <KPIMini label="발생률" value={NATIONAL_AVG.strokeIncidence} unit="/10만" icon="📊" color="#00d4ff" source="KDCA 2022"
-            onClick={() => setDetailPopup({ title: '허혈성 뇌졸중 발생률', content: `연령표준화 발생률 ${NATIONAL_AVG.strokeIncidence}/10만명 (KDCA 2022). 시도별 최대 134.5(전북)~최소 101.6(서울)으로 약 1.3배 격차.` })}
+            onClick={() => { setCol2Metric('incidence'); setDetailPopup({ title: '허혈성 뇌졸중 발생률', content: `연령표준화 발생률 ${NATIONAL_AVG.strokeIncidence}/10만명 (KDCA 2022). 시도별 최대 134.5(전북)~최소 101.6(서울).` }); }}
           />
           <KPIMini label="연간 환자" value="100,088" unit="명" icon="🏥" color="#e0e0ff" source="KOSIS 2023"
-            onClick={() => setDetailPopup({ title: '연간 허혈성 뇌졸중 환자수', content: `2023년 KOSIS 기준 허혈성 뇌졸중(K76.0/K75.8) 진료 환자 100,088명. 2022년 94,916명 대비 5.4% 증가. 경기(24,243) > 서울(21,138) > 부산(5,798) 순.` })}
+            onClick={() => { setCol2Metric('patients'); setDetailPopup({ title: '연간 허혈성 뇌졸중 환자수', content: `2023년 KOSIS 100,088명. 경기(24,243) > 서울(21,138) > 부산(5,798).` }); }}
           />
           <KPIMini label="30일 사망" value="3.3" unit="%" icon="🇰🇷" color="#ffd60a" source="OECD 2025"
-            onClick={() => setDetailPopup({ title: 'OECD 비교: 30일 치명률', content: `허혈성 뇌졸중 30일 치명률 한국 3.3% vs OECD 평균 7.7% — OECD 최상위 수준. 한국은 '도착 후 치료 품질'은 세계 최고이나, '도착까지 시간'(26.2%만 3.5시간 내)이 과제. 출처: OECD Health at a Glance 2025.` })}
+            onClick={() => { setCol2Metric('mortality'); setDetailPopup({ title: 'OECD 비교: 30일 치명률', content: `한국 3.3% vs OECD 평균 7.7% — OECD 최상위. '도착 후 치료 품질'은 세계 최고이나 '도착까지'(26.2%) 과제. OECD Health at a Glance 2025.` }); }}
           />
           <KPIMini label="3.5h 도착" value={KSR.arrivalTime.within3_5h} unit="%" icon="⏱️" color="#ffaa00" source="KSR 2024"
             warning="10년 무개선"
-            onClick={() => setDetailPopup({ title: '3.5시간 내 도착률', content: `tPA 투여 가능 시간 내 도착: 26.2% (KSR 2022). 2012년 26.0% → 2022년 26.2%로 10년간 사실상 변화 없음. 도착 중앙값 12시간. 24시간 내 도착 67.3%. 증상 인지 지연이 주 원인.` })}
+            onClick={() => { setCol2Metric('goldenTime'); setDetailPopup({ title: '3.5시간 내 도착률', content: `26.2% (KSR 2022). 2012년 26.0%→2022년 26.2% 10년 무개선. 중앙값 12시간. 증상 인지 지연 주 원인.` }); }}
           />
           <KPIMini label="IV-tPA" value={KSR.revascularization.ivTpa.pct} unit="%" icon="💉" color="#b388ff" source="KSR 2024"
-            onClick={() => setDetailPopup({ title: 'IV-tPA 시행률', content: `정맥내 혈전용해술 6.1% (KSR 2022). 2012년 10.2%에서 하락 — 3.5시간 도착률 26.2%로 적응 환자 제한. 대신 혈전제거술 3.0%→6.5% 2배↑.` })}
+            onClick={() => { setCol2Metric('tpa'); setDetailPopup({ title: 'IV-tPA 시행률', content: `6.1% (KSR 2022). 10.2%→6.1% 하락 — 도착률 26.2%로 적응 환자 제한. 혈전제거술 3.0%→6.5% 2배↑ 대체.` }); }}
           />
           <KPIMini label="혈전제거" value={KSR.revascularization.thrombectomy.pct} unit="%" icon="🔧" color="#00ff88" source="KSR 2024"
-            onClick={() => setDetailPopup({ title: '혈전제거술', content: `기계적 혈전제거술 6.5% (KSR 2022). 3.0%→6.5% (2배↑). 지역 편차: 전북 26.1%(최고)~서울 12.9%(최저). 대혈관 폐색(LVO)에 효과적.` })}
+            onClick={() => setDetailPopup({ title: '혈전제거술', content: `6.5% (KSR 2022). 3.0%→6.5% 2배↑. 지역: 전북 26.1%(최고)~서울 12.9%(최저). LVO에 효과적. 시도별 데이터는 KSR 전국만.` })}
           />
           <KPIMini label="mRS 0-1" value={KSR.outcomes.mrs01.pct} unit="%" icon="✅" color="#00ff88" source="KSR 2024"
             onClick={() => setDetailPopup({ title: '좋은 예후 (mRS 0-1)', content: `퇴원 시 mRS 0-1: 44.1% (KSR 2022). 39.7%→44.1% 개선. mRS 0-2(독립 생활): 61.2%. 경증 비율↑ + 재관류 발전 기여.` })}
@@ -596,7 +601,7 @@ export default function StrokeDashboard() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexShrink: 0 }}>
             <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>시도별 {metricLabels[col2Metric]}</span>
             <div style={{ display: 'flex', gap: '4px' }}>
-              {['patients', 'tpa', 'goldenTime'].map(m => (
+              {Object.keys(metricConfig).map(m => (
                 <button
                   key={m}
                   onClick={() => setCol2Metric(m)}
