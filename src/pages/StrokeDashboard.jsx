@@ -111,7 +111,7 @@ function getExamRiskFactors(provName) {
   const fg = FULL_DATA.exam_items.fasting_glucose?.province?.[provName]?.total;
   const tc = FULL_DATA.exam_items.total_cholesterol?.province?.[provName]?.total;
   const bmi = FULL_DATA.exam_items.bmi?.province?.[provName]?.total;
-  if (!bp || !fg || !tc || !bmi) return null;
+  if (!Array.isArray(bp) || !Array.isArray(fg) || !Array.isArray(tc) || !Array.isArray(bmi)) return null;
   return {
     bpHigh: +(bp.slice(3).reduce((s,v) => s+v, 0).toFixed(1)),      // 90이상 (diastolic hypertension range)
     glucoseHigh: +(fg.slice(1).reduce((s,v) => s+v, 0).toFixed(1)),  // 100이상
@@ -506,15 +506,20 @@ function TrendLineChart({ title, lines, years }) {
         {/* lines */}
         {lines.map((line, li) => {
           const pts = line.data.map((v, i) => `${toX(i)},${toY(v)}`).join(' ');
+          const lastVal = line.data[line.data.length - 1];
+          const lastY = toY(lastVal);
+          // Anti-collision: if another line's last value is within 8px, offset vertically
+          const otherLastYs = lines.filter((_, j) => j < li).map(l => toY(l.data[l.data.length - 1]));
+          const labelOffset = otherLastYs.some(oy => Math.abs(oy - lastY) < 10) ? (li % 2 === 0 ? -7 : 7) : 0;
           return (
             <g key={li}>
               <polyline points={pts} fill="none" stroke={line.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               {line.data.map((v, i) => (
                 <circle key={i} cx={toX(i)} cy={toY(v)} r="3" fill={line.color} stroke="#12121a" strokeWidth="1" />
               ))}
-              <text x={toX(line.data.length - 1) + 4} y={toY(line.data[line.data.length - 1]) + 3}
+              <text x={toX(line.data.length - 1) + 4} y={lastY + 3 + labelOffset}
                 fill={line.color} fontSize="9" fontFamily="'JetBrains Mono'" fontWeight="700">
-                {line.data[line.data.length - 1]}%
+                {lastVal}%
               </text>
             </g>
           );
@@ -1413,7 +1418,7 @@ export default function StrokeDashboard({ embedded = false }) {
               {strokeType === 'all' && (
                 <Panel>
                   <div style={{ fontSize: '12px', fontWeight: 700, color: '#00d4ff', marginBottom: '10px' }}>
-                    {t('허혈성 vs 출혈성 (2024)','Ischemic vs Hemorrhagic (2024)')}
+                    {t('허혈성 vs 출혈성 추이 (2022-2024)','Ischemic vs Hemorrhagic Trend (2022-2024)')}
                   </div>
                   <TypeComparison kosis={STROKE_KOSIS} selectedProv={selectedProv} lang={lang} t={t} />
                 </Panel>
@@ -1577,75 +1582,73 @@ function StrokeTypePanel({ type, kosis, selectedProv, lang, t }) {
   );
 }
 
-// ── 허혈성 vs 출혈성 요약 비교 (all 모드) ──
+// ── 허혈성 vs 출혈성 3년 추이 비교 (all 모드) ──
 function TypeComparison({ kosis, selectedProv, lang, t }) {
   const prov = selectedProv || '전체';
-  const year = '2024';
-  const fallback = '2023';
+  const years = ['2022', '2023', '2024'];
 
-  const getMonthlyTotal = (typeData) => {
-    const total = typeData?.monthlyRegion?.['계']?.[prov];
-    return total?.[year] || total?.[fallback] || 0;
-  };
+  const getTotal = (typeData, yr) => typeData?.monthlyRegion?.['계']?.[prov]?.[yr] || 0;
 
-  const ischTotal = getMonthlyTotal(kosis.ischemic);
-  const hemTotal = getMonthlyTotal(kosis.hemorrhagic);
-  const allTotal = ischTotal + hemTotal || 1;
+  const ischByYear = years.map(yr => getTotal(kosis.ischemic, yr));
+  const hemByYear = years.map(yr => getTotal(kosis.hemorrhagic, yr));
+  const allMax = Math.max(...ischByYear, ...hemByYear, 1);
 
-  const items = [
-    { label: t('허혈성', 'Ischemic', lang), value: ischTotal, pct: ((ischTotal / allTotal) * 100).toFixed(1), color: '#4d96ff' },
-    { label: t('출혈성', 'Hemorrhagic', lang), value: hemTotal, pct: ((hemTotal / allTotal) * 100).toFixed(1), color: '#ff6b6b' },
-  ];
+  const latestIsch = ischByYear[ischByYear.length - 1] || ischByYear[ischByYear.length - 2];
+  const latestHem = hemByYear[hemByYear.length - 1] || hemByYear[hemByYear.length - 2];
+  const latestAll = latestIsch + latestHem || 1;
+
+  const w = 260, h = 100, pl = 36, pr = 50, pt = 10, pb = 22;
+  const plotW = w - pl - pr, plotH = h - pt - pb;
+  const toX = (i) => pl + (i / (years.length - 1)) * plotW;
+  const toY = (v) => pt + plotH - (v / allMax) * plotH;
 
   return (
     <div>
-      <div style={{ fontSize: '10px', color: '#bbbbdd', marginBottom: '8px' }}>
-        {prov} — {year} {t('연간 환자수', 'Annual Cases', lang)}
-      </div>
-      {items.map(item => (
-        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <div style={{ width: '50px', fontSize: '11px', color: item.color, fontWeight: 700 }}>{item.label}</div>
-          <div style={{ flex: 1, height: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '4px', overflow: 'hidden', position: 'relative' }}>
-            <div style={{ width: `${item.pct}%`, height: '100%', background: `${item.color}66`, borderRadius: '4px' }} />
-            <span style={{ position: 'absolute', right: '8px', top: '3px', fontSize: '10px', color: item.color, fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>
-              {item.value.toLocaleString()} ({item.pct}%)
-            </span>
+      {/* Summary bars */}
+      <div style={{ display: 'flex', gap: '6px', marginBottom: '8px' }}>
+        {[
+          { label: t('허혈성','Ischemic',lang), value: latestIsch, pct: ((latestIsch/latestAll)*100).toFixed(0), color: '#4d96ff' },
+          { label: t('출혈성','Hemorrhagic',lang), value: latestHem, pct: ((latestHem/latestAll)*100).toFixed(0), color: '#ff6b6b' },
+        ].map(item => (
+          <div key={item.label} style={{ flex: 1, background: `${item.color}11`, border: `1px solid ${item.color}33`, borderRadius: '8px', padding: '6px 8px', textAlign: 'center' }}>
+            <div style={{ fontSize: '9px', color: item.color, fontWeight: 600 }}>{item.label}</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, color: item.color, fontFamily: "'JetBrains Mono'" }}>{item.value.toLocaleString()}</div>
+            <div style={{ fontSize: '9px', color: '#aaaacc' }}>{item.pct}%</div>
           </div>
-        </div>
-      ))}
-
-      {/* Monthly comparison mini chart */}
-      <div style={{ marginTop: '8px' }}>
-        <div style={{ fontSize: '9px', color: '#aaaacc', marginBottom: '4px' }}>{t('월별 비교','Monthly Comparison', lang)}</div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '50px' }}>
-          {['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'].map((m, i) => {
-            const isch = kosis.ischemic?.monthlyRegion?.[m]?.[prov]?.[year] || kosis.ischemic?.monthlyRegion?.[m]?.[prov]?.[fallback] || 0;
-            const hem = kosis.hemorrhagic?.monthlyRegion?.[m]?.[prov]?.[year] || kosis.hemorrhagic?.monthlyRegion?.[m]?.[prov]?.[fallback] || 0;
-            const total = isch + hem;
-            const maxAll = Math.max(...['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'].map(mm => {
-              const a = kosis.ischemic?.monthlyRegion?.[mm]?.[prov]?.[year] || kosis.ischemic?.monthlyRegion?.[mm]?.[prov]?.[fallback] || 0;
-              const b = kosis.hemorrhagic?.monthlyRegion?.[mm]?.[prov]?.[year] || kosis.hemorrhagic?.monthlyRegion?.[mm]?.[prov]?.[fallback] || 0;
-              return a + b;
-            }), 1);
-            const h = (total / maxAll) * 40;
-            const ischH = total > 0 ? (isch / total) * h : 0;
-            const hemH = h - ischH;
-            return (
-              <div key={m} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ height: `${hemH}px`, background: '#ff6b6b66', borderRadius: '2px 2px 0 0' }} />
-                  <div style={{ height: `${ischH}px`, background: '#4d96ff66' }} />
-                </div>
-                <div style={{ fontSize: '6px', color: '#444', marginTop: '1px' }}>{i + 1}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div style={{ display: 'flex', gap: '12px', marginTop: '4px', fontSize: '8px' }}>
-          <span style={{ color: '#4d96ff' }}>■ {t('허혈성','Ischemic', lang)}</span>
-          <span style={{ color: '#ff6b6b' }}>■ {t('출혈성','Hemorrhagic', lang)}</span>
-        </div>
+        ))}
       </div>
+
+      {/* 3-year trend lines */}
+      <div style={{ fontSize: '9px', color: '#aaaacc', marginBottom: '4px' }}>{t('연도별 추이 (2022-2024)','Annual Trend (2022-2024)',lang)}</div>
+      <svg width="100%" viewBox={`0 0 ${w} ${h}`} style={{ overflow: 'visible' }}>
+        {years.map((yr, i) => (
+          <text key={yr} x={toX(i)} y={h - 4} textAnchor="middle" fill="#aaaacc" fontSize="8" fontFamily="'JetBrains Mono'">{yr}</text>
+        ))}
+        {[
+          { data: ischByYear, color: '#4d96ff', label: t('허혈성','Isch',lang) },
+          { data: hemByYear, color: '#ff6b6b', label: t('출혈성','Hem',lang) },
+        ].map((line, li) => {
+          const pts = line.data.map((v, i) => `${toX(i)},${toY(v)}`).join(' ');
+          const lastV = line.data[line.data.length - 1];
+          const lastY2 = toY(lastV);
+          return (
+            <g key={li}>
+              <polyline points={pts} fill="none" stroke={line.color} strokeWidth="2" strokeLinecap="round" />
+              {line.data.map((v, i) => (
+                <circle key={i} cx={toX(i)} cy={toY(v)} r="3" fill={line.color} stroke="#12121a" strokeWidth="1" />
+              ))}
+              <text x={toX(years.length - 1) + 4} y={lastY2 + (li === 0 ? -2 : 10)} fill={line.color} fontSize="8" fontFamily="'JetBrains Mono'" fontWeight="700">
+                {lastV > 0 ? lastV.toLocaleString() : '—'}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      <div style={{ display: 'flex', gap: '12px', marginTop: '4px', fontSize: '8px', justifyContent: 'center' }}>
+        <span style={{ color: '#4d96ff' }}>■ {t('허혈성','Ischemic',lang)}</span>
+        <span style={{ color: '#ff6b6b' }}>■ {t('출혈성','Hemorrhagic',lang)}</span>
+      </div>
+      {ischByYear[2] < ischByYear[1] && <div style={{ fontSize: '8px', color: '#ffd93d', marginTop: '4px' }}>⚠ 2024 {t('부분연도 가능','may be partial-year',lang)}</div>}
     </div>
   );
 }
