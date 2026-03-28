@@ -9,13 +9,17 @@ export default function CascadeFunnel({ title, source, totalPop, totalLabel, uni
   const ratio = stages[0]?.count / (stages[stages.length - 1]?.count || 1);
   const useLog = logScale ?? ratio > 30;
 
-  function getWidth(count) {
-    if (useLog) {
-      const logMax = Math.log10(maxCount);
-      const logVal = Math.log10(Math.max(count, 1));
-      return Math.max((logVal / logMax) * 100, 15);
-    }
-    return Math.max((count / maxCount) * 100, 15);
+  function getWidth(count, isTotal) {
+    if (isTotal) return 100;
+    // First stage width is linear relative to totalPop
+    const linearPct = (count / maxCount) * 100;
+    if (!useLog) return Math.max(linearPct, 12);
+    // For log scale: map within the first stage's linear width
+    const firstStagePct = (stages[0].count / maxCount) * 100;
+    const logMax = Math.log10(stages[0].count);
+    const logVal = Math.log10(Math.max(count, 1));
+    const logRatio = logVal / logMax; // 0~1
+    return Math.max(logRatio * firstStagePct, 12);
   }
 
   const allRows = [
@@ -32,7 +36,7 @@ export default function CascadeFunnel({ title, source, totalPop, totalLabel, uni
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
         {allRows.map((row, i) => {
-          const widthPct = getWidth(row.count);
+          const widthPct = getWidth(row.count, row.isTotal);
           const prev = i === 0 ? null : allRows[i - 1].count;
           const lost = prev != null ? prev - row.count : 0;
           const lostPct = prev > 0 ? Math.round((lost / prev) * 100) : 0;
