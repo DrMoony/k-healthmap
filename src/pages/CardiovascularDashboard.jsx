@@ -511,11 +511,11 @@ function HTNPanel({ lang }) {
         source="KSH 2025"
         totalPop={4350}
         stages={[
-          { label: t('추정 유병','Est. Prevalent'), pct: 29, count: 1260, color: '#ff6b6b', note: t('30세+ 인구 대비','of 30+ population') },
-          { label: t('미진단(추정)','Undiagnosed(est.)'), pct: 21, count: Math.round(1260 * 0.21), color: '#ff6b6b44', note: t('유병자 중 미인지','unaware among prevalent'), isDrop: true },
-          { label: t('인지','Aware'), pct: 79, count: Math.round(1260 * 0.79), color: '#ffd93d' },
-          { label: t('치료','Treated'), pct: 76, count: Math.round(1260 * 0.76), color: '#6bcb77' },
-          { label: t('조절','Controlled'), pct: 62, count: Math.round(1260 * 0.62), color: '#4d96ff', note: 'BP <140/90' },
+          { label: t('추정 유병','Est. Prevalent'), pct: 29, count: 1260, color: '#ff6b6b', note: t('KNHANES 실측 (BP≥140/90 or 복약)','KNHANES measured (BP≥140/90 or on meds)') },
+          { label: t('미인지(미진단)','Undiagnosed'), pct: 21, count: Math.round(1260 * 0.21), color: '#ff6b6b44', note: t('BP↑이나 진단·코드 없음','High BP, no Dx/KCD code'), isDrop: true },
+          { label: t('진단(인지)','Diagnosed'), pct: 79, count: Math.round(1260 * 0.79), color: '#ffd93d', note: t('의사 진단 ≈ KCD I10-I15','Doctor Dx ≈ KCD I10-I15') },
+          { label: t('복약','On Medication'), pct: 76, count: Math.round(1260 * 0.76), color: '#6bcb77', note: t('항고혈압제 복용 중','Currently on anti-HTN') },
+          { label: t('조절','Controlled'), pct: 62, count: Math.round(1260 * 0.62), color: '#4d96ff', note: t('BP <140/90 달성','BP <140/90 achieved') },
         ]}
       />
 
