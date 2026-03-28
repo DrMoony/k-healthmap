@@ -1,20 +1,9 @@
 import { useLang } from '../i18n';
 
-/**
- * Care Cascade / Disease Progression Funnel
- * @param {string} title - 펀넬 제목
- * @param {string} source - 출처
- * @param {number} totalPop - 전체 인구 (만 단위)
- * @param {string} totalLabel - 전체 인구 라벨 (기본: "30세+ 인구")
- * @param {string} unit - 단위 (기본: "만")
- * @param {string} lossLabel - 첫 단계 이탈 라벨 (기본: "비유병")
- * @param {string} endLabel - 마지막 단계 라벨 (기본: "조절 도달")
- * @param {Array} stages - [{ label, count, color, note }]
- */
 export default function CascadeFunnel({ title, source, totalPop, totalLabel, unit, lossLabel, endLabel, stages }) {
-  const { lang, t } = useLang();
+  const { t } = useLang();
   const u = unit || t('만','0K');
-  const maxCount = totalPop;
+  const maxCount = stages[0]?.count || 1; // 첫 단계 = 100% 기준
 
   return (
     <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
@@ -24,56 +13,67 @@ export default function CascadeFunnel({ title, source, totalPop, totalLabel, uni
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-        {/* Total population bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-          <div style={{ width: '80px', textAlign: 'right', flexShrink: 0 }}>
-            <div style={{ fontSize: '9px', color: '#9999bb' }}>{totalLabel || t('30세+ 인구','30+ Pop.')}</div>
+        {/* Total population context */}
+        {totalPop && (
+          <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+            <span style={{ fontSize: '9px', color: '#666688', background: 'rgba(255,255,255,0.03)', padding: '2px 10px', borderRadius: '10px' }}>
+              {totalLabel || t('30세+ 인구','30+ Pop.')} {totalPop.toLocaleString()}{u}
+            </span>
           </div>
-          <div style={{ flex: 1, height: '16px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '10px', color: '#9999bb', fontFamily: "'JetBrains Mono'" }}>{totalPop.toLocaleString()}{u}</span>
-          </div>
-          <div style={{ width: '60px', flexShrink: 0 }} />
-        </div>
+        )}
 
         {stages.map((stage, i) => {
-          const widthPct = Math.max((stage.count / maxCount) * 100, 8);
-          const prev = i === 0 ? totalPop : stages[i - 1].count;
+          const widthPct = Math.max((stage.count / maxCount) * 100, 15);
+          const prev = i === 0 ? (totalPop || stages[0].count) : stages[i - 1].count;
           const lost = prev - stage.count;
           const lostPct = prev > 0 ? Math.round((lost / prev) * 100) : 0;
+          const showLoss = lost > 0 && (i > 0 || totalPop);
 
           return (
             <div key={i}>
-              {lost > 0 && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', height: '18px' }}>
-                  <div style={{ width: '80px', flexShrink: 0 }} />
-                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ fontSize: '8px', color: '#ff6b6b', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                      <span style={{ color: '#ff6b6b66' }}>▼</span>
-                      <span>-{lost.toLocaleString()}{u} ({lostPct}% {i === 0 ? (lossLabel || t('비유병','unaffected')) : t('이탈','lost')})</span>
-                    </div>
-                  </div>
-                  <div style={{ width: '60px', flexShrink: 0 }} />
+              {/* Loss indicator */}
+              {showLoss && (
+                <div style={{ textAlign: 'center', height: '16px', lineHeight: '16px' }}>
+                  <span style={{ fontSize: '8px', color: '#ff6b6b88' }}>
+                    ▼ -{lost.toLocaleString()}{u} ({lostPct}% {i === 0 ? (lossLabel || t('비유병','unaffected')) : t('이탈','lost')})
+                  </span>
                 </div>
               )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '80px', textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontSize: '10px', color: stage.color, fontWeight: 700 }}>{stage.label}</div>
+
+              {/* Stage bar — centered */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0px' }}>
+                {/* Left label */}
+                <div style={{ width: '76px', textAlign: 'right', paddingRight: '8px', flexShrink: 0 }}>
+                  <div style={{ fontSize: '10px', color: stage.color, fontWeight: 700, lineHeight: 1.2 }}>{stage.label}</div>
                 </div>
-                <div style={{ flex: 1, position: 'relative' }}>
+
+                {/* Center bar area */}
+                <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
                   <div style={{
-                    width: `${widthPct}%`, height: '26px',
-                    background: `linear-gradient(90deg, ${stage.color}dd, ${stage.color}55)`,
-                    borderRadius: '4px',
-                    display: 'flex', alignItems: 'center', paddingLeft: '8px',
+                    width: `${widthPct}%`, minWidth: '60px', height: '28px',
+                    background: `linear-gradient(180deg, ${stage.color}cc, ${stage.color}44)`,
+                    borderRadius: i === 0 ? '8px 8px 4px 4px' : i === stages.length - 1 ? '4px 4px 8px 8px' : '4px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    border: `1px solid ${stage.color}33`,
                     transition: 'width 0.8s ease',
                   }}>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono'", textShadow: '0 1px 4px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>
-                      {stage.count.toLocaleString()}{u}
+                    <span style={{
+                      fontSize: stage.count >= 100 ? '12px' : '11px',
+                      fontWeight: 800, color: '#fff',
+                      fontFamily: "'JetBrains Mono'",
+                      textShadow: '0 1px 4px rgba(0,0,0,0.7)',
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {stage.count >= 10000
+                        ? `${(stage.count / 10000).toFixed(1)}${t('억','00M')}`
+                        : `${stage.count.toLocaleString()}${u}`}
                     </span>
                   </div>
                 </div>
-                <div style={{ width: '60px', flexShrink: 0, fontSize: '8px', color: '#9999bb', lineHeight: 1.3 }}>
-                  {stage.note}
+
+                {/* Right note */}
+                <div style={{ width: '76px', paddingLeft: '8px', flexShrink: 0 }}>
+                  <div style={{ fontSize: '8px', color: '#9999bb', lineHeight: 1.3 }}>{stage.note}</div>
                 </div>
               </div>
             </div>
@@ -81,14 +81,15 @@ export default function CascadeFunnel({ title, source, totalPop, totalLabel, uni
         })}
       </div>
 
+      {/* Summary line */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '12px', fontSize: '10px' }}>
         <span style={{ color: '#ff6b6b' }}>
-          {t('최종 이탈','Total lost')}: {stages[0].count - stages[stages.length - 1].count}{u}
-          ({Math.round((1 - stages[stages.length - 1].count / stages[0].count) * 100)}%)
+          {t('이탈','Lost')}: {(stages[0].count - stages[stages.length - 1].count).toLocaleString()}{u}
+          <span style={{ opacity: 0.7 }}> ({Math.round((1 - stages[stages.length - 1].count / stages[0].count) * 100)}%)</span>
         </span>
-        <span style={{ color: '#4d96ff' }}>
-          {endLabel || t('도달','Reached')}: {stages[stages.length - 1].count}{u}
-          ({Math.round(stages[stages.length - 1].count / stages[0].count * 100)}%)
+        <span style={{ color: stages[stages.length - 1].color }}>
+          {endLabel || t('도달','Reached')}: {stages[stages.length - 1].count.toLocaleString()}{u}
+          <span style={{ opacity: 0.7 }}> ({Math.round(stages[stages.length - 1].count / stages[0].count * 100)}%)</span>
         </span>
       </div>
     </div>
