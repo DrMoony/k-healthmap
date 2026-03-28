@@ -109,7 +109,7 @@ function KPICard({ label, value, unit, color = '#ff6b6b', sub }) {
 
 // ── TrendLine (SVG multi-line chart) ────────────────────────
 
-function TrendLineChart({ title, lines, years, source, valueUnit = '' }) {
+function TrendLineChart({ title, lines, years, source, valueUnit = '', badge }) {
   const allVals = lines.flatMap(l => l.data.filter(v => v != null));
   if (allVals.length === 0) return null;
   const minV = Math.min(...allVals) * 0.85;
@@ -123,7 +123,12 @@ function TrendLineChart({ title, lines, years, source, valueUnit = '' }) {
 
   return (
     <div style={{ width: '100%' }}>
-      {title && <SectionHeader title={title} source={source} />}
+      {title && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ flex: 1 }}><SectionHeader title={title} source={source} /></div>
+          {badge && <span style={{ fontSize: '9px', color: '#ffd93d', background: 'rgba(255,217,61,0.1)', padding: '1px 6px', borderRadius: '8px', whiteSpace: 'nowrap', flexShrink: 0, marginBottom: '8px' }}>{badge}</span>}
+        </div>
+      )}
       <svg width="100%" viewBox={`0 0 ${w} ${h}`} style={{ overflow: 'visible' }}>
         {[0, 0.25, 0.5, 0.75, 1].map((t, i) => {
           const y = padT + plotH * (1 - t);
@@ -418,6 +423,7 @@ export default function MIDashboard({ embedded = false }) {
           <TrendLineChart
             title={t('첫발생 vs 재발생 발생률','First vs Recurrent Incidence')}
             source="KOSIS"
+            badge={selectedProv ? t('전국 데이터','National') : null}
             years={incTypeYears}
             valueUnit=""
             lines={[
@@ -592,6 +598,7 @@ export default function MIDashboard({ embedded = false }) {
           <TrendLineChart
             title={t('발생률 추이 (2013-2023)','Incidence Trend (2013-2023)')}
             source="KOSIS"
+            badge={selectedProv ? t('전국 데이터','National') : null}
             years={incYears}
             valueUnit=""
             lines={[
@@ -619,6 +626,7 @@ export default function MIDashboard({ embedded = false }) {
           <TrendLineChart
             title={t('치명률 추이 (30일/1년)','Case Fatality Trend (30d/1yr)')}
             source="KOSIS"
+            badge={selectedProv ? t('전국 데이터','National') : null}
             years={fatYears}
             valueUnit="%"
             lines={[
@@ -690,6 +698,7 @@ export default function MIDashboard({ embedded = false }) {
           <TrendLineChart
             title={t('첫발생 vs 재발생 30일 치명률','First vs Recurrent 30d CFR')}
             source="KOSIS"
+            badge={selectedProv ? t('전국 데이터','National') : null}
             years={fatTypeYears}
             valueUnit="%"
             lines={[
