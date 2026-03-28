@@ -41,6 +41,28 @@ function getPatientCount(provName) {
   return d['2024'] || d['2023'] || d['2022'] || null;
 }
 
+function getTypedPatientCount(provName, strokeType) {
+  if (strokeType === 'all') {
+    return getPatientCount(provName);
+  }
+  const typeData = strokeType === 'ischemic' ? STROKE_KOSIS.ischemic : STROKE_KOSIS.hemorrhagic;
+  const total = typeData?.monthlyRegion?.['계']?.[provName];
+  return total?.['2024'] || total?.['2023'] || null;
+}
+
+function getTypedAgeDistribution(strokeType, gender = '전체') {
+  if (strokeType === 'all') return null; // use existing byGenderAge
+  const typeData = strokeType === 'ischemic' ? STROKE_KOSIS.ischemic : STROKE_KOSIS.hemorrhagic;
+  if (!typeData?.erResultAge) return null;
+  const genderPrefix = gender === '남자' ? '남자' : gender === '여자' ? '여자' : '전체';
+  return AGE_GROUPS_KOSIS.map(ag => {
+    const key = `${genderPrefix}_${ag}`;
+    const entry = typeData.erResultAge[key];
+    if (!entry || !entry['계']) return 0;
+    return entry['계']['2024'] || entry['계']['2023'] || entry['계']['2022'] || 0;
+  });
+}
+
 function getAgeDistribution(gender = '전체') {
   const genderData = STROKE_KOSIS?.byGenderAge?.[gender];
   if (!genderData) return null;
@@ -54,7 +76,7 @@ const TRANSPORT_LABELS = ['<1h', '1-2h', '2-3h', '3-6h', '6h+'];
 const TRANSPORT_KEYS = ['1시간미만', '1~2시간', '2~3시간', '3~6시간', '6시간이상'];
 
 const OUTCOME_KEYS = ['퇴가', '입원', '전원', '사망', '기타'];
-const OUTCOME_COLORS = ['#00ff88', '#00d4ff', '#ffd60a', '#ff4444', '#888'];
+const OUTCOME_COLORS = ['#00ff88', '#00d4ff', '#ffd60a', '#ff4444', '#bbbbdd'];
 const OUTCOME_LABELS = ['퇴가', '입원', '전원', '사망', '기타'];
 
 function getOutcomeDist(regionName) {
@@ -144,10 +166,10 @@ function CompareBar({ label, value, national, unit = '', higherIsWorse = true, w
   return (
     <div style={{ marginBottom: '8px', width }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '3px' }}>
-        <span style={{ color: '#8888aa' }}>{label}</span>
+        <span style={{ color: '#bbbbdd' }}>{label}</span>
         <span style={{ color: isWorse ? '#ff6b6b' : '#00ff88', fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>
           {typeof value === 'number' ? value.toFixed(1) : value}{unit}
-          <span style={{ color: '#555', marginLeft: '4px', fontSize: '10px' }}>
+          <span style={{ color: '#9999bb', marginLeft: '4px', fontSize: '10px' }}>
             ({diff >= 0 ? '+' : ''}{diff.toFixed(1)})
           </span>
         </span>
@@ -188,7 +210,7 @@ function HBar({ data, maxVal, highlightName, nationalAvg, labelWidth = 36, heigh
           >
             <span style={{
               width: `${labelWidth}px`, fontSize: '11px', textAlign: 'right',
-              color: isHighlight ? '#ffd60a' : '#8888aa', fontWeight: isHighlight ? 700 : 400,
+              color: isHighlight ? '#ffd60a' : '#bbbbdd', fontWeight: isHighlight ? 700 : 400,
               flexShrink: 0, fontFamily: "'Noto Sans KR'",
             }}>{name}</span>
             <div style={{ flex: 1, position: 'relative', height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px' }}>
@@ -230,13 +252,13 @@ function VerticalBarChart({ data, labels, title, color = '#00d4ff', maxOverride 
   const max = maxOverride || Math.max(...data, 1);
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {title && <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px', fontWeight: 600 }}>{title}</div>}
+      {title && <div style={{ fontSize: '11px', color: '#bbbbdd', marginBottom: '6px', fontWeight: 600 }}>{title}</div>}
       <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', gap: '3px', minHeight: 0 }}>
         {data.map((v, i) => {
           const ratio = max > 0 ? v / max : 0;
           return (
             <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
-              <span style={{ fontSize: '9px', color: '#888', fontFamily: "'JetBrains Mono'", marginBottom: '2px' }}>
+              <span style={{ fontSize: '9px', color: '#bbbbdd', fontFamily: "'JetBrains Mono'", marginBottom: '2px' }}>
                 {v >= 1000 ? `${(v/1000).toFixed(0)}k` : v}
               </span>
               <motion.div
@@ -248,7 +270,7 @@ function VerticalBarChart({ data, labels, title, color = '#00d4ff', maxOverride 
                   background: typeof color === 'function' ? color(ratio) : `linear-gradient(180deg, ${gradientColor(ratio)}, ${gradientColor(ratio * 0.3)})`,
                 }}
               />
-              <span style={{ fontSize: '9px', color: '#666', marginTop: '3px', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '9px', color: '#aaaacc', marginTop: '3px', whiteSpace: 'nowrap' }}>
                 {labels[i]}
               </span>
             </div>
@@ -284,9 +306,9 @@ function InfoTip({ text }) {
     <span style={{ position: 'relative', display: 'inline-flex', marginLeft: '4px', verticalAlign: 'middle' }}
       onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
       <span style={{
-        width: '14px', height: '14px', borderRadius: '50%', border: '1px solid #555',
+        width: '14px', height: '14px', borderRadius: '50%', border: '1px solid #9999bb',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '9px', color: '#888', cursor: 'help',
+        fontSize: '9px', color: '#bbbbdd', cursor: 'help',
       }}>?</span>
       {show && (
         <div style={{
@@ -337,10 +359,10 @@ function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning,
         <span style={{ fontSize: '18px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color: isProvince ? '#ffd60a' : '#ffffff', textShadow: `0 0 10px ${isProvince ? '#ffd60a' : color}44` }}>
           {value}
         </span>
-        <span style={{ fontSize: '10px', color: '#aaa' }}>{unit}</span>
+        <span style={{ fontSize: '10px', color: '#ccccee' }}>{unit}</span>
       </div>
       {isProvince && nationalValue != null && (
-        <div style={{ fontSize: '9px', color: '#aaa', marginTop: '2px', fontFamily: "'JetBrains Mono'" }}>
+        <div style={{ fontSize: '9px', color: '#ccccee', marginTop: '2px', fontFamily: "'JetBrains Mono'" }}>
           {t('전국','Natl')} <span style={{ color: '#00d4ff' }}>{nationalValue}</span>{unit}
         </div>
       )}
@@ -348,7 +370,7 @@ function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning,
         <div style={{ fontSize: '9px', color: '#ffaa00', marginTop: '2px', fontWeight: 600 }}>⚠ {warning}</div>
       )}
       {source && !isProvince && (
-        <div style={{ fontSize: '8px', color: '#666', marginTop: '2px' }}>{source}</div>
+        <div style={{ fontSize: '8px', color: '#aaaacc', marginTop: '2px' }}>{source}</div>
       )}
     </div>
   );
@@ -473,13 +495,13 @@ function TrendLineChart({ title, lines, years }) {
           return (
             <g key={i}>
               <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="rgba(255,255,255,0.05)" />
-              <text x={padL - 4} y={y + 3} textAnchor="end" fill="#555" fontSize="8" fontFamily="'JetBrains Mono'">{val.toFixed(1)}</text>
+              <text x={padL - 4} y={y + 3} textAnchor="end" fill="#9999bb" fontSize="8" fontFamily="'JetBrains Mono'">{val.toFixed(1)}</text>
             </g>
           );
         })}
         {/* x axis labels */}
         {years.map((yr, i) => (
-          <text key={yr} x={toX(i)} y={h - 4} textAnchor="middle" fill="#666" fontSize="8" fontFamily="'JetBrains Mono'">{yr}</text>
+          <text key={yr} x={toX(i)} y={h - 4} textAnchor="middle" fill="#aaaacc" fontSize="8" fontFamily="'JetBrains Mono'">{yr}</text>
         ))}
         {/* lines */}
         {lines.map((line, li) => {
@@ -502,7 +524,7 @@ function TrendLineChart({ title, lines, years }) {
         {lines.map((line, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <div style={{ width: '12px', height: '2px', background: line.color, borderRadius: '1px' }} />
-            <span style={{ fontSize: '10px', color: '#8888aa' }}>{line.label}</span>
+            <span style={{ fontSize: '10px', color: '#bbbbdd' }}>{line.label}</span>
           </div>
         ))}
       </div>
@@ -530,7 +552,7 @@ function DetailPopup({ title, content, onClose }) {
         <span style={{ fontSize: '14px', fontWeight: 800, color: '#e8e8f0' }}>{title}</span>
         <button onClick={onClose} style={{
           background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%',
-          width: '24px', height: '24px', color: '#888', cursor: 'pointer', fontSize: '14px',
+          width: '24px', height: '24px', color: '#bbbbdd', cursor: 'pointer', fontSize: '14px',
         }}>x</button>
       </div>
       <div style={{ fontSize: '12px', color: '#ccc', lineHeight: 1.8 }}>{content}</div>
@@ -542,9 +564,10 @@ function DetailPopup({ title, content, onClose }) {
 // MAIN COMPONENT
 // ════════════════════════════════════════════════════
 
-export default function StrokeDashboard() {
+export default function StrokeDashboard({ embedded = false }) {
   const { lang, t } = useLang();
   const [selectedProv, setSelectedProv] = useState(null);
+  const [strokeType, setStrokeType] = useState('all'); // 'all' | 'ischemic' | 'hemorrhagic'
 
   const PROV_EN = {
     '서울': 'Seoul', '부산': 'Busan', '대구': 'Daegu', '인천': 'Incheon',
@@ -583,7 +606,7 @@ export default function StrokeDashboard() {
   const col2Data = useMemo(() => {
     if (col2Metric === 'patients') {
       return PROVINCES
-        .map(name => ({ name, value: getPatientCount(name) || Math.round(PROVINCE_INFO[name].strokeIncidence * PROVINCE_INFO[name].population / 100000) }))
+        .map(name => ({ name, value: getTypedPatientCount(name, strokeType) || Math.round(PROVINCE_INFO[name].strokeIncidence * PROVINCE_INFO[name].population / 100000) }))
         .sort((a, b) => b.value - a.value);
     }
     const cfg = metricConfig[col2Metric];
@@ -591,14 +614,19 @@ export default function StrokeDashboard() {
     return PROVINCES
       .map(name => ({ name, value: PROVINCE_INFO[name][cfg.field] || 0 }))
       .sort((a, b) => b.value - a.value);
-  }, [col2Metric]);
+  }, [col2Metric, strokeType]);
 
   const col2Max = useMemo(() => Math.max(...col2Data.map(d => d.value), 1), [col2Data]);
   const col2NatAvg = metricConfig[col2Metric]?.natAvg || null;
 
   // ── Age distribution ────────────────
 
-  const ageDist = useMemo(() => getAgeDistribution(gender), [gender]);
+  const ageDist = useMemo(() => {
+    if (strokeType !== 'all') {
+      return getTypedAgeDistribution(strokeType, gender);
+    }
+    return getAgeDistribution(gender);
+  }, [gender, strokeType]);
 
   // ── Rankings ────────────────
 
@@ -664,11 +692,12 @@ export default function StrokeDashboard() {
 
   return (
     <div style={{
-      position: 'fixed',
-      top: '56px',
-      left: 0,
-      right: 0,
-      bottom: 0,
+      position: embedded ? 'relative' : 'fixed',
+      top: embedded ? 0 : '56px',
+      left: embedded ? undefined : 0,
+      right: embedded ? undefined : 0,
+      bottom: embedded ? undefined : 0,
+      height: embedded ? 'calc(100vh - 160px)' : undefined,
       background: '#0a0a0f',
       display: 'grid',
       gridTemplateColumns: '300px 1fr 1fr 320px',
@@ -693,8 +722,34 @@ export default function StrokeDashboard() {
         )}
       </AnimatePresence>
 
-      {/* ═══════ COLUMN 1: Map + 6 KPIs ═══════ */}
+      {/* ═══════ COLUMN 1: Type Toggle + Map + 6 KPIs ═══════ */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
+        {/* Stroke Type Toggle */}
+        <Panel style={{ flex: '0 0 auto', padding: '6px 8px' }}>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            {[
+              { id: 'all', label: t('전체','All'), color: '#00d4ff' },
+              { id: 'ischemic', label: t('허혈성','Ischemic'), color: '#4d96ff' },
+              { id: 'hemorrhagic', label: t('출혈성','Hemorrhagic'), color: '#ff6b6b' },
+            ].map(tp => (
+              <button key={tp.id} onClick={() => setStrokeType(tp.id)} style={{
+                flex: 1, padding: '5px 4px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer',
+                fontFamily: "'Noto Sans KR'", fontWeight: strokeType === tp.id ? 700 : 400,
+                background: strokeType === tp.id ? `${tp.color}18` : 'transparent',
+                border: strokeType === tp.id ? `1px solid ${tp.color}44` : '1px solid transparent',
+                color: strokeType === tp.id ? tp.color : '#aaaacc',
+                transition: 'all 0.2s',
+              }}>
+                {tp.label}
+              </button>
+            ))}
+          </div>
+          {strokeType !== 'all' && (
+            <div style={{ fontSize: '9px', color: '#9999bb', marginTop: '4px', textAlign: 'center' }}>
+              {t('허혈성/출혈성 분리: 2022년~', 'Ischemic/Hemorrhagic split: 2022+', lang)}
+            </div>
+          )}
+        </Panel>
         <Panel style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', padding: '8px' }}>
           <div style={{ width: '100%', maxWidth: '260px' }}>
             <KoreaMap metric="stroke" onProvinceClick={(name) => {
@@ -721,7 +776,7 @@ export default function StrokeDashboard() {
         {selectedProv && (
           <div style={{ background: '#ffd60a22', border: '1px solid #ffd60a44', borderRadius: 8, padding: '6px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ color: '#ffd60a', fontWeight: 700, fontSize: 14 }}>{provName(selectedProv)}</span>
-            <button onClick={() => setSelectedProv(null)} style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: 12 }}>✕ {t('전국으로','Back to National')}</button>
+            <button onClick={() => setSelectedProv(null)} style={{ background: 'none', border: 'none', color: '#bbbbdd', cursor: 'pointer', fontSize: 12 }}>✕ {t('전국으로','Back to National')}</button>
           </div>
         )}
 
@@ -795,7 +850,14 @@ export default function StrokeDashboard() {
         {/* Top: 시도별 환자수 바차트 */}
         <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexShrink: 0 }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>{t('시도별','By Province')} {metricLabels[col2Metric]}</span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>
+              {t('시도별','By Province')} {metricLabels[col2Metric]}
+              {strokeType !== 'all' && col2Metric === 'patients' && (
+                <span style={{ fontSize: '9px', color: strokeType === 'ischemic' ? '#4d96ff' : '#ff6b6b', fontWeight: 600, marginLeft: '6px' }}>
+                  {strokeType === 'ischemic' ? t('허혈성','Ischemic') : t('출혈성','Hemorrhagic')}
+                </span>
+              )}
+            </span>
             <div style={{ display: 'flex', gap: '4px' }}>
               {Object.keys(metricConfig).map(m => (
                 <button
@@ -805,7 +867,7 @@ export default function StrokeDashboard() {
                     padding: '3px 8px', fontSize: '10px', borderRadius: '6px', cursor: 'pointer',
                     border: col2Metric === m ? '1px solid rgba(0,212,255,0.5)' : '1px solid rgba(255,255,255,0.1)',
                     background: col2Metric === m ? 'rgba(0,212,255,0.15)' : 'transparent',
-                    color: col2Metric === m ? '#00d4ff' : '#666',
+                    color: col2Metric === m ? '#00d4ff' : '#aaaacc',
                     fontFamily: "'Noto Sans KR'",
                   }}
                 >{metricLabels[m]}</button>
@@ -838,7 +900,7 @@ export default function StrokeDashboard() {
               { label: t('혈전제거술','Thrombectomy'), color: '#00ff88', data: [3.0, 3.2, 4.0, 4.8, 5.5, 6.5] },
             ]}
           />
-          <div style={{ fontSize: '10px', color: '#666', marginTop: '6px', textAlign: 'center' }}>
+          <div style={{ fontSize: '10px', color: '#aaaacc', marginTop: '6px', textAlign: 'center' }}>
             {t('재관류 치료 총','Total recanalization')} {KSR.revascularization.total.pct}% | {t('지역 편차','Regional range')} {KSR.revascularization.regionalRange.min}%~{KSR.revascularization.regionalRange.max}%
           </div>
         </Panel>
@@ -853,8 +915,12 @@ export default function StrokeDashboard() {
             <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', flexShrink: 0 }}>
                 <span style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0' }}>
-                  {t('연령별 허혈성 뇌졸중 환자수','Ischemic Stroke Patients by Age')}
-                  <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> {t('(전국)','(National)')}</span>
+                  {strokeType === 'all'
+                    ? t('연령별 허혈성 뇌졸중 환자수','Ischemic Stroke Patients by Age')
+                    : strokeType === 'ischemic'
+                      ? t('연령별 허혈성 뇌졸중 환자수','Ischemic Stroke Patients by Age')
+                      : t('연령별 출혈성 뇌졸중 환자수','Hemorrhagic Stroke Patients by Age')}
+                  <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}> {t('(전국)','(National)')}</span>
                 </span>
                 <div style={{ display: 'flex', gap: '4px' }}>
                   {[{k:'전체',l:t('전체','All')},{k:'남자',l:t('남자','Male')},{k:'여자',l:t('여자','Female')}].map(({k:g,l:gl}) => (
@@ -865,7 +931,7 @@ export default function StrokeDashboard() {
                         padding: '3px 8px', fontSize: '10px', borderRadius: '6px', cursor: 'pointer',
                         border: gender === g ? '1px solid rgba(0,212,255,0.5)' : '1px solid rgba(255,255,255,0.1)',
                         background: gender === g ? 'rgba(0,212,255,0.15)' : 'transparent',
-                        color: gender === g ? '#00d4ff' : '#666',
+                        color: gender === g ? '#00d4ff' : '#aaaacc',
                         fontFamily: "'Noto Sans KR'",
                       }}
                     >{gl}</button>
@@ -876,34 +942,54 @@ export default function StrokeDashboard() {
                 {ageDist ? (
                   <VerticalBarChart data={ageDist} labels={AGE_LABELS} title="" />
                 ) : (
-                  <div style={{ color: '#555', fontSize: '12px', textAlign: 'center', paddingTop: '40px' }}>{t('데이터 없음','No data')}</div>
+                  <div style={{ color: '#9999bb', fontSize: '12px', textAlign: 'center', paddingTop: '40px' }}>{t('데이터 없음','No data')}</div>
                 )}
               </div>
-              <div style={{ fontSize: '9px', color: '#555', marginTop: '4px', textAlign: 'right', flexShrink: 0 }}>
-                {t('평균연령','Mean age')} {KSR.demographics.meanAge}{t('세','yr')} | {t('남성','Male')} {KSR.demographics.maleRatio}% | 85{t('세+','+')} {KSR.demographics.elderly85plus.pct}%
+              <div style={{ fontSize: '9px', color: '#9999bb', marginTop: '4px', textAlign: 'right', flexShrink: 0 }}>
+                {strokeType === 'all' ? (
+                  <>{t('평균연령','Mean age')} {KSR.demographics.meanAge}{t('세','yr')} | {t('남성','Male')} {KSR.demographics.maleRatio}% | 85{t('세+','+')} {KSR.demographics.elderly85plus.pct}% <span style={{ color: '#444' }}>KOSIS 2019-2021 + KSR</span></>
+                ) : (
+                  <><span style={{ color: strokeType === 'ischemic' ? '#4d96ff' : '#ff6b6b' }}>{strokeType === 'ischemic' ? t('허혈성','Ischemic') : t('출혈성','Hemorrhagic')}</span> | <span style={{ color: '#444' }}>KOSIS 2022-2024</span></>
+                )}
               </div>
             </Panel>
 
             {/* NIHSS 중증도 분포 */}
-            <Panel style={{ flex: '0 0 auto' }}>
+            <Panel style={{ flex: '0 0 auto', opacity: strokeType === 'hemorrhagic' ? 0.35 : 1, position: 'relative' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-                {t('NIHSS 중증도 분포','NIHSS Severity Distribution')} <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{t('중앙값','Median')} {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
+                {t('NIHSS 중증도 분포','NIHSS Severity Distribution')} <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}>{t('중앙값','Median')} {KSR.severity.median} (IQR {KSR.severity.iqr[0]}-{KSR.severity.iqr[1]})</span>
+                {strokeType !== 'all' && <span style={{ fontSize: '9px', color: '#bbbbdd', marginLeft: '4px' }}>KSR ({t('허혈성만','Ischemic only')})</span>}
               </div>
+              {strokeType === 'hemorrhagic' && (
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, pointerEvents: 'none' }}>
+                  <span style={{ fontSize: '11px', color: '#ff6b6b', background: 'rgba(10,10,15,0.8)', padding: '4px 12px', borderRadius: '6px' }}>
+                    {t('출혈성 데이터 없음 (KSR 허혈성 레지스트리)','No hemorrhagic data (KSR ischemic registry)')}
+                  </span>
+                </div>
+              )}
               <StackedBar
                 segments={[
                   { label: t('NIHSS 0-3 경증','NIHSS 0-3 Minor'), value: KSR.severity.minor.pct, color: '#00ff88' },
                   { label: t('NIHSS 4-14 중등도','NIHSS 4-14 Moderate'), value: KSR.severity.moderate.pct, color: '#ffaa00' },
                   { label: t('NIHSS 15+ 중증','NIHSS 15+ Severe'), value: KSR.severity.severe.pct, color: '#ff4444' },
                 ]}
-                onClick={handleSeverityClick}
+                onClick={strokeType !== 'hemorrhagic' ? handleSeverityClick : undefined}
               />
             </Panel>
 
             {/* 예후 mRS 분포 */}
-            <Panel style={{ flex: '0 0 auto' }}>
+            <Panel style={{ flex: '0 0 auto', opacity: strokeType === 'hemorrhagic' ? 0.35 : 1, position: 'relative' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
-                {t('퇴원 시 예후','Discharge Outcome')} (mRS) <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>KSR 2022</span>
+                {t('퇴원 시 예후','Discharge Outcome')} (mRS) <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}>KSR 2022</span>
+                {strokeType !== 'all' && <span style={{ fontSize: '9px', color: '#bbbbdd', marginLeft: '4px' }}>KSR ({t('허혈성만','Ischemic only')})</span>}
               </div>
+              {strokeType === 'hemorrhagic' && (
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, pointerEvents: 'none' }}>
+                  <span style={{ fontSize: '11px', color: '#ff6b6b', background: 'rgba(10,10,15,0.8)', padding: '4px 12px', borderRadius: '6px' }}>
+                    {t('출혈성 데이터 없음 (KSR 허혈성 레지스트리)','No hemorrhagic data (KSR ischemic registry)')}
+                  </span>
+                </div>
+              )}
               <StackedBar
                 segments={[
                   { label: t('mRS 0-1 좋은예후','mRS 0-1 Good outcome'), value: KSR.outcomes.mrs01.pct, color: '#00ff88' },
@@ -911,9 +997,9 @@ export default function StrokeDashboard() {
                   { label: t('mRS 3-5 장애','mRS 3-5 Disability'), value: 36.2, color: '#ffaa00' },
                   { label: t('mRS 6 원내사망','mRS 6 In-hospital death'), value: KSR.outcomes.inHospitalMortality.pct, color: '#ff4444' },
                 ]}
-                onClick={handleMrsClick}
+                onClick={strokeType !== 'hemorrhagic' ? handleMrsClick : undefined}
               />
-              <div style={{ fontSize: '10px', color: '#8888aa', marginTop: '6px' }}>
+              <div style={{ fontSize: '10px', color: '#bbbbdd', marginTop: '6px' }}>
                 {t('독립적 생활','Independent living')} (mRS 0-2): <span style={{ color: '#00ff88', fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{KSR.outcomes.mrs02.pct}%</span>
               </div>
             </Panel>
@@ -929,7 +1015,7 @@ export default function StrokeDashboard() {
               {(() => {
                 const tDist = getTransportDist(selectedProv);
                 const natDist = getTransportDist(null);
-                if (!tDist) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
+                if (!tDist) return <div style={{ color: '#9999bb', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
                 const total = tDist.reduce((s, v) => s + v, 0);
                 const natTotal = natDist ? natDist.reduce((s, v) => s + v, 0) : 1;
                 return (
@@ -948,7 +1034,7 @@ export default function StrokeDashboard() {
                             background: colors[i],
                             opacity: 0.8,
                           }} />
-                          <span style={{ fontSize: '9px', color: '#666', marginTop: '3px', whiteSpace: 'nowrap' }}>
+                          <span style={{ fontSize: '9px', color: '#aaaacc', marginTop: '3px', whiteSpace: 'nowrap' }}>
                             {TRANSPORT_LABELS[i]}
                           </span>
                         </div>
@@ -966,9 +1052,9 @@ export default function StrokeDashboard() {
                 const prov3h = total > 0 ? ((tDist[0] + tDist[1] + tDist[2]) / total * 100).toFixed(1) : 0;
                 const nat3h = natTotal > 0 ? ((natDist[0] + natDist[1] + natDist[2]) / natTotal * 100).toFixed(1) : 0;
                 return (
-                  <div style={{ fontSize: '9px', color: '#888', marginTop: '6px', textAlign: 'right' }}>
+                  <div style={{ fontSize: '9px', color: '#bbbbdd', marginTop: '6px', textAlign: 'right' }}>
                     {t('3시간 내 도착:','Within 3hr:')} <span style={{ color: '#ffd60a', fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{prov3h}%</span>
-                    <span style={{ color: '#555', marginLeft: '6px' }}>{t('전국','National')} {nat3h}%</span>
+                    <span style={{ color: '#9999bb', marginLeft: '6px' }}>{t('전국','National')} {nat3h}%</span>
                   </div>
                 );
               })()}
@@ -978,13 +1064,13 @@ export default function StrokeDashboard() {
             <Panel style={{ flex: '0 0 auto' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#ff6b6b', marginBottom: '10px' }}>
                 {t('뇌졸중 위험인자','Stroke Risk Factors')} <span style={{ color: '#ffd60a', fontSize: '11px' }}>{provName(selectedProv)}</span>
-                <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> {t('검진통계연보','Health Screening Stats')}</span>
+                <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}> {t('검진통계연보','Health Screening Stats')}</span>
               </div>
               {(() => {
                 const examRisk = getExamRiskFactors(selectedProv);
                 const natExam = getExamNationalAvg();
                 const provInfo = PROVINCE_INFO[selectedProv];
-                if (!examRisk || !provInfo) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
+                if (!examRisk || !provInfo) return <div style={{ color: '#9999bb', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
                 const items = [
                   { label: t('혈압 이상','High BP'), value: examRisk.bpHigh, national: natExam.bpHigh, unit: '%', src: t('수축기BP 90+','SBP 90+') },
                   { label: t('혈당 이상','High Glucose'), value: examRisk.glucoseHigh, national: natExam.glucoseHigh, unit: '%', src: t('공복혈당 100+','FBG 100+') },
@@ -1005,10 +1091,10 @@ export default function StrokeDashboard() {
                       return (
                         <div key={label} style={{ marginBottom: '6px' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', marginBottom: '2px' }}>
-                            <span style={{ color: '#8888aa' }}>{label} <span style={{ color: '#555', fontSize: '9px' }}>({src})</span></span>
+                            <span style={{ color: '#bbbbdd' }}>{label} <span style={{ color: '#9999bb', fontSize: '9px' }}>({src})</span></span>
                             <span style={{ color: isWorse ? '#ff6b6b' : '#00ff88', fontFamily: "'JetBrains Mono'", fontWeight: 700, fontSize: '11px' }}>
                               {value}{unit}
-                              <span style={{ color: '#555', fontSize: '9px', marginLeft: '3px' }}>
+                              <span style={{ color: '#9999bb', fontSize: '9px', marginLeft: '3px' }}>
                                 ({diff >= 0 ? '+' : ''}{diff.toFixed(1)})
                               </span>
                             </span>
@@ -1028,7 +1114,7 @@ export default function StrokeDashboard() {
                         </div>
                       );
                     })}
-                    <div style={{ fontSize: '9px', color: '#555', marginTop: '4px', textAlign: 'right' }}>
+                    <div style={{ fontSize: '9px', color: '#9999bb', marginTop: '4px', textAlign: 'right' }}>
                       ━ <span style={{ color: '#00d4ff' }}>{t('전국 평균','Natl Avg')}</span> | <span style={{ color: '#ff6b6b' }}>{t('빨강','Red')}</span>={t('전국 이상','Above')} <span style={{ color: '#00ff88' }}>{t('초록','Green')}</span>={t('전국 이하','Below')}
                     </div>
                   </div>
@@ -1040,11 +1126,11 @@ export default function StrokeDashboard() {
             <Panel style={{ flex: '0 0 auto' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
                 {t('퇴원 결과','Discharge Disposition')} <span style={{ color: '#ffd60a', fontSize: '11px' }}>{provName(selectedProv)}</span>
-                <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> KOSIS 2023</span>
+                <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}> KOSIS 2023</span>
               </div>
               {(() => {
                 const outcomePcts = getOutcomeDist(selectedProv);
-                if (!outcomePcts) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
+                if (!outcomePcts) return <div style={{ color: '#9999bb', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
                 return (
                   <StackedBar
                     segments={outcomePcts.map((pct, i) => ({
@@ -1061,11 +1147,11 @@ export default function StrokeDashboard() {
             <Panel style={{ flex: '0 0 auto' }}>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#e8e8f0', marginBottom: '8px' }}>
                 {t('퇴원 결과 추이','Discharge Trend')} <span style={{ color: '#ffd60a', fontSize: '11px' }}>{provName(selectedProv)}</span>
-                <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}> 2022-2024</span>
+                <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}> 2022-2024</span>
               </div>
               {(() => {
                 const trend = getOutcomeTrend(selectedProv);
-                if (!trend) return <div style={{ color: '#555', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
+                if (!trend) return <div style={{ color: '#9999bb', fontSize: '12px', textAlign: 'center' }}>{t('데이터 없음','No data')}</div>;
                 const years = trend.map(t => t.year);
                 return (
                   <div>
@@ -1111,7 +1197,7 @@ export default function StrokeDashboard() {
                       })}
                       {/* x labels */}
                       {years.map((yr, i) => (
-                        <text key={yr} x={30 + (i / (years.length - 1)) * 180} y={88} textAnchor="middle" fill="#666" fontSize="8" fontFamily="'JetBrains Mono'">
+                        <text key={yr} x={30 + (i / (years.length - 1)) * 180} y={88} textAnchor="middle" fill="#aaaacc" fontSize="8" fontFamily="'JetBrains Mono'">
                           {yr}
                         </text>
                       ))}
@@ -1125,7 +1211,7 @@ export default function StrokeDashboard() {
                       ].map(item => (
                         <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                           <div style={{ width: '10px', height: '2px', background: item.color, borderRadius: '1px' }} />
-                          <span style={{ fontSize: '9px', color: '#8888aa' }}>{item.label}</span>
+                          <span style={{ fontSize: '9px', color: '#bbbbdd' }}>{item.label}</span>
                         </div>
                       ))}
                     </div>
@@ -1140,23 +1226,23 @@ export default function StrokeDashboard() {
               {prov && (
                 <div style={{ fontSize: '11px', color: '#ccc', lineHeight: 1.8 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ color: '#8888aa' }}>{t('인구','Population')}</span>
+                    <span style={{ color: '#bbbbdd' }}>{t('인구','Population')}</span>
                     <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: '#e8e8f0' }}>{lang === 'ko' ? `${(prov.population / 10000).toFixed(0)}만명` : `${(prov.population / 1000000).toFixed(1)}M`}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ color: '#8888aa' }}>고령화율</span>
+                    <span style={{ color: '#bbbbdd' }}>고령화율</span>
                     <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: prov.agingRate > NATIONAL_AVG.agingRate ? '#ff6b6b' : '#00ff88' }}>{prov.agingRate}%</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ color: '#8888aa' }}>{t('의사밀도','Doctors Density')}</span>
+                    <span style={{ color: '#bbbbdd' }}>{t('의사밀도','Doctors Density')}</span>
                     <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: prov.doctorsPerThousand < NATIONAL_AVG.doctorsPerThousand ? '#ff6b6b' : '#00ff88' }}>{prov.doctorsPerThousand}/{t('천명','/1k')}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ color: '#8888aa' }}>{t('상급종합병원','Tertiary Hospitals')}</span>
+                    <span style={{ color: '#bbbbdd' }}>{t('상급종합병원','Tertiary Hospitals')}</span>
                     <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: '#00d4ff' }}>{prov.tertiaryHospitals}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#8888aa' }}>{t('미충족의료','Unmet Medical Need')}</span>
+                    <span style={{ color: '#bbbbdd' }}>{t('미충족의료','Unmet Medical Need')}</span>
                     <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: prov.unmetMedical > NATIONAL_AVG.unmetMedical ? '#ff6b6b' : '#00ff88' }}>{prov.unmetMedical}%</span>
                   </div>
                 </div>
@@ -1184,7 +1270,7 @@ export default function StrokeDashboard() {
                   <span style={{ fontSize: '14px', fontWeight: 700, color: '#e8e8f0', fontFamily: "'JetBrains Mono'" }}>
                     {(getPatientCount(selectedProv) || Math.round(prov.strokeIncidence * prov.population / 100000)).toLocaleString()}명
                   </span>
-                  <span style={{ fontSize: '10px', color: '#666' }}>{t('허혈성 뇌졸중','Ischemic Stroke')}</span>
+                  <span style={{ fontSize: '10px', color: '#aaaacc' }}>{t('허혈성 뇌졸중','Ischemic Stroke')}</span>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginTop: '10px' }}>
                   {[
@@ -1197,9 +1283,9 @@ export default function StrokeDashboard() {
                       background: 'rgba(255,255,255,0.03)', borderRadius: '6px', padding: '6px 8px',
                       border: '1px solid rgba(255,255,255,0.04)',
                     }}>
-                      <div style={{ fontSize: '10px', color: '#8888aa' }}>{label}</div>
+                      <div style={{ fontSize: '10px', color: '#bbbbdd' }}>{label}</div>
                       <span style={{ fontSize: '14px', fontWeight: 900, fontFamily: "'JetBrains Mono'", color }}>{val}</span>
-                      <span style={{ fontSize: '9px', color: '#666' }}>{unit} ({r}/17)</span>
+                      <span style={{ fontSize: '9px', color: '#aaaacc' }}>{unit} ({r}/17)</span>
                     </div>
                   ))}
                 </div>
@@ -1213,7 +1299,7 @@ export default function StrokeDashboard() {
                 <CompareBar label={t("미충족의료","Unmet Medical")} value={prov.unmetMedical} national={NATIONAL_AVG.unmetMedical} unit="%" />
                 <CompareBar label={t("1인당 GRDP (만원)","GRDP/capita (10k KRW)")} value={Math.round(prov.grdp / prov.population * 10000000)} national={NATIONAL_AVG.grdpPerCapita} unit="" higherIsWorse={false} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginTop: '4px' }}>
-                  <span style={{ color: '#8888aa' }}>{t('상급종합병원','Tertiary Hospitals')}</span>
+                  <span style={{ color: '#bbbbdd' }}>{t('상급종합병원','Tertiary Hospitals')}</span>
                   <span style={{ color: '#00d4ff', fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>{prov.tertiaryHospitals}</span>
                 </div>
               </Panel>
@@ -1229,7 +1315,7 @@ export default function StrokeDashboard() {
               {/* 위험인자 프로파일 */}
               <Panel>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#ff6b6b', marginBottom: '10px' }}>
-                  {t('위험인자 프로파일','Risk Factor Profile')} <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{t('허혈성 뇌졸중 환자 중','Among ischemic stroke patients')}</span>
+                  {t('위험인자 프로파일','Risk Factor Profile')} <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}>{t('허혈성 뇌졸중 환자 중','Among ischemic stroke patients')}</span>
                 </div>
                 {Object.entries(KSR.riskFactors).map(([key, rf]) => {
                   const labels = { hypertension: t('고혈압','Hypertension'), dyslipidemia: t('이상지질혈증','Dyslipidemia'), diabetes: t('당뇨','Diabetes'), smoking: t('현재 흡연','Current Smoking'), atrialFib: t('심방세동','Atrial Fibrillation') };
@@ -1241,7 +1327,7 @@ export default function StrokeDashboard() {
                       style={{ marginBottom: '8px', cursor: 'pointer' }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '3px' }}>
-                        <span style={{ color: '#8888aa' }}>{labels[key]}</span>
+                        <span style={{ color: '#bbbbdd' }}>{labels[key]}</span>
                         <span style={{ fontFamily: "'JetBrains Mono'", fontWeight: 700, color: colors[key] }}>
                           {rf.pct}%
                           {rf.newDx && <span style={{ color: '#ffaa00', fontSize: '9px', marginLeft: '4px' }}>({rf.newDx}% 첫진단)</span>}
@@ -1263,7 +1349,7 @@ export default function StrokeDashboard() {
               {/* TOAST 분류 */}
               <Panel>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#00d4ff', marginBottom: '10px' }}>
-                  {t('TOAST 분류','TOAST Classification')} <span style={{ fontSize: '10px', color: '#666', fontWeight: 400 }}>{t('허혈성 뇌졸중 아형','Ischemic stroke subtypes')}</span>
+                  {t('TOAST 분류','TOAST Classification')} <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}>{t('허혈성 뇌졸중 아형','Ischemic stroke subtypes')}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <DonutChart
@@ -1273,7 +1359,7 @@ export default function StrokeDashboard() {
                       { label: t('대혈관 죽상경화','LAA'), value: KSR.toast.laa.pct, color: '#ff6b6b' },
                       { label: t('소혈관 폐색','SVO'), value: KSR.toast.svo.pct, color: '#ffaa00' },
                       { label: t('심인성 색전','CE'), value: KSR.toast.ce.pct, color: '#00d4ff' },
-                      { label: t('기타/불명','Other/Unknown'), value: KSR.toast.other.pct, color: '#555' },
+                      { label: t('기타/불명','Other/Unknown'), value: KSR.toast.other.pct, color: '#9999bb' },
                     ]}
                     onSegmentClick={handleToastClick}
                   />
@@ -1282,14 +1368,14 @@ export default function StrokeDashboard() {
                       { label: t('LAA 대혈관','LAA'), pct: KSR.toast.laa.pct, color: '#ff6b6b', note: t('감소','Decreasing') },
                       { label: t('SVO 소혈관','SVO'), pct: KSR.toast.svo.pct, color: '#ffaa00', note: t('증가','Increasing') },
                       { label: t('CE 심인성','CE'), pct: KSR.toast.ce.pct, color: '#00d4ff', note: t('안정','Stable') },
-                      { label: t('기타/불명','Other/Unknown'), pct: KSR.toast.other.pct, color: '#555', note: '' },
+                      { label: t('기타/불명','Other/Unknown'), pct: KSR.toast.other.pct, color: '#9999bb', note: '' },
                     ].map(item => (
                       <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px', cursor: 'pointer' }}
                         onClick={() => handleToastClick({ label: item.label.split(' ').pop() === '심인성' ? '심인성 색전' : item.label.includes('대혈관') ? '대혈관 죽상경화' : item.label.includes('소혈관') ? '소혈관 폐색' : '기타/불명' })}>
                         <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: item.color }} />
-                        <span style={{ color: '#8888aa' }}>{item.label}</span>
+                        <span style={{ color: '#bbbbdd' }}>{item.label}</span>
                         <span style={{ color: item.color, fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>{item.pct}%</span>
-                        {item.note && <span style={{ color: '#555', fontSize: '9px' }}>{item.note}</span>}
+                        {item.note && <span style={{ color: '#9999bb', fontSize: '9px' }}>{item.note}</span>}
                       </div>
                     ))}
                   </div>
@@ -1302,22 +1388,40 @@ export default function StrokeDashboard() {
                 <div style={{ fontSize: '11px', color: '#ccc', lineHeight: 1.8 }}>
                   <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,170,0,0.06)', borderRadius: '8px', border: '1px solid rgba(255,170,0,0.15)' }}>
                     <strong style={{ color: '#ffaa00' }}>AF 46%가 뇌졸중 입원 시 첫 진단</strong>
-                    <div style={{ color: '#999', marginTop: '2px' }}>{t('심방세동 사전 스크리닝 부족 → 1차 예방 기회 상실','Lack of AF pre-screening → missed primary prevention')}</div>
+                    <div style={{ color: '#ccccdd', marginTop: '2px' }}>{t('심방세동 사전 스크리닝 부족 → 1차 예방 기회 상실','Lack of AF pre-screening → missed primary prevention')}</div>
                   </div>
                   <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,68,68,0.06)', borderRadius: '8px', border: '1px solid rgba(255,68,68,0.15)' }}>
                     <strong style={{ color: '#ff6b6b' }}>{t('3.5h 내 도착률 26.2% — 10년간 변화 없음','3.5h arrival rate 26.2% — no change in 10 years')}</strong>
-                    <div style={{ color: '#999', marginTop: '2px' }}>{t('tPA 투여 가능 시간 내 도착 4명 중 1명. 증상 인지 교육 시급','Only 1 in 4 arrive within tPA window. Symptom awareness education urgent')}</div>
+                    <div style={{ color: '#ccccdd', marginTop: '2px' }}>{t('tPA 투여 가능 시간 내 도착 4명 중 1명. 증상 인지 교육 시급','Only 1 in 4 arrive within tPA window. Symptom awareness education urgent')}</div>
                   </div>
                   <div style={{ padding: '8px', background: 'rgba(0,255,136,0.06)', borderRadius: '8px', border: '1px solid rgba(0,255,136,0.15)' }}>
                     <strong style={{ color: '#00ff88' }}>{t('혈전제거술 2배 증가 (3.0%→6.5%)','Thrombectomy doubled (3.0%→6.5%)')}</strong>
-                    <div style={{ color: '#999', marginTop: '2px' }}>{t('tPA 하락을 보상. 지역 편차(12.9~26.1%) 해소 필요','Compensating tPA decline. Regional gap (12.9~26.1%) needs attention')}</div>
+                    <div style={{ color: '#ccccdd', marginTop: '2px' }}>{t('tPA 하락을 보상. 지역 편차(12.9~26.1%) 해소 필요','Compensating tPA decline. Regional gap (12.9~26.1%) needs attention')}</div>
                   </div>
                 </div>
               </Panel>
 
+              {/* 허혈성/출혈성 비교 (2022-2024) */}
+              {strokeType !== 'all' && (
+                <Panel>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: strokeType === 'ischemic' ? '#4d96ff' : '#ff6b6b', marginBottom: '10px' }}>
+                    {strokeType === 'ischemic' ? t('허혈성 뇌졸중 (2022-2024)','Ischemic Stroke (2022-2024)') : t('출혈성 뇌졸중 (2022-2024)','Hemorrhagic Stroke (2022-2024)')}
+                  </div>
+                  <StrokeTypePanel type={strokeType} kosis={STROKE_KOSIS} selectedProv={selectedProv} lang={lang} t={t} />
+                </Panel>
+              )}
+              {strokeType === 'all' && (
+                <Panel>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#00d4ff', marginBottom: '10px' }}>
+                    {t('허혈성 vs 출혈성 (2024)','Ischemic vs Hemorrhagic (2024)')}
+                  </div>
+                  <TypeComparison kosis={STROKE_KOSIS} selectedProv={selectedProv} lang={lang} t={t} />
+                </Panel>
+              )}
+
               {/* 지도 안내 */}
               <Panel>
-                <div style={{ fontSize: '11px', color: '#666', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#aaaacc', textAlign: 'center' }}>
                   {t('지도에서 시도를 클릭하면 지역별 상세 분석이 표시됩니다','Click a province on the map for detailed regional analysis')}
                 </div>
               </Panel>
@@ -1332,10 +1436,10 @@ export default function StrokeDashboard() {
             return (
               <>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: detailPopup ? '#00d4ff' : '#8888aa' }}>{info.title}</span>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: detailPopup ? '#00d4ff' : '#bbbbdd' }}>{info.title}</span>
                   {detailPopup && (
                     <button onClick={() => setDetailPopup(null)} style={{
-                      background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '12px',
+                      background: 'none', border: 'none', color: '#9999bb', cursor: 'pointer', fontSize: '12px',
                     }}>✕</button>
                   )}
                 </div>
@@ -1356,6 +1460,190 @@ export default function StrokeDashboard() {
           lineHeight: 1.5,
         }}>
           {t('출처','Source')}: KSR {t('한국뇌졸중등록사업','Korea Stroke Registry')} 2024 (97 {t('병원','hospitals')}, 171,520{t('건','cases')}), KOSIS {t('심뇌혈관질환통계','Cardiovascular Disease Stats')} (orgId=411), KDCA {t('심뇌혈관질환 발생통계','CVD Incidence Stats')} 2022, {t('심평원','HIRA')}, OECD Health at a Glance 2025
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── 허혈성/출혈성 타입별 패널 ──
+function StrokeTypePanel({ type, kosis, selectedProv, lang, t }) {
+  const data = type === 'ischemic' ? kosis.ischemic : kosis.hemorrhagic;
+  if (!data) return <div style={{ color: '#9999bb', fontSize: '11px' }}>No data</div>;
+
+  const prov = selectedProv || '전체';
+  const color = type === 'ischemic' ? '#4d96ff' : '#ff6b6b';
+
+  // Monthly data for selected province
+  const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  const monthlyData = months.map(m => {
+    const val = data.monthlyRegion?.[m]?.[prov];
+    return { month: m.replace('월',''), count: val?.['2024'] || val?.['2023'] || 0 };
+  });
+  const maxMonthly = Math.max(...monthlyData.map(d => d.count), 1);
+
+  // ER outcomes for province
+  const erData = data.erResultRegion?.[prov] || {};
+  const outcomes = ['퇴가','입원','전원','사망'];
+  const erYear = '2024';
+  const erValues = outcomes.map(o => {
+    const item = erData[o];
+    if (!item) return 0;
+    // Find the first numeric value from item codes
+    const vals = Object.values(item);
+    if (vals.length > 0 && typeof vals[0] === 'object') {
+      return vals[0][erYear] || vals[0]['2023'] || 0;
+    }
+    return item[erYear] || item['2023'] || 0;
+  });
+  const erTotal = erValues.reduce((a, b) => a + b, 0) || 1;
+
+  // Transport by region
+  const transportData = data.transportRegion?.[prov] || {};
+  const vehicles = ['119구급차','기타구급차','자차/택시','도보/기타'];
+  const vehYear = '2024';
+  const vehValues = vehicles.map(v => transportData[v]?.[vehYear] || transportData[v]?.['2023'] || 0);
+  const vehTotal = vehValues.reduce((a, b) => a + b, 0) || 1;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {/* Monthly bar */}
+      <div>
+        <div style={{ fontSize: '10px', color: '#bbbbdd', marginBottom: '6px' }}>
+          {t(`월별 환자수 (${prov})`, `Monthly Cases (${prov})`, lang)}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '60px' }}>
+          {monthlyData.map((d, i) => {
+            const h = maxMonthly > 0 ? (d.count / maxMonthly) * 50 : 0;
+            return (
+              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ width: '100%', height: `${h}px`, background: `${color}66`, borderRadius: '2px 2px 0 0' }} />
+                <div style={{ fontSize: '7px', color: '#9999bb', marginTop: '2px' }}>{d.month}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ER outcomes */}
+      <div>
+        <div style={{ fontSize: '10px', color: '#bbbbdd', marginBottom: '4px' }}>{t('응급진료 결과','ER Outcomes', lang)}</div>
+        <div style={{ display: 'flex', height: '16px', borderRadius: '4px', overflow: 'hidden' }}>
+          {outcomes.map((o, i) => {
+            const w = (erValues[i] / erTotal) * 100;
+            const colors = ['#6bcb77','#4d96ff','#ffd93d','#ff6b6b'];
+            return w > 0 ? (
+              <div key={o} style={{ width: `${w}%`, background: colors[i], position: 'relative' }}
+                title={`${o}: ${erValues[i]} (${w.toFixed(1)}%)`} />
+            ) : null;
+          })}
+        </div>
+        <div style={{ display: 'flex', gap: '8px', marginTop: '4px', fontSize: '9px' }}>
+          {outcomes.map((o, i) => {
+            const colors = ['#6bcb77','#4d96ff','#ffd93d','#ff6b6b'];
+            return (
+              <span key={o} style={{ color: colors[i] }}>
+                {o} {((erValues[i] / erTotal) * 100).toFixed(1)}%
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Transport mode */}
+      <div>
+        <div style={{ fontSize: '10px', color: '#bbbbdd', marginBottom: '4px' }}>{t('내원수단','Transport Mode', lang)}</div>
+        {vehicles.map((v, i) => {
+          const pct = ((vehValues[i] / vehTotal) * 100).toFixed(1);
+          const colors = ['#ff6b6b','#ff922b','#ffd93d','#bbbbdd'];
+          return (
+            <div key={v} style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+              <div style={{ width: '65px', fontSize: '9px', color: '#bbbbdd', textAlign: 'right' }}>{v}</div>
+              <div style={{ flex: 1, height: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ width: `${pct}%`, height: '100%', background: colors[i], borderRadius: '3px' }} />
+              </div>
+              <div style={{ width: '35px', fontSize: '9px', color: '#aaaacc', fontFamily: "'JetBrains Mono'" }}>{pct}%</div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ fontSize: '8px', color: '#00d4ff66' }}>
+        <a href="https://kosis.kr/" target="_blank" rel="noopener noreferrer" style={{ color: '#00d4ff66', textDecoration: 'none' }}>
+          📎 KOSIS 심뇌혈관질환통계 2022-2024
+        </a>
+      </div>
+    </div>
+  );
+}
+
+// ── 허혈성 vs 출혈성 요약 비교 (all 모드) ──
+function TypeComparison({ kosis, selectedProv, lang, t }) {
+  const prov = selectedProv || '전체';
+  const year = '2024';
+  const fallback = '2023';
+
+  const getMonthlyTotal = (typeData) => {
+    const total = typeData?.monthlyRegion?.['계']?.[prov];
+    return total?.[year] || total?.[fallback] || 0;
+  };
+
+  const ischTotal = getMonthlyTotal(kosis.ischemic);
+  const hemTotal = getMonthlyTotal(kosis.hemorrhagic);
+  const allTotal = ischTotal + hemTotal || 1;
+
+  const items = [
+    { label: t('허혈성', 'Ischemic', lang), value: ischTotal, pct: ((ischTotal / allTotal) * 100).toFixed(1), color: '#4d96ff' },
+    { label: t('출혈성', 'Hemorrhagic', lang), value: hemTotal, pct: ((hemTotal / allTotal) * 100).toFixed(1), color: '#ff6b6b' },
+  ];
+
+  return (
+    <div>
+      <div style={{ fontSize: '10px', color: '#bbbbdd', marginBottom: '8px' }}>
+        {prov} — {year} {t('연간 환자수', 'Annual Cases', lang)}
+      </div>
+      {items.map(item => (
+        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <div style={{ width: '50px', fontSize: '11px', color: item.color, fontWeight: 700 }}>{item.label}</div>
+          <div style={{ flex: 1, height: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '4px', overflow: 'hidden', position: 'relative' }}>
+            <div style={{ width: `${item.pct}%`, height: '100%', background: `${item.color}66`, borderRadius: '4px' }} />
+            <span style={{ position: 'absolute', right: '8px', top: '3px', fontSize: '10px', color: item.color, fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>
+              {item.value.toLocaleString()} ({item.pct}%)
+            </span>
+          </div>
+        </div>
+      ))}
+
+      {/* Monthly comparison mini chart */}
+      <div style={{ marginTop: '8px' }}>
+        <div style={{ fontSize: '9px', color: '#aaaacc', marginBottom: '4px' }}>{t('월별 비교','Monthly Comparison', lang)}</div>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '50px' }}>
+          {['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'].map((m, i) => {
+            const isch = kosis.ischemic?.monthlyRegion?.[m]?.[prov]?.[year] || kosis.ischemic?.monthlyRegion?.[m]?.[prov]?.[fallback] || 0;
+            const hem = kosis.hemorrhagic?.monthlyRegion?.[m]?.[prov]?.[year] || kosis.hemorrhagic?.monthlyRegion?.[m]?.[prov]?.[fallback] || 0;
+            const total = isch + hem;
+            const maxAll = Math.max(...['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'].map(mm => {
+              const a = kosis.ischemic?.monthlyRegion?.[mm]?.[prov]?.[year] || kosis.ischemic?.monthlyRegion?.[mm]?.[prov]?.[fallback] || 0;
+              const b = kosis.hemorrhagic?.monthlyRegion?.[mm]?.[prov]?.[year] || kosis.hemorrhagic?.monthlyRegion?.[mm]?.[prov]?.[fallback] || 0;
+              return a + b;
+            }), 1);
+            const h = (total / maxAll) * 40;
+            const ischH = total > 0 ? (isch / total) * h : 0;
+            const hemH = h - ischH;
+            return (
+              <div key={m} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ height: `${hemH}px`, background: '#ff6b6b66', borderRadius: '2px 2px 0 0' }} />
+                  <div style={{ height: `${ischH}px`, background: '#4d96ff66' }} />
+                </div>
+                <div style={{ fontSize: '6px', color: '#444', marginTop: '1px' }}>{i + 1}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ display: 'flex', gap: '12px', marginTop: '4px', fontSize: '8px' }}>
+          <span style={{ color: '#4d96ff' }}>■ {t('허혈성','Ischemic', lang)}</span>
+          <span style={{ color: '#ff6b6b' }}>■ {t('출혈성','Hemorrhagic', lang)}</span>
         </div>
       </div>
     </div>

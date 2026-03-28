@@ -97,7 +97,7 @@ export default function Overview() {
                 border: `1px solid ${metric === m.id ? m.color : 'rgba(255,255,255,0.1)'}`,
                 borderRadius: '8px',
                 padding: '4px 12px',
-                color: metric === m.id ? m.color : '#8888aa',
+                color: metric === m.id ? m.color : '#bbbbdd',
                 fontSize: '12px',
                 fontWeight: metric === m.id ? 600 : 400,
                 cursor: 'pointer',

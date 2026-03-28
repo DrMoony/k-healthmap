@@ -82,7 +82,7 @@ export default function KPICard({ label, value, unit = '%', delta, icon, color =
           ...(compact ? {} : { marginBottom: '8px' }),
         }}>
           <span style={{ fontSize: compact ? '16px' : '20px' }}>{icon}</span>
-          <span style={{ color: '#8888aa', fontSize: compact ? '12px' : '13px', fontWeight: 500 }}>
+          <span style={{ color: '#bbbbdd', fontSize: compact ? '12px' : '13px', fontWeight: 500 }}>
             {label}
           </span>
         </div>
@@ -97,7 +97,7 @@ export default function KPICard({ label, value, unit = '%', delta, icon, color =
           }}>
             {displayed.toFixed(1)}
           </span>
-          <span style={{ color: '#8888aa', fontSize: compact ? '12px' : '16px' }}>{unit}</span>
+          <span style={{ color: '#bbbbdd', fontSize: compact ? '12px' : '16px' }}>{unit}</span>
         </div>
 
         {delta != null && (

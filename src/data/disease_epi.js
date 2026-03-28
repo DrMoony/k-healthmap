@@ -37,15 +37,27 @@ export const DISEASE_TIMESERIES = {
     ref: 'KDCA, 심뇌혈관질환 발생통계 2022',
   },
   htn_prevalence: {
-    years: [1998, 2001, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021],
-    crude: [25.1, 26.0, 22.9, 20.4, 22.7, 23.4, 24.1, 26.5, 26.7, 25.7, 24.3, 27.0, 28.5, 26.9, 28.8, 28.4, 29.4, 28.4],
-    std: [26.0, 23.6, 22.7, 19.7, 21.4, 21.4, 21.7, 23.9, 23.8, 22.4, 20.5, 22.5, 23.7, 22.3, 23.5, 22.5, 23.3, 21.8],
-    ref: 'Korea Hypertension Fact Sheet 2023; KNHANES 1998-2021',
+    years: [1998, 2001, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+    crude: [25.1, 26.0, 22.9, 20.4, 22.7, 23.4, 24.1, 26.5, 26.7, 25.7, 24.3, 27.0, 28.5, 26.9, 28.8, 28.4, 29.4, 28.4, 29.6, 29.0],
+    std: [26.0, 23.6, 22.7, 19.7, 21.4, 21.4, 21.7, 23.9, 23.8, 22.4, 20.5, 22.5, 23.7, 22.3, 23.5, 22.5, 23.3, 21.8, 22.4, null],
+    ref: 'Korea Hypertension Fact Sheet 2025; KNHANES 1998-2023',
+  },
+  // 팩트시트별 관리 캐스케이드 (유병률은 조율 기준, 30세 이상)
+  htn_factsheet_cascade: {
+    years: [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    dataYear: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+    prevalence: [29, null, null, null, null, null, null, 29],
+    patients: [null, null, null, null, null, null, null, 1260],  // 만명
+    awareness: [65, null, null, null, 74, 74, 77, 79],
+    treatment: [61, null, null, null, 70, 70, 74, 76],
+    control: [44, null, null, null, 56, 56, 59, 62],
+    note: '각 연도 팩트시트의 최신 데이터 기준. 빈 값은 해당 팩트시트에서 미추출.',
+    ref: 'KSH Hypertension Fact Sheets 2018-2025',
   },
   htn_awareness: {
-    periods: ['1998', '2007-2009', '2013-2015', '2020', '2021'],
-    values: [23.5, 66.3, 67.3, 69.5, 74.1],
-    ref: 'Korea Hypertension Fact Sheet 2023',
+    periods: ['1998', '2007-2009', '2013-2015', '2020', '2021', '2023'],
+    values: [23.5, 66.3, 67.3, 69.5, 74.1, 79],
+    ref: 'Korea Hypertension Fact Sheet 2025',
   },
   dm_prevalence: {
     periods: ['1998-2005', '2007-2009', '2010-2012', '2013-2015', '2016-2018', '2019-2020', '2021-2022'],
@@ -56,6 +68,27 @@ export const DISEASE_TIMESERIES = {
     periods: ['2005-2009', '2010-2012', '2013-2015', '2016-2019', '2020-2022'],
     values: [41.30, 43.14, 44.60, 47.00, 48.41],
     ref: 'KSoLA, Dyslipidemia Fact Sheet 2024; National trends 2005-2022',
+  },
+  eskd_incidence: {
+    years: [2010, 2012, 2014, 2016, 2018, 2020, 2022],
+    rates: [199.4, 221.0, 248.3, 275.8, 310.5, 340.1, 360.2],
+    patients: [63341, 73064, 84989, 98746, 110856, 121379, 135345],
+    unit: 'per million population',
+    ref: 'KORDS 2010-2022, KSN ESKD Fact Sheet 2024',
+  },
+  dialysis_trend: {
+    years: [2010, 2012, 2014, 2016, 2018, 2020, 2022],
+    hd: [43931, 50477, 59667, 71066, 82141, 92540, 107285],
+    pd: [8441, 8962, 9374, 9608, 9651, 9735, 10413],
+    total: [52372, 59439, 69041, 80674, 91792, 102275, 117698],
+    ref: 'KORDS 2010-2022',
+  },
+  transplant_trend: {
+    years: [2010, 2012, 2014, 2016, 2018, 2020, 2022],
+    living: [915, 943, 1063, 1167, 1310, 1278, 1394],
+    deceased: [346, 402, 547, 673, 735, 654, 770],
+    total: [1261, 1345, 1610, 1840, 2045, 1932, 2164],
+    ref: 'KORDS 2010-2022',
   },
 };
 
@@ -407,6 +440,291 @@ export const DISEASE_EPI = {
     },
 
     // ──────────────────────────────────────────────
+    // 5b. 대사이상지방간염 (MASH, 구 NASH)
+    // ──────────────────────────────────────────────
+    mash: {
+      name: '대사이상지방간염 (MASH)',
+      nameEn: 'MASH (formerly NASH)',
+      metricType: 'prevalence',
+
+      // ── 글로벌 역학 ──
+      global: {
+        masldPrevalence: 38,  // 성인 전체, Younossi 2023 Hepatology
+        masldInT2DM: 65.3,    // T2DM 환자 중 MASLD, Younossi 2024 CGH
+        ref: 'Younossi ZM et al., Hepatology 2023;79(4):1264-1282; Clin Gastroenterol Hepatol 2024',
+      },
+
+      // ── 한국 유병률 (KASL GL 2025, 건보/건검 데이터) ──
+      koreaPrevalence: {
+        masld_healthCheckup: { value: 27.5, male: 35.9, female: 17.4, n: 9775066, year: 2009, method: 'FLI+건검', unit: '%' },
+        masld_ultrasound: { value: 33.5, n: 7918, method: '복부초음파', unit: '%' },
+        masld_cap: { value: 42.9, method: 'CAP≥250', unit: '%' },
+        masld_biopsy: { value: 51.4, method: '생체간 공여자 조직검사', unit: '%' },
+        nafld_masld_concordance: 99, // %
+        ref: 'KASL 2025 MASLD 진료가이드라인, refs 31-46',
+      },
+
+      // ── 한국 MASH 진단 기반 역학 (NHIS claims, PMC10744038) ──
+      koreaMASH: {
+        prevalencePer1000: { y2010: 0.49, y2021: 9.79 },  // /1000명
+        incidencePer1000: { y2010: 0.37, y2021: 5.52 },   // /1000명
+        foldIncrease: { prevalence: 20, incidence: 15 },
+        peakAge: '60-69',
+        sexSwitch: '50세 미만 남성↑, 50세 이상 여성↑',
+        caveat: '진단코드 기반 — 실제 유병률의 ~10%. 증가 추세는 주로 진단 인식 향상 반영.',
+        ref: 'J Clin Med 2023;12(24):7634 (PMC10744038), NHIS 2010-2021',
+      },
+
+      // ── 간섬유화 진행 (KASL GL 2025 인용 메타분석) ──
+      fibrosis: {
+        // 과체중 MASLD 환자
+        overweightMASLD: { anyFibrosis: 46.6, advancedF3F4: 6.7, cirrhosisF4: 2.5, unit: '%' },
+        // 과체중 MASH 환자
+        overweightMASH: { anyFibrosis: 72.6, advancedF3F4: 19.4, cirrhosisF4: 1.7, unit: '%' },
+        // MASLD 전체
+        masldSignificantFibrosis: 26.7, // F2+ (%), MASLD 인구 중
+        masldF2plus: 29.2,  // 조직검사 확인 환자 중 F2+
+        masldCirrhosis: 3.2, // 조직검사 확인 환자 중
+        // 섬유화 진행 속도
+        progressionRate: {
+          nafl_to_F1: 14.3,   // 년 (단순지방간)
+          nash_to_F1: 7.1,    // 년 (지방간염 — 2배 빠름)
+          fiveYearCirrhosis: 2.42,  // %
+          tenYearCirrhosis: 3.70,   // %
+        },
+        // 3년 섬유화 진행 비율
+        threeYearProgression: 27,  // %
+        ref: 'KASL GL 2025 refs 82-91; Singh 2015 Clin Gastro Hepatol',
+      },
+
+      // ── HCC 위험 ──
+      hcc: {
+        cirrhosisAnnualRate: 1.5,  // % 이상, 간경변 동반 시
+        masldHccRate: 0.62,        // %, MASLD군
+        nonMasldHccRate: 0.18,     // %, 비MASLD군
+        ref: 'KASL GL 2025 refs 64-72',
+      },
+
+      // ── 사망 위험 (전체사망률 HR) ──
+      mortalityHR: {
+        nafl: 1.71,           // 단순지방간
+        nash: 2.14,           // 지방간염
+        nashWithFibrosis: 2.44,  // 섬유화 동반
+        cirrhosis: 3.79,      // 간경변
+        ref: 'KASL GL 2025 ref 95',
+      },
+
+      // ── MASH 진행 파이프라인 (시각화용 요약) ──
+      pipeline: {
+        stages: [
+          { id: 'masld', label: 'MASLD', labelEn: 'MASLD', prevalence: '27-38%', note: '한국 27.5%, 글로벌 38%' },
+          { id: 'mash', label: 'MASH', labelEn: 'MASH', prevalence: '~1% 진단', note: '과체중MASLD의 ~20% 추정' },
+          { id: 'fibrosis', label: '진행성 섬유화', labelEn: 'Adv. Fibrosis', prevalence: 'MASH의 19.4%', note: 'F3-F4' },
+          { id: 'cirrhosis', label: '간경변', labelEn: 'Cirrhosis', prevalence: '10년 3.7%', note: 'MASH의 1.7%' },
+          { id: 'hcc', label: '간세포암', labelEn: 'HCC', prevalence: '연 1.5%', note: '간경변 동반 시' },
+        ],
+        mortalityMultiplier: [1.0, 1.71, 2.14, 2.44, 3.79],  // vs 일반인구
+        transitionYears: [null, null, 7.1, null, null],  // NASH→F1 7.1년
+      },
+
+      ref: 'KASL 2025 MASLD GL, KASL NAFLD FS 2023, Younossi 2023/2024',
+      refUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10744038/',
+    },
+
+    // ──────────────────────────────────────────────
+    // 5c. B형간염 (Hepatitis B)
+    // ──────────────────────────────────────────────
+    hbv: {
+      name: 'B형간염',
+      nameEn: 'Hepatitis B',
+      metricType: 'prevalence',
+
+      // ── HBsAg 양성률 (KNHANES) ──
+      hbsAgPrevalence: {
+        y2007_2009: 3.4,   // % (KNHANES 2007-2009, 10세 이상)
+        y2019_2021: 2.14,  // % (KNHANES 2019-2021)
+        overall_2019: 2.7, // % (20세 이상, 연령보정)
+        male: 3.4,         // % (2019-2021)
+        female: 1.9,       // % (2019-2021)
+        agePeak: '40-49세',
+        trend: 'decreasing',
+        trendNote: '예방접종 효과로 30세 미만 거의 소실',
+        unit: '%',
+      },
+
+      // ── 항체 보유율 ──
+      antiHBs: {
+        overall: 66.7,      // % (2019-2021 KNHANES)
+        age10_19: 73.2,     // %
+        age20_29: 59.1,     // %
+        age30_39: 56.5,     // %
+        trendNote: '20-30대 항체 소실 → 추가접종 필요',
+        unit: '%',
+      },
+
+      // ── 환자수 (NHIS 청구) ──
+      patients: {
+        chronicHBV: 490000, // 만성 B형간염 진료환자 약 49만명 (2021)
+        year: 2021,
+        trendNote: '치료율 향상으로 진료환자 안정적 유지',
+      },
+
+      // ── 예방접종 ──
+      vaccination: {
+        newbornCoverage: 97.8,  // % (2021)
+        perinatalPrevention: 96.2, // % (수직감염 예방사업)
+        universalSince: 1995,
+        trendNote: '1995년 국가예방접종 도입, 10대 이하 HBsAg 거의 0%',
+      },
+
+      // ── HBV 관련 질환 ──
+      complications: {
+        hbvRelatedHCC_proportion: 62,  // % (간세포암 중 HBV 원인, 2008)
+        hbvRelatedHCC_2020: 48,        // % (감소 추세)
+        hbvRelatedLC_proportion: 45,   // % (간경변 중 HBV 원인)
+        trendNote: 'HBV 기인 간암 비율 감소, MASLD 기인 증가',
+      },
+
+      // ── 사망률 ──
+      mortality: {
+        liverDiseaseMortality2021: 13.5, // /100,000 (간질환 사망률, HBV 포함)
+        trendNote: '간질환 사망률 전반적 감소, HBV 기여 비율 하락',
+        unit: '/100,000',
+      },
+
+      riskFactors: ['수직감염 (모자감염)', '혈액 노출', '성적 접촉', '의료시술'],
+      ref: 'KASL HBV Factsheet 2023; KNHANES 2019-2021; 대한간학회 만성 B형간염 진료 가이드라인 2022',
+      refUrl: 'https://www.kasl.org/',
+    },
+
+    // ──────────────────────────────────────────────
+    // 5d. C형간염 (Hepatitis C)
+    // ──────────────────────────────────────────────
+    hcv: {
+      name: 'C형간염',
+      nameEn: 'Hepatitis C',
+      metricType: 'prevalence',
+
+      // ── Anti-HCV 양성률 (KNHANES) ──
+      antiHcvPrevalence: {
+        y2012_2016: 0.7,   // % (KNHANES, 20세 이상)
+        y2019_2021: 0.6,   // % (KNHANES)
+        male: 0.5,
+        female: 0.6,
+        agePeak: '60세 이상 (1.5-2.5%)',
+        trend: 'stable_to_decreasing',
+        unit: '%',
+      },
+
+      // ── HCV RNA 양성률 (현재 감염) ──
+      hcvRna: {
+        positiveRate: 0.4,  // % (anti-HCV 양성자 중 ~60% RNA+)
+        estimatedPatients: 160000, // 약 16만명 (활동성 감염 추정)
+        unit: '%',
+      },
+
+      // ── 환자수 (NHIS 청구) ──
+      patients: {
+        diagnosedTotal: 120000,  // 진단환자 약 12만명 (2021)
+        estimatedTotal: 300000,  // 추정 총 감염자 약 30만명
+        treatmentRate: 33,       // % (DAA 치료율)
+        year: 2021,
+        trendNote: 'DAA 도입(2015) 후 치료 성공률 95%+ 이나 진단율 여전히 낮음',
+      },
+
+      // ── 유전자형 ──
+      genotype: {
+        gt1b: 45,    // % (가장 흔함)
+        gt2a: 40,    // %
+        gt3: 5,      // %
+        other: 10,   // %
+        trendNote: '유전자형 1b가 가장 흔하나, 2형도 높은 비율',
+      },
+
+      // ── DAA 치료 ──
+      treatment: {
+        svrRate: 97,    // % (SVR12, DAA 치료)
+        daaApproval: 2015,
+        annualTreated2021: 16000, // 연간 DAA 치료자 수
+        eliminationTarget: 2030,
+        gapNote: 'WHO 2030 목표 대비 진단율·치료율 모두 미달',
+      },
+
+      // ── HCV 관련 질환 ──
+      complications: {
+        hcvRelatedHCC_proportion: 10,  // % (간세포암 중 HCV 원인)
+        hcvRelatedLC_proportion: 15,   // % (간경변 중 HCV 원인)
+        trendNote: 'DAA 치료 확대 시 간경변·간암 예방 가능',
+      },
+
+      riskFactors: ['의료시술 (침습적 시술)', '수혈 (1991년 이전)', '문신/피어싱', '주사약물 사용'],
+      ref: 'KASL HCV Factsheet 2021; KNHANES 2019-2021; 대한간학회 만성 C형간염 진료 가이드라인 2025',
+      refUrl: 'https://www.kasl.org/',
+    },
+
+    // ──────────────────────────────────────────────
+    // 5e. 알코올 간질환 (Alcoholic Liver Disease)
+    // ──────────────────────────────────────────────
+    ald: {
+      name: '알코올 간질환',
+      nameEn: 'Alcoholic Liver Disease',
+      metricType: 'prevalence',
+
+      // ── 유병률 및 환자수 (NHIS) ──
+      prevalence: {
+        aldDiagnosed2021: 290000,  // 약 29만명 (NHIS 진료기준)
+        aldPrevalence: 5.2,        // % (건검 수진자 중 추정)
+        alcoholicFattyLiver: 4.5,  // % (알코올성 지방간)
+        alcoholicHepatitis: 0.4,   // % (알코올성 간염)
+        alcoholicCirrhosis: 0.3,   // % (알코올성 간경변)
+        year: 2021,
+        trendNote: '2012→2021 ALD 진료환자 꾸준히 증가',
+        unit: '%',
+      },
+
+      // ── 음주 현황 (KNHANES) ──
+      alcoholConsumption: {
+        highRiskDrinking_male: 20.7,   // % (월 1회 이상 고위험 음주, 2021)
+        highRiskDrinking_female: 8.9,  // %
+        highRiskDrinking_overall: 14.7, // %
+        bingeRateAdult: 38.7,          // % (월 1회 이상 폭음)
+        perCapitaAlcohol_L: 8.3,       // 리터/년 (15세 이상)
+        trend: 'stable_high',
+        trendNote: '남성 고위험음주 감소 추세이나 여전히 높은 수준, 여성 증가 추세',
+      },
+
+      // ── 성별·연령 ──
+      demographics: {
+        maleRatio: 78,   // % (ALD 환자 중 남성)
+        femaleRatio: 22,  // %
+        peakAge_male: '50-59세',
+        peakAge_female: '60-69세',
+        femaleTrend: '여성 ALD 비율 지속 증가',
+      },
+
+      // ── ALD 관련 간경변·간암 ──
+      complications: {
+        aldRelatedLC_proportion: 25,   // % (간경변 중 ALD 원인)
+        aldRelatedHCC_proportion: 12,  // % (간세포암 중 ALD 원인)
+        aldMortality2021: 4.2,         // /100,000 (알코올 간질환 사망률)
+        trendNote: 'ALD 기인 간경변 비율 증가 추세, HBV 비율 감소분 대체',
+      },
+
+      // ── 사망률 ──
+      mortality: {
+        aldDeathRate2021: 4.2,  // /100,000
+        aldDeathRate2012: 3.8,  // /100,000
+        trend: 'increasing',
+        liverDeathContribution: 31,  // % (전체 간질환 사망 중 ALD 기여)
+        unit: '/100,000',
+      },
+
+      riskFactors: ['과도한 음주 (남 40g/일, 여 20g/일 이상)', '폭음 습관', '비만 동반', '바이러스 간염 중복'],
+      ref: 'KASL ALD Factsheet 2023; 간질환 백서 2024; KNHANES 2021',
+      refUrl: 'https://www.kasl.org/',
+    },
+
+    // ──────────────────────────────────────────────
     // 6. 심근경색 (Myocardial Infarction)
     // ──────────────────────────────────────────────
     mi: {
@@ -515,28 +833,184 @@ export const DISEASE_EPI = {
     // 8b. 만성신장질환 (CKD)
     // ──────────────────────────────────────────────
     ckd: {
-      name: '만성신장질환',
+      name: '만성콩팥병',
       nameEn: 'Chronic Kidney Disease',
       metricType: 'prevalence',
+
+      // ── CKD 유병률 ──
       prevalence: [
         { value: 8.2, unit: '%', population: '20세 이상', year: '2011-2013', source: 'KNHANES' },
         { value: 13.7, unit: '%', population: '35세 이상', year: null, source: 'estimated' },
       ],
-      dataAge: '2011-2013 (최신 데이터 필요)',
+      prevalenceNote: '최신 KNHANES 기반 CKD 유병률 업데이트 미발표; 현재 10%+ 추정 (고령화 반영)',
+      dataAge: '2011-2013 (최신 전국 조사)',
       trend: 'increasing',
-      trendDetail: '20세 이상 CKD 유병률 8.2%, 고령화로 증가 추세',
-      awareness: { range: '1.3-6.3%', note: '극히 낮은 인지율' },
+      trendDetail: '20세 이상 CKD 유병률 8.2%, 고령화+당뇨+고혈압 증가로 CKD 환자 지속 증가 추세',
+
+      // ── CKD Stage 분포 (KNHANES 2011-2013, eGFR-based) ──
+      stageDistribution: {
+        stage1: { percent: 1.7, label: 'Stage 1 (eGFR≥90 + 알부민뇨)' },
+        stage2: { percent: 3.5, label: 'Stage 2 (eGFR 60-89 + 알부민뇨)' },
+        stage3a: { percent: 1.8, label: 'Stage 3a (eGFR 45-59)' },
+        stage3b: { percent: 0.8, label: 'Stage 3b (eGFR 30-44)' },
+        stage4: { percent: 0.3, label: 'Stage 4 (eGFR 15-29)' },
+        stage5: { percent: 0.1, label: 'Stage 5 (eGFR <15)' },
+        source: 'KNHANES 2011-2013, Park S et al. Sci Rep 2023',
+        note: 'Stage 1-2는 알부민뇨 기준, Stage 3-5는 eGFR 기준',
+      },
+
+      // ── 인지율 ──
+      awareness: { range: '1.3-6.3%', note: '극히 낮은 인지율 — CKD Stage 3 이상에서도 10% 미만' },
       awarenessGap: { prevalence: 8.2, awareness_low: 1.3, awareness_high: 6.3 },
-      nafldCkdLink: 19.1,
-      ageNote: '고령일수록 급증, 35세 이상 13.7%',
+
+      // ── ESKD (말기콩팥병) — KORDS 2022 기준, KSN ESKD FS 2024 ──
       eskd: {
-        incidenceRate2022: 360.2, // per million, world 3rd
-        incidenceChange: '10년간 2배 증가',
+        // 발생률
+        incidenceRate2022: 360.2, // per million population, 세계 3위
+        incidenceRank: '세계 3위 (대만, 미국 다음)',
+        incidenceTrend: [
+          { year: 2010, rate: 199.4 },
+          { year: 2012, rate: 221.0 },
+          { year: 2014, rate: 248.3 },
+          { year: 2016, rate: 275.8 },
+          { year: 2018, rate: 310.5 },
+          { year: 2020, rate: 340.1 },
+          { year: 2022, rate: 360.2 },
+        ],
+        incidenceUnit: 'per million population',
+        incidenceChange: '10년간 약 1.8배 증가 (199→360/백만)',
+        // 유병률 (말기콩팥병 전체)
+        prevalenceTotal2022: 135345, // 투석+이식 합산 유병 환자수 (KORDS 2022)
+        prevalenceRate2022: 2621.2, // per million population
+        prevalenceTrend: [
+          { year: 2010, patients: 63341, rate: 1270 },
+          { year: 2012, patients: 73064, rate: 1448 },
+          { year: 2014, patients: 84989, rate: 1670 },
+          { year: 2016, patients: 98746, rate: 1926 },
+          { year: 2018, patients: 110856, rate: 2148 },
+          { year: 2020, patients: 121379, rate: 2343 },
+          { year: 2022, patients: 135345, rate: 2621 },
+        ],
+        newPatients2022: 18614, // 2022 신규 ESKD 환자수
+        // 원인질환
+        causeDistribution: {
+          diabetes: 48.3,       // %
+          hypertension: 21.6,   // %
+          glomerulonephritis: 7.8,
+          polycysticKidney: 2.1,
+          other: 20.2,
+          year: 2022,
+          source: 'KORDS 2022',
+        },
+        // 사망률
+        mortality: {
+          annualDeaths2022: 6751,
+          crudeDeathRate: 49.9, // per 1000 ESKD patients
+          fiveYearSurvival: 61.3, // %
+          note: '일반인구 대비 사망위험 3-5배',
+        },
         ref: 'KSN ESKD Fact Sheet 2024, KORDS 2010-2022',
       },
-      ref: 'Park S, et al. CKD prevalence and awareness in South Korea: KNHANES 2011-2013. Sci Rep. 2023;13:3377. (주의: 12년 전 데이터, 현재 유병률 10%+ 추정)',
-      refUrl: 'https://doi.org/10.1038/s41598-023-30location',
-      refNote: 'Nature Scientific Reports 2023, KNHANES 2011-2013 기반 전국 단면 연구',
+
+      // ── 투석 (Dialysis) — KORDS 2022 ──
+      dialysis: {
+        totalPatients2022: 117698, // 전체 투석 환자
+        hdPatients2022: 107285,    // 혈액투석 (HD)
+        pdPatients2022: 10413,     // 복막투석 (PD)
+        hdPercent: 91.2,
+        pdPercent: 8.8,
+        trend: [
+          { year: 2010, total: 52372, hd: 43931, pd: 8441 },
+          { year: 2012, total: 59439, hd: 50477, pd: 8962 },
+          { year: 2014, total: 69041, hd: 59667, pd: 9374 },
+          { year: 2016, total: 80674, hd: 71066, pd: 9608 },
+          { year: 2018, total: 91792, hd: 82141, pd: 9651 },
+          { year: 2020, total: 102275, hd: 92540, pd: 9735 },
+          { year: 2022, total: 117698, hd: 107285, pd: 10413 },
+        ],
+        modalityNote: 'HD 비율 지속 증가, PD 비율 감소 추세 (2010: 83.9%→2022: 91.2% HD)',
+        incidentModality2022: { hd: 86.1, pd: 6.4, preemptiveTransplant: 7.5, unit: '%' },
+        avgAge2022: 65.8, // 신규 투석 환자 평균 연령
+        ref: 'KORDS 2022, KSN 투석전문의 Factsheet 2024',
+      },
+
+      // ── 신장이식 (Transplant) — KORDS 2022 ──
+      transplant: {
+        cumulativeTotal2022: 17647,  // 누적 생존 이식환자
+        annualTransplants2022: 2164, // 2022년 이식 건수
+        livingDonor2022: 1394,       // 생체
+        deceasedDonor2022: 770,      // 뇌사
+        livingPercent: 64.4,
+        deceasedPercent: 35.6,
+        trend: [
+          { year: 2010, total: 1261, living: 915, deceased: 346 },
+          { year: 2012, total: 1345, living: 943, deceased: 402 },
+          { year: 2014, total: 1610, living: 1063, deceased: 547 },
+          { year: 2016, total: 1840, living: 1167, deceased: 673 },
+          { year: 2018, total: 2045, living: 1310, deceased: 735 },
+          { year: 2020, total: 1932, living: 1278, deceased: 654 },
+          { year: 2022, total: 2164, living: 1394, deceased: 770 },
+        ],
+        fiveYearGraftSurvival: 93.2, // %
+        trendNote: '뇌사 이식 증가 추세, 2020 COVID 영향으로 일시 감소',
+        ref: 'KORDS 2022',
+      },
+
+      // ── DKD (당뇨병콩팥병) 관련 ──
+      dkdOverlap: {
+        ckdAmongDM: 32.4,        // 당뇨 환자 중 CKD(eGFR<60 or 알부민뇨) 비율 (%)
+        dmAmongESKD: 48.3,       // ESKD 환자 중 당뇨 원인 비율 (%)
+        dkdPrevalenceInDM30plus: 19.1, // 30세 이상 당뇨환자 중 CKD 동반 (%), NHIS
+        albuminuriaInDM: 26.7,   // 당뇨 환자 중 알부민뇨 유병률 (%)
+        dmCkdMortality: 'CKD 동반 당뇨환자 사망 위험 2.5배 (vs CKD 미동반)',
+        yearlyProgression: '당뇨환자 CKD → ESKD 진행률 연 2-3%',
+        ref: 'KSN 당뇨병콩팥병 진료지침 2024; KDA DFS 2024; KORDS 2022',
+      },
+
+      // ── 고혈압 + CKD ──
+      htnCkdOverlap: {
+        ckdAmongHTN: 12.8,       // 고혈압 환자 중 CKD 비율 (%)
+        htnAmongESKD: 21.6,      // ESKD 원인 중 고혈압 비율 (%)
+        ref: 'KSN 고혈압콩팥병 진료지침 2025; KORDS 2022',
+      },
+
+      // ── NAFLD + CKD 연관 ──
+      nafldCkdLink: 19.1,
+
+      // ── 연령별 ──
+      ageNote: '고령일수록 급증: 65세 이상 CKD 유병률 약 25-30% 추정',
+      ageDistribution: {
+        '20-39': 2.1,
+        '40-49': 4.8,
+        '50-59': 7.2,
+        '60-69': 12.5,
+        '70+': 28.3,
+        unit: '%',
+        source: 'KNHANES 2011-2013 추정, 고령 구간은 최근 증가 반영',
+      },
+
+      // ── 비용 부담 ──
+      costBurden: {
+        dialysisCostPerYear: '약 3,000만원/인',
+        totalDialysisCost2022: '약 3.5조원',
+        transplantCostFirstYear: '약 2,500만원',
+        transplantMaintenancePerYear: '약 800만원',
+        costNote: '투석 vs 이식: 5년 기준 이식이 경제적 (이식 후 5년 총 약 6,500만 vs 투석 5년 1.5억)',
+        ref: 'NHIS 건강보험통계, KSN 지속가능신장치료 보고서',
+      },
+
+      // ── 투석전문의 현황 ──
+      nephrologistWorkforce: {
+        totalNephrologists2024: 1782,
+        dialysisFacilities2024: 878,
+        nephrologistPerFacility: 2.0,
+        shortageNote: '지방 투석전문의 부족, 서울·경기 집중',
+        ref: 'KSN 투석전문의 Factsheet 2024',
+      },
+
+      ref: 'KSN ESKD Fact Sheet 2024; KORDS 2010-2022; Park S, et al. Sci Rep. 2023;13:3377 (KNHANES 2011-2013); KSN 당뇨병콩팥병 진료지침 2024; KSN 고혈압콩팥병 진료지침 2025; KSN 투석전문의 Factsheet 2024',
+      refUrl: 'https://www.ksn.or.kr/',
+      refNote: '대한신장학회 KORDS 레지스트리, KNHANES, NHIS 기반. CKD 유병률은 2011-2013 데이터로 현재 과소추정 가능.',
     },
 
     // ──────────────────────────────────────────────

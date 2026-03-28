@@ -1,0 +1,107 @@
+울혈성 심부전 입원율 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A006/3/1/20260327094138&prdSe=Y&newEstPrdCnt=20
+
+만성콩팥병(중등도 이상) 유병률 추이 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_11702_N119/3/1/20260320092331&prdSe=Y&newEstPrdCnt=20
+
+
+당뇨병 하지 대절단율 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A009_1/3/1/20260327094508&prdSe=Y&newEstPrdCnt=10
+
+당뇨병 하지 절단율 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A009/3/1/20260327094538&prdSe=Y&newEstPrdCnt=15
+
+
+당뇨병 입원율 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A008/3/1/20260327094607&prdSe=Y&newEstPrdCnt=15
+
+당뇨병 하지 소절단율 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A009_2/3/1/20260327094636&prdSe=Y&newEstPrdCnt=15
+
+시·군·구별 당뇨병 진단 경험률(30세 이상) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_DIA_DOCTOR/3/1/20260327094721&prdSe=Y&newEstPrdCnt=15
+
+시·도별 당뇨병 진단 경험자(30세 이상)의 남자 현재흡연율 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_117075_DIA_DOCTOR_SM_MALE/3/1/20260327094749&prdSe=Y&newEstPrdCnt=15
+
+장애인 만성질환(당뇨병) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117102_2023C/3/1/20260327094827&prdSe=Y&newEstPrdCnt=3&prdInterval=15
+
+당뇨병 환자의 지질저하제 처방률  https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A010/3/1/20260327094851&prdSe=Y&newEstPrdCnt=15
+
+당뇨병 환자의 일차 선택 항고혈압제 처방률 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A011/3/1/20260327094935&prdSe=Y&newEstPrdCnt=15
+
+시·군·구별 연간 당뇨성 안질환 합병증검사(안저검사) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_DIA_EYE/3/1/20260327095005&prdSe=Y&newEstPrdCnt=15
+
+시·군·구별 연간 당뇨성 신장질환 합병증검사(미세단백뇨검사) 수진율(30세 이상) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_DIA_KIDNEY/3/1/20260327095050&prdSe=Y&newEstPrdCnt=15
+
+시·군·구별 당뇨병 진단 경험자(30세 이상)의 치료율 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_DIA_TREAT/3/1/20260327095124&prdSe=Y&newEstPrdCnt=15
+급성심근경색 환자의 퇴원 후 사망원인(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5411/3/1/20260327095157&prdSe=Y&newEstPrdCnt=15
+급성심근경색 환자의 퇴원 후 사망시점(성별,연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5512/3/1/20260327095226&prdSe=Y&newEstPrdCnt=15
+급성심근경색 환자의 퇴원 후 사망시점(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5511/3/1/20260327095303&prdSe=Y&newEstPrdCnt=15
+
+
+발생구분별 심근경색증 발생률 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A029/3/1/20260327095554&prdSe=Y&newEstPrdCnt=15
+
+심근경색 환자의 응급진료결과(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_332/3/1/20260327095628&prdSe=Y&newEstPrdCnt=15
+
+심근경색 환자의 응급진료결과(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_331/3/1/20260327095652&prdSe=Y&newEstPrdCnt=15
+
+심근경색 환자의 월별 응급실 이용(시·도별)  https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_211/3/1/20260327095759&prdSe=Y&newEstPrdCnt=15
+
+심근경색 환자의 발병 후 응급실 도착 소요시간(성별, 연령별)  https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_322/3/1/20260327095838&prdSe=Y&newEstPrdCnt=15
+
+
+심근경색 환자의 내원수단별 응급실 이용(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_312/3/1/20260327095902&prdSe=Y&newEstPrdCnt=15
+심근경색 환자의 월별 응급실 이용(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_212/3/1/20260327095935&prdSe=Y&newEstPrdCnt=15
+
+심근경색 환자의 응급진료결과(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_332/3/1/20260327095628&prdSe=Y&newEstPrdCnt=15
+
+심근경색 환자의 응급진료결과(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_331/3/1/20260327095652&prdSe=Y&newEstPrdCnt=15
+
+
+발생구분별 심근경색증 30일 치명률 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A008/3/1/20260327100049&prdSe=Y&newEstPrdCnt=15
+심근경색증 발생 건수
+심근경색증 발생률 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A004/3/1/20260327100112&prdSe=Y&newEstPrdCnt=15
+심근경색증 1년 치명률 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A011/3/1/20260327100146&prdSe=Y&newEstPrdCnt=15 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A001/3/1/20260327100214&prdSe=Y&newEstPrdCnt=15
+
+심근경색증 30일 치명률  https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A007/3/1/20260327100255&prdSe=Y&newEstPrdCnt=15
+
+급성심근경색증 입원 환자의 병원 내·외 30일 치명률 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/117/DT_117100_A001/3/1/20260327100323&prdSe=Y&newEstPrdCnt=15
+
+급성 심근경색(AMI) 후 사망률 (OECD) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/101/DT_2OEHG039/3/1/20260327100351&prdSe=Y&newEstPrdCnt=15
+심근경색증 발생률 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A004/3/1/20260327100112&prdSe=Y&newEstPrdCnt=15
+
+심근경색증 1년 치명률  https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A011/3/1/20260327100146&prdSe=Y&newEstPrdCnt=15
+심근경색증 발생 건수 https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/177/DT_177001_A001/3/1/20260327100214&prdSe=Y&newEstPrdCnt=15
+
+
+-+------------------
+뇌졸중 환자의 응급진료 결과 현황(성별,연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_334/3/1/20260320092436&prdSe=Y&newEstPrdCnt=15
+
+뇌졸중 환자의 사망장소(성별,연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5222/3/1/20260327100817&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 사망장소(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5221/3/1/20260327100843&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 퇴원 후 사망원인(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5421/3/1/20260327100916&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 병원 내 사망시점(성별,연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5322/3/1/20260327101017&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 병원 내 사망시점(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_5321/3/1/20260327101141&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 발병 후 응급실 도착 소요시간 현황(성별,연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_324/3/1/20260320092646&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 응급진료 결과 현황(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_333/3/1/20260327101325&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 응급실 내원수단 현황(성별,연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_314/3/1/20260327101350&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 응급실 내원수단 현황(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_313/3/1/20260320093122&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자의 발병 후 응급실 도착 소요시간 현황(시도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_323/3/1/20260327101451&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자 수(시도별,월별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_221/3/1/20260327101744&prdSe=Y&newEstPrdCnt=15
+뇌졸중 환자 수(성별,연령별,월별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_222/3/1/20260327101827&prdSe=Y&newEstPrdCnt=15
+
+
+허혈성 뇌졸중 환자의 응급진료결과(성별, 연령별)  https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3342/3/1/20260327100749&prdSe=Y&newEstPrdCnt=15
+허혈성 뇌졸중 환자의 응급진료결과(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3332/3/1/20260320092539&prdSe=Y&newEstPrdCnt=15
+허혈성 뇌졸중 환자의 발병 후 응급실 도착 소요시간(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3242/3/1/20260327101303&prdSe=Y&newEstPrdCnt=15
+허혈성 뇌졸중 환자의 발병 후 응급실 도착 소요시간(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3232/3/1/20260320092803&prdSe=Y&newEstPrdCnt=15
+허혈성 뇌졸중 환자의 내원수단별 응급실 이용(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3142/3/1/20260320092734&prdSe=Y&newEstPrdCnt=15
+허혈성 뇌졸중 환자의 내원수단별 응급실 이용(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3132/3/1/20260320092851&prdSe=Y&newEstPrdCnt=15
+허혈성 뇌졸중 환자의 월별 응급실 이용(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_2222/3/1/20260327101615&prdSe=Y&newEstPrdCnt=15
+허혈성 뇌졸중 환자의 월별 응급실 이용(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_2212/3/1/20260320092923&prdSe=Y&newEstPrdCnt=15
+
+
+출혈성 뇌졸중 환자의 응급진료결과(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3341/3/1/20260327100949&prdSe=Y&newEstPrdCnt=15
+출혈성 뇌졸중 환자의 응급진료결과(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3331/3/1/20260327101110&prdSe=Y&newEstPrdCnt=15
+출혈성 뇌졸중 환자의 발병 후 응급실 도착 소요시간(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3241/3/1/20260327101211&prdSe=Y&newEstPrdCnt=15
+출혈성 뇌졸중 환자의 내원수단별 응급실 이용(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3141/3/1/20260327101427&prdSe=Y&newEstPrdCnt=15
+출혈성 뇌졸중 환자의 내원수단별 응급실 이용(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3131/3/1/20260327101704&prdSe=Y&newEstPrdCnt=15
+출혈성 뇌졸중 환자의 발병 후 응급실 도착 소요시간(시·도별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_3231/3/1/20260320093039&prdSe=Y&newEstPrdCnt=15
+출혈성 뇌졸중 환자의 월별 응급실 이용(성별, 연령별) https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_2221/3/1/20260327101854&prdSe=Y&newEstPrdCnt=15
+출혈성 뇌졸중 환자의 월별 응급실 이용(시·도별)  https://kosis.kr/openapi/statisticsBigData.do?method=getList&apiKey=NjkyYTRhOGI5MmNjYzAyOWQ4ZDFjYWM3NDc3ZWE0N2Y=&format=xls&userStatsId=kkm5301/411/DT_41104_2211/3/1/20260320093011&prdSe=Y&newEstPrdCnt=15
+
+
+

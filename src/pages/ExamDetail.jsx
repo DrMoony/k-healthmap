@@ -134,7 +134,7 @@ const EXAM_DISEASE_LINKS = {
     { disease: 'CKD', prevalence: '8.2%', risk: '신성 빈혈 \u2014 CKD 진행의 지표', color: '#4ecdc4' },
   ],
   chest_xray: [
-    { disease: '폐결핵', prevalence: '-', risk: '흉부X선 이상 시 결핵/폐질환 의심', color: '#8888aa' },
+    { disease: '폐결핵', prevalence: '-', risk: '흉부X선 이상 시 결핵/폐질환 의심', color: '#bbbbdd' },
   ],
   waist: [
     { disease: '복부비만', prevalence: '24.5%', risk: '남 \u226590cm, 여 \u226585cm 복부비만', color: '#ff006e' },
@@ -158,8 +158,8 @@ const NEON = {
   bg: '#0a0a0f',
   bgPanel: '#1a1a2e',
   bgPanelEnd: '#12121a',
-  dimText: '#555570',
-  labelText: '#8888aa',
+  dimText: '#9999bb',
+  labelText: '#bbbbdd',
   bodyText: '#e8e8f0',
 };
 

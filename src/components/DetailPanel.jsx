@@ -49,7 +49,7 @@ function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, 
       onMouseEnter={() => tooltip && setShowTip(true)}
       onMouseLeave={() => { setShowTip(false); setShowInfo(false); }}
     >
-      <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
+      <div style={{ fontSize: '11px', color: '#bbbbdd', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
         {label}
         {info && (
           <span
@@ -58,21 +58,21 @@ function StatBadge({ label, value, unit, color = '#00d4ff', tooltip, info, avg, 
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               width: '13px', height: '13px', borderRadius: '50%',
-              border: '1px solid #555570', fontSize: '9px', color: '#8888aa',
+              border: '1px solid #9999bb', fontSize: '9px', color: '#bbbbdd',
               cursor: 'help', lineHeight: 1, flexShrink: 0,
             }}
           >?</span>
         )}
       </div>
       <div style={{ fontSize: '16px', fontWeight: 800, fontFamily: "'JetBrains Mono'", color }}>
-        {value}{unit && <span style={{ fontSize: '10px', color: '#555570', fontWeight: 400, marginLeft: '2px' }}>{unit}</span>}
+        {value}{unit && <span style={{ fontSize: '10px', color: '#9999bb', fontWeight: 400, marginLeft: '2px' }}>{unit}</span>}
       </div>
       {avg != null && rawValue != null && (() => {
         const diff = rawValue - avg;
         const isAbove = diff > 0;
         const isGood = higherIsBetter ? isAbove : !isAbove;
         const arrow = isAbove ? '▲' : '▼';
-        const diffColor = Math.abs(diff) < 0.3 ? '#8888aa' : isGood ? '#00ff88' : '#ff4444';
+        const diffColor = Math.abs(diff) < 0.3 ? '#bbbbdd' : isGood ? '#00ff88' : '#ff4444';
         return (
           <div style={{ fontSize: '9px', color: diffColor, marginTop: '2px', fontFamily: "'JetBrains Mono'" }}>
             {arrow} {lang === 'en' ? 'vs Nat\'l' : '전국대비'} {isAbove ? '+' : ''}{typeof rawValue === 'number' && rawValue % 1 !== 0 ? diff.toFixed(1) : Math.round(diff)}
@@ -140,7 +140,7 @@ function CompareBar({ value, avg, min, max, color, label, unit = '', higherIsBet
   return (
     <div style={{ marginBottom: '8px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
-        <span style={{ fontSize: '11px', color: '#8888aa' }}>{label}</span>
+        <span style={{ fontSize: '11px', color: '#bbbbdd' }}>{label}</span>
         <span style={{ fontSize: '11px', fontFamily: "'JetBrains Mono'", color: isGood ? '#00ff88' : '#ff4444', fontWeight: 700 }}>
           {typeof value === 'number' && value % 1 !== 0 ? value.toFixed(1) : value}{unit}
         </span>
@@ -160,7 +160,7 @@ function CompareBar({ value, avg, min, max, color, label, unit = '', higherIsBet
       <div style={{ position: 'relative', height: '12px' }}>
         <span style={{
           position: 'absolute', left: `${avgPos}%`, transform: 'translateX(-50%)',
-          fontSize: '9px', color: '#8888aa', top: '1px',
+          fontSize: '9px', color: '#bbbbdd', top: '1px',
         }}>
           {lang === 'en' ? 'Nat\'l' : '전국'} {typeof avg === 'number' && avg % 1 !== 0 ? avg.toFixed(1) : avg}
         </span>
@@ -245,7 +245,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
       }}>
         <div style={{
           width: '8px', height: '8px', borderRadius: '50%',
-          background: hasSelection ? '#00ff88' : '#555570',
+          background: hasSelection ? '#00ff88' : '#9999bb',
           boxShadow: hasSelection ? '0 0 8px rgba(0,255,136,0.5)' : 'none',
         }} />
         <span style={{ fontSize: '13px', fontWeight: 600, color: '#e8e8f0' }}>
@@ -268,7 +268,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '16px',
-                color: '#555570',
+                color: '#9999bb',
               }}
             >
               <div style={{ fontSize: '40px', opacity: 0.3 }}>🔍</div>
@@ -313,7 +313,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     padding: '14px',
                     marginBottom: '12px',
                   }}>
-                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '10px' }}>
+                    <div style={{ fontSize: '11px', color: '#bbbbdd', marginBottom: '10px' }}>
                       {t('전국 뇌졸중 주요 지표 (2022)', 'National Stroke Key Indicators (2022)')}
                     </div>
                     <CompareBar label={t("발생률 (건/10만)", "Incidence (/100K)")} value={NATIONAL_AVG.strokeIncidence} avg={NATIONAL_AVG.strokeIncidence} min={95} max={140} color="#e74c3c" higherIsBetter={false} />
@@ -327,7 +327,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     padding: '10px',
                     border: '1px solid rgba(255,255,255,0.04)',
                   }}>
-                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>{t('지역별 발생률 순위', 'Regional Incidence Ranking')}</div>
+                    <div style={{ fontSize: '11px', color: '#bbbbdd', marginBottom: '6px' }}>{t('지역별 발생률 순위', 'Regional Incidence Ranking')}</div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
                       {Object.entries(PROVINCE_INFO)
                         .map(([name, info]) => ({ name, val: info.strokeIncidence }))
@@ -339,7 +339,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                             background: i < 3 ? 'rgba(231,76,60,0.1)' : 'transparent',
                             fontSize: '11px',
                           }}>
-                            <span style={{ color: i < 3 ? '#e74c3c' : '#8888aa', fontFamily: "'JetBrains Mono'" }}>
+                            <span style={{ color: i < 3 ? '#e74c3c' : '#bbbbdd', fontFamily: "'JetBrains Mono'" }}>
                               {i + 1}. {lang === 'en' ? (T.provinces[entry.name] || entry.name) : entry.name}
                             </span>
                             <span style={{
@@ -352,7 +352,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                           </div>
                         ))}
                     </div>
-                    <div style={{ fontSize: '9px', color: '#555570', marginTop: '6px' }}>
+                    <div style={{ fontSize: '9px', color: '#9999bb', marginTop: '6px' }}>
                       {t('출처: KDCA 심뇌혈관질환 발생통계(2022) | tPA·골든타임: 추정치', 'Source: KDCA CVD Statistics(2022) | tPA·Golden Time: Estimated')}
                     </div>
                   </div>
@@ -366,7 +366,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     border: '1px solid rgba(255,255,255,0.04)',
                     marginBottom: '12px',
                   }}>
-                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '10px' }}>
+                    <div style={{ fontSize: '11px', color: '#bbbbdd', marginBottom: '10px' }}>
                       {t('10년 추세 (2015–2024)', '10-Year Trend (2015–2024)')}
                     </div>
                     <SparkChart
@@ -384,7 +384,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                     padding: '10px',
                     border: '1px solid rgba(255,255,255,0.04)',
                   }}>
-                    <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '6px' }}>{t('연도별', 'By Year')}</div>
+                    <div style={{ fontSize: '11px', color: '#bbbbdd', marginBottom: '6px' }}>{t('연도별', 'By Year')}</div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
                       {years.map((y, i) => (
                         <div key={y} style={{
@@ -395,7 +395,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                           background: y === 2024 ? `${selectedKPI.color}11` : 'transparent',
                           fontSize: '11px',
                         }}>
-                          <span style={{ color: '#8888aa', fontFamily: "'JetBrains Mono'" }}>{y}</span>
+                          <span style={{ color: '#bbbbdd', fontFamily: "'JetBrains Mono'" }}>{y}</span>
                           <span style={{
                             color: y === 2024 ? selectedKPI.color : '#e8e8f0',
                             fontFamily: "'JetBrains Mono'",
@@ -539,12 +539,12 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                             {provInfo.tertiaryList.map((h, i) => (
                               <div key={i} style={{ fontSize: '10px', color: '#ccc', lineHeight: 1.6 }}>· {h}</div>
                             ))}
-                            <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
+                            <div style={{ fontSize: '10px', color: '#aaaacc', marginTop: '4px' }}>
                               {t(`인구당 ${(provInfo.tertiaryHospitals / (provInfo.population / 1e6)).toFixed(1)}개/백만명`, `${(provInfo.tertiaryHospitals / (provInfo.population / 1e6)).toFixed(1)} per million`)}
                             </div>
                           </div>
                         ) : (
-                          <div style={{ fontSize: '10px', color: '#888' }}>{t('상급종합병원 없음', 'No tertiary hospitals')}</div>
+                          <div style={{ fontSize: '10px', color: '#bbbbdd' }}>{t('상급종합병원 없음', 'No tertiary hospitals')}</div>
                         )
                       }
                     />
@@ -594,7 +594,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                   <CompareBar label={t("사망률 (명/10만)", "Mortality (/100K)")} value={provInfo.strokeMortality} avg={NATIONAL_AVG.strokeMortality} min={25} max={45} color="#c0392b" higherIsBetter={false} />
                   <CompareBar label={t("tPA 시술률 (%)", "tPA Rate (%)")} value={provInfo.tpaRate} avg={NATIONAL_AVG.tpaRate} min={3} max={16} color="#3498db" unit="%" higherIsBetter={true} />
                   <CompareBar label={t("골든타임 도착률 (%)", "Golden Time Arrival (%)")} value={provInfo.goldenTimeRate} avg={NATIONAL_AVG.goldenTimeRate} min={20} max={55} color="#2ecc71" unit="%" higherIsBetter={true} />
-                  <div style={{ fontSize: '9px', color: '#555570', marginTop: '4px' }}>
+                  <div style={{ fontSize: '9px', color: '#9999bb', marginTop: '4px' }}>
                     {t('출처: KDCA 심뇌혈관질환 발생통계(2022), 심평원 | tPA·골든타임: 추정치', 'Source: KDCA CVD Statistics(2022), HIRA | tPA·Golden Time: Estimated')}
                   </div>
                 </div>
@@ -628,7 +628,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                       </span>
                     ))}
                   </div>
-                  <div style={{ fontSize: '9px', color: '#555570', marginTop: '4px' }}>
+                  <div style={{ fontSize: '9px', color: '#9999bb', marginTop: '4px' }}>
                     {t('출처: 대한비만학회 Fact Sheet 2024', 'Source: Korean Society for Obesity Fact Sheet 2024')}
                   </div>
                 </div>
@@ -655,7 +655,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                       border: '1px solid rgba(255,255,255,0.06)',
                     }}
                   >
-                    <div style={{ fontSize: '10px', color: '#8888aa', marginBottom: '6px', fontWeight: 600 }}>
+                    <div style={{ fontSize: '10px', color: '#bbbbdd', marginBottom: '6px', fontWeight: 600 }}>
                       {badgeLabels[expandedBadge] || expandedBadge} — {t('전국 순위', 'National Ranking')}
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 12px' }}>
@@ -665,10 +665,10 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                           padding: '2px 6px', borderRadius: '4px', fontSize: '10px',
                           background: entry.name === selectedProvince?.name ? 'rgba(0,212,255,0.12)' : 'transparent',
                         }}>
-                          <span style={{ color: entry.name === selectedProvince?.name ? '#00d4ff' : '#8888aa', fontFamily: "'JetBrains Mono'", minWidth: '18px' }}>
+                          <span style={{ color: entry.name === selectedProvince?.name ? '#00d4ff' : '#bbbbdd', fontFamily: "'JetBrains Mono'", minWidth: '18px' }}>
                             {i + 1}.
                           </span>
-                          <span style={{ color: entry.name === selectedProvince?.name ? '#e8e8f0' : '#aaa', flex: 1 }}>
+                          <span style={{ color: entry.name === selectedProvince?.name ? '#e8e8f0' : '#ccccee', flex: 1 }}>
                             {lang === 'en' ? (T.provinces[entry.name] || entry.name) : entry.name}
                           </span>
                           <span style={{ color: entry.name === selectedProvince?.name ? '#00d4ff' : '#ccc', fontFamily: "'JetBrains Mono'", fontWeight: entry.name === selectedProvince?.name ? 700 : 400 }}>
@@ -709,7 +709,7 @@ export default function DetailPanel({ selectedKPI, selectedProvince, years, year
                   border: '1px solid rgba(255,255,255,0.04)',
                   marginBottom: '8px',
                 }}>
-                  <div style={{ fontSize: '11px', color: '#8888aa', marginBottom: '4px', fontWeight: 600 }}>
+                  <div style={{ fontSize: '11px', color: '#bbbbdd', marginBottom: '4px', fontWeight: 600 }}>
                     {t('건강 프로필 레이더', 'Health Profile Radar')}
                   </div>
                   <div style={{ height: '220px' }}>

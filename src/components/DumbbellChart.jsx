@@ -19,7 +19,7 @@ export default function DumbbellChart({ data, label, onItemClick }) {
 
   if (!data || data.length === 0) {
     return (
-      <div ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555577', fontSize: '11px' }}>
+      <div ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9999bb', fontSize: '11px' }}>
         데이터 없음
       </div>
     );
@@ -59,7 +59,7 @@ export default function DumbbellChart({ data, label, onItemClick }) {
     <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
       <svg width={w} height={Math.max(h, chartH + padT + padB)} style={{ display: 'block' }}>
         {/* Header legend */}
-        <text x={padL} y={14} fill="#888" fontSize="10" fontFamily="Noto Sans KR, sans-serif">
+        <text x={padL} y={14} fill="#bbbbdd" fontSize="10" fontFamily="Noto Sans KR, sans-serif">
           {label || '성별 비교'}
         </text>
         <circle cx={w - 120} cy={10} r={4} fill="#00d4ff" />
@@ -105,7 +105,7 @@ export default function DumbbellChart({ data, label, onItemClick }) {
 
               {/* Province label */}
               <text x={padL - 6} y={y + 3}
-                fill={isActive ? '#ffd60a' : '#aaaacc'}
+                fill={isActive ? '#ffd60a' : '#ccccee'}
                 fontSize="10" fontFamily="Noto Sans KR, sans-serif"
                 textAnchor="end" fontWeight={isActive ? 'bold' : 'normal'}>
                 {d.name}
@@ -159,7 +159,7 @@ export default function DumbbellChart({ data, label, onItemClick }) {
           const step = Math.ceil((maxVal - minVal) / 6);
           for (let v = Math.ceil(minVal); v <= maxVal; v += step) ticks.push(v);
           return ticks.map(v => (
-            <text key={v} x={xScale(v)} y={padT + chartH + 12} fill="#555577" fontSize="9"
+            <text key={v} x={xScale(v)} y={padT + chartH + 12} fill="#9999bb" fontSize="9"
               fontFamily="JetBrains Mono, monospace" textAnchor="middle">{v}%</text>
           ));
         })()}

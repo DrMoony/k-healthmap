@@ -101,7 +101,7 @@ export default function RadarProfile({ provinceName, onAxisClick }) {
       {!provinceName ? (
         <div style={{
           height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#555577', fontSize: '11px',
+          color: '#9999bb', fontSize: '11px',
         }}>
           지역을 선택하면 건강 프로필이 표시됩니다
         </div>
@@ -132,7 +132,7 @@ export default function RadarProfile({ provinceName, onAxisClick }) {
           {/* National average polygon */}
           <polygon
             points={natPoints.map(p => `${p.x},${p.y}`).join(' ')}
-            fill="none" stroke="#888888" strokeWidth={1.5}
+            fill="none" stroke="#bbbbdd" strokeWidth={1.5}
             strokeDasharray="4,3" opacity={0.5}
           />
 
@@ -169,7 +169,7 @@ export default function RadarProfile({ provinceName, onAxisClick }) {
               >
                 <text
                   x={pos.x} y={pos.y}
-                  fill={isHovered ? '#ffd60a' : '#aaaacc'}
+                  fill={isHovered ? '#ffd60a' : '#ccccee'}
                   fontSize="10"
                   fontFamily="Noto Sans KR, sans-serif"
                   textAnchor="middle"
@@ -198,7 +198,7 @@ export default function RadarProfile({ provinceName, onAxisClick }) {
             fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">
             {provinceName}
           </text>
-          <text x={cx} y={cy + 10} fill="#555577" fontSize="9"
+          <text x={cx} y={cy + 10} fill="#9999bb" fontSize="9"
             fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">
             외곽 = 나쁨 | --- 전국평균
           </text>

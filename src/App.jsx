@@ -2,11 +2,13 @@ import { useState, Component } from 'react';
 import { LangProvider } from './i18n';
 import NavBar from './components/NavBar';
 import Overview from './pages/Overview';
-import Metabolic from './pages/Metabolic';
 import ExamDetail from './pages/ExamDetail';
 import Lifestyle from './pages/Lifestyle';
+import DiabetesDashboard from './pages/DiabetesDashboard';
+import LiverDashboard from './pages/LiverDashboard';
+import CardiovascularDashboard from './pages/CardiovascularDashboard';
+import KidneyDashboard from './pages/KidneyDashboard';
 import DiseaseNetwork from './pages/DiseaseNetwork';
-import StrokeDashboard from './pages/StrokeDashboard';
 import './styles/global.css';
 
 // Error boundary to prevent white screen crashes
@@ -27,7 +29,7 @@ class ErrorBoundary extends Component {
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         }}>
           <div style={{ fontSize: '18px', marginBottom: '12px' }}>렌더링 오류 발생</div>
-          <div style={{ fontSize: '12px', color: '#888', maxWidth: '600px', textAlign: 'center' }}>
+          <div style={{ fontSize: '12px', color: '#bbbbdd', maxWidth: '600px', textAlign: 'center' }}>
             {this.state.error?.message}
           </div>
           <button onClick={() => this.setState({ hasError: false, error: null })}
@@ -55,11 +57,13 @@ function App() {
 
         <ErrorBoundary key={activeTab}>
           {activeTab === 'overview' && <Overview />}
-          {activeTab === 'metabolic' && <Metabolic />}
           {activeTab === 'exam' && <ExamDetail />}
           {activeTab === 'lifestyle' && <Lifestyle />}
+          {activeTab === 'diabetes' && <DiabetesDashboard />}
+          {activeTab === 'liver' && <LiverDashboard />}
+          {activeTab === 'cardiovascular' && <CardiovascularDashboard />}
+          {activeTab === 'kidney' && <KidneyDashboard />}
           {activeTab === 'disease' && <DiseaseNetwork />}
-          {activeTab === 'stroke' && <StrokeDashboard />}
         </ErrorBoundary>
       </div>
     </LangProvider>

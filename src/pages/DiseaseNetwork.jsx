@@ -220,7 +220,7 @@ const PATHWAY_COLORS = {
   liver: '#00ff88',
   cardiac: '#ff6b6b',
   renal: '#4ecdc4',
-  mixed: '#aaaacc',
+  mixed: '#ccccee',
 };
 
 const LEVEL_LABELS_KO = ['위험인자', '1차 질환', '2차 합병증', '3차 결과'];
@@ -248,9 +248,9 @@ function InfoTip({ text }) {
     <span style={{ position: 'relative', display: 'inline-flex', marginLeft: '4px', verticalAlign: 'middle' }}
       onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
       <span style={{
-        width: '14px', height: '14px', borderRadius: '50%', border: '1px solid #555',
+        width: '14px', height: '14px', borderRadius: '50%', border: '1px solid #9999bb',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '9px', color: '#888', cursor: 'help',
+        fontSize: '9px', color: '#bbbbdd', cursor: 'help',
       }}>?</span>
       {show && (
         <div style={{
@@ -320,7 +320,7 @@ const STYLES = `
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 .stat-label {
-  color: #8888aa;
+  color: #bbbbdd;
   font-size: 12px;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -375,7 +375,7 @@ const STYLES = `
 }
 .view-tab:hover {
   background: rgba(255,255,255,0.08);
-  color: #aaaadd;
+  color: #ccccee;
   border-color: rgba(255,255,255,0.2);
 }
 .view-tab.active {
@@ -417,7 +417,7 @@ function EdgeLine({ from, to, strength, pathway, selectedId, edgeIdx, onEdgeClic
   const p2 = NODE_POSITIONS[to];
   const isHighlighted = selectedId === from || selectedId === to;
   const baseOpacity = isHighlighted ? 0.85 : 0.2;
-  const pathwayColor = PATHWAY_COLORS[pathway] || '#aaaacc';
+  const pathwayColor = PATHWAY_COLORS[pathway] || '#ccccee';
   const color = isHighlighted ? pathwayColor : '#223344';
 
   const mx = (p1.x + p2.x) / 2;
@@ -568,7 +568,7 @@ function DiseaseDetail({ disease, onClose }) {
       <button onClick={onClose} style={{
         position: 'absolute', top: 12, right: 12,
         background: 'rgba(255,255,255,0.06)', border: 'none',
-        color: '#8888aa', fontSize: 18, cursor: 'pointer',
+        color: '#bbbbdd', fontSize: 18, cursor: 'pointer',
         width: 28, height: 28, borderRadius: '50%',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>x</button>
@@ -617,7 +617,7 @@ function DiseaseDetail({ disease, onClose }) {
 
       <div style={{ marginBottom: 14 }}>
         <p style={{
-          color: '#aaaacc', fontSize: 12.5, lineHeight: 1.7,
+          color: '#ccccee', fontSize: 12.5, lineHeight: 1.7,
           fontFamily: "'Noto Sans KR', sans-serif", margin: 0,
         }}>
           {disease.description}
@@ -629,7 +629,7 @@ function DiseaseDetail({ disease, onClose }) {
         border: `1px solid ${disease.color}22`,
       }}>
         <p style={{
-          color: '#8888aa', fontSize: 11, margin: '0 0 4px',
+          color: '#bbbbdd', fontSize: 11, margin: '0 0 4px',
           fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600,
         }}>
           {t('동반질환/합병증','Comorbidities/Complications')}
@@ -644,7 +644,7 @@ function DiseaseDetail({ disease, onClose }) {
 
       <div>
         <p style={{
-          color: '#8888aa', fontSize: 11, margin: '0 0 6px',
+          color: '#bbbbdd', fontSize: 11, margin: '0 0 6px',
           fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600,
         }}>
           {t('위험인자','Risk Factors')}
@@ -658,7 +658,7 @@ function DiseaseDetail({ disease, onClose }) {
 
       <div style={{ marginTop: 14 }}>
         <p style={{
-          color: '#8888aa', fontSize: 11, margin: '0 0 8px',
+          color: '#bbbbdd', fontSize: 11, margin: '0 0 8px',
           fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600,
         }}>
           {t('연결된 질환','Connected Diseases')}
@@ -667,7 +667,7 @@ function DiseaseDetail({ disease, onClose }) {
           const otherId = e.from === disease.id ? e.to : e.from;
           const other = DISEASES[otherId];
           const direction = e.from === disease.id ? '\u2192' : '\u2190';
-          const pColor = PATHWAY_COLORS[e.pathway] || '#aaa';
+          const pColor = PATHWAY_COLORS[e.pathway] || '#ccccee';
           return (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 8,
@@ -714,17 +714,17 @@ function DiseaseDetail({ disease, onClose }) {
               }}>
                 <span style={{ color: '#00d4ff' }}>{'\u2642'} {epi.genderGap.male}%</span>
                 <span style={{ color: '#ff006e' }}>{'\u2640'} {epi.genderGap.female}%</span>
-                <span style={{ color: '#666' }}>({epi.prevalence?.year})</span>
+                <span style={{ color: '#aaaacc' }}>({epi.prevalence?.year})</span>
               </div>
             )}
             {epi.awareness && (
               <div style={{
                 background: 'rgba(0,0,0,0.2)', borderRadius: 6, padding: '8px 10px',
-                marginBottom: 10, fontSize: 10, lineHeight: 1.8, color: '#aaa',
+                marginBottom: 10, fontSize: 10, lineHeight: 1.8, color: '#ccccee',
               }}>
                 <div>{t('인지율','Awareness')} <span style={{ color: '#ffd60a', fontWeight: 700 }}>{epi.awareness}%</span></div>
                 {epi.treatment && <div>{t('치료율','Treatment')} <span style={{ color: '#00ff88', fontWeight: 700 }}>{epi.treatment}%</span></div>}
-                {epi.control && <div>{t('조절률','Control')} <span style={{ color: '#00d4ff', fontWeight: 700 }}>{epi.control.value}%</span> <span style={{ color: '#666' }}>({epi.control.criteria})</span></div>}
+                {epi.control && <div>{t('조절률','Control')} <span style={{ color: '#00d4ff', fontWeight: 700 }}>{epi.control.value}%</span> <span style={{ color: '#aaaacc' }}>({epi.control.criteria})</span></div>}
               </div>
             )}
             <div style={{
@@ -756,7 +756,7 @@ function EdgeDetailPopup({ edge, onClose }) {
   if (!edge) return null;
   const evidence = EDGE_EVIDENCE[`${edge.from}-${edge.to}`];
   if (!evidence) return null;
-  const pColor = PATHWAY_COLORS[edge.pathway] || '#aaa';
+  const pColor = PATHWAY_COLORS[edge.pathway] || '#ccccee';
   return (
     <div className="detail-panel" style={{
       position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -768,7 +768,7 @@ function EdgeDetailPopup({ edge, onClose }) {
       <button onClick={onClose} style={{
         position: 'absolute', top: 8, right: 8,
         background: 'rgba(255,255,255,0.06)', border: 'none',
-        color: '#8888aa', fontSize: 16, cursor: 'pointer',
+        color: '#bbbbdd', fontSize: 16, cursor: 'pointer',
         width: 24, height: 24, borderRadius: '50%',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>x</button>
@@ -788,7 +788,7 @@ function EdgeDetailPopup({ edge, onClose }) {
           <div className="strength-bar-fill" style={{ width: `${(evidence.strength / 3) * 100}%`, background: pColor }} />
         </div>
       </div>
-      <p style={{ color: '#aaaacc', fontSize: 12, lineHeight: 1.6, marginTop: 12, fontFamily: "'Noto Sans KR', sans-serif" }}>
+      <p style={{ color: '#ccccee', fontSize: 12, lineHeight: 1.6, marginTop: 12, fontFamily: "'Noto Sans KR', sans-serif" }}>
         {evidence.evidence}
       </p>
     </div>
@@ -920,8 +920,8 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
 
           {[150, 290, 450].map((y, i) => (
             <g key={`flow-${i}`} opacity="0.15">
-              <line x1="400" y1={y} x2="400" y2={y + 20} stroke="#aaaacc" strokeWidth="1" strokeDasharray="3 3" />
-              <polygon points={`395,${y + 18} 405,${y + 18} 400,${y + 24}`} fill="#aaaacc" />
+              <line x1="400" y1={y} x2="400" y2={y + 20} stroke="#ccccee" strokeWidth="1" strokeDasharray="3 3" />
+              <polygon points={`395,${y + 18} 405,${y + 18} 400,${y + 24}`} fill="#ccccee" />
             </g>
           ))}
 
@@ -1020,7 +1020,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
 function Progression2yrView({ gender }) {
   const { lang, t } = useLang();
   const prog2yr = DISEASE_EPI.diseases?.nafld?.progression2yr;
-  if (!prog2yr) return <div style={{ color: '#888', padding: 24 }}>No 2yr data</div>;
+  if (!prog2yr) return <div style={{ color: '#bbbbdd', padding: 24 }}>No 2yr data</div>;
 
   const AGE_GROUPS = ['20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80+'];
   const YEARS = [2010, 2015, 2020];
@@ -1081,7 +1081,7 @@ function Progression2yrView({ gender }) {
                 ))}
                 {/* X-axis labels */}
                 {YEARS.map(yr => (
-                  <text key={yr} x={xScale(yr)} y={h - mB + 16} textAnchor="middle" fill="#8888aa" fontSize="10" fontFamily="'JetBrains Mono'">{yr}</text>
+                  <text key={yr} x={xScale(yr)} y={h - mB + 16} textAnchor="middle" fill="#bbbbdd" fontSize="10" fontFamily="'JetBrains Mono'">{yr}</text>
                 ))}
                 {/* Lines per age group */}
                 {AGE_GROUPS.map((ag, i) => {
@@ -1120,7 +1120,7 @@ function Progression2yrView({ gender }) {
         margin: '8px 0 0', padding: '8px 14px',
         background: 'rgba(0,255,136,0.04)', border: '1px solid rgba(0,255,136,0.12)', borderRadius: 8,
       }}>
-        <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc', margin: 0, lineHeight: 1.7 }}>
+        <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#ccccee', margin: 0, lineHeight: 1.7 }}>
           {t(
             '간경화 진행률은 대부분 연령에서 2010→2020 감소 추세 (치료 발전). 단, 여성 70-79세·80+에서는 여전히 4-10%로 높음. 간세포암은 남성 80+에서 증가 추세 (0.67%→0.71%).',
             'Cirrhosis progression declining across most age groups (2010→2020). However, female 70-79 & 80+ remain high (4-10%). HCC in male 80+ shows slight increase (0.67%→0.71%).'
@@ -1226,7 +1226,7 @@ function MASLDHeatmapView() {
 
     // Column headers
     ctx.font = "11px 'JetBrains Mono', monospace";
-    ctx.fillStyle = '#8888aa';
+    ctx.fillStyle = '#bbbbdd';
     ctx.textAlign = 'center';
     AGE_GROUPS.forEach((ag, i) => {
       ctx.fillText(ag, marginLeft + i * cellW + cellW / 2, marginTop - 12);
@@ -1236,7 +1236,7 @@ function MASLDHeatmapView() {
     ctx.textAlign = 'right';
     ctx.font = "12px 'Noto Sans KR', sans-serif";
     OUTCOME_LABELS.forEach((label, i) => {
-      ctx.fillStyle = '#aaaacc';
+      ctx.fillStyle = '#ccccee';
       ctx.fillText(label, marginLeft - 12, marginTop + i * cellH + cellH / 2 + 4);
     });
 
@@ -1310,7 +1310,7 @@ function MASLDHeatmapView() {
       ctx.fillRect(legendX, legendY + i, legendW, 1);
     }
     ctx.font = "10px 'JetBrains Mono', monospace";
-    ctx.fillStyle = '#aaaacc';
+    ctx.fillStyle = '#ccccee';
     ctx.textAlign = 'left';
     // Log scale labels
     const maxR = Math.round(Math.pow(2, logMax));
@@ -1367,7 +1367,7 @@ function MASLDHeatmapView() {
               : t('2010/2015/2020년 MASLD 코호트의 2년 추적 시 간경화·간세포암 진행률을 비교. 시간에 따른 진행률 변화를 파악.','Compares 2yr progression to cirrhosis/HCC across 2010/2015/2020 MASLD cohorts.')} />
           </h2>
           <p style={{
-            fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#aaaacc',
+            fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#ccccee',
             margin: '4px 0 0', lineHeight: 1.6,
           }}>
             {trackingMode === '10yr'
@@ -1475,7 +1475,7 @@ function MASLDHeatmapView() {
               <h4 style={{ color: '#00ff88', margin: '0 0 6px', fontSize: 12, fontWeight: 700 }}>
                 {t('MASLD 합병증 요약', 'MASLD Complication Summary')}
               </h4>
-              <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.7, margin: 0 }}>
+              <p style={{ color: '#ccccee', fontSize: 11, lineHeight: 1.7, margin: 0 }}>
                 {t(
                   'MASLD 환자는 일반 인구 대비 간경변 최대 ×30, 간세포암 ×10, 심혈관질환 ×2-4배 높은 발생률. 특히 50세 이상 남성에서 악성종양 발생이 현저히 증가. 셀을 클릭하면 상세 분석을 확인할 수 있습니다.',
                   'MASLD patients show up to ×30 higher cirrhosis, ×10 HCC, ×2-4 CVD incidence vs general population. Malignancy risk notably elevated in males 50+. Click a cell for detailed analysis.'
@@ -1498,7 +1498,7 @@ function MASLDHeatmapView() {
             <button onClick={() => setClickDetail(null)} style={{
               position: 'absolute', top: 6, right: 8,
               background: 'rgba(255,255,255,0.06)', border: 'none',
-              color: '#8888aa', fontSize: 14, cursor: 'pointer',
+              color: '#bbbbdd', fontSize: 14, cursor: 'pointer',
               width: 22, height: 22, borderRadius: '50%',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>x</button>
@@ -1524,12 +1524,12 @@ function MASLDHeatmapView() {
                       <span style={{ color: '#ffd60a', fontSize: 11, fontWeight: 600 }}>
                         일반 인구 대비 {ratio.toFixed(1)}배
                       </span>
-                      <span style={{ color: '#888', fontSize: 10, marginLeft: 6 }}>
+                      <span style={{ color: '#bbbbdd', fontSize: 10, marginLeft: 6 }}>
                         ({t('일반','Gen pop')}: {genPop}%)
                       </span>
                     </div>
                   )}
-                  <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ color: '#ccccee', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
                     {lang === 'en'
                       ? `Among 100 ${gender === 'male' ? 'male' : 'female'} MASLD patients aged ${clickDetail.age}, ~${v < 1 ? v.toFixed(1) : Math.round(v)} develop ${clickDetail.outcome} within 10yr.`
                       : `${clickDetail.age}세 ${gender === 'male' ? '남성' : '여성'} MASLD 환자 100명 중 약 ${v < 1 ? v.toFixed(1) : Math.round(v)}명에서 10년 내 ${clickDetail.outcome} 발생.`}
@@ -1538,7 +1538,7 @@ function MASLDHeatmapView() {
                     {v > 10 && (lang === 'en' ? ' Active screening recommended.' : ' 적극적 선별검사 필요.')}
                     {v <= 1 && (lang === 'en' ? ' Low incidence but continued monitoring recommended.' : ' 낮은 발생률이나 지속 모니터링 권장.')}
                   </p>
-                  <p style={{ color: '#555', fontSize: 9, marginTop: 6 }}>
+                  <p style={{ color: '#9999bb', fontSize: 9, marginTop: 6 }}>
                     {t('※ 일반 인구 발생률은 국가암등록/KDCA 기반 근사치. 정확한 비교에는 연령표준화 분석 필요.','※ General population incidence rates are approximations from National Cancer Registry/KDCA. Age-standardized analysis needed for precise comparison.')}
                   </p>
                 </>
@@ -1549,7 +1549,7 @@ function MASLDHeatmapView() {
               return (
                 <>
                   <h4 style={{ color: '#00ff88', margin: '0 0 6px', fontSize: 13 }}>{clickDetail.outcome}</h4>
-                  <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ color: '#ccccee', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
                     MASLD 코호트에서 {clickDetail.outcome} 10년 누적 발생률은 연령 증가에 따라 상승하며, {maxAge.age}세에서 {maxAge.value.toFixed(1)}%로 가장 높음.
                     {clickDetail.outcome === '간경변' || clickDetail.outcome === '간세포암' ? ' MASLD와 직접적 인과관계가 있는 합병증.' : ' MASLD와의 독립적 인과관계는 추가 연구 필요.'}
                   </p>
@@ -1561,7 +1561,7 @@ function MASLDHeatmapView() {
               return (
                 <>
                   <h4 style={{ color: '#00ff88', margin: '0 0 6px', fontSize: 13 }}>{clickDetail.age}세 MASLD 환자</h4>
-                  <p style={{ color: '#aaaacc', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ color: '#ccccee', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
                     이 연령대에서 10년 내 가장 높은 누적 발생률은 {maxOutcome.outcome} ({maxOutcome.value.toFixed(1)}%).
                     {parseInt(clickDetail.age) >= 60 ? ' 고령에서 다장기 합병증 위험이 급격히 증가하므로 다학제 관리 필요.' : ' 비교적 젊은 연령이나 장기 추적 시 합병증 부담 증가 가능.'}
                   </p>
@@ -1895,7 +1895,7 @@ function TrendsView() {
             const maxDiseaseVal = Math.max(...data.map(d => d.value), 1);
             const lineWidth = 1.2 + (maxDiseaseVal / maxVal) * 2.5;
             const glowWidth = lineWidth * 2.5;
-            const color = activeColors[disease] || '#888';
+            const color = activeColors[disease] || '#bbbbdd';
             return (
               <g key={disease}>
                 <path d={buildPath(data)} fill="none" stroke={color}
@@ -1931,7 +1931,7 @@ function TrendsView() {
           <g>
             {Object.entries(activeLabels).map(([key, label], i) => {
               const isHidden = hiddenDiseases[key];
-              const color = activeColors[key] || '#888';
+              const color = activeColors[key] || '#bbbbdd';
               return (
                 <g key={key} transform={`translate(${marginL + 10 + i * 130}, ${marginT - 20})`}
                   style={{ cursor: 'pointer' }}
@@ -1969,7 +1969,7 @@ function TrendsView() {
                 Math.abs(curr.year - hoverInfo.year) < Math.abs(prev.year - hoverInfo.year) ? curr : prev
               , data[0]);
               if (!closest || Math.abs(closest.year - hoverInfo.year) > 3) return null;
-              const color = activeColors[key] || '#888';
+              const color = activeColors[key] || '#bbbbdd';
               const label = activeLabels[key] || key;
               const valStr = isIncidenceMode ? `${closest.value.toLocaleString()}건` : `${closest.value.toFixed(1)}%`;
               return (
@@ -1992,7 +1992,7 @@ function TrendsView() {
             <button onClick={() => setPointDetail(null)} style={{
               position: 'absolute', top: 6, right: 8,
               background: 'rgba(255,255,255,0.06)', border: 'none',
-              color: '#8888aa', fontSize: 14, cursor: 'pointer',
+              color: '#bbbbdd', fontSize: 14, cursor: 'pointer',
               width: 22, height: 22, borderRadius: '50%',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>x</button>
@@ -2000,7 +2000,7 @@ function TrendsView() {
               {pointDetail.year}{lang === 'ko' ? '년' : ''} {lang === 'en' ? (MODE_LABELS_EN[mode] || mode) : (MODE_LABELS[mode] || mode)}
             </h4>
             {Object.entries(pointDetail.allDiseases).map(([key, val]) => {
-              const color = activeColors[key] || '#888';
+              const color = activeColors[key] || '#bbbbdd';
               const label = activeLabels[key] || key;
               const valStr = isIncidenceMode ? `${val.toLocaleString()}건/년` : `${val.toFixed(1)}%`;
               return (
@@ -2068,7 +2068,7 @@ function CostTreemapView() {
         <h2 style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 18, fontWeight: 800, color: '#e0e0ff', margin: 0 }}>
           {t('질환별 사회경제적 부담','Socioeconomic Burden by Disease')}
         </h2>
-        <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#8888aa', margin: '4px 0 0' }}>
+        <p style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11, color: '#bbbbdd', margin: '4px 0 0' }}>
           ■ 진한 색 = 직접 의료비 (건보 진료비)　■ 옅은 색 = 간접비 추정 (생산성 손실·미인지·진행 비용) — 조원/년
         </p>
       </div>
@@ -2086,7 +2086,7 @@ function CostTreemapView() {
                   {d.name}
                 </text>
                 <text x={labelW - 8} y={y + barH / 2 + 12} textAnchor="end"
-                  fill="#555" fontSize={9} fontFamily="'JetBrains Mono', monospace">
+                  fill="#9999bb" fontSize={9} fontFamily="'JetBrains Mono', monospace">
                   {d.basis}
                 </text>
                 {/* Indirect cost bar — lighter */}
@@ -2110,11 +2110,11 @@ function CostTreemapView() {
                   </text>
                 )}
                 <text x={labelW + barAreaW + 14} y={y + barH / 2 - 6}
-                  fill="#aaaacc" fontSize={11} fontFamily="'JetBrains Mono', monospace">
+                  fill="#ccccee" fontSize={11} fontFamily="'JetBrains Mono', monospace">
                   총 {(d.cost + d.indirect).toFixed(1)}조
                 </text>
                 <text x={labelW + barAreaW + 14} y={y + barH / 2 + 10}
-                  fill="#666" fontSize={10} fontFamily="'Noto Sans KR', sans-serif">
+                  fill="#aaaacc" fontSize={10} fontFamily="'Noto Sans KR', sans-serif">
                   {d.population}
                 </text>
               </g>
@@ -2129,7 +2129,7 @@ function CostTreemapView() {
           }}>
             <button onClick={() => setSelectedCost(null)} style={{
               position: 'absolute', top: 8, right: 8, background: 'none', border: 'none',
-              color: '#666', fontSize: 14, cursor: 'pointer',
+              color: '#aaaacc', fontSize: 14, cursor: 'pointer',
             }}>x</button>
             <h4 style={{ color: selectedCost.color, margin: '0 0 8px', fontSize: 14 }}>{selectedCost.name}</h4>
             {[
@@ -2143,7 +2143,7 @@ function CostTreemapView() {
               [t('출처','Source'), selectedCost.ref],
             ].map(([label, val]) => (
               <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', gap: 8 }}>
-                <span style={{ color: '#8888aa', fontSize: 11, flexShrink: 0 }}>{label}</span>
+                <span style={{ color: '#bbbbdd', fontSize: 11, flexShrink: 0 }}>{label}</span>
                 <span style={{ color: '#e0e0ff', fontSize: 11, textAlign: 'right' }}>{val}</span>
               </div>
             ))}
@@ -2267,11 +2267,11 @@ function ManagementView() {
           stroke={isSelected ? `${d.color}66` : 'rgba(255,255,255,0.03)'} strokeWidth={1} />
         {/* Disease name + patient count */}
         <text x={fx + funnelW / 2} y={funnelTop + 4} textAnchor="middle"
-          fill={isSelected ? d.color : '#aaaacc'} fontSize={12} fontWeight={700}
+          fill={isSelected ? d.color : '#ccccee'} fontSize={12} fontWeight={700}
           fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
         {d.patients && (
           <text x={fx + funnelW / 2} y={funnelTop + 18} textAnchor="middle"
-            fill="#666" fontSize={10} fontFamily="'JetBrains Mono', monospace">{d.patients}</text>
+            fill="#aaaacc" fontSize={10} fontFamily="'JetBrains Mono', monospace">{d.patients}</text>
         )}
         {d.highlight && <circle cx={fx + funnelW / 2 + 28} cy={funnelTop} r={3} fill={d.color} opacity={0.8} />}
         {/* Trapezoid stages */}
@@ -2328,7 +2328,7 @@ function ManagementView() {
         maxHeight: 260, overflowY: 'auto',
         boxShadow: '0 0 20px rgba(0,212,255,0.1)',
       }}>
-        <h4 style={{ color: '#8888aa', margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 13 }}>
+        <h4 style={{ color: '#bbbbdd', margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 13 }}>
           {defaultMgmtInference.title}
         </h4>
         <p style={{ color: '#bbb', fontSize: 11, lineHeight: 1.7, margin: 0 }}>{defaultMgmtInference.detail}</p>
@@ -2345,7 +2345,7 @@ function ManagementView() {
       }}>
         <button onClick={() => setSelectedDisease(null)} style={{
           position: 'absolute', top: 8, right: 10, background: 'rgba(255,255,255,0.06)',
-          border: 'none', color: '#8888aa', fontSize: 14, cursor: 'pointer',
+          border: 'none', color: '#bbbbdd', fontSize: 14, cursor: 'pointer',
           width: 22, height: 22, borderRadius: '50%', display: 'flex',
           alignItems: 'center', justifyContent: 'center',
         }}>x</button>
@@ -2364,7 +2364,7 @@ function ManagementView() {
               const barW = (step.value / 100) * 200;
               return (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
-                  <span style={{ width: 70, fontSize: 9, color: '#aaaacc', fontFamily: "'Noto Sans KR', sans-serif", flexShrink: 0 }}>
+                  <span style={{ width: 70, fontSize: 9, color: '#ccccee', fontFamily: "'Noto Sans KR', sans-serif", flexShrink: 0 }}>
                     {step.label}
                   </span>
                   <div style={{ flex: 1, height: 10, background: 'rgba(255,255,255,0.03)', borderRadius: 3, position: 'relative' }}>
@@ -2390,7 +2390,7 @@ function ManagementView() {
             </p>
             {d.extendedCascade.map((step, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                <span style={{ width: 70, fontSize: 8, color: '#666', fontFamily: "'Noto Sans KR', sans-serif", flexShrink: 0 }}>
+                <span style={{ width: 70, fontSize: 8, color: '#aaaacc', fontFamily: "'Noto Sans KR', sans-serif", flexShrink: 0 }}>
                   {step.label}
                 </span>
                 <span style={{ fontSize: 9, color: '#ff006e', fontFamily: "'JetBrains Mono', monospace" }}>
@@ -2532,10 +2532,10 @@ function SurvivalCurvesView() {
                 fill="#6666aa" fontSize={10} fontFamily="'JetBrains Mono', monospace">{t}yr</text>
             </g>
           ))}
-          <text x={w / 2} y={h - 6} textAnchor="middle" fill="#8888aa" fontSize={11} fontFamily="'Noto Sans KR', sans-serif">
+          <text x={w / 2} y={h - 6} textAnchor="middle" fill="#bbbbdd" fontSize={11} fontFamily="'Noto Sans KR', sans-serif">
             {t('추적 기간 (년)','Follow-up Period (years)')}
           </text>
-          <text x={16} y={h / 2} textAnchor="middle" fill="#8888aa" fontSize={11}
+          <text x={16} y={h / 2} textAnchor="middle" fill="#bbbbdd" fontSize={11}
             fontFamily="'Noto Sans KR', sans-serif" transform={`rotate(-90, 16, ${h / 2})`}>
             {t('생존율 (%)','Survival Rate (%)')}
           </text>
@@ -2611,13 +2611,13 @@ function SurvivalCurvesView() {
           }}>
             <button onClick={() => setSelectedCurve(null)} style={{
               position: 'absolute', top: 8, right: 8, background: 'none', border: 'none',
-              color: '#666', fontSize: 14, cursor: 'pointer',
+              color: '#aaaacc', fontSize: 14, cursor: 'pointer',
             }}>x</button>
             <h4 style={{ color: selectedCurve.color, margin: '0 0 8px', fontSize: 14 }}>{selectedCurve.name}</h4>
             <div style={{ marginBottom: 8 }}>
               {selectedCurve.points.filter(p => p.t > 0).map(p => (
                 <div key={p.t} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                  <span style={{ color: '#8888aa', fontSize: 11 }}>{p.t}{t('년 생존율','yr Survival')}</span>
+                  <span style={{ color: '#bbbbdd', fontSize: 11 }}>{p.t}{t('년 생존율','yr Survival')}</span>
                   <span style={{ color: '#e0e0ff', fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{p.s}%</span>
                 </div>
               ))}

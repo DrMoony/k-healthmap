@@ -1,7 +1,7 @@
 # K-HealthMap 데이터 인벤토리
 
 **마지막 업데이트**: 2026-03-27
-**총 파일**: ~142개 (PDF 93+, XLS 6, JSON 14, JS 18, ZIP 11)
+**총 파일**: ~202개 (PDF 93+, XLS 66, JSON 14, JS 18, ZIP 11)
 
 ## 요약
 
@@ -16,7 +16,11 @@
 | 뇌졸중 | 11 | 2012-2024 | KSR | 심혈관 |
 | 비만 | 1 | 2025 | KOSSO | 당뇨/종합 |
 | 건강검진통계 | 23 | 2011-2024 | NHIS | 검진항목 |
-| KOSIS API | 6+7 | 2019-2024 | 통계청 | 뇌졸중 |
+| KOSIS 뇌졸중 | 35 | 2014-2024 | 통계청 | 뇌졸중/심혈관 |
+| KOSIS MI | 17 | 2019-2024 | 통계청 | 심혈관 |
+| KOSIS 당뇨 | 12 | 2019-2024 | 통계청 | 당뇨 |
+| KOSIS HF | 1 | 2019-2024 | 통계청 | 심혈관 |
+| KOSIS CKD | 0 | - | 통계청 | 콩팥 (API 오류) |
 
 ## 활용 원칙
 - **2020년 이후**: inference/인사이트 주요 기준 데이터
@@ -204,25 +208,150 @@
 
 ---
 
-## 7. KOSIS API
+## 7. KOSIS API — 뇌졸중 (총 35개 XLS)
 
-### XLS (6개)
+### 기존 (6개, 뇌졸중 전체)
 stroke_patients / stroke_region_incidence / stroke_region_type / stroke_treatment / stroke_transport / mortality_by_region
 
-### 처리 → stroke_kosis.js
-시도별 환자수, 이송시간, 전귀결과 (2022-2024)
+### 뇌졸중 전체 (13개, 2014-2021)
+| 파일 | 내용 | 크기 |
+|---|---|---|
+| stroke_er_result_age.xls | 응급진료결과 (성별,연령별) | 211KB |
+| stroke_er_result_region.xls | 응급진료결과 (시도별) | 136KB |
+| stroke_transport_age.xls | 내원수단 (성별,연령별) | 301KB |
+| stroke_transport_region.xls | 내원수단 (시도별) | 193KB |
+| stroke_arrival_time_age.xls | 도착소요시간 (성별,연령별) | 216KB |
+| stroke_arrival_time_region.xls | 도착소요시간 (시도별) | 139KB |
+| stroke_monthly_age.xls | 월별 환자수 (성별,연령별) | 518KB |
+| stroke_monthly_region.xls | 월별 환자수 (시도별) | 243KB |
+| stroke_death_place_age.xls | 사망장소 (성별,연령별) | 209KB |
+| stroke_death_place_region.xls | 사망장소 (시도별) | 121KB |
+| stroke_death_cause_region.xls | 퇴원후 사망원인 (시도별) | 205KB |
+| stroke_death_timing_age.xls | 병원내 사망시점 (성별,연령별) | 124KB |
+| stroke_death_timing_region.xls | 병원내 사망시점 (시도별) | 72KB |
+
+### 허혈성 뇌졸중 (8개, 2022-2024)
+| 파일 | 내용 |
+|---|---|
+| isch_er_result_age.xls | 응급진료결과 (성별,연령별) |
+| isch_er_result_region.xls | 응급진료결과 (시도별) |
+| isch_transport_age.xls | 내원수단 (성별,연령별) |
+| isch_transport_region.xls | 내원수단 (시도별) |
+| isch_arrival_time_age.xls | 도착소요시간 (성별,연령별) |
+| isch_arrival_time_region.xls | 도착소요시간 (시도별) |
+| isch_monthly_age.xls | 월별 환자수 (성별,연령별) |
+| isch_monthly_region.xls | 월별 환자수 (시도별) |
+
+### 출혈성 뇌졸중 (8개, 2022-2024)
+| 파일 | 내용 |
+|---|---|
+| hem_er_result_age.xls | 응급진료결과 (성별,연령별) |
+| hem_er_result_region.xls | 응급진료결과 (시도별) |
+| hem_transport_age.xls | 내원수단 (성별,연령별) |
+| hem_transport_region.xls | 내원수단 (시도별) |
+| hem_arrival_time_age.xls | 도착소요시간 (성별,연령별) |
+| hem_arrival_time_region.xls | 도착소요시간 (시도별) |
+| hem_monthly_age.xls | 월별 환자수 (성별,연령별) |
+| hem_monthly_region.xls | 월별 환자수 (시도별) |
+
+### 처리 → stroke_kosis.js (770KB)
+- 뇌졸중 전체 (2014-2021): 응급진료결과, 내원수단, 도착시간, 월별 — 성별·연령별 + 시도별
+- 허혈성 (2022-2024): 동일 8개 차원
+- 출혈성 (2022-2024): 동일 8개 차원
+- 사망 (2017): 장소, 원인, 시점 — 성별·연령별 + 시도별
+- 기존: 시도별 환자수, 이송시간 그룹화, 응급진료결과별
 
 ---
 
-## 탭별 데이터 매핑
+## 8. KOSIS API — 급성심근경색 (MI) ⭐ NEW
 
-| 탭 | 1차 데이터 (인사이트) | 2차 데이터 (추이) |
-|---|---|---|
-| **당뇨** | DFS 2024, 합병증 4종, 진료지침 2025 | DFS 2012-2020 |
-| **간건강** | NAFLD FS 2023, MASLD GL 2025, 백서 2024, HBV/HCV/ALD FS | 백서 2021, NAFLD GL 2013/2021 |
-| **심혈관** | KSR 2024, HF FS 2025, CVD 2022, KOSIS | KSR 2012-2023, HF 2020/2022 |
-| **콩팥** | ESKD FS 2024, DKD GL 2024, HTN-CKD GL 2025 | KSN News 2018-2021 |
-| **종합현황** | province_info, NATIONAL_AVG | trends.js |
-| **검진항목** | full_data.js (2024) | 건강검진통계연보 Excel |
-| **생활습관** | lifestyle_data.js | lifestyle_trends.js |
-| **질환네트워크** | disease_epi.js, stroke_ksr.js | historical_trends.json |
+| 파일 | 내용 | 크기 | 탭 |
+|---|---|---|---|
+| mi_incidence_rate.xls | 발생률 (연도별) | 12KB | 심혈관 |
+| mi_incidence_type.xls | 발생률 (유형별: STEMI/NSTEMI) | 14KB | 심혈관 |
+| mi_cases.xls | 환자 수 (연도별) | 9KB | 심혈관 |
+| mi_30day_fatality.xls | 30일 치명률 | 8KB | 심혈관 |
+| mi_30day_fatality_type.xls | 30일 치명률 (유형별) | 14KB | 심혈관 |
+| mi_1yr_fatality.xls | 1년 치명률 | 9KB | 심혈관 |
+| ami_inhospital_30day.xls | 원내 30일 사망률 | 14KB | 심혈관 |
+| ami_oecd_mortality.xls | OECD 비교 사망률 | 118KB | 심혈관 |
+| mi_er_result_region.xls | 응급실 결과 (시도별) | 161KB | 심혈관+종합 |
+| mi_er_result_age.xls | 응급실 결과 (연령별) | 247KB | 심혈관 |
+| mi_transport_age.xls | 이송시간 (연령별) | 352KB | 심혈관 |
+| mi_arrival_time_age.xls | 도착시간 (연령별) | 252KB | 심혈관 |
+| mi_monthly_region.xls | 월별 발생 (시도별) | 292KB | 심혈관+종합 |
+| mi_monthly_age.xls | 월별 발생 (연령별) | 586KB | 심혈관 |
+| mi_death_cause_region.xls | 퇴원 후 사망원인 (시도별) | 205KB | 심혈관 |
+| mi_death_timing_region.xls | 퇴원 후 사망시점 (시도별) | 72KB | 심혈관 |
+| mi_death_timing_age.xls | 퇴원 후 사망시점 (연령별) | 124KB | 심혈관 |
+
+**소계**: 17개 파일, 2.5MB
+
+---
+
+## 9. KOSIS API — 당뇨병 (DM) ⭐ NEW
+
+| 파일 | 내용 | 크기 | 탭 |
+|---|---|---|---|
+| dm_admission.xls | 입원율 | 9KB | 당뇨 |
+| dm_amputation.xls | 절단율 (전체) | 14KB | 당뇨 |
+| dm_major_amputation.xls | 대절단율 | 14KB | 당뇨 |
+| dm_minor_amputation.xls | 소절단율 | 14KB | 당뇨 |
+| dm_diagnosis_region.xls | 진단율 (시도별) | 137KB | 당뇨+종합 |
+| dm_treatment_region.xls | 치료율 (시도별) | 137KB | 당뇨+종합 |
+| dm_eye_exam.xls | 안저검사율 (시도별) | 137KB | 당뇨 |
+| dm_kidney_exam.xls | 신장검사율 (시도별) | 120KB | 당뇨+콩팥 |
+| dm_statin_rx.xls | 스타틴 처방률 | 8KB | 당뇨+심혈관 |
+| dm_antihtn_rx.xls | 항고혈압제 처방률 | 8KB | 당뇨+심혈관 |
+| dm_smoking_male.xls | 남성 흡연율 (시도별) | 137KB | 당뇨+생활습관 |
+| dm_disabled.xls | 장애인 당뇨 | 9KB | 당뇨 |
+
+**소계**: 12개 파일, 744KB
+
+---
+
+## 10. KOSIS API — 심부전 (HF) ⭐ NEW
+
+| 파일 | 내용 | 크기 | 탭 |
+|---|---|---|---|
+| hf_admission.xls | 입원율 | 9KB | 심혈관 |
+
+**소계**: 1개 파일, 9KB
+
+---
+
+## 11. KOSIS API — 만성콩팥병 (CKD) ⭐ NEW
+
+| 파일 | 내용 | 크기 | 상태 |
+|---|---|---|---|
+| ckd_prevalence.xls | 유병률 | 124B | ❌ API 오류 (재시도 필요) |
+
+**소계**: 0개 유효 파일 — API 파라미터 수정 후 재다운로드 필요
+
+---
+
+## KOSIS 전체 요약
+
+| 카테고리 | 파일 수 | 용량 | 상태 |
+|---|---|---|---|
+| 뇌졸중 | 35 | ~5.2MB | ✅ 처리완료 (stroke_kosis.js, 770KB) |
+| 급성심근경색 | 17 | 2.5MB | 🟡 다운로드완료, 파싱 필요 |
+| 당뇨병 | 12 | 744KB | 🟡 다운로드완료, 파싱 필요 |
+| 심부전 | 1 | 9KB | 🟡 다운로드완료, 파싱 필요 |
+| 만성콩팥병 | 0 | - | ❌ API 오류 |
+| **합계** | **36+7** | **~3.3MB** | |
+
+---
+
+## 탭별 데이터 매핑 (NEW: 8-tab 구조)
+
+| 탭 | 1차 데이터 (인사이트) | KOSIS 신규 | 2차 데이터 (추이) |
+|---|---|---|---|
+| **종합현황** | province_info, NATIONAL_AVG | mi_er_result_region, dm_diagnosis/treatment_region | trends.js |
+| **검진항목** | full_data.js (2024) | — | 건강검진통계연보 Excel |
+| **생활습관** | lifestyle_data.js | dm_smoking_male | lifestyle_trends.js |
+| **당뇨** | DFS 2024, 합병증 4종, 진료지침 2025 | dm_admission, dm_amputation×3, dm_eye/kidney_exam, dm_statin/antihtn_rx, dm_disabled | DFS 2012-2020 |
+| **간건강** | NAFLD FS 2023, MASLD GL 2025, 백서 2024, HBV/HCV/ALD FS | — | 백서 2021, NAFLD GL 2013/2021 |
+| **심혈관** | KSR 2024, HF FS 2025, CVD 2022, stroke KOSIS | mi_×17, hf_admission, dm_statin/antihtn_rx | KSR 2012-2023, HF 2020/2022 |
+| **콩팥** | ESKD FS 2024, DKD GL 2024, HTN-CKD GL 2025 | dm_kidney_exam, ckd_prevalence(재시도) | KSN News 2018-2021 |
+| **네트워크** | disease_epi.js, stroke_ksr.js | — | historical_trends.json |

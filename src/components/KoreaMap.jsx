@@ -103,11 +103,11 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
 
         {/* Ulleungdo */}
         <circle cx="385" cy="120" r="5" fill="#2a2a3a" stroke="rgba(255,255,255,0.4)" strokeWidth={0.8} />
-        <text x="385" y="134" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>{t('울릉도', 'Ulleungdo')}</text>
+        <text x="385" y="134" textAnchor="middle" fontSize={9} fill="#ccccee" fontFamily="'Noto Sans KR'" fontWeight={500}>{t('울릉도', 'Ulleungdo')}</text>
 
         {/* Dokdo */}
         <circle cx="408" cy="115" r="2.5" fill="#2a2a3a" stroke="rgba(255,255,255,0.4)" strokeWidth={0.8} />
-        <text x="408" y="106" textAnchor="middle" fontSize={9} fill="#aaa" fontFamily="'Noto Sans KR'" fontWeight={500}>{t('독도', 'Dokdo')}</text>
+        <text x="408" y="106" textAnchor="middle" fontSize={9} fill="#ccccee" fontFamily="'Noto Sans KR'" fontWeight={500}>{t('독도', 'Dokdo')}</text>
 
         {/* Siren animation */}
         <style>{`
@@ -194,13 +194,13 @@ export default function KoreaMap({ metric = 'obesity', year = 2024, onProvinceCl
         </defs>
         <g transform="translate(82, 160)">
           <rect x="0" y="0" width="8" height="160" rx="4" fill="url(#legendGrad)" />
-          <text x="12" y="8" fontSize="9" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
+          <text x="12" y="8" fontSize="9" fill="#bbbbdd" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
             {range[1]}{metric === 'stroke' ? '' : '%'}
           </text>
-          <text x="12" y="160" fontSize="9" fill="#8888aa" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
+          <text x="12" y="160" fontSize="9" fill="#bbbbdd" fontFamily="'JetBrains Mono'" dominantBaseline="middle">
             {range[0]}{metric === 'stroke' ? '' : '%'}
           </text>
-          <text x="4" y="-10" fontSize="9" fill="#555570" fontFamily="'Noto Sans KR'" textAnchor="start">
+          <text x="4" y="-10" fontSize="9" fill="#9999bb" fontFamily="'Noto Sans KR'" textAnchor="start">
             {metric === 'obesity' ? t('비만율', 'Obesity Rate') : metric === 'stroke' ? t('뇌졸중 발생률', 'Stroke Incidence') : t('대사증후군', 'Metabolic Syndrome')}
           </text>
         </g>

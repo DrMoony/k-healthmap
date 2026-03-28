@@ -4,11 +4,13 @@ import { T } from '../translations';
 
 const tabs = [
   { id: 'overview', icon: '🏠' },
-  { id: 'metabolic', icon: '🗺️' },
   { id: 'exam', icon: '🔬' },
   { id: 'lifestyle', icon: '🏃' },
+  { id: 'diabetes', icon: '💉' },
+  { id: 'liver', icon: '🫁' },
+  { id: 'cardiovascular', icon: '❤️' },
+  { id: 'kidney', icon: '🫘' },
   { id: 'disease', icon: '🧬' },
-  { id: 'stroke', icon: '🧠' },
 ];
 
 export default function NavBar({ active, onChange }) {
@@ -37,7 +39,6 @@ export default function NavBar({ active, onChange }) {
         {/* Logo with Taegeukgi */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginRight: '32px' }}>
           <svg viewBox="0 0 36 36" width="22" height="22" style={{ flexShrink: 0 }}>
-            {/* Taegeuk — red top, blue bottom, S-curve */}
             <circle cx="18" cy="18" r="16" fill="#c60c30"/>
             <path d="M18 2 A16 16 0 0 1 18 34 A8 8 0 0 1 18 18 A8 8 0 0 0 18 2" fill="#003478"/>
           </svg>
@@ -66,8 +67,8 @@ export default function NavBar({ active, onChange }) {
               background: active === tab.id ? 'rgba(0,212,255,0.1)' : 'transparent',
               border: active === tab.id ? '1px solid rgba(0,212,255,0.3)' : '1px solid transparent',
               borderRadius: '8px',
-              padding: '6px 14px',
-              color: active === tab.id ? '#00d4ff' : '#8888aa',
+              padding: '6px 10px',
+              color: active === tab.id ? '#00d4ff' : '#bbbbdd',
               fontSize: '13px',
               fontWeight: active === tab.id ? 600 : 400,
               cursor: 'pointer',
@@ -120,7 +121,7 @@ export default function NavBar({ active, onChange }) {
               cursor: 'pointer',
               transition: 'all 0.2s',
               background: lang === 'ko' ? 'rgba(0,212,255,0.2)' : 'transparent',
-              color: lang === 'ko' ? '#00d4ff' : '#666',
+              color: lang === 'ko' ? '#00d4ff' : '#aaaacc',
               fontFamily: "'JetBrains Mono', monospace",
             }}
           >
@@ -137,7 +138,7 @@ export default function NavBar({ active, onChange }) {
               cursor: 'pointer',
               transition: 'all 0.2s',
               background: lang === 'en' ? 'rgba(0,212,255,0.2)' : 'transparent',
-              color: lang === 'en' ? '#00d4ff' : '#666',
+              color: lang === 'en' ? '#00d4ff' : '#aaaacc',
               fontFamily: "'JetBrains Mono', monospace",
             }}
           >

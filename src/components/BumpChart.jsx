@@ -87,12 +87,12 @@ export default function BumpChart({ metric, onProvinceClick }) {
 
   const colorMap = {};
   const neonColors = ['#00ff88', '#00e676', '#69f0ae', '#b2ff59', '#c6ff00',
-    '#888888', '#999999', '#777777', '#888888', '#777777', '#999999',
-    '#888888', '#777777', '#888888', '#ff5252', '#ff1744', '#ff006e'];
+    '#bbbbdd', '#ccccdd', '#777777', '#bbbbdd', '#777777', '#ccccdd',
+    '#bbbbdd', '#777777', '#bbbbdd', '#ff5252', '#ff1744', '#ff006e'];
   latestRanks.forEach((e, i) => {
     if (i < 3) colorMap[e.name] = '#00ff88';       // top 3 green
     else if (i >= maxRank - 3) colorMap[e.name] = '#ff006e'; // bottom 3 red
-    else colorMap[e.name] = '#555577';
+    else colorMap[e.name] = '#9999bb';
   });
 
   const padL = 48, padR = 56, padT = 24, padB = 32;
@@ -123,14 +123,14 @@ export default function BumpChart({ metric, onProvinceClick }) {
           <g key={r}>
             <line x1={padL} y1={yScale(r)} x2={padL + chartW} y2={yScale(r)}
               stroke="rgba(255,255,255,0.03)" strokeWidth={0.5} />
-            <text x={padL - 6} y={yScale(r) + 3} fill="#555577" fontSize="10"
+            <text x={padL - 6} y={yScale(r) + 3} fill="#9999bb" fontSize="10"
               fontFamily="JetBrains Mono, monospace" textAnchor="end">{r}</text>
           </g>
         ))}
 
         {/* X labels */}
         {YEARS.map((yr, i) => (
-          <text key={yr} x={xScale(i)} y={h - 8} fill="#888" fontSize="10"
+          <text key={yr} x={xScale(i)} y={h - 8} fill="#bbbbdd" fontSize="10"
             fontFamily="JetBrains Mono, monospace" textAnchor="middle">{yr}</text>
         ))}
 
@@ -176,7 +176,7 @@ export default function BumpChart({ metric, onProvinceClick }) {
           });
           const validPoints = points.filter(pt => pt != null);
           if (validPoints.length < 2) return null;
-          const color = colorMap[p] === '#555577' ? '#ffd60a' : colorMap[p];
+          const color = colorMap[p] === '#9999bb' ? '#ffd60a' : colorMap[p];
 
           return (
             <g style={{ cursor: 'pointer' }}

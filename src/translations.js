@@ -2,11 +2,13 @@ export const T = {
   // NavBar
   tabs: {
     overview: { ko: '종합현황', en: 'Overview' },
-    metabolic: { ko: '대사질환', en: 'Metabolic' },
-    exam: { ko: '검진항목', en: 'Health Screening' },
+    exam: { ko: '검진항목', en: 'Screening' },
     lifestyle: { ko: '생활습관', en: 'Lifestyle' },
-    disease: { ko: '질환네트워크', en: 'Disease Network' },
-    stroke: { ko: '뇌졸중', en: 'Stroke' },
+    diabetes: { ko: '당뇨', en: 'Diabetes' },
+    liver: { ko: '간건강', en: 'Liver' },
+    cardiovascular: { ko: '심혈관', en: 'Cardiovascular' },
+    kidney: { ko: '콩팥', en: 'Kidney' },
+    disease: { ko: '네트워크', en: 'Network' },
   },
   // Common
   common: {

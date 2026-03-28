@@ -30,8 +30,8 @@ export const theme = {
   // Text
   text: {
     primary: '#e8e8f0',
-    secondary: '#8888aa',
-    muted: '#555570',
+    secondary: '#bbbbdd',
+    muted: '#9999bb',
     accent: '#00d4ff',
   },
 

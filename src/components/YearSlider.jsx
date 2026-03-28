@@ -43,7 +43,7 @@ export default function YearSlider({ year, onChange, min = 2015, max = 2024 }) {
               width: y === year ? '14px' : '6px',
               height: y === year ? '14px' : '6px',
               borderRadius: '50%',
-              background: y === year ? '#00d4ff' : '#555570',
+              background: y === year ? '#00d4ff' : '#9999bb',
               boxShadow: y === year ? '0 0 12px rgba(0,212,255,0.5)' : 'none',
               cursor: 'pointer',
               transition: 'all 0.2s',
@@ -76,7 +76,7 @@ export default function YearSlider({ year, onChange, min = 2015, max = 2024 }) {
         justifyContent: 'space-between',
         fontSize: '11px',
         fontFamily: "'JetBrains Mono'",
-        color: '#555570',
+        color: '#9999bb',
         marginTop: '4px',
       }}>
         <span>{min}</span>

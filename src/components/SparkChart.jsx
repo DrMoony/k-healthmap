@@ -141,7 +141,7 @@ export default function SparkChart({ data, labels, color, height = 100, showLabe
             textAnchor="middle"
             fontSize={10}
             fontFamily="'JetBrains Mono'"
-            fill={hoveredIdx === i ? color : '#aaaacc'}
+            fill={hoveredIdx === i ? color : '#ccccee'}
             fontWeight={i === data.length - 1 ? 700 : 400}
           >
             {labels[i]}

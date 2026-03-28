@@ -10,7 +10,7 @@ const sankeyData = {
     // Level 0 - Root risk factors
     { id: '비만 1,670만', nodeColor: '#ff006e' },
     { id: '유전·노화·환경', nodeColor: '#6c7a89' },
-    { id: '대사이상 (Lean)', nodeColor: '#8888aa' },
+    { id: '대사이상 (Lean)', nodeColor: '#bbbbdd' },
     // Level 1 - Primary diseases
     { id: '당뇨 530만', nodeColor: '#00d4ff' },
     { id: '이상지질혈증 1,780만', nodeColor: '#b388ff' },
@@ -184,7 +184,7 @@ export default function DiseaseSankey() {
           data={sankeyData}
           margin={{ top: 20, right: 180, bottom: 40, left: 20 }}
           align="justify"
-          colors={node => node.nodeColor || '#888'}
+          colors={node => node.nodeColor || '#bbbbdd'}
           nodeOpacity={0.9}
           nodeHoverOpacity={1}
           nodeThickness={20}
