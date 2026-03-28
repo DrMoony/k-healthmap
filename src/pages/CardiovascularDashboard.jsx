@@ -188,32 +188,41 @@ function OECDPanel({ kosis, lang }) {
     <ChartPanel title={t(`OECD AMI 원내 30일 사망률 (${latestYear})`, `OECD AMI In-hospital 30-day Mortality (${latestYear})`, lang)}
       refUrl="https://kosis.kr/" refLabel="KOSIS OECD Health Statistics">
       <div>
-        {comparison.map((c, i) => {
-          const isKorea = c.country === '한국';
+        {(() => {
           const maxVal = Math.max(...comparison.map(x => x.value));
-          const barW = (c.value / maxVal) * 100;
-          return (
-            <div key={c.country} style={{
-              display: 'flex', alignItems: 'center', gap: '4px', padding: '1px 0',
-              background: isKorea ? 'rgba(0,212,255,0.08)' : 'transparent',
-              borderRadius: '3px',
-            }}>
-              <div style={{ width: '70px', textAlign: 'right', fontSize: '9px', color: isKorea ? '#00d4ff' : '#bbbbdd', fontWeight: isKorea ? 700 : 400, flexShrink: 0 }}>
-                {c.countryEn || c.country}
+          const minVal = Math.min(...comparison.map(x => x.value));
+          const FLAG = {'Korea':'🇰🇷','Israel':'🇮🇱','Australia':'🇦🇺','Mexico':'🇲🇽','Chile':'🇨🇱','Canada':'🇨🇦','Japan':'🇯🇵','France':'🇫🇷','Germany':'🇩🇪','UK':'🇬🇧','Italy':'🇮🇹','Spain':'🇪🇸','Sweden':'🇸🇪','Norway':'🇳🇴','Finland':'🇫🇮','Denmark':'🇩🇰','Netherlands':'🇳🇱','Belgium':'🇧🇪','Switzerland':'🇨🇭','Turkey':'🇹🇷','Poland':'🇵🇱','Czech Rep.':'🇨🇿','Hungary':'🇭🇺','Slovakia':'🇸🇰','Slovenia':'🇸🇮','Estonia':'🇪🇪','Latvia':'🇱🇻','Lithuania':'🇱🇹','Iceland':'🇮🇸','Luxembourg':'🇱🇺','Greece':'🇬🇷','Portugal':'🇵🇹','Ireland':'🇮🇪','New Zealand':'🇳🇿','Colombia':'🇨🇴','Costa Rica':'🇨🇷','Romania':'🇷🇴','USA':'🇺🇸'};
+          return comparison.map((c) => {
+            const isKorea = c.country === '한국';
+            const name = c.countryEn || c.country;
+            const barW = (c.value / maxVal) * 100;
+            const ratio = maxVal > minVal ? (c.value - minVal) / (maxVal - minVal) : 0;
+            const barColor = isKorea ? '#00d4ff'
+              : `rgb(${Math.round(60 + ratio * 195)}, ${Math.round(180 - ratio * 130)}, ${Math.round(255 - ratio * 155)})`;
+            return (
+              <div key={c.country} style={{
+                display: 'flex', alignItems: 'center', gap: '3px', padding: '1px 0',
+                background: isKorea ? 'rgba(0,212,255,0.08)' : 'transparent',
+                borderRadius: '3px',
+              }}>
+                <span style={{ fontSize: '10px', width: '14px', textAlign: 'center', flexShrink: 0 }}>{FLAG[name] || ''}</span>
+                <div style={{ width: '62px', textAlign: 'right', fontSize: '9px', color: isKorea ? '#00d4ff' : '#bbbbdd', fontWeight: isKorea ? 700 : 400, flexShrink: 0 }}>
+                  {name}
+                </div>
+                <div style={{ flex: 1, height: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{
+                    width: `${barW}%`, height: '100%',
+                    background: barColor,
+                    borderRadius: '3px', opacity: 0.7,
+                  }} />
+                </div>
+                <div style={{ width: '34px', fontSize: '9px', textAlign: 'right', color: isKorea ? '#00d4ff' : '#aaaacc', fontFamily: "'JetBrains Mono'", fontWeight: isKorea ? 700 : 400, flexShrink: 0 }}>
+                  {c.value}%
+                </div>
               </div>
-              <div style={{ flex: 1, height: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
-                <div style={{
-                  width: `${barW}%`, height: '100%',
-                  background: isKorea ? '#00d4ff' : 'rgba(255,100,100,0.4)',
-                  borderRadius: '3px',
-                }} />
-              </div>
-              <div style={{ width: '34px', fontSize: '9px', textAlign: 'right', color: isKorea ? '#00d4ff' : '#aaaacc', fontFamily: "'JetBrains Mono'", fontWeight: isKorea ? 700 : 400, flexShrink: 0 }}>
-                {c.value}%
-              </div>
-            </div>
-          );
-        })}
+            );
+          });
+        })()}
       </div>
     </ChartPanel>
   );
