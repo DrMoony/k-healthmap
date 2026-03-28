@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLang } from '../i18n';
 import { DISEASE_EPI } from '../data/disease_epi';
 import { DM_KOSIS } from '../data/dm_kosis';
+import CascadeFunnel from '../components/CascadeFunnel';
 
 const t = (ko, en, lang) => lang === 'ko' ? ko : en;
 const dm = DISEASE_EPI.diseases.diabetes;
@@ -164,6 +165,23 @@ export default function DiabetesDashboard() {
           <ComplicationScreening eye={DM_KOSIS.eyeExamRegion} kidney={DM_KOSIS.kidneyExamRegion} lang={lang} year={latestYear} />
         </div>
       </div>
+
+      {/* Care Cascade Funnel */}
+      <CascadeFunnel
+        title={t('당뇨병 관리 캐스케이드 (30세+, 만 단위)', 'Diabetes Care Cascade (30+, in 10K)', lang)}
+        source="KDA DFS 2024"
+        totalPop={3600}
+        totalLabel={t('30세+ 인구', '30+ Pop.', lang)}
+        lossLabel={t('비당뇨', 'no DM', lang)}
+        endLabel={t('통합관리', 'All Targets', lang)}
+        stages={[
+          { label: t('유병', 'Prevalence', lang), count: 530, color: '#ff6b6b', note: 'FPG≥126 or HbA1c≥6.5 or 복약' },
+          { label: t('인지(진단)', 'Awareness', lang), count: 396, color: '#ffd93d', note: t('의사 진단', 'Physician Dx', lang) },
+          { label: t('치료(복약)', 'Treatment', lang), count: 376, color: '#6bcb77', note: t('경구약/인슐린', 'OHA/Insulin', lang) },
+          { label: t('조절(HbA1c<7%)', 'Control(A1c<7)', lang), count: 321, color: '#4d96ff', note: 'HbA1c <7.0%' },
+          { label: t('통합관리', 'All Targets', lang), count: 84, color: '#b388ff', note: t('혈당+BP+LDL', 'Glc+BP+LDL', lang) },
+        ]}
+      />
 
       {/* Reference */}
       <div style={{ marginTop: '16px', fontSize: '10px', color: '#444', textAlign: 'right' }}>

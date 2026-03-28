@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLang } from '../i18n';
 import { DISEASE_EPI } from '../data/disease_epi';
+import CascadeFunnel from '../components/CascadeFunnel';
 
 const t = (ko, en, lang) => lang === 'ko' ? ko : en;
 
@@ -49,6 +50,23 @@ export default function LiverDashboard() {
       {subTab === 'viral' && <ViralPanel lang={lang} />}
       {subTab === 'ald' && <ALDPanel lang={lang} />}
       {subTab === 'progression' && <ProgressionPanel masld={masld} mash={mash} lc={lc} lang={lang} />}
+
+      {/* MASLD Progression Funnel */}
+      <CascadeFunnel
+        title={t('MASLD 질병 진행 펀넬 (성인, 만 단위)', 'MASLD Disease Progression Funnel (Adults, in 10K)', lang)}
+        source="KASL 2025, NHIS"
+        totalPop={3600}
+        totalLabel={t('성인 인구', 'Adult Pop.', lang)}
+        lossLabel={t('비MASLD', 'no MASLD', lang)}
+        endLabel="HCC"
+        stages={[
+          { label: 'MASLD', count: 768, color: '#00ff88', note: t('NHIS 청구', 'NHIS claims', lang) },
+          { label: 'MASH', count: 153, color: '#2ecc71', note: '~20%' },
+          { label: t('진행성 섬유화', 'Adv. Fibrosis', lang), count: 30, color: '#e67e22', note: 'F3-F4 19.4%' },
+          { label: t('간경변', 'Cirrhosis', lang), count: 6, color: '#e74c3c', note: '10yr 3.7%' },
+          { label: 'HCC', count: 1, color: '#c0392b', note: t('연 1-3%', '1-3%/yr', lang) },
+        ]}
+      />
     </div>
   );
 }

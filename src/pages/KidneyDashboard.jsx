@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLang } from '../i18n';
 import { DISEASE_EPI, DISEASE_TIMESERIES } from '../data/disease_epi';
 import { DM_KOSIS } from '../data/dm_kosis';
+import CascadeFunnel from '../components/CascadeFunnel';
 
 const t = (ko, en, lang) => lang === 'ko' ? ko : en;
 const ckd = DISEASE_EPI.diseases.ckd;
@@ -101,6 +102,21 @@ export default function KidneyDashboard() {
       {activeTab === 'ckd' && <CKDTab lang={lang} examData={examData} latestYear={latestYear} />}
       {activeTab === 'eskd' && <ESKDTab lang={lang} />}
       {activeTab === 'dkd' && <DKDTab lang={lang} examData={examData} latestYear={latestYear} />}
+
+      {/* CKD Care Cascade Funnel */}
+      <CascadeFunnel
+        title={t('CKD 관리 캐스케이드 (20세+, 만 단위)', 'CKD Care Cascade (20+, in 10K)', lang)}
+        source="KSN KORDS 2024"
+        totalPop={4350}
+        totalLabel={t('20세+ 인구', '20+ Pop.', lang)}
+        lossLabel={t('비CKD', 'no CKD', lang)}
+        endLabel={t('투석/이식', 'Dialysis/Tx', lang)}
+        stages={[
+          { label: t('CKD 유병', 'CKD Prev.', lang), count: 360, color: '#4ecdc4', note: '8.2% (2011-13)' },
+          { label: t('인지(진단)', 'Awareness', lang), count: 23, color: '#ffd93d', note: t('6.3%만 인지!', '6.3% aware!', lang) },
+          { label: t('ESKD(투석/이식)', 'ESKD(Dial/Tx)', lang), count: 14, color: '#9b59b6', note: t('13.5만명', '135K pts', lang) },
+        ]}
+      />
 
       {/* Reference */}
       <div style={{ marginTop: '16px', fontSize: '10px', color: '#444', textAlign: 'right' }}>

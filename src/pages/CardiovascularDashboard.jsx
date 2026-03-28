@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLang } from '../i18n';
+import CascadeFunnel from '../components/CascadeFunnel';
 import { DISEASE_EPI, DISEASE_TIMESERIES } from '../data/disease_epi';
 import { MI_KOSIS } from '../data/mi_kosis';
 import { HF_KOSIS } from '../data/hf_kosis';
@@ -506,8 +507,7 @@ function HTNPanel({ lang }) {
 
       {/* Care Cascade Funnel */}
       <CascadeFunnel
-        lang={lang}
-        title={t('고혈압 관리 캐스케이드', 'Hypertension Care Cascade')}
+        title={t('고혈압 관리 캐스케이드', 'Hypertension Care Cascade', lang)}
         source="KSH 2025"
         totalPop={4350}
         stages={[
@@ -527,8 +527,8 @@ function HTNPanel({ lang }) {
   );
 }
 
-// ── Care Cascade Funnel (reusable) ──
-function CascadeFunnel({ lang, title, source, totalPop, stages }) {
+// CascadeFunnel → ../components/CascadeFunnel.jsx
+function _UNUSED_CascadeFunnel({ lang, title, source, totalPop, stages }) {
   // stages: [{ label, count, color, note }] — each step of the cascade
   // Between each step, we show the "lost" (이탈) population
   const maxCount = totalPop;
