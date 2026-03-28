@@ -63,20 +63,20 @@ export default function CardiovascularDashboard() {
 function MIPanel({ mi, kosis, lang }) {
   const latest = '2023';
   const kpis = [
-    { label: t('발생률', 'Incidence', lang), value: kosis.incidenceRate['전체']?.[latest], unit: '/10만', color: '#ff6b6b', refUrl: 'https://kosis.kr/', refLabel: 'KOSIS 심뇌혈관질환통계' },
-    { label: t('환자수', 'Cases', lang), value: kosis.cases['전체']?.[latest]?.toLocaleString(), unit: t('명', '', lang), color: '#ffd93d', refUrl: 'https://kosis.kr/', refLabel: 'KOSIS 심뇌혈관질환통계' },
-    { label: t('30일 치명률', '30-day CFR', lang), value: kosis.fatality30d['전체']?.[latest], unit: '%', color: '#ff922b', refUrl: 'https://kosis.kr/', refLabel: 'KOSIS 심뇌혈관질환통계' },
-    { label: t('1년 치명률', '1-yr CFR', lang), value: kosis.fatality1yr['전체']?.[latest], unit: '%', color: '#e599f7', refUrl: 'https://kosis.kr/', refLabel: 'KOSIS 심뇌혈관질환통계' },
+    { label: t('발생률', 'Incidence', lang), value: kosis.incidenceRate['전체']?.[latest], unit: '/10만', color: '#ff6b6b', refUrl: 'https://kosis.kr/', refLabel: t('KOSIS 심뇌혈관질환통계', 'KOSIS CVD Statistics', lang) },
+    { label: t('환자수', 'Cases', lang), value: kosis.cases['전체']?.[latest]?.toLocaleString(), unit: t('명', '', lang), color: '#ffd93d', refUrl: 'https://kosis.kr/', refLabel: t('KOSIS 심뇌혈관질환통계', 'KOSIS CVD Statistics', lang) },
+    { label: t('30일 치명률', '30-day CFR', lang), value: kosis.fatality30d['전체']?.[latest], unit: '%', color: '#ff922b', refUrl: 'https://kosis.kr/', refLabel: t('KOSIS 심뇌혈관질환통계', 'KOSIS CVD Statistics', lang) },
+    { label: t('1년 치명률', '1-yr CFR', lang), value: kosis.fatality1yr['전체']?.[latest], unit: '%', color: '#e599f7', refUrl: 'https://kosis.kr/', refLabel: t('KOSIS 심뇌혈관질환통계', 'KOSIS CVD Statistics', lang) },
   ];
 
   return (
     <>
       <KPIRow kpis={kpis} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
-        <ChartPanel title={t('MI 발생률 추이', 'MI Incidence Trend', lang)} refUrl="https://kosis.kr/" refLabel="KOSIS 심뇌혈관질환통계">
+        <ChartPanel title={t('MI 발생률 추이', 'MI Incidence Trend', lang)} refUrl="https://kosis.kr/" refLabel={t('KOSIS 심뇌혈관질환통계', 'KOSIS CVD Statistics', lang)}>
           <TrendLines data={kosis.incidenceRate} keys={['전체', '남자', '여자']} lang={lang} />
         </ChartPanel>
-        <ChartPanel title={t('30일 치명률 추이', '30-day Fatality Trend', lang)} refUrl="https://kosis.kr/" refLabel="KOSIS 심뇌혈관질환통계">
+        <ChartPanel title={t('30일 치명률 추이', '30-day Fatality Trend', lang)} refUrl="https://kosis.kr/" refLabel={t('KOSIS 심뇌혈관질환통계', 'KOSIS CVD Statistics', lang)}>
           <TrendLines data={kosis.fatality30d} keys={['전체', '남자', '여자']} lang={lang} colors={{ '전체': '#ff922b', '남자': '#4d96ff', '여자': '#ff6b6b' }} />
         </ChartPanel>
         <ChartPanel title={t('발생유형별 발생률', 'Incidence by Onset Type', lang)} refUrl="https://kosis.kr/" refLabel="KOSIS">
@@ -127,7 +127,7 @@ function StrokePanel({ stroke, kosis, lang }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <ChartPanel title={t(`${type === 'ischemic' ? '허혈성' : '출혈성'} 월별 환자수 (${latestYear})`,
           `${type === 'ischemic' ? 'Ischemic' : 'Hemorrhagic'} Monthly Cases (${latestYear})`, lang)}
-          refUrl="https://kosis.kr/" refLabel="KOSIS 심뇌혈관질환통계 2022-2024">
+          refUrl="https://kosis.kr/" refLabel={t('KOSIS 심뇌혈관질환통계 2022-2024', 'KOSIS CVD Statistics 2022-2024', lang)}>
           <MonthlyBar data={monthlyTotals} lang={lang} />
         </ChartPanel>
         <ChartPanel title={t('시도별 이송시간 (2023)', 'Regional Transport Time (2023)', lang)} refUrl="https://kosis.kr/" refLabel="KOSIS">
@@ -172,15 +172,15 @@ function HFPanel({ hf, kosis, lang }) {
 
 // ── OECD Panel ──
 function OECDPanel({ kosis, lang }) {
+  const OECD_EN = {'한국':'Korea','이스라엘':'Israel','호주':'Australia','멕시코':'Mexico','칠레':'Chile','캐나다':'Canada','일본':'Japan','프랑스':'France','독일':'Germany','영국':'UK','이탈리아':'Italy','스페인':'Spain','스웨덴':'Sweden','노르웨이':'Norway','핀란드':'Finland','덴마크':'Denmark','네덜란드':'Netherlands','벨기에':'Belgium','스위스':'Switzerland','터키':'Turkey','폴란드':'Poland','체코':'Czech Rep.','헝가리':'Hungary','슬로바키아':'Slovakia','슬로베니아':'Slovenia','에스토니아':'Estonia','라트비아':'Latvia','리투아니아':'Lithuania','아이슬란드':'Iceland','룩셈부르크':'Luxembourg','그리스':'Greece','포르투갈':'Portugal','아일랜드':'Ireland','뉴질랜드':'New Zealand','콜롬비아':'Colombia','코스타리카':'Costa Rica','루마니아':'Romania'};
   const oecdData = kosis.oecdMortality || {};
-  // Get latest year for Korea
   const koreaData = oecdData['한국']?.['원내입원'] || {};
   const latestYear = Object.keys(koreaData).sort().pop();
 
-  // Build comparison: country → latest inhospital value
   const countries = Object.keys(oecdData);
   const comparison = countries.map(c => ({
     country: c,
+    countryEn: OECD_EN[c] || c,
     value: oecdData[c]?.['원내입원']?.[latestYear],
   })).filter(c => c.value != null).sort((a, b) => a.value - b.value);
 
@@ -199,7 +199,7 @@ function OECDPanel({ kosis, lang }) {
               borderRadius: '4px',
             }}>
               <div style={{ width: '80px', textAlign: 'right', fontSize: '11px', color: isKorea ? '#00d4ff' : '#bbbbdd', fontWeight: isKorea ? 700 : 400 }}>
-                {c.country}
+                {lang === 'en' ? c.countryEn : c.country}
               </div>
               <div style={{ flex: 1, height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
                 <div style={{
@@ -303,7 +303,7 @@ function TrendLines({ data, keys, lang, colors, labels }) {
       {keys.map((k, i) => (
         <g key={k} transform={`translate(${PL + i * 90}, ${H - 16})`}>
           <rect width="10" height="3" fill={c[k] || '#bbbbdd'} rx="1" />
-          <text x="14" y="3" fill="#bbbbdd" fontSize="9">{lb[k] || (lang === 'ko' ? k : k.replace('전체', 'Total').replace('남자', 'Male').replace('여자', 'Female'))}</text>
+          <text x="14" y="3" fill="#bbbbdd" fontSize="9">{lb[k] || (lang === 'ko' ? k : ({'전체':'Total','남자':'Male','여자':'Female','전체_첫발생':'First','전체_재발생':'Recurrent','전체_환자단위':'Patient','전체_입원단위':'Admission'}[k] || k))}</text>
         </g>
       ))}
     </svg>
@@ -333,6 +333,8 @@ function MonthlyBar({ data, lang }) {
   );
 }
 
+const PROV_EN = {'서울':'Seoul','부산':'Busan','대구':'Daegu','인천':'Incheon','광주':'Gwangju','대전':'Daejeon','울산':'Ulsan','세종':'Sejong','경기':'Gyeonggi','강원':'Gangwon','충북':'Chungbuk','충남':'Chungnam','전북':'Jeonbuk','전남':'Jeonnam','경북':'Gyeongbuk','경남':'Gyeongnam','제주':'Jeju'};
+
 function TransportSummary({ data, lang }) {
   if (!data) return null;
   const regions = Object.keys(data).filter(r => r !== '전체');
@@ -348,7 +350,7 @@ function TransportSummary({ data, lang }) {
         const pct = r.total > 0 ? ((r.under3 / r.total) * 100).toFixed(1) : 0;
         return (
           <div key={r.region} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '2px 0' }}>
-            <div style={{ width: '40px', fontSize: '11px', color: '#bbbbdd', textAlign: 'right' }}>{r.region}</div>
+            <div style={{ width: '40px', fontSize: '11px', color: '#bbbbdd', textAlign: 'right' }}>{lang === 'en' ? (PROV_EN[r.region] || r.region) : r.region}</div>
             <div style={{ flex: 1, height: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
               <div style={{ width: `${pct}%`, height: '100%', background: pct > 80 ? '#6bcb77' : pct > 60 ? '#ffd93d' : '#ff6b6b', borderRadius: '3px' }} />
             </div>
@@ -360,6 +362,16 @@ function TransportSummary({ data, lang }) {
   );
 }
 
+const COMORB_LABELS = {
+  htn: { ko: '고혈압', en: 'Hypertension' }, dm: { ko: '당뇨', en: 'Diabetes' },
+  ihd: { ko: '허혈성심질환', en: 'IHD' }, af: { ko: '심방세동', en: 'A-fib' },
+  ckd: { ko: 'CKD', en: 'CKD' }, stroke: { ko: '뇌졸중', en: 'Stroke' },
+  hypertension: { ko: '고혈압', en: 'Hypertension' }, highLDL: { ko: '고LDL', en: 'High LDL' },
+  obesity: { ko: '비만', en: 'Obesity' }, integratedControl: { ko: '통합관리', en: 'All Targets' },
+  withDiabetes: { ko: '당뇨동반', en: 'w/ Diabetes' }, withHypertension: { ko: '고혈압동반', en: 'w/ Hypertension' },
+  withObesity: { ko: '비만동반', en: 'w/ Obesity' }, withAbdominalObesity: { ko: '복부비만동반', en: 'w/ Central Obesity' },
+};
+
 function ComorbidityBars({ data, lang }) {
   if (!data) return <div style={{ color: '#9999bb', fontSize: '12px' }}>No data</div>;
   const items = typeof data === 'object' && !Array.isArray(data) ? Object.entries(data) : [];
@@ -370,9 +382,10 @@ function ComorbidityBars({ data, lang }) {
       {items.slice(0, 8).map(([k, v]) => {
         const val = typeof v === 'number' ? v : parseFloat(v);
         if (isNaN(val)) return null;
+        const label = COMORB_LABELS[k] ? COMORB_LABELS[k][lang] || COMORB_LABELS[k].en : k;
         return (
           <div key={k} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '3px 0' }}>
-            <div style={{ width: '120px', fontSize: '11px', color: '#bbbbdd', textAlign: 'right' }}>{k}</div>
+            <div style={{ width: '120px', fontSize: '11px', color: '#bbbbdd', textAlign: 'right' }}>{label}</div>
             <div style={{ flex: 1, height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
               <div style={{ width: `${Math.min(val, 100)}%`, height: '100%', background: '#e599f788', borderRadius: '3px' }} />
             </div>
