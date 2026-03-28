@@ -1,9 +1,27 @@
 import { useLang } from '../i18n';
 
-export default function CascadeFunnel({ title, source, totalPop, totalLabel, unit, lossLabel, endLabel, stages }) {
+export default function CascadeFunnel({ title, source, totalPop, totalLabel, unit, lossLabel, endLabel, stages, logScale }) {
   const { t } = useLang();
   const u = unit || t('만','0K');
-  const maxCount = stages[0]?.count || 1; // 첫 단계 = 100% 기준
+  const maxCount = totalPop || stages[0]?.count || 1;
+
+  // Auto-detect if log scale needed: if ratio > 50x between first and last stage
+  const ratio = stages[0]?.count / (stages[stages.length - 1]?.count || 1);
+  const useLog = logScale ?? ratio > 30;
+
+  function getWidth(count) {
+    if (useLog) {
+      const logMax = Math.log10(maxCount);
+      const logVal = Math.log10(Math.max(count, 1));
+      return Math.max((logVal / logMax) * 100, 15);
+    }
+    return Math.max((count / maxCount) * 100, 15);
+  }
+
+  const allRows = [
+    { label: totalLabel || t('전체 인구','Total Pop.'), count: totalPop, color: '#555577', note: '', isTotal: true },
+    ...stages,
+  ];
 
   return (
     <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
@@ -13,67 +31,59 @@ export default function CascadeFunnel({ title, source, totalPop, totalLabel, uni
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-        {/* Total population context */}
-        {totalPop && (
-          <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '9px', color: '#666688', background: 'rgba(255,255,255,0.03)', padding: '2px 10px', borderRadius: '10px' }}>
-              {totalLabel || t('30세+ 인구','30+ Pop.')} {totalPop.toLocaleString()}{u}
-            </span>
-          </div>
-        )}
-
-        {stages.map((stage, i) => {
-          const widthPct = Math.max((stage.count / maxCount) * 100, 15);
-          const prev = i === 0 ? (totalPop || stages[0].count) : stages[i - 1].count;
-          const lost = prev - stage.count;
+        {allRows.map((row, i) => {
+          const widthPct = getWidth(row.count);
+          const prev = i === 0 ? null : allRows[i - 1].count;
+          const lost = prev != null ? prev - row.count : 0;
           const lostPct = prev > 0 ? Math.round((lost / prev) * 100) : 0;
-          const showLoss = lost > 0 && (i > 0 || totalPop);
+
+          // Format count nicely
+          const countStr = row.count >= 10000
+            ? `${(row.count / 10000).toFixed(1)}${t('억','00M')}`
+            : `${row.count.toLocaleString()}${u}`;
 
           return (
             <div key={i}>
-              {/* Loss indicator */}
-              {showLoss && (
-                <div style={{ textAlign: 'center', height: '16px', lineHeight: '16px' }}>
+              {lost > 0 && (
+                <div style={{ textAlign: 'center', height: '14px', lineHeight: '14px' }}>
                   <span style={{ fontSize: '8px', color: '#ff6b6b88' }}>
-                    ▼ -{lost.toLocaleString()}{u} ({lostPct}% {i === 0 ? (lossLabel || t('비유병','unaffected')) : t('이탈','lost')})
+                    ▼ -{lost.toLocaleString()}{u} ({lostPct}% {i === 1 ? (lossLabel || t('비유병','unaffected')) : t('이탈','lost')})
                   </span>
                 </div>
               )}
 
-              {/* Stage bar — centered */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0px' }}>
-                {/* Left label */}
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ width: '76px', textAlign: 'right', paddingRight: '8px', flexShrink: 0 }}>
-                  <div style={{ fontSize: '10px', color: stage.color, fontWeight: 700, lineHeight: 1.2 }}>{stage.label}</div>
+                  <div style={{ fontSize: row.isTotal ? '9px' : '10px', color: row.color, fontWeight: 700, lineHeight: 1.2 }}>{row.label}</div>
                 </div>
 
-                {/* Center bar area */}
                 <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
                   <div style={{
-                    width: `${widthPct}%`, minWidth: '60px', height: '28px',
-                    background: `linear-gradient(180deg, ${stage.color}cc, ${stage.color}44)`,
-                    borderRadius: i === 0 ? '8px 8px 4px 4px' : i === stages.length - 1 ? '4px 4px 8px 8px' : '4px',
+                    width: `${widthPct}%`, minWidth: '50px',
+                    height: row.isTotal ? '22px' : '26px',
+                    background: row.isTotal
+                      ? 'rgba(255,255,255,0.06)'
+                      : `linear-gradient(180deg, ${row.color}cc, ${row.color}44)`,
+                    borderRadius: i === 0 ? '8px 8px 4px 4px' : i === allRows.length - 1 ? '4px 4px 8px 8px' : '3px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    border: `1px solid ${stage.color}33`,
+                    border: row.isTotal ? '1px solid rgba(255,255,255,0.08)' : `1px solid ${row.color}33`,
                     transition: 'width 0.8s ease',
                   }}>
                     <span style={{
-                      fontSize: stage.count >= 100 ? '12px' : '11px',
-                      fontWeight: 800, color: '#fff',
+                      fontSize: row.isTotal ? '10px' : '11px',
+                      fontWeight: row.isTotal ? 500 : 800,
+                      color: row.isTotal ? '#9999bb' : '#fff',
                       fontFamily: "'JetBrains Mono'",
-                      textShadow: '0 1px 4px rgba(0,0,0,0.7)',
+                      textShadow: row.isTotal ? 'none' : '0 1px 4px rgba(0,0,0,0.7)',
                       whiteSpace: 'nowrap',
                     }}>
-                      {stage.count >= 10000
-                        ? `${(stage.count / 10000).toFixed(1)}${t('억','00M')}`
-                        : `${stage.count.toLocaleString()}${u}`}
+                      {countStr}
                     </span>
                   </div>
                 </div>
 
-                {/* Right note */}
                 <div style={{ width: '76px', paddingLeft: '8px', flexShrink: 0 }}>
-                  <div style={{ fontSize: '8px', color: '#9999bb', lineHeight: 1.3 }}>{stage.note}</div>
+                  <div style={{ fontSize: '8px', color: '#9999bb', lineHeight: 1.3 }}>{row.note}</div>
                 </div>
               </div>
             </div>
@@ -81,7 +91,6 @@ export default function CascadeFunnel({ title, source, totalPop, totalLabel, uni
         })}
       </div>
 
-      {/* Summary line */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '12px', fontSize: '10px' }}>
         <span style={{ color: '#ff6b6b' }}>
           {t('이탈','Lost')}: {(stages[0].count - stages[stages.length - 1].count).toLocaleString()}{u}
@@ -92,6 +101,11 @@ export default function CascadeFunnel({ title, source, totalPop, totalLabel, uni
           <span style={{ opacity: 0.7 }}> ({Math.round(stages[stages.length - 1].count / stages[0].count * 100)}%)</span>
         </span>
       </div>
+      {useLog && (
+        <div style={{ textAlign: 'center', fontSize: '7px', color: '#555566', marginTop: '4px' }}>
+          {t('※ 로그 스케일 (범위 차이가 커 선형 대비 축소 표시)','※ Log scale (wide range compressed for visibility)')}
+        </div>
+      )}
     </div>
   );
 }
