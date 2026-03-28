@@ -8,6 +8,7 @@ import { TRENDS } from '../data/trends';
 import { BMI_PROV } from '../data/bmi_prov';
 import { MET_PROV } from '../data/met_prov';
 import { NATIONAL_AVG } from '../data/province_info';
+import { DISEASE_TIMESERIES } from '../data/disease_epi';
 import { useLang } from '../i18n';
 
 export default function Overview() {
@@ -26,6 +27,9 @@ export default function Overview() {
     { id: 'obesity', label: t('비만율', 'Obesity Rate'), value: TRENDS.obesity[latest], icon: '⚖️', color: '#ff006e', delta: TRENDS.obesity[latest] - TRENDS.obesity[first], data: TRENDS.obesity, source: 'KNHANES 2024, BMI≥25' },
     { id: 'metabolic', label: t('대사증후군 위험군', 'Metabolic Syndrome Risk'), value: TRENDS.metabolic[latest], icon: '💉', color: '#ffd60a', delta: TRENDS.metabolic[latest] - TRENDS.metabolic[first], data: TRENDS.metabolic, source: 'KNHANES 2024' },
     { id: 'stroke', label: t('허혈성 뇌졸중 발생률', 'Ischemic Stroke Incidence'), value: NATIONAL_AVG.strokeIncidence, icon: '🧠', color: '#e74c3c', delta: null, data: null, unit: t('/10만', '/100K'), source: 'KOSIS CVD 2023' },
+    { id: 'hypertension', label: t('고혈압 유병률', 'Hypertension Prevalence'), value: DISEASE_TIMESERIES.htn_prevalence.crude[DISEASE_TIMESERIES.htn_prevalence.crude.length - 1], icon: '💓', color: '#ffd60a', delta: +(DISEASE_TIMESERIES.htn_prevalence.crude[DISEASE_TIMESERIES.htn_prevalence.crude.length - 1] - DISEASE_TIMESERIES.htn_prevalence.crude[0]).toFixed(1), data: DISEASE_TIMESERIES.htn_prevalence.crude, source: DISEASE_TIMESERIES.htn_prevalence.ref },
+    { id: 'diabetes', label: t('당뇨 유병률', 'Diabetes Prevalence'), value: DISEASE_TIMESERIES.dm_prevalence.values[DISEASE_TIMESERIES.dm_prevalence.values.length - 1], icon: '🩸', color: '#00d4ff', delta: +(DISEASE_TIMESERIES.dm_prevalence.values[DISEASE_TIMESERIES.dm_prevalence.values.length - 1] - DISEASE_TIMESERIES.dm_prevalence.values[0]).toFixed(1), data: DISEASE_TIMESERIES.dm_prevalence.values, source: DISEASE_TIMESERIES.dm_prevalence.ref },
+    { id: 'dyslipidemia', label: t('이상지질혈증 유병률', 'Dyslipidemia Prevalence'), value: DISEASE_TIMESERIES.dyslipidemia_prevalence.values[DISEASE_TIMESERIES.dyslipidemia_prevalence.values.length - 1], icon: '🫀', color: '#b388ff', delta: +(DISEASE_TIMESERIES.dyslipidemia_prevalence.values[DISEASE_TIMESERIES.dyslipidemia_prevalence.values.length - 1] - DISEASE_TIMESERIES.dyslipidemia_prevalence.values[0]).toFixed(1), data: DISEASE_TIMESERIES.dyslipidemia_prevalence.values, source: DISEASE_TIMESERIES.dyslipidemia_prevalence.ref },
   ];
 
   // Province detail data
@@ -50,7 +54,7 @@ export default function Overview() {
       <div style={{
         gridColumn: '1 / -1',
         display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
+        gridTemplateColumns: 'repeat(4, 1fr)',
         gap: '10px',
       }}>
         {kpis.map((kpi, i) => (
