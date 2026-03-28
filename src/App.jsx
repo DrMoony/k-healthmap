@@ -1,15 +1,28 @@
-import { useState, Component } from 'react';
+import { useState, Component, lazy, Suspense } from 'react';
 import { LangProvider } from './i18n';
 import NavBar from './components/NavBar';
-import Overview from './pages/Overview';
-import ExamDetail from './pages/ExamDetail';
-import Lifestyle from './pages/Lifestyle';
-import DiabetesDashboard from './pages/DiabetesDashboard';
-import LiverDashboard from './pages/LiverDashboard';
-import CardiovascularDashboard from './pages/CardiovascularDashboard';
-import KidneyDashboard from './pages/KidneyDashboard';
-import DiseaseNetwork from './pages/DiseaseNetwork';
 import './styles/global.css';
+
+const Overview = lazy(() => import('./pages/Overview'));
+const ExamDetail = lazy(() => import('./pages/ExamDetail'));
+const Lifestyle = lazy(() => import('./pages/Lifestyle'));
+const DiabetesDashboard = lazy(() => import('./pages/DiabetesDashboard'));
+const LiverDashboard = lazy(() => import('./pages/LiverDashboard'));
+const CardiovascularDashboard = lazy(() => import('./pages/CardiovascularDashboard'));
+const KidneyDashboard = lazy(() => import('./pages/KidneyDashboard'));
+const DiseaseNetwork = lazy(() => import('./pages/DiseaseNetwork'));
+
+function LoadingFallback() {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      minHeight: '60vh', color: '#4a4a6a', fontSize: 13,
+      fontFamily: "'JetBrains Mono', monospace",
+    }}>
+      Loading...
+    </div>
+  );
+}
 
 // Error boundary to prevent white screen crashes
 class ErrorBoundary extends Component {
@@ -56,14 +69,16 @@ function App() {
         <NavBar active={activeTab} onChange={setActiveTab} />
 
         <ErrorBoundary key={activeTab}>
-          {activeTab === 'overview' && <Overview />}
-          {activeTab === 'exam' && <ExamDetail />}
-          {activeTab === 'lifestyle' && <Lifestyle />}
-          {activeTab === 'diabetes' && <DiabetesDashboard />}
-          {activeTab === 'liver' && <LiverDashboard />}
-          {activeTab === 'cardiovascular' && <CardiovascularDashboard />}
-          {activeTab === 'kidney' && <KidneyDashboard />}
-          {activeTab === 'disease' && <DiseaseNetwork />}
+          <Suspense fallback={<LoadingFallback />}>
+            {activeTab === 'overview' && <Overview />}
+            {activeTab === 'exam' && <ExamDetail />}
+            {activeTab === 'lifestyle' && <Lifestyle />}
+            {activeTab === 'diabetes' && <DiabetesDashboard />}
+            {activeTab === 'liver' && <LiverDashboard />}
+            {activeTab === 'cardiovascular' && <CardiovascularDashboard />}
+            {activeTab === 'kidney' && <KidneyDashboard />}
+            {activeTab === 'disease' && <DiseaseNetwork />}
+          </Suspense>
         </ErrorBoundary>
       </div>
     </LangProvider>
