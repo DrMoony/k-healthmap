@@ -187,8 +187,8 @@ export const DISEASE_EPI = {
       name: '고혈압',
       nameEn: 'Hypertension',
       metricType: 'prevalence',
-      prevalence: { value: 30, unit: '%', population: '20세 이상 성인 (추정)', year: 2022 },
-      patients: '약 1,300만명',
+      prevalence: { value: 30, unit: '%', population: '30세 이상', year: 2022 },
+      patients: '약 1,260만명 (20세 이상, KSH 2025)',
       trend: 'stable_high',
       trendDetail: '20세 이상 약 30% 유병률 유지, 인구 고령화로 환자 수 지속 증가',
       management: {
@@ -339,6 +339,7 @@ export const DISEASE_EPI = {
         dm_2012: 14.6, dm_2022: 14.6,
         hl_2012: 1.9, hl_2022: 8.1,
         ckd_2012: 1.1, ckd_2022: 19.1,
+        ckdNote: 'CKD 동반율 급증은 진단코드 확대/검진 확대 효과 포함 — 순수 유병률 증가와 구분 필요',
       },
       multiComorbidity: {
         dm_htn_2022: 4.3,
@@ -363,6 +364,7 @@ export const DISEASE_EPI = {
           '80+': { malignancy: 32.43, IHD: 27.29, stroke: 22.77, LC: 3.94, HCC: 2.0 },
         },
         female: {
+          dataQualityWarning: true,
           '20-29': { malignancy: 7.81, IHD: 3.15, stroke: 0.95, LC: 0.78, HCC: 0.25 },
           '30-39': { malignancy: 3.63, IHD: 1.55, stroke: 0.45, LC: 0.41, HCC: 0.05 },
           '40-49': { malignancy: 12.8, IHD: 13.54, stroke: 7.53, LC: 6.61, HCC: 2.23 },
@@ -627,6 +629,7 @@ export const DISEASE_EPI = {
       patients: {
         diagnosedTotal: 120000,  // 진단환자 약 12만명 (2021)
         estimatedTotal: 300000,  // 추정 총 감염자 약 30만명
+        estimatedTotalNote: 'anti-HCV 양성 추정 (기왕감염 포함), 현재 활동성(RNA+)은 16만명',
         treatmentRate: 33,       // % (DAA 치료율)
         year: 2021,
         trendNote: 'DAA 도입(2015) 후 치료 성공률 95%+ 이나 진단율 여전히 낮음',
@@ -784,7 +787,7 @@ export const DISEASE_EPI = {
       genderGap: {
         male: { cases: 61988, crudeRate: 242.7 },
         female: { cases: 48586, crudeRate: 188.9 },
-        maleToFemaleRatio: 1.2,
+        maleToFemaleRatio: 1.3,
       },
       recurrence: { rate2012: 17.5, rate2022: 20.4, y2012: 17.5, y2022: 20.4, unit: '%' },
       ageRate80plus: 1515.7,
@@ -1071,6 +1074,7 @@ export const DISEASE_EPI = {
         ],
         unit: '%',
         note: '국민건강검진 대사증후군 관련 이상소견률',
+        note2019: '2019년 10%p 감소는 검진기준 변경 가능성 — 시계열 해석 주의',
       },
       trend: 'stable_high',
       trendDetail: '2018년 78.5% 피크 후 68-70% 수준 유지. 구성요소(비만, 고혈압, 이상지질혈증, 고혈당) 각각 증가 추세.',
