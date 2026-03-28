@@ -1,115 +1,138 @@
 import { useLang } from '../i18n';
 
-export default function CascadeFunnel({ title, source, totalPop, totalLabel, unit, lossLabel, endLabel, stages, logScale }) {
+export default function CascadeFunnel({ title, source, totalPop, totalLabel, unit, lossLabel, endLabel, stages }) {
   const { t } = useLang();
   const u = unit || t('만','0K');
-  const maxCount = totalPop || stages[0]?.count || 1;
 
-  // Auto-detect if log scale needed: if ratio > 50x between first and last stage
-  const ratio = stages[0]?.count / (stages[stages.length - 1]?.count || 1);
-  const useLog = logScale ?? ratio > 30;
-
-  function getWidth(count, isTotal) {
-    if (isTotal) return 100;
-    // First stage width is linear relative to totalPop
-    const linearPct = (count / maxCount) * 100;
-    if (!useLog) return Math.max(linearPct, 12);
-    // For log scale: map within the first stage's linear width
-    const firstStagePct = (stages[0].count / maxCount) * 100;
-    const logMax = Math.log10(stages[0].count);
-    const logVal = Math.log10(Math.max(count, 1));
-    const logRatio = logVal / logMax; // 0~1
-    return Math.max(logRatio * firstStagePct, 12);
-  }
-
+  // All rows including total
   const allRows = [
-    { label: totalLabel || t('전체 인구','Total Pop.'), count: totalPop, color: '#555577', note: '', isTotal: true },
+    { label: totalLabel || t('전체 인구','Total Pop.'), count: totalPop, color: '#444466', note: '' },
     ...stages,
   ];
 
+  // SVG nested squares — area proportional to count
+  const svgSize = 280;
+  const maxArea = svgSize * svgSize;
+
   return (
     <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
         <span style={{ fontSize: '13px', fontWeight: 700, color: '#e8e8f0' }}>{title}</span>
         <span style={{ fontSize: '9px', color: '#9999bb' }}>{source}</span>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-        {allRows.map((row, i) => {
-          const widthPct = getWidth(row.count, row.isTotal);
-          const prev = i === 0 ? null : allRows[i - 1].count;
-          const lost = prev != null ? prev - row.count : 0;
-          const lostPct = prev > 0 ? Math.round((lost / prev) * 100) : 0;
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        {/* Left: nested area squares */}
+        <div style={{ flexShrink: 0 }}>
+          <svg width={svgSize} height={svgSize} viewBox={`0 0 ${svgSize} ${svgSize}`}>
+            {allRows.map((row, i) => {
+              const ratio = row.count / allRows[0].count;
+              const side = Math.sqrt(ratio) * svgSize;
+              const x = (svgSize - side) / 2;
+              const y = (svgSize - side) / 2;
+              const isFirst = i === 0;
+              return (
+                <g key={i}>
+                  <rect
+                    x={x} y={y} width={side} height={side}
+                    rx={isFirst ? 8 : Math.max(2, 6 - i)}
+                    fill={isFirst ? 'rgba(255,255,255,0.04)' : `${row.color}22`}
+                    stroke={row.color}
+                    strokeWidth={isFirst ? 1 : 1.5}
+                    strokeOpacity={isFirst ? 0.2 : 0.6}
+                  />
+                  {/* Label inside if big enough */}
+                  {side > 40 && (
+                    <text
+                      x={svgSize / 2} y={y + (i === 0 ? 14 : Math.min(side / 2 + 4, y + side - 4))}
+                      textAnchor="middle"
+                      fill={row.color}
+                      fontSize={side > 80 ? 11 : side > 50 ? 9 : 7}
+                      fontFamily="'JetBrains Mono'"
+                      fontWeight={700}
+                      opacity={0.9}
+                    >
+                      {row.count.toLocaleString()}{u}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+            {/* Labels for tiny squares — outside */}
+            {allRows.filter((row, i) => {
+              const ratio = row.count / allRows[0].count;
+              return Math.sqrt(ratio) * svgSize <= 40 && i > 0;
+            }).map((row, idx) => {
+              const ratio = row.count / allRows[0].count;
+              const side = Math.sqrt(ratio) * svgSize;
+              const cx = svgSize / 2;
+              const cy = svgSize / 2;
+              return (
+                <g key={`lbl-${idx}`}>
+                  <line x1={cx + side / 2} y1={cy} x2={svgSize - 8} y2={30 + idx * 20}
+                    stroke={row.color} strokeWidth={0.5} strokeOpacity={0.4} strokeDasharray="2 2" />
+                  <text x={svgSize - 6} y={33 + idx * 20} textAnchor="end"
+                    fill={row.color} fontSize={8} fontFamily="'JetBrains Mono'" fontWeight={700}>
+                    {row.count}{u}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
 
-          // Format count nicely
-          const countStr = row.count >= 10000
-            ? `${(row.count / 10000).toFixed(1)}${t('억','00M')}`
-            : `${row.count.toLocaleString()}${u}`;
+        {/* Right: legend with bars */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '3px', justifyContent: 'center' }}>
+          {allRows.map((row, i) => {
+            const pctOfTotal = ((row.count / allRows[0].count) * 100).toFixed(1);
+            const prev = i === 0 ? null : allRows[i - 1].count;
+            const lost = prev != null ? prev - row.count : 0;
+            const lostPct = prev > 0 ? Math.round((lost / prev) * 100) : 0;
+            const isFirst = i === 0;
 
-          return (
-            <div key={i}>
-              {lost > 0 && (
-                <div style={{ textAlign: 'center', height: '14px', lineHeight: '14px' }}>
-                  <span style={{ fontSize: '8px', color: '#ff6b6b88' }}>
+            return (
+              <div key={i}>
+                {lost > 0 && (
+                  <div style={{ fontSize: '7px', color: '#ff6b6b77', paddingLeft: '4px', height: '12px', lineHeight: '12px' }}>
                     ▼ -{lost.toLocaleString()}{u} ({lostPct}% {i === 1 ? (lossLabel || t('비유병','unaffected')) : t('이탈','lost')})
-                  </span>
-                </div>
-              )}
-
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ width: '76px', textAlign: 'right', paddingRight: '8px', flexShrink: 0 }}>
-                  <div style={{ fontSize: row.isTotal ? '9px' : '10px', color: row.color, fontWeight: 700, lineHeight: 1.2 }}>{row.label}</div>
-                </div>
-
-                <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+                  </div>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <div style={{
-                    width: `${widthPct}%`, minWidth: '50px',
-                    height: row.isTotal ? '22px' : '26px',
-                    background: row.isTotal
-                      ? 'rgba(255,255,255,0.06)'
-                      : `linear-gradient(180deg, ${row.color}cc, ${row.color}44)`,
-                    borderRadius: i === 0 ? '8px 8px 4px 4px' : i === allRows.length - 1 ? '4px 4px 8px 8px' : '3px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    border: row.isTotal ? '1px solid rgba(255,255,255,0.08)' : `1px solid ${row.color}33`,
-                    transition: 'width 0.8s ease',
-                  }}>
-                    <span style={{
-                      fontSize: row.isTotal ? '10px' : '11px',
-                      fontWeight: row.isTotal ? 500 : 800,
-                      color: row.isTotal ? '#9999bb' : '#fff',
-                      fontFamily: "'JetBrains Mono'",
-                      textShadow: row.isTotal ? 'none' : '0 1px 4px rgba(0,0,0,0.7)',
-                      whiteSpace: 'nowrap',
-                    }}>
-                      {countStr}
-                    </span>
+                    width: '10px', height: '10px', borderRadius: '2px', flexShrink: 0,
+                    background: isFirst ? 'rgba(255,255,255,0.06)' : `${row.color}88`,
+                    border: `1px solid ${row.color}66`,
+                  }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                      <span style={{ fontSize: '10px', color: row.color, fontWeight: 700 }}>{row.label}</span>
+                      <span style={{ fontSize: '10px', color: isFirst ? '#9999bb' : '#fff', fontFamily: "'JetBrains Mono'", fontWeight: 700 }}>
+                        {row.count.toLocaleString()}{u}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '8px', color: '#9999bb' }}>{row.note}</span>
+                      {!isFirst && <span style={{ fontSize: '8px', color: '#9999bb' }}>{pctOfTotal}%</span>}
+                    </div>
                   </div>
                 </div>
-
-                <div style={{ width: '76px', paddingLeft: '8px', flexShrink: 0 }}>
-                  <div style={{ fontSize: '8px', color: '#9999bb', lineHeight: 1.3 }}>{row.note}</div>
-                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '12px', fontSize: '10px' }}>
-        <span style={{ color: '#ff6b6b' }}>
-          {t('이탈','Lost')}: {(stages[0].count - stages[stages.length - 1].count).toLocaleString()}{u}
-          <span style={{ opacity: 0.7 }}> ({Math.round((1 - stages[stages.length - 1].count / stages[0].count) * 100)}%)</span>
-        </span>
-        <span style={{ color: stages[stages.length - 1].color }}>
-          {endLabel || t('도달','Reached')}: {stages[stages.length - 1].count.toLocaleString()}{u}
-          <span style={{ opacity: 0.7 }}> ({Math.round(stages[stages.length - 1].count / stages[0].count * 100)}%)</span>
-        </span>
-      </div>
-      {useLog && (
-        <div style={{ textAlign: 'center', fontSize: '7px', color: '#555566', marginTop: '4px' }}>
-          {t('※ 로그 스케일 (범위 차이가 커 선형 대비 축소 표시)','※ Log scale (wide range compressed for visibility)')}
+          {/* Summary */}
+          <div style={{ display: 'flex', gap: '10px', marginTop: '6px', fontSize: '9px', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '6px' }}>
+            <span style={{ color: '#ff6b6b' }}>
+              {t('이탈','Lost')} {(stages[0].count - stages[stages.length - 1].count).toLocaleString()}{u}
+              ({Math.round((1 - stages[stages.length - 1].count / stages[0].count) * 100)}%)
+            </span>
+            <span style={{ color: stages[stages.length - 1].color }}>
+              {endLabel || t('도달','Reached')} {stages[stages.length - 1].count.toLocaleString()}{u}
+              ({Math.round(stages[stages.length - 1].count / stages[0].count * 100)}%)
+            </span>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
