@@ -21,11 +21,11 @@ export default function Overview() {
   const first = 0;
 
   const kpis = [
-    { id: 'screening', label: t('일반검진 수검률', 'General Screening Rate'), value: TRENDS.screening[latest], icon: '🏥', color: '#00d4ff', delta: TRENDS.screening[latest] - TRENDS.screening[first], data: TRENDS.screening },
-    { id: 'cancer', label: t('암검진 수검률', 'Cancer Screening Rate'), value: TRENDS.cancer[latest], icon: '🔬', color: '#b388ff', delta: TRENDS.cancer[latest] - TRENDS.cancer[first], data: TRENDS.cancer },
-    { id: 'obesity', label: t('비만율', 'Obesity Rate'), value: TRENDS.obesity[latest], icon: '⚖️', color: '#ff006e', delta: TRENDS.obesity[latest] - TRENDS.obesity[first], data: TRENDS.obesity },
-    { id: 'metabolic', label: t('대사증후군 위험군', 'Metabolic Syndrome Risk'), value: TRENDS.metabolic[latest], icon: '💉', color: '#ffd60a', delta: TRENDS.metabolic[latest] - TRENDS.metabolic[first], data: TRENDS.metabolic },
-    { id: 'stroke', label: t('허혈성 뇌졸중 발생률', 'Ischemic Stroke Incidence'), value: NATIONAL_AVG.strokeIncidence, icon: '🧠', color: '#e74c3c', delta: null, data: null, unit: t('/10만', '/100K') },
+    { id: 'screening', label: t('일반검진 수검률', 'General Screening Rate'), value: TRENDS.screening[latest], icon: '🏥', color: '#00d4ff', delta: TRENDS.screening[latest] - TRENDS.screening[first], data: TRENDS.screening, source: 'KNHANES 2024' },
+    { id: 'cancer', label: t('암검진 수검률', 'Cancer Screening Rate'), value: TRENDS.cancer[latest], icon: '🔬', color: '#b388ff', delta: TRENDS.cancer[latest] - TRENDS.cancer[first], data: TRENDS.cancer, source: 'KNHANES 2024' },
+    { id: 'obesity', label: t('비만율', 'Obesity Rate'), value: TRENDS.obesity[latest], icon: '⚖️', color: '#ff006e', delta: TRENDS.obesity[latest] - TRENDS.obesity[first], data: TRENDS.obesity, source: 'KNHANES 2024, BMI≥25' },
+    { id: 'metabolic', label: t('대사증후군 위험군', 'Metabolic Syndrome Risk'), value: TRENDS.metabolic[latest], icon: '💉', color: '#ffd60a', delta: TRENDS.metabolic[latest] - TRENDS.metabolic[first], data: TRENDS.metabolic, source: 'KNHANES 2024' },
+    { id: 'stroke', label: t('허혈성 뇌졸중 발생률', 'Ischemic Stroke Incidence'), value: NATIONAL_AVG.strokeIncidence, icon: '🧠', color: '#e74c3c', delta: null, data: null, unit: t('/10만', '/100K'), source: 'KOSIS CVD 2023' },
   ];
 
   // Province detail data

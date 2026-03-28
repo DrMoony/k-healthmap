@@ -5,7 +5,7 @@ function easeOutCubic(t) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-export default function KPICard({ label, value, unit = '%', delta, icon, color = '#00d4ff', delay = 0, compact, active, onClick, data }) {
+export default function KPICard({ label, value, unit = '%', delta, icon, color = '#00d4ff', delay = 0, compact, active, onClick, data, source }) {
   const [displayed, setDisplayed] = useState(0);
   const ref = useRef(null);
   const hasAnimated = useRef(false);
@@ -111,6 +111,16 @@ export default function KPICard({ label, value, unit = '%', delta, icon, color =
           </div>
         )}
       </div>
+
+      {source && (
+        <div style={{
+          fontSize: '8px', color: '#6666aa', marginTop: compact ? '2px' : '6px',
+          fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.4,
+          borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '4px',
+        }}>
+          {source}
+        </div>
+      )}
     </motion.div>
   );
 }
