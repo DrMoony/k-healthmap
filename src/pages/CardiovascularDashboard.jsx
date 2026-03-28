@@ -511,11 +511,10 @@ function HTNPanel({ lang }) {
         source="KSH 2025"
         totalPop={4350}
         stages={[
-          { label: t('추정 유병','Est. Prevalent'), pct: 29, count: 1260, color: '#ff6b6b', note: t('KNHANES 실측 (BP≥140/90 or 복약)','KNHANES measured (BP≥140/90 or on meds)') },
-          { label: t('미인지(미진단)','Undiagnosed'), pct: 21, count: Math.round(1260 * 0.21), color: '#ff6b6b44', note: t('BP↑이나 진단·코드 없음','High BP, no Dx/KCD code'), isDrop: true },
-          { label: t('진단(인지)','Diagnosed'), pct: 79, count: Math.round(1260 * 0.79), color: '#ffd93d', note: t('의사 진단 ≈ KCD I10-I15','Doctor Dx ≈ KCD I10-I15') },
-          { label: t('복약','On Medication'), pct: 76, count: Math.round(1260 * 0.76), color: '#6bcb77', note: t('항고혈압제 복용 중','Currently on anti-HTN') },
-          { label: t('조절','Controlled'), pct: 62, count: Math.round(1260 * 0.62), color: '#4d96ff', note: t('BP <140/90 달성','BP <140/90 achieved') },
+          { label: t('유병','Prevalent'), count: 1260, color: '#ff6b6b', note: t('BP≥140/90 or 복약자','BP≥140/90 or on meds') },
+          { label: t('진단(인지)','Diagnosed'), count: Math.round(1260 * 0.79), color: '#ffd93d', note: t('의사 진단 경험','Doctor Dx') },
+          { label: t('복약','On Meds'), count: Math.round(1260 * 0.76), color: '#6bcb77', note: t('항고혈압제','Anti-HTN Rx') },
+          { label: t('조절','Controlled'), count: Math.round(1260 * 0.62), color: '#4d96ff', note: 'BP <140/90' },
         ]}
       />
 
@@ -530,62 +529,89 @@ function HTNPanel({ lang }) {
 
 // ── Care Cascade Funnel (reusable) ──
 function CascadeFunnel({ lang, title, source, totalPop, stages }) {
-  const mainStages = stages.filter(s => !s.isDrop);
-  const dropStage = stages.find(s => s.isDrop);
-  const maxCount = Math.max(...mainStages.map(s => s.count));
+  // stages: [{ label, count, color, note }] — each step of the cascade
+  // Between each step, we show the "lost" (이탈) population
+  const maxCount = totalPop;
 
   return (
     <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
         <span style={{ fontSize: '13px', fontWeight: 700, color: '#e8e8f0' }}>{title}</span>
         <span style={{ fontSize: '9px', color: '#9999bb' }}>{source}</span>
       </div>
-      <div style={{ fontSize: '9px', color: '#9999bb', marginBottom: '10px', textAlign: 'center' }}>
-        {t('30세+ 인구', '30+ Population', lang)} ~{totalPop}{t('만명', '0K', lang)}
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
-        {mainStages.map((stage, i) => {
-          const widthPct = Math.max((stage.count / maxCount) * 100, 20);
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
+        {/* Total population bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+          <div style={{ width: '80px', textAlign: 'right', flexShrink: 0 }}>
+            <div style={{ fontSize: '9px', color: '#9999bb' }}>{t('30세+ 인구','30+ Pop.', lang)}</div>
+          </div>
+          <div style={{ flex: 1, height: '16px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '10px', color: '#9999bb', fontFamily: "'JetBrains Mono'" }}>{totalPop.toLocaleString()}{t('만','0K', lang)}</span>
+          </div>
+          <div style={{ width: '60px', flexShrink: 0 }} />
+        </div>
+
+        {stages.map((stage, i) => {
+          const widthPct = Math.max((stage.count / maxCount) * 100, 8);
+          const prev = i === 0 ? totalPop : stages[i - 1].count;
+          const lost = prev - stage.count;
+          const lostPct = prev > 0 ? Math.round((lost / prev) * 100) : 0;
+
           return (
-            <div key={i} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '90px', textAlign: 'right', flexShrink: 0 }}>
-                <div style={{ fontSize: '10px', color: stage.color, fontWeight: 600 }}>{stage.label}</div>
-                <div style={{ fontSize: '9px', color: '#9999bb' }}>{stage.pct}%</div>
-              </div>
-              <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-                <div style={{
-                  width: `${widthPct}%`, height: '28px',
-                  background: `linear-gradient(90deg, ${stage.color}cc, ${stage.color}66)`,
-                  borderRadius: i === 0 ? '6px 6px 2px 2px' : i === mainStages.length - 1 ? '2px 2px 6px 6px' : '2px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono'", textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
-                    {stage.count}{t('만','0K', lang)}
-                  </span>
+            <div key={i}>
+              {/* Loss indicator between stages */}
+              {lost > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', height: '18px' }}>
+                  <div style={{ width: '80px', flexShrink: 0 }} />
+                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ fontSize: '8px', color: '#ff6b6b', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                      <span style={{ color: '#ff6b6b66' }}>▼</span>
+                      <span>-{lost.toLocaleString()}{t('만','0K', lang)} ({lostPct}% {i === 0 ? t('비유병','no HTN', lang) : t('이탈','lost', lang)})</span>
+                    </div>
+                  </div>
+                  <div style={{ width: '60px', flexShrink: 0 }} />
                 </div>
-              </div>
-              <div style={{ width: '80px', flexShrink: 0 }}>
-                {stage.note && <div style={{ fontSize: '8px', color: '#9999bb' }}>{stage.note}</div>}
+              )}
+
+              {/* Stage bar */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '80px', textAlign: 'right', flexShrink: 0 }}>
+                  <div style={{ fontSize: '10px', color: stage.color, fontWeight: 700 }}>{stage.label}</div>
+                </div>
+                <div style={{ flex: 1, position: 'relative' }}>
+                  <div style={{
+                    width: `${widthPct}%`, height: '26px',
+                    background: `linear-gradient(90deg, ${stage.color}dd, ${stage.color}55)`,
+                    borderRadius: '4px',
+                    display: 'flex', alignItems: 'center', paddingLeft: '8px',
+                    transition: 'width 0.8s ease',
+                  }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono'", textShadow: '0 1px 4px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>
+                      {stage.count.toLocaleString()}{t('만','0K', lang)}
+                    </span>
+                  </div>
+                </div>
+                <div style={{ width: '60px', flexShrink: 0, fontSize: '8px', color: '#9999bb', lineHeight: 1.3 }}>
+                  {stage.note}
+                </div>
               </div>
             </div>
           );
         })}
       </div>
-      {dropStage && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
-          <div style={{ fontSize: '9px', color: '#ff6b6b', background: 'rgba(255,107,107,0.08)', padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(255,107,107,0.15)' }}>
-            ⚠ {dropStage.label}: ~{dropStage.count}{t('만명','0K', lang)} ({dropStage.pct}%) — {dropStage.note}
-          </div>
-        </div>
-      )}
-      {mainStages.length >= 3 && (
-        <div style={{ fontSize: '9px', color: '#aaaacc', textAlign: 'center', marginTop: '8px' }}>
-          {mainStages[0].count}{t('만','0K', lang)} → {mainStages[mainStages.length - 1].count}{t('만','0K', lang)}
-          <span style={{ color: '#ff6b6b', marginLeft: '6px' }}>
-            ({Math.round((1 - mainStages[mainStages.length - 1].count / mainStages[0].count) * 100)}% {t('이탈','lost', lang)})
-          </span>
-        </div>
-      )}
+
+      {/* Summary */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '12px', fontSize: '10px' }}>
+        <span style={{ color: '#ff6b6b' }}>
+          {t('최종 이탈','Total lost', lang)}: {stages[0].count - stages[stages.length - 1].count}{t('만','0K', lang)}
+          ({Math.round((1 - stages[stages.length - 1].count / stages[0].count) * 100)}%)
+        </span>
+        <span style={{ color: '#4d96ff' }}>
+          {t('조절 도달','Controlled', lang)}: {stages[stages.length - 1].count}{t('만','0K', lang)}
+          ({Math.round(stages[stages.length - 1].count / stages[0].count * 100)}%)
+        </span>
+      </div>
     </div>
   );
 }
