@@ -504,11 +504,88 @@ function HTNPanel({ lang }) {
         </ChartPanel>
       </div>
 
+      {/* Care Cascade Funnel */}
+      <CascadeFunnel
+        lang={lang}
+        title={t('고혈압 관리 캐스케이드', 'Hypertension Care Cascade')}
+        source="KSH 2025"
+        totalPop={4350}
+        stages={[
+          { label: t('추정 유병','Est. Prevalent'), pct: 29, count: 1260, color: '#ff6b6b', note: t('30세+ 인구 대비','of 30+ population') },
+          { label: t('미진단(추정)','Undiagnosed(est.)'), pct: 21, count: Math.round(1260 * 0.21), color: '#ff6b6b44', note: t('유병자 중 미인지','unaware among prevalent'), isDrop: true },
+          { label: t('인지','Aware'), pct: 79, count: Math.round(1260 * 0.79), color: '#ffd93d' },
+          { label: t('치료','Treated'), pct: 76, count: Math.round(1260 * 0.76), color: '#6bcb77' },
+          { label: t('조절','Controlled'), pct: 62, count: Math.round(1260 * 0.62), color: '#4d96ff', note: 'BP <140/90' },
+        ]}
+      />
+
       <div style={{ marginTop: '12px', padding: '12px 16px', background: 'rgba(255,107,107,0.05)', borderRadius: '8px', border: '1px solid rgba(255,107,107,0.15)', fontSize: '11px', color: '#ccc', lineHeight: 1.6 }}>
         <strong style={{ color: '#ff6b6b' }}>{t('핵심', 'Key', lang)}:</strong>{' '}
         {t('인지율 65%→79%, 치료율 61%→76%, 조절률 44%→62%로 7년간 꾸준히 개선. 그러나 20-30대 유병자의 인지율 36%, 치료율 35%로 젊은 층 관리 사각지대.',
            'Awareness 65%→79%, treatment 61%→76%, control 44%→62% — steady 7yr improvement. But ages 20-30: awareness 36%, treatment 35% — young adults remain a blind spot.', lang)}
       </div>
     </>
+  );
+}
+
+// ── Care Cascade Funnel (reusable) ──
+function CascadeFunnel({ lang, title, source, totalPop, stages }) {
+  const mainStages = stages.filter(s => !s.isDrop);
+  const dropStage = stages.find(s => s.isDrop);
+  const maxCount = Math.max(...mainStages.map(s => s.count));
+
+  return (
+    <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <span style={{ fontSize: '13px', fontWeight: 700, color: '#e8e8f0' }}>{title}</span>
+        <span style={{ fontSize: '9px', color: '#9999bb' }}>{source}</span>
+      </div>
+      <div style={{ fontSize: '9px', color: '#9999bb', marginBottom: '10px', textAlign: 'center' }}>
+        {t('30세+ 인구', '30+ Population', lang)} ~{totalPop}{t('만명', '0K', lang)}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
+        {mainStages.map((stage, i) => {
+          const widthPct = Math.max((stage.count / maxCount) * 100, 20);
+          return (
+            <div key={i} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '90px', textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontSize: '10px', color: stage.color, fontWeight: 600 }}>{stage.label}</div>
+                <div style={{ fontSize: '9px', color: '#9999bb' }}>{stage.pct}%</div>
+              </div>
+              <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+                <div style={{
+                  width: `${widthPct}%`, height: '28px',
+                  background: `linear-gradient(90deg, ${stage.color}cc, ${stage.color}66)`,
+                  borderRadius: i === 0 ? '6px 6px 2px 2px' : i === mainStages.length - 1 ? '2px 2px 6px 6px' : '2px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono'", textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+                    {stage.count}{t('만','0K', lang)}
+                  </span>
+                </div>
+              </div>
+              <div style={{ width: '80px', flexShrink: 0 }}>
+                {stage.note && <div style={{ fontSize: '8px', color: '#9999bb' }}>{stage.note}</div>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {dropStage && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
+          <div style={{ fontSize: '9px', color: '#ff6b6b', background: 'rgba(255,107,107,0.08)', padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(255,107,107,0.15)' }}>
+            ⚠ {dropStage.label}: ~{dropStage.count}{t('만명','0K', lang)} ({dropStage.pct}%) — {dropStage.note}
+          </div>
+        </div>
+      )}
+      {mainStages.length >= 3 && (
+        <div style={{ fontSize: '9px', color: '#aaaacc', textAlign: 'center', marginTop: '8px' }}>
+          {mainStages[0].count}{t('만','0K', lang)} → {mainStages[mainStages.length - 1].count}{t('만','0K', lang)}
+          <span style={{ color: '#ff6b6b', marginLeft: '6px' }}>
+            ({Math.round((1 - mainStages[mainStages.length - 1].count / mainStages[0].count) * 100)}% {t('이탈','lost', lang)})
+          </span>
+        </div>
+      )}
+    </div>
   );
 }
