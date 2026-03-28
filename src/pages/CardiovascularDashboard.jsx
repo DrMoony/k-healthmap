@@ -172,7 +172,7 @@ function HFPanel({ hf, kosis, lang }) {
 
 // ── OECD Panel ──
 function OECDPanel({ kosis, lang }) {
-  const OECD_EN = {'한국':'Korea','이스라엘':'Israel','호주':'Australia','멕시코':'Mexico','칠레':'Chile','캐나다':'Canada','일본':'Japan','프랑스':'France','독일':'Germany','영국':'UK','이탈리아':'Italy','스페인':'Spain','스웨덴':'Sweden','노르웨이':'Norway','핀란드':'Finland','덴마크':'Denmark','네덜란드':'Netherlands','벨기에':'Belgium','스위스':'Switzerland','터키':'Turkey','폴란드':'Poland','체코':'Czech Rep.','헝가리':'Hungary','슬로바키아':'Slovakia','슬로베니아':'Slovenia','에스토니아':'Estonia','라트비아':'Latvia','리투아니아':'Lithuania','아이슬란드':'Iceland','룩셈부르크':'Luxembourg','그리스':'Greece','포르투갈':'Portugal','아일랜드':'Ireland','뉴질랜드':'New Zealand','콜롬비아':'Colombia','코스타리카':'Costa Rica','루마니아':'Romania'};
+  const OECD_EN = {'한국':'Korea','이스라엘':'Israel','호주':'Australia','멕시코':'Mexico','칠레':'Chile','캐나다':'Canada','일본':'Japan','프랑스':'France','독일':'Germany','영국':'UK','이탈리아':'Italy','스페인':'Spain','스웨덴':'Sweden','노르웨이':'Norway','핀란드':'Finland','덴마크':'Denmark','네덜란드':'Netherlands','벨기에':'Belgium','스위스':'Switzerland','터키':'Turkey','폴란드':'Poland','체코':'Czech Rep.','헝가리':'Hungary','슬로바키아':'Slovakia','슬로베니아':'Slovenia','에스토니아':'Estonia','라트비아':'Latvia','리투아니아':'Lithuania','아이슬란드':'Iceland','룩셈부르크':'Luxembourg','그리스':'Greece','포르투갈':'Portugal','아일랜드':'Ireland','뉴질랜드':'New Zealand','콜롬비아':'Colombia','코스타리카':'Costa Rica','루마니아':'Romania','1100':'OECD Avg','1195':'EU27','1225':'Colombia','2020':'Mexico','2030':'Chile','3060':'Latvia','3065':'Costa Rica','3070':'Iceland','4015':'Canada','4025':'Czech Rep.','4045':'Romania','4050':'Finland','4055':'France','4060':'Greece','4070':'Italy','4075':'Japan','4080':'Luxembourg','4100':'Netherlands','4105':'Norway','4110':'Poland','4120':'Portugal','4125':'Slovakia','4135':'Slovenia','4140':'Spain','4165':'Sweden','4170':'Switzerland','4175':'Turkey','4180':'UK','4185':'Hungary','4200':'Denmark','4205':'Estonia','4210':'Germany','4215':'Ireland','4220':'Lithuania','4230':'Belgium','6010':'New Zealand','6060':'USA'};
   const oecdData = kosis.oecdMortality || {};
   const koreaData = oecdData['한국']?.['원내입원'] || {};
   const latestYear = Object.keys(koreaData).sort().pop();
@@ -199,7 +199,7 @@ function OECDPanel({ kosis, lang }) {
               borderRadius: '4px',
             }}>
               <div style={{ width: '80px', textAlign: 'right', fontSize: '11px', color: isKorea ? '#00d4ff' : '#bbbbdd', fontWeight: isKorea ? 700 : 400 }}>
-                {lang === 'en' ? c.countryEn : c.country}
+                {c.countryEn || c.country}
               </div>
               <div style={{ flex: 1, height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
                 <div style={{
