@@ -523,7 +523,7 @@ export const DISEASE_EPI = {
           { id: 'cirrhosis', label: '간경변', labelEn: 'Cirrhosis', prevalence: '10년 3.7%', note: 'MASH의 1.7%' },
           { id: 'hcc', label: '간세포암', labelEn: 'HCC', prevalence: '연 1.5%', note: '간경변 동반 시' },
         ],
-        mortalityMultiplier: [1.0, 1.71, 2.14, 2.44, 3.79],  // vs 일반인구
+        mortalityMultiplier: [1.71, 2.14, 2.44, 3.79, null],  // MASLD=1.71, MASH=2.14, Fibrosis=2.44, Cirrhosis=3.79, HCC=N/A
         transitionYears: [null, null, 7.1, null, null],  // NASH→F1 7.1년
       },
 

@@ -136,8 +136,8 @@ function StrokePanel({ stroke, kosis, lang }) {
       </div>
 
       <div style={{ marginTop: '12px', fontSize: '10px', color: '#444' }}>
-        {t('2022년부터 허혈성/출혈성 분리 집계. 2014-2021 전체 데이터는 네트워크 탭에서 확인.',
-           'Ischemic/Hemorrhagic split since 2022. Pre-2022 combined data in Network tab.', lang)}
+        {t('2022년부터 허혈성/출혈성 분리 집계. 2024년 데이터는 부분연도(partial-year) 가능. 2014-2021 전체 데이터는 네트워크 탭에서 확인.',
+           'Ischemic/Hemorrhagic split since 2022. 2024 data may be partial-year. Pre-2022 combined data in Network tab.', lang)}
       </div>
     </>
   );
@@ -150,7 +150,7 @@ function HFPanel({ hf, kosis, lang }) {
   const hfSurv5 = typeof hf.survival === 'object' ? hf.survival?.year5 : hf.survival?.fiveYear;
   const kpis = [
     { label: t('유병률', 'Prevalence', lang), value: hfPrev, unit: '%', color: '#e599f7', refUrl: 'https://www.kshf.or.kr/', refLabel: 'KSHF HF Fact Sheet 2025' },
-    { label: t('환자수', 'Patients', lang), value: '132', unit: t('만명', '0K', lang), color: '#ffd93d', refUrl: 'https://www.kshf.or.kr/', refLabel: 'KSHF HF Fact Sheet 2025' },
+    { label: t('환자수', 'Patients', lang), value: '175', unit: t('만명', '0K', lang), color: '#ffd93d', refUrl: 'https://www.kshf.or.kr/', refLabel: 'KSHF HF Fact Sheet 2025' },
     { label: t('입원율', 'Admission', lang), value: kosis.admission['전체']?.[latest], unit: '/10만', color: '#ff922b', refUrl: 'https://kosis.kr/', refLabel: 'KOSIS HIRA' },
     { label: t('5년 생존율', '5yr Survival', lang), value: hfSurv5, unit: '%', color: '#6bcb77', refUrl: 'https://www.kshf.or.kr/', refLabel: 'KSHF HF Fact Sheet 2025' },
   ];
