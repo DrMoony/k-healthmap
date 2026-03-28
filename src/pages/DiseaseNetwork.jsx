@@ -22,6 +22,11 @@ const DISEASES = {
     comorbidity: '당뇨 2.5배, 고혈압 1.9배, 이상지질혈증 1.7배 위험 증가',
     color: '#ff006e',
     pathway: 'root',
+    populationEn: '~15.8M',
+    trendEn: '32.4% (2012) → 38.4% (2024), rising',
+    descriptionEn: 'BMI ≥25. Core trigger of metabolic diseases—drives insulin resistance and chronic inflammation across multiple organ systems.',
+    comorbidityEn: 'DM risk ×2.5, HTN ×1.9, Dyslipidemia ×1.7',
+    riskFactorsEn: ['High-calorie diet', 'Physical inactivity', 'Genetic predisposition', 'Stress/sleep deprivation'],
   },
   diabetes: {
     id: 'diabetes', name: '당뇨', nameEn: 'Diabetes',
@@ -32,6 +37,11 @@ const DISEASES = {
     comorbidity: '심혈관질환 2-4배, MASLD 70% 동반, CKD 40% 동반',
     color: '#00d4ff',
     pathway: 'all',
+    populationEn: '~6M (age ≥30)',
+    trendEn: '11.8% (2012) → 16.7% (2024), steadily rising',
+    descriptionEn: 'FPG ≥126 mg/dL or HbA1c ≥6.5%. Including pre-diabetes, estimated >15M affected.',
+    comorbidityEn: 'CVD risk ×2-4, MASLD 70% coexist, CKD 40% coexist',
+    riskFactorsEn: ['Obesity/central obesity', 'Family history', 'Physical inactivity', 'High-carb diet'],
   },
   dyslipidemia: {
     id: 'dyslipidemia', name: '이상지질혈증', nameEn: 'Dyslipidemia',
@@ -42,6 +52,11 @@ const DISEASES = {
     comorbidity: '심혈관질환 직접 기여, MASLD 65% 동반',
     color: '#b388ff',
     pathway: 'cardiac',
+    populationEn: '~16.6M',
+    trendEn: '32.8% (2012) → 40.4% (2024), rapid increase',
+    descriptionEn: 'LDL ≥160, TG ≥200, HDL <40(M)/<50(F). Key driver of atherosclerosis.',
+    comorbidityEn: 'Direct CVD contributor, MASLD 65% coexist',
+    riskFactorsEn: ['Obesity', 'High-fat diet', 'Physical inactivity', 'Genetic predisposition', 'Alcohol'],
   },
   hypertension: {
     id: 'hypertension', name: '고혈압', nameEn: 'Hypertension',
@@ -52,6 +67,11 @@ const DISEASES = {
     comorbidity: '뇌졸중 4배, 심근경색 2배, CKD 주요 원인',
     color: '#ffd60a',
     pathway: 'cardiac',
+    populationEn: '~12M (age ≥30)',
+    trendEn: '29.0% (2012) → 29.3% (2024), stable/slight rise',
+    descriptionEn: 'SBP ≥140 or DBP ≥90 mmHg. Silent killer—major cause of cerebro-cardiovascular complications.',
+    comorbidityEn: 'Stroke risk ×4, MI risk ×2, major CKD cause',
+    riskFactorsEn: ['Obesity', 'High-sodium diet', 'Alcohol', 'Stress', 'Family history'],
   },
   masld: {
     id: 'masld', name: 'MASLD', nameEn: 'Metabolic Steatotic Liver Disease',
@@ -62,6 +82,11 @@ const DISEASES = {
     comorbidity: 'MASH 진행률 ~20%, 간경변 진행률 ~10%',
     color: '#00ff88',
     pathway: 'liver',
+    populationEn: '7.68M adults (NHIS-diagnosed)',
+    trendEn: 'Rapidly increasing parallel to obesity/DM',
+    descriptionEn: 'Metabolic dysfunction-associated steatotic liver disease. Risk of fibrosis → cirrhosis when progressing to MASH.',
+    comorbidityEn: 'MASH progression ~20%, cirrhosis progression ~10%',
+    riskFactorsEn: ['Obesity', 'Diabetes', 'Dyslipidemia', 'Insulin resistance'],
   },
   cvd: {
     id: 'cvd', name: '심혈관질환', nameEn: 'Cardiovascular Disease',
@@ -72,6 +97,11 @@ const DISEASES = {
     comorbidity: '급성 심근경색 원내사망률 약 8%',
     color: '#ff6b6b',
     pathway: 'cardiac',
+    populationEn: 'Mortality 59.7/100K, #2 cause of death',
+    trendEn: 'Mortality declining, but prevalence rising',
+    descriptionEn: 'Encompasses ischemic heart disease and cerebrovascular disease. 2nd leading cause of death in Korea.',
+    comorbidityEn: 'Acute MI in-hospital mortality ~8%',
+    riskFactorsEn: ['Hypertension', 'Diabetes', 'Dyslipidemia', 'Smoking', 'Obesity'],
   },
   ckd: {
     id: 'ckd', name: '만성신장질환', nameEn: 'Chronic Kidney Disease',
@@ -82,6 +112,11 @@ const DISEASES = {
     comorbidity: '심혈관 사망률 일반인 대비 10-30배',
     color: '#4ecdc4',
     pathway: 'renal',
+    populationEn: '~3.6M',
+    trendEn: 'Continuously rising with DM/HTN increase',
+    descriptionEn: 'GFR <60 or proteinuria ≥3 months. ~130K on dialysis, ~30K awaiting transplant.',
+    comorbidityEn: 'CV mortality 10-30× general population',
+    riskFactorsEn: ['Diabetes', 'Hypertension', 'Glomerulonephritis', 'Aging'],
   },
   heart_failure: {
     id: 'heart_failure', name: '심부전', nameEn: 'Heart Failure',
@@ -101,6 +136,16 @@ const DISEASES = {
     comorbidity: '간경변 진행 10-20%, HCC 연간 발생률 1-2%',
     color: '#2ecc71',
     pathway: 'liver',
+    populationEn: '~1.53M (20% of MASLD)',
+    trendEn: 'Increasing proportionally with MASLD',
+    descriptionEn: 'Metabolic steatohepatitis. Hepatocyte injury + inflammation. Key stage for liver fibrosis.',
+    comorbidityEn: 'Cirrhosis progression 10-20%, annual HCC 1-2%',
+    riskFactorsEn: ['MASLD', 'Obesity', 'Diabetes', 'Insulin resistance'],
+    populationEn: '~1.32M',
+    trendEn: '0.77% (2002) → 2.58% (2020), ×3.6',
+    descriptionEn: 'Cardiac pump failure. Prevalence ×3.6 increase. In-hospital mortality 16%.',
+    comorbidityEn: 'HTN 78.7%, DM 58.8%, IHD 50.6%',
+    riskFactorsEn: ['Hypertension', 'Diabetes', 'IHD', 'Atrial fibrillation', 'Obesity'],
   },
   lc: {
     id: 'lc', name: '간경변', nameEn: 'Liver Cirrhosis',
@@ -111,6 +156,11 @@ const DISEASES = {
     comorbidity: 'HCC 연간 1-3% 발생, 간부전, 복수, 정맥류 출혈',
     color: '#e74c3c',
     pathway: 'liver',
+    populationEn: '-',
+    trendEn: 'MASH-driven cirrhosis increasing',
+    descriptionEn: 'Liver fibrosis stage F4. 10-20% progression from MASH. 5-year survival ~50%.',
+    comorbidityEn: 'Annual HCC 1-3%, liver failure, ascites, variceal bleeding',
+    riskFactorsEn: ['MASH', 'Hepatitis B', 'Hepatitis C', 'Alcohol'],
   },
   hcc: {
     id: 'hcc', name: '간세포암', nameEn: 'Hepatocellular Carcinoma',
@@ -121,6 +171,11 @@ const DISEASES = {
     comorbidity: '5년 생존율 ~38%',
     color: '#c0392b',
     pathway: 'liver',
+    populationEn: 'Mortality 14.1/100K',
+    trendEn: 'HBV-related declining, MASH-related rising',
+    descriptionEn: 'Hepatocellular carcinoma. Annual 1-3% from cirrhosis. Can arise directly from non-cirrhotic MASH.',
+    comorbidityEn: '5-year survival ~38%',
+    riskFactorsEn: ['Cirrhosis', 'MASH', 'Hepatitis B', 'Hepatitis C'],
   },
   lt: {
     id: 'lt', name: '간이식', nameEn: 'Liver Transplant',
@@ -131,6 +186,11 @@ const DISEASES = {
     comorbidity: '5년 생존율 ~75%',
     color: '#e67e22',
     pathway: 'liver',
+    populationEn: '~5,000 on waiting list',
+    trendEn: 'MASH indication for LT increasing',
+    descriptionEn: 'Curative treatment for end-stage liver disease or HCC. Includes deceased + living-donor LT.',
+    comorbidityEn: '5-year survival ~75%',
+    riskFactorsEn: ['End-stage cirrhosis', 'HCC'],
   },
   mi_stroke: {
     id: 'mi_stroke', name: '심근경색/뇌졸중', nameEn: 'MI / Stroke',
@@ -141,6 +201,11 @@ const DISEASES = {
     comorbidity: '뇌졸중 후 장애 발생률 약 50%',
     color: '#e67e22',
     pathway: 'cardiac',
+    populationEn: 'MI 65/100K, Stroke 217/100K',
+    trendEn: 'Acute mortality declining, incidence stable/rising',
+    descriptionEn: 'Acute MI and stroke. Emergency conditions where golden-time treatment determines outcomes.',
+    comorbidityEn: 'Post-stroke disability rate ~50%',
+    riskFactorsEn: ['Hypertension', 'Diabetes', 'Dyslipidemia', 'Smoking', 'Atrial fibrillation'],
   },
   dialysis: {
     id: 'dialysis', name: '투석', nameEn: 'Dialysis',
@@ -151,6 +216,11 @@ const DISEASES = {
     comorbidity: '투석환자 5년 생존율 약 60%',
     color: '#9b59b6',
     pathway: 'renal',
+    populationEn: '~₩30M/yr per patient',
+    trendEn: 'Dialysis patients growing 8%/yr',
+    descriptionEn: 'ESKD requiring dialysis. Annual healthcare cost ~₩30M per patient.',
+    comorbidityEn: 'Dialysis 5-year survival ~60%',
+    riskFactorsEn: ['CKD progression', 'Diabetic nephropathy', 'Hypertensive nephrosclerosis'],
   },
   kt: {
     id: 'kt', name: '신장이식', nameEn: 'Kidney Transplant',
@@ -161,6 +231,11 @@ const DISEASES = {
     comorbidity: '5년 생존율 ~95%',
     color: '#8e44ad',
     pathway: 'renal',
+    populationEn: '~2,000 cases/yr',
+    trendEn: 'Waiting time increasing',
+    descriptionEn: 'Curative treatment for ESKD. Living + deceased-donor. Superior survival vs dialysis.',
+    comorbidityEn: '5-year survival ~95%',
+    riskFactorsEn: ['ESKD', 'Diabetic nephropathy'],
   },
 };
 
@@ -408,6 +483,7 @@ EDGES.forEach(e => {
     from: from.name, to: to.name,
     strength: e.strength, pathway: e.pathway,
     evidence: `${from.name}은(는) ${to.name}의 주요 위험인자입니다. 연결 강도 ${e.strength}/3. 경로: ${e.pathway}.`,
+    evidenceEn: `${from.nameEn} is a major risk factor for ${to.nameEn}. Strength ${e.strength}/3. Pathway: ${e.pathway}.`,
   };
 });
 
@@ -478,7 +554,7 @@ function EdgeLine({ from, to, strength, pathway, selectedId, edgeIdx, onEdgeClic
 }
 
 // ── Node Component ──────────────────────────────────────────
-function DiseaseNode({ disease, pos, isSelected, onClick, dimmed }) {
+function DiseaseNode({ disease, pos, isSelected, onClick, dimmed, lang }) {
   const r = NODE_RADIUS[disease.level];
   const glowColor = disease.color;
   // Rule 2: Fill opacity based on prevalence
@@ -532,7 +608,7 @@ function DiseaseNode({ disease, pos, isSelected, onClick, dimmed }) {
         fontSize={disease.level === 0 ? 14 : disease.level === 3 ? 10 : 12}
         fontFamily="'Noto Sans KR', sans-serif" fontWeight="700"
       >
-        {disease.name}
+        {lang === 'en' ? (disease.nameEn || disease.name) : disease.name}
       </text>
       <text
         x={pos.x} y={pos.y + (disease.level === 0 ? 13 : disease.level === 3 ? 9 : 11)}
@@ -607,11 +683,11 @@ function DiseaseDetail({ disease, onClose }) {
         </div>
         <div className="stat-row">
           <span className="stat-label">{t('환자규모','Patients')}</span>
-          <span className="stat-value">{disease.population}</span>
+          <span className="stat-value">{lang === 'en' ? (disease.populationEn || disease.population) : disease.population}</span>
         </div>
         <div className="stat-row" style={{ borderBottom: 'none' }}>
           <span className="stat-label">{t('추이','Trend')}</span>
-          <span className="stat-value" style={{ fontSize: 11, textAlign: 'right', maxWidth: '65%' }}>{disease.trend}</span>
+          <span className="stat-value" style={{ fontSize: 11, textAlign: 'right', maxWidth: '65%' }}>{lang === 'en' ? (disease.trendEn || disease.trend) : disease.trend}</span>
         </div>
       </div>
 
@@ -650,7 +726,7 @@ function DiseaseDetail({ disease, onClose }) {
           {t('위험인자','Risk Factors')}
         </p>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {disease.riskFactors.map((rf, i) => (
+          {(lang === 'en' ? (disease.riskFactorsEn || disease.riskFactors) : disease.riskFactors).map((rf, i) => (
             <span key={i} className="risk-tag">{rf}</span>
           ))}
         </div>
@@ -683,7 +759,7 @@ function DiseaseDetail({ disease, onClose }) {
                 fontFamily: "'Noto Sans KR', sans-serif",
                 minWidth: 80,
               }}>
-                {direction} {other.name}
+                {direction} {lang === 'en' ? (other.nameEn || other.name) : other.name}
               </span>
               <div className="strength-bar-bg" style={{ flexShrink: 0 }}>
                 <div className="strength-bar-fill" style={{
@@ -945,6 +1021,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
                   isSelected={selectedId === id}
                   dimmed={highlightLevel !== null && disease.level !== highlightLevel}
                   onClick={() => { setSelectedId(selectedId === id ? null : id); setEdgeDetail(null); }}
+                  lang={lang}
                 />
               </g>
             ))}
@@ -954,7 +1031,7 @@ function NetworkView({ selectedId, setSelectedId, hoveredId, setHoveredId, selec
             const hp = NODE_POSITIONS[hoveredId];
             const hd = DISEASES[hoveredId];
             const r = NODE_RADIUS[hd.level];
-            const label = `${hd.name} — ${hd.prevalence}`;
+            const label = `${lang === 'en' ? (hd.nameEn || hd.name) : hd.name} — ${hd.prevalence}`;
             const boxW = Math.min(250, Math.max(120, label.length * 9 + 24));
             const boxH = 22;
             const gap = 8;
@@ -2163,81 +2240,88 @@ function ManagementView() {
   const [selectedDisease, setSelectedDisease] = useState(null);
   const w = 900, h = 340;
 
+  const STAGE_LABELS = { '인지': 'Awareness', '치료': 'Treatment', '조절': 'Control' };
   const diseases = [
     {
-      id: 'htn', name: '고혈압', color: '#ffd60a', highlight: false,
-      patients: '~1,300만',
+      id: 'htn', name: '고혈압', nameEn: 'Hypertension', color: '#ffd60a', highlight: false,
+      patients: '~1,300만', patientsEn: '~13M',
       stages: [
         { label: '인지', value: 77 },
         { label: '치료', value: 74 },
         { label: '조절', value: 59 },
       ],
       detail: '고혈압 인지율 77%, 치료율 74%, 조절율 59%. 3차 예방 강화 필요.',
+      detailEn: 'HTN awareness 77%, treatment 74%, control 59%. Tertiary prevention needs strengthening.',
       ref: '대한고혈압학회 Fact Sheet 2024',
     },
     {
-      id: 'dm', name: '당뇨', color: '#00d4ff', highlight: true,
-      patients: '~530만',
+      id: 'dm', name: '당뇨', nameEn: 'Diabetes', color: '#00d4ff', highlight: true,
+      patients: '~530만', patientsEn: '~5.3M',
       stages: [
         { label: '인지', value: 75 },
         { label: '치료', value: 71 },
         { label: '조절', value: 32 },
       ],
       extendedCascade: [
-        { label: '당뇨 환자', value: 100, sub: '30세 이상' },
-        { label: '인지', value: 74.7, sub: 'Awareness' },
-        { label: '치료', value: 70.9, sub: 'Treatment' },
+        { label: '당뇨 환자', labelEn: 'DM Patients', value: 100, sub: '30세 이상', subEn: 'Age ≥30' },
+        { label: '인지', labelEn: 'Awareness', value: 74.7, sub: 'Awareness' },
+        { label: '치료', labelEn: 'Treatment', value: 70.9, sub: 'Treatment' },
         { label: 'HbA1c <6.5%', value: 32.4, sub: 'Glycemic Control' },
-        { label: '+BP 조절', value: 19.7, sub: 'BP <140/85' },
-        { label: '+LDL 조절', value: 15.9, sub: 'LDL <100' },
-        { label: '통합관리', value: 15.9, sub: 'All 3 Targets Met' },
+        { label: '+BP 조절', labelEn: '+BP Control', value: 19.7, sub: 'BP <140/85' },
+        { label: '+LDL 조절', labelEn: '+LDL Control', value: 15.9, sub: 'LDL <100' },
+        { label: '통합관리', labelEn: 'All Targets', value: 15.9, sub: 'All 3 Targets Met' },
       ],
       youngAdult: [100, 43.3, 34.6, 29.6, 8.0, 9.2, 9.2],
       detail: '당뇨 인지율 75%, 치료율 71%이나 HbA1c<6.5% 조절율 32.4%로 매우 낮음. 통합관리(혈당+혈압+LDL 동시조절) 15.9%.',
+      detailEn: 'DM awareness 75%, treatment 71%, but HbA1c <6.5% control only 32.4%. Comprehensive management (glucose+BP+LDL) 15.9%.',
       ref: 'KDA Diabetes Fact Sheet 2024',
     },
     {
-      id: 'dyslip', name: '이상지질혈증', color: '#b388ff', highlight: false,
-      patients: '~1,780만',
+      id: 'dyslip', name: '이상지질혈증', nameEn: 'Dyslipidemia', color: '#b388ff', highlight: false,
+      patients: '~1,780만', patientsEn: '~17.8M',
       stages: [
         { label: '인지', value: 68 },
         { label: '치료', value: 61 },
         { label: '조절', value: 54 },
       ],
       detail: '이상지질혈증 인지율 68%, 치료율 61%, LDL 조절율 54%. 고위험군 스타틴 처방 확대 필요.',
-      ref: '한국지질동맥경화학회 Fact Sheet 2024',
+      detailEn: 'Dyslipidemia awareness 68%, treatment 61%, LDL control 54%. Statin prescription expansion needed for high-risk groups.',
+      ref: 'KSoLA Fact Sheet 2024',
     },
     {
       id: 'ckd', name: 'CKD', color: '#4ecdc4', highlight: false,
-      patients: '~357만',
+      patients: '~357만', patientsEn: '~3.57M',
       stages: [
         { label: '인지', value: 6.3 },
         { label: '치료', value: null },
         { label: '조절', value: null },
       ],
       detail: 'CKD 인지율 1.3~6.3%로 극히 낮음. 대부분 투석 직전까지 인지 못함. 조기 선별 시급.',
-      ref: '대한신장학회 KORDS 2023',
+      detailEn: 'CKD awareness only 1.3-6.3%. Most patients unaware until pre-dialysis. Early screening urgently needed.',
+      ref: 'KSN KORDS 2023',
     },
     {
-      id: 'obesity', name: '비만', color: '#ff006e', highlight: false,
-      patients: '~1,670만',
+      id: 'obesity', name: '비만', nameEn: 'Obesity', color: '#ff006e', highlight: false,
+      patients: '~1,670만', patientsEn: '~16.7M',
       stages: [
         { label: '인지', value: null },
         { label: '치료', value: null },
         { label: '조절', value: null },
       ],
       detail: '비만 관리 캐스케이드 공식 데이터 부재. 인지율 약 55% 추정, 적극 관리 30%, 5% 이상 감량 성공 12%.',
-      ref: '대한비만학회 Fact Sheet 2024 (추정)',
+      detailEn: 'No official obesity management cascade data. Estimated awareness ~55%, active management 30%, ≥5% weight loss success 12%.',
+      ref: 'KOSSO Fact Sheet 2024 (estimated)',
     },
     {
       id: 'masld', name: 'MASLD', color: '#00ff88', highlight: false,
-      patients: '~768만',
+      patients: '~768만', patientsEn: '~7.68M',
       stages: [
         { label: '인지', value: null },
         { label: '치료', value: null },
         { label: '조절', value: null },
       ],
       detail: 'MASLD 인지율 ~10%. 건강검진에서 지방간 소견 있으나 후속 관리 부재. FIB-4 기반 선별 도입 필요.',
+      detailEn: 'MASLD awareness ~10%. Fatty liver detected in checkups but no follow-up. FIB-4 based screening adoption needed.',
       ref: 'KASL MASLD Fact Sheet 2023',
     },
   ];
@@ -2268,10 +2352,10 @@ function ManagementView() {
         {/* Disease name + patient count */}
         <text x={fx + funnelW / 2} y={funnelTop + 4} textAnchor="middle"
           fill={isSelected ? d.color : '#ccccee'} fontSize={12} fontWeight={700}
-          fontFamily="'Noto Sans KR', sans-serif">{d.name}</text>
+          fontFamily="'Noto Sans KR', sans-serif">{lang === 'en' ? (d.nameEn || d.name) : d.name}</text>
         {d.patients && (
           <text x={fx + funnelW / 2} y={funnelTop + 18} textAnchor="middle"
-            fill="#aaaacc" fontSize={10} fontFamily="'JetBrains Mono', monospace">{d.patients}</text>
+            fill="#aaaacc" fontSize={10} fontFamily="'JetBrains Mono', monospace">{lang === 'en' ? (d.patientsEn || d.patients) : d.patients}</text>
         )}
         {d.highlight && <circle cx={fx + funnelW / 2 + 28} cy={funnelTop} r={3} fill={d.color} opacity={0.8} />}
         {/* Trapezoid stages */}
@@ -2300,7 +2384,7 @@ function ManagementView() {
               </text>
               <text x={cy} y={yTop + stageH / 2 + 8} textAnchor="middle"
                 fill="rgba(255,255,255,0.5)" fontSize={8} fontFamily="'Noto Sans KR', sans-serif">
-                {stage.label}
+                {lang === 'en' ? (STAGE_LABELS[stage.label] || stage.label) : stage.label}
               </text>
             </g>
           );
@@ -2350,9 +2434,9 @@ function ManagementView() {
           alignItems: 'center', justifyContent: 'center',
         }}>x</button>
         <h4 style={{ color: d.color, margin: '0 0 8px', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 14 }}>
-          {d.name} {t('관리 현황','Management Status')}
+          {lang === 'en' ? (d.nameEn || d.name) : d.name} {t('관리 현황','Management Status')}
         </h4>
-        <p style={{ color: '#bbb', fontSize: 11, lineHeight: 1.7, margin: '0 0 10px' }}>{d.detail}</p>
+        <p style={{ color: '#bbb', fontSize: 11, lineHeight: 1.7, margin: '0 0 10px' }}>{lang === 'en' ? (d.detailEn || d.detail) : d.detail}</p>
 
         {/* Extended cascade for diabetes */}
         {d.extendedCascade && (
@@ -2365,7 +2449,7 @@ function ManagementView() {
               return (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
                   <span style={{ width: 70, fontSize: 9, color: '#ccccee', fontFamily: "'Noto Sans KR', sans-serif", flexShrink: 0 }}>
-                    {step.label}
+                    {lang === 'en' ? (step.labelEn || step.label) : step.label}
                   </span>
                   <div style={{ flex: 1, height: 10, background: 'rgba(255,255,255,0.03)', borderRadius: 3, position: 'relative' }}>
                     <div style={{
