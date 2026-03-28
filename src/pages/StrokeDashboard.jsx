@@ -330,6 +330,7 @@ function InfoTip({ text }) {
 // ── KPI Mini Card ────────────────────────────────────
 
 function KPIMini({ label, value, unit, icon, color = '#00d4ff', source, warning, onClick, provinceName, nationalValue, infoTip }) {
+  const { t } = useLang();
   const isProvince = !!provinceName;
   return (
     <div
