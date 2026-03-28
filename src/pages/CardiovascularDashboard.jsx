@@ -187,28 +187,28 @@ function OECDPanel({ kosis, lang }) {
   return (
     <ChartPanel title={t(`OECD AMI 원내 30일 사망률 (${latestYear})`, `OECD AMI In-hospital 30-day Mortality (${latestYear})`, lang)}
       refUrl="https://kosis.kr/" refLabel="KOSIS OECD Health Statistics">
-      <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+      <div>
         {comparison.map((c, i) => {
           const isKorea = c.country === '한국';
           const maxVal = Math.max(...comparison.map(x => x.value));
           const barW = (c.value / maxVal) * 100;
           return (
             <div key={c.country} style={{
-              display: 'flex', alignItems: 'center', gap: '8px', padding: '3px 0',
+              display: 'flex', alignItems: 'center', gap: '4px', padding: '1px 0',
               background: isKorea ? 'rgba(0,212,255,0.08)' : 'transparent',
-              borderRadius: '4px',
+              borderRadius: '3px',
             }}>
-              <div style={{ width: '80px', textAlign: 'right', fontSize: '11px', color: isKorea ? '#00d4ff' : '#bbbbdd', fontWeight: isKorea ? 700 : 400 }}>
+              <div style={{ width: '70px', textAlign: 'right', fontSize: '9px', color: isKorea ? '#00d4ff' : '#bbbbdd', fontWeight: isKorea ? 700 : 400, flexShrink: 0 }}>
                 {c.countryEn || c.country}
               </div>
-              <div style={{ flex: 1, height: '14px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ flex: 1, height: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
                 <div style={{
                   width: `${barW}%`, height: '100%',
                   background: isKorea ? '#00d4ff' : 'rgba(255,100,100,0.4)',
                   borderRadius: '3px',
                 }} />
               </div>
-              <div style={{ width: '40px', fontSize: '11px', color: isKorea ? '#00d4ff' : '#aaaacc', fontFamily: "'JetBrains Mono'", fontWeight: isKorea ? 700 : 400 }}>
+              <div style={{ width: '34px', fontSize: '9px', textAlign: 'right', color: isKorea ? '#00d4ff' : '#aaaacc', fontFamily: "'JetBrains Mono'", fontWeight: isKorea ? 700 : 400, flexShrink: 0 }}>
                 {c.value}%
               </div>
             </div>
