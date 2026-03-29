@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Factsheet PDFs (large binaries)
+factsheets/*.pdf
+factsheets/*.md
+
+# Workspace
+_workspace/
+
+# Claude agents/skills
+.claude/

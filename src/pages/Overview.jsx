@@ -90,8 +90,12 @@ export default function Overview() {
         <div style={{ display: 'flex', gap: '8px', alignSelf: 'flex-start', flexShrink: 0, zIndex: 2 }}>
           {[
             { id: 'obesity', label: t('비만율', 'Obesity'), color: '#ff006e' },
-            { id: 'metabolic', label: t('대사증후군', 'Metabolic Syndrome'), color: '#00d4ff' },
+            { id: 'metabolic', label: t('대사증후군', 'MetS'), color: '#00d4ff' },
             { id: 'stroke', label: t('뇌졸중', 'Stroke'), color: '#e74c3c' },
+            { id: 'htn', label: t('고혈압', 'HTN'), color: '#ff922b' },
+            { id: 'dm', label: t('당뇨', 'DM'), color: '#b388ff' },
+            { id: 'ckd', label: t('CKD', 'CKD'), color: '#4ecdc4' },
+            { id: 'hcv', label: t('HCV', 'HCV'), color: '#e056a0' },
           ].map(m => (
             <button
               key={m.id}

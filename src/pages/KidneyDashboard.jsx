@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useLang } from '../i18n';
 import { DISEASE_EPI, DISEASE_TIMESERIES } from '../data/disease_epi';
 import { DM_KOSIS } from '../data/dm_kosis';
-import CascadeFunnel from '../components/CascadeFunnel';
+import CascadeWaterfall from '../components/CascadeWaterfall';
+import InsightPanel from '../components/InsightPanel';
 
 const t = (ko, en, lang) => lang === 'ko' ? ko : en;
 const ckd = DISEASE_EPI.diseases.ckd;
@@ -104,7 +105,7 @@ export default function KidneyDashboard() {
       {activeTab === 'dkd' && <DKDTab lang={lang} examData={examData} latestYear={latestYear} />}
 
       {/* CKD Care Cascade Funnel */}
-      <CascadeFunnel
+      <CascadeWaterfall
         title={t('CKD 관리 캐스케이드 (20세+, 만 단위)', 'CKD Care Cascade (20+, in 10K)', lang)}
         source="KSN KORDS 2024"
         totalPop={4350}
@@ -134,37 +135,78 @@ function CKDTab({ lang, examData, latestYear }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
       {/* CKD Stage Distribution */}
-      <div style={cardStyle}>
-        <CardTitle text={t('CKD Stage 분포 (20세 이상)', 'CKD Stage Distribution (≥20y)', lang)}
-          refUrl="https://doi.org/10.1038/s41598-023-30location" refLabel="Sci Rep 2023" />
+      <InsightPanel
+        title={t('CKD Stage 분포 (20세 이상)', 'CKD Stage Distribution (≥20y)', lang)}
+        source="Sci Rep 2023" sourceUrl="https://doi.org/10.1038/s41598-023-33377-2"
+        details={[
+          { label: t('전체 유병률', 'Total Prevalence', lang), value: '8.2', unit: '%', color: '#ff6b6b' },
+          { label: 'Stage 1-2', value: '~5.3', unit: '%', color: '#4d96ff' },
+          { label: 'Stage 3-5', value: '~2.9', unit: '%', color: '#ff922b' },
+        ]}
+        insight={{
+          ko: 'CKD Stage 1-2가 전체 유병자의 약 65%를 차지하며, 알부민뇨 기준으로 분류됩니다. Stage 3 이상(eGFR <60)은 약 35%로, 조기 선별검사(알부민뇨 + eGFR)의 중요성을 시사합니다.',
+          en: 'Stage 1-2 accounts for ~65% of all CKD, classified by albuminuria. Stage 3+ (eGFR <60) comprises ~35%, underscoring the importance of early screening with albuminuria + eGFR.',
+        }}
+      >
         <StageDistributionChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* CKD Awareness Gap */}
-      <div style={cardStyle}>
-        <CardTitle text={t('CKD 인지율 Gap', 'CKD Awareness Gap', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KSN 2024" />
+      <InsightPanel
+        title={t('CKD 인지율 Gap', 'CKD Awareness Gap', lang)}
+        source="KSN 2024" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: t('유병률', 'Prevalence', lang), value: '8.2', unit: '%', color: '#ff6b6b' },
+          { label: t('인지율 상한', 'Awareness High', lang), value: '6.3', unit: '%', color: '#ffd93d' },
+          { label: t('인지율 하한', 'Awareness Low', lang), value: '1.3', unit: '%', color: '#ff922b' },
+        ]}
+        insight={{
+          ko: 'CKD 인지율은 1.3~6.3%로, 유병률 8.2%에 비해 극히 낮습니다. Stage 3 이상에서도 10% 미만만이 자신의 질환을 인지하며, 이는 한국의 CKD 조기 진단 인프라 확충이 시급함을 보여줍니다.',
+          en: 'CKD awareness is only 1.3-6.3%, extremely low versus 8.2% prevalence. Even in Stage 3+, fewer than 10% are aware of their condition, highlighting an urgent need for improved CKD screening infrastructure in Korea.',
+        }}
+      >
         <AwarenessGapChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* Age Distribution */}
-      <div style={cardStyle}>
-        <CardTitle text={t('연령대별 CKD 유병률', 'CKD Prevalence by Age', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KNHANES" />
+      <InsightPanel
+        title={t('연령대별 CKD 유병률', 'CKD Prevalence by Age', lang)}
+        source="KNHANES" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: t('70세 이상', '70+', lang), value: '28.3', unit: '%', color: '#ff6b6b' },
+          { label: t('60대', '60s', lang), value: '~14', unit: '%', color: '#ffd93d' },
+          { label: t('20-30대', '20-30s', lang), value: '<3', unit: '%', color: '#6bcb77' },
+        ]}
+        insight={{
+          ko: '70세 이상에서 CKD 유병률이 28.3%에 달하며, 고령화 사회에서 CKD 부담이 급증하고 있습니다. 60대 이상에서 전체 CKD 환자의 절반 이상을 차지하므로, 노인 대상 신장기능 정기검사가 필수적입니다.',
+          en: 'CKD prevalence reaches 28.3% in those aged 70+, with the aging population driving a rapid increase in CKD burden. Over half of all CKD patients are 60+, making routine kidney function screening essential for older adults.',
+        }}
+      >
         <AgeDistributionChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* Cost Burden */}
-      <div style={cardStyle}>
-        <CardTitle text={t('CKD 의료비 부담', 'CKD Cost Burden', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="NHIS/KSN" />
+      <InsightPanel
+        title={t('CKD 의료비 부담', 'CKD Cost Burden', lang)}
+        source="NHIS/KSN" sourceUrl="https://www.ksn.or.kr/"
+        insight={{
+          ko: '투석 환자 1인당 연간 약 3,000만원의 의료비가 소요되며, 이식 후 유지비는 연 600-800만원으로 투석 대비 경제적입니다. 전체 투석 비용은 건강보험 재정에 상당한 부담을 주고 있어, CKD 조기 발견 및 진행 억제가 비용 효율적 전략입니다.',
+          en: 'Annual dialysis cost is ~30M KRW per patient, while post-transplant maintenance costs 6-8M KRW/year, making transplantation more cost-effective. Total dialysis expenditure places significant burden on national health insurance, emphasizing early CKD detection and progression prevention as cost-effective strategies.',
+        }}
+      >
         <CostBurdenPanel lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* Regional kidney exam rate — full width */}
-      <div style={{ ...cardStyle, gridColumn: '1 / -1' }}>
-        <CardTitle text={t(`시도별 당뇨환자 신장검사율 (${latestYear})`, `Regional DM Kidney Exam Rate (${latestYear})`, lang)}
-          refUrl="https://kosis.kr/" refLabel="KOSIS HIRA" />
+      <div style={{ gridColumn: '1 / -1' }}>
+      <InsightPanel
+        title={t(`시도별 당뇨환자 신장검사율 (${latestYear})`, `Regional DM Kidney Exam Rate (${latestYear})`, lang)}
+        source="KOSIS HIRA" sourceUrl="https://kosis.kr/"
+        insight={{
+          ko: '당뇨환자의 신장검사율은 지역 간 편차가 큽니다. DKD 가이드라인(2024)은 당뇨 진단 시점부터 매년 eGFR과 소변 알부민-크레아티닌 비(UACR) 검사를 권고하지만, 실제 검사율은 전국 평균 40% 내외에 그치고 있습니다.',
+          en: 'Kidney screening rates among diabetic patients vary significantly across regions. DKD guidelines (2024) recommend annual eGFR and UACR testing from diabetes diagnosis, but actual screening rates average only ~40% nationwide.',
+        }}
+      >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {examData.map(d => {
             const maxRate = examData[0]?.rate || 1;
@@ -184,6 +226,7 @@ function CKDTab({ lang, examData, latestYear }) {
             );
           })}
         </div>
+      </InsightPanel>
       </div>
     </div>
   );
@@ -197,52 +240,115 @@ function ESKDTab({ lang }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
       {/* ESKD Incidence Trend */}
-      <div style={cardStyle}>
-        <CardTitle text={t('ESKD 발생률 추이 (백만명당)', 'ESKD Incidence Trend (per million)', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KORDS 2010-2022" />
+      <InsightPanel
+        title={t('ESKD 발생률 추이 (백만명당)', 'ESKD Incidence Trend (per million)', lang)}
+        source="KORDS 2010-2022" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: '2022', value: '~310', unit: t('/백만', '/M', lang), color: '#ff6b6b' },
+          { label: t('연평균 증가', 'Avg Growth', lang), value: '~3', unit: '%/yr', color: '#ffd93d' },
+        ]}
+        insight={{
+          ko: 'ESKD 발생률은 2010년 이후 꾸준히 증가하여 2022년 약 310명/백만명에 달합니다. 당뇨와 고혈압의 증가, 고령화가 주요 원인이며, CKD 진행 억제를 위한 조기 개입(SGLT2i, RASi 등)이 ESKD 발생을 줄이는 핵심 전략입니다.',
+          en: 'ESKD incidence has steadily risen since 2010, reaching ~310 per million in 2022. Increasing diabetes, hypertension, and aging are key drivers. Early intervention with SGLT2i and RAS inhibitors to slow CKD progression is the primary strategy to reduce ESKD incidence.',
+        }}
+      >
         <ESKDIncidenceChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* ESKD Prevalence Trend */}
-      <div style={cardStyle}>
-        <CardTitle text={t('ESKD 유병환자 추이', 'ESKD Prevalent Patients Trend', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KORDS 2010-2022" />
+      <InsightPanel
+        title={t('ESKD 유병환자 추이', 'ESKD Prevalent Patients Trend', lang)}
+        source="KORDS 2010-2022" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: '2022', value: '135,345', unit: t('명', 'pts', lang), color: '#ffd93d' },
+          { label: t('10년 증가', '10yr Growth', lang), value: '~60', unit: '%', color: '#ff922b' },
+        ]}
+        insight={{
+          ko: 'ESKD 유병환자는 2022년 13.5만명으로, 10년간 약 60% 증가했습니다. 투석 생존율 개선과 신규 환자 지속 유입이 동시에 작용하여, 의료 인프라와 재정 부담이 계속 커지고 있습니다.',
+          en: 'ESKD prevalent patients reached 135,345 in 2022, a ~60% increase over 10 years. Improved dialysis survival and continuous new patient influx both contribute, placing growing strain on healthcare infrastructure and finances.',
+        }}
+      >
         <ESKDPrevalenceChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* Dialysis Modality */}
-      <div style={cardStyle}>
-        <CardTitle text={t('투석 방법 (HD vs PD)', 'Dialysis Modality (HD vs PD)', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KORDS 2022" />
+      <InsightPanel
+        title={t('투석 방법 (HD vs PD)', 'Dialysis Modality (HD vs PD)', lang)}
+        source="KORDS 2022" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: t('혈액투석', 'HD', lang), value: '91.2', unit: '%', color: '#4d96ff' },
+          { label: t('복막투석', 'PD', lang), value: '8.8', unit: '%', color: '#e599f7' },
+        ]}
+        insight={{
+          ko: '한국은 HD(혈액투석) 비율이 91.2%로 PD(복막투석) 대비 압도적입니다. 국제적으로 PD 비율이 15-30%인 점과 비교하면 한국의 PD 활용이 저조하며, 가정 기반 투석(home dialysis) 확대 정책이 논의되고 있습니다.',
+          en: 'Korea has a 91.2% HD vs 8.8% PD ratio, far below the global PD rate of 15-30%. This highlights underutilization of peritoneal dialysis, with policy discussions ongoing to expand home-based dialysis options.',
+        }}
+      >
         <DialysisDonut lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* Dialysis Trend */}
-      <div style={cardStyle}>
-        <CardTitle text={t('투석 환자수 추이', 'Dialysis Patient Trend', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KORDS 2010-2022" />
+      <InsightPanel
+        title={t('투석 환자수 추이', 'Dialysis Patient Trend', lang)}
+        source="KORDS 2010-2022" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: '2022 HD', value: '107,370', unit: t('명', 'pts', lang), color: '#4d96ff' },
+          { label: '2022 PD', value: '10,328', unit: t('명', 'pts', lang), color: '#e599f7' },
+        ]}
+        insight={{
+          ko: '투석 환자수는 2010년 이후 꾸준히 증가하여 2022년 약 11.8만명입니다. HD 환자 비율이 지속적으로 증가하는 반면, PD 환자 수는 정체 또는 감소 추세를 보이고 있습니다.',
+          en: 'Total dialysis patients have steadily increased to ~118K in 2022. HD patient numbers continue to grow, while PD numbers remain stagnant or declining.',
+        }}
+      >
         <DialysisTrendChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* ESKD Cause Distribution */}
-      <div style={cardStyle}>
-        <CardTitle text={t('ESKD 원인질환 분포', 'ESKD Cause Distribution', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KORDS 2022" />
+      <InsightPanel
+        title={t('ESKD 원인질환 분포', 'ESKD Cause Distribution', lang)}
+        source="KORDS 2022" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: t('당뇨', 'DM', lang), value: '48.3', unit: '%', color: '#ff6b6b' },
+          { label: t('고혈압', 'HTN', lang), value: '21.6', unit: '%', color: '#ffd93d' },
+          { label: t('사구체신염', 'GN', lang), value: '7.8', unit: '%', color: '#4d96ff' },
+        ]}
+        insight={{
+          ko: 'ESKD의 가장 큰 원인은 당뇨병(48.3%)이며, 고혈압(21.6%)이 뒤를 잇습니다. 두 질환이 전체 ESKD의 70%를 차지하므로, 당뇨와 고혈압의 적극적 관리가 ESKD 예방의 핵심입니다.',
+          en: 'Diabetes (48.3%) is the leading cause of ESKD, followed by hypertension (21.6%). Together they account for 70% of all ESKD, making aggressive management of these conditions the cornerstone of ESKD prevention.',
+        }}
+      >
         <ESKDCauseChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* Transplant Trend */}
-      <div style={cardStyle}>
-        <CardTitle text={t('신장이식 추이 (생체 vs 뇌사)', 'Transplant Trend (Living vs Deceased)', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KORDS 2010-2022" />
+      <InsightPanel
+        title={t('신장이식 추이 (생체 vs 뇌사)', 'Transplant Trend (Living vs Deceased)', lang)}
+        source="KORDS 2010-2022" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: '2022', value: '2,164', unit: t('건', 'cases', lang), color: '#6bcb77' },
+          { label: t('생체이식', 'Living', lang), value: '~55', unit: '%', color: '#6bcb77' },
+          { label: t('뇌사이식', 'Deceased', lang), value: '~45', unit: '%', color: '#ff922b' },
+        ]}
+        insight={{
+          ko: '2022년 신장이식 2,164건 중 생체이식이 약 55%를 차지합니다. ESKD 유병환자 13.5만명 대비 연간 이식 건수는 1.6%에 불과하여, 장기 기증 활성화 및 대기 시간 단축이 시급합니다.',
+          en: '2,164 kidney transplants were performed in 2022, with living donors accounting for ~55%. Only 1.6% of ESKD patients receive a transplant annually, underscoring the urgent need to increase organ donation and reduce wait times.',
+        }}
+      >
         <TransplantChart lang={lang} />
-      </div>
+      </InsightPanel>
 
       {/* Mortality & Workforce */}
-      <div style={{ ...cardStyle, gridColumn: '1 / -1' }}>
-        <CardTitle text={t('ESKD 사망 및 투석전문의 현황', 'ESKD Mortality & Workforce', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KSN 2024" />
+      <div style={{ gridColumn: '1 / -1' }}>
+      <InsightPanel
+        title={t('ESKD 사망 및 투석전문의 현황', 'ESKD Mortality & Workforce', lang)}
+        source="KSN 2024" sourceUrl="https://www.ksn.or.kr/"
+        insight={{
+          ko: 'ESKD 환자의 5년 생존율은 약 60%로, 일반 인구 대비 현저히 낮습니다. 투석전문의 1인당 담당 환자 수가 증가하고 있어, 전문 인력 확충이 필요합니다. 이식 후 생존율은 투석 대비 유의하게 높습니다.',
+          en: 'Five-year survival for ESKD patients is ~60%, significantly lower than the general population. The nephrologist-to-patient ratio is worsening, necessitating workforce expansion. Post-transplant survival is significantly better than dialysis.',
+        }}
+      >
         <MortalityWorkforcePanel lang={lang} />
+      </InsightPanel>
       </div>
     </div>
   );
@@ -259,9 +365,18 @@ function DKDTab({ lang, examData, latestYear }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
       {/* DKD Overview */}
-      <div style={cardStyle}>
-        <CardTitle text={t('당뇨병콩팥병 (DKD) 핵심 지표', 'Diabetic Kidney Disease Key Metrics', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="DKD GL 2024" />
+      <InsightPanel
+        title={t('당뇨병콩팥병 (DKD) 핵심 지표', 'Diabetic Kidney Disease Key Metrics', lang)}
+        source="DKD GL 2024" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: t('DM 중 CKD', 'CKD in DM', lang), value: '25-40', unit: '%', color: '#ff6b6b' },
+          { label: t('ESKD 원인 DM', 'DM in ESKD', lang), value: '48.3', unit: '%', color: '#ffd93d' },
+        ]}
+        insight={{
+          ko: '당뇨병은 ESKD의 최대 원인(48.3%)이며, 당뇨환자의 25-40%에서 CKD가 동반됩니다. SGLT2 억제제, Finerenone 등 최신 치료제가 DKD 진행을 유의하게 지연시키는 것으로 입증되어, 조기 DKD 선별과 적극적 치료가 핵심입니다.',
+          en: 'Diabetes is the leading cause of ESKD (48.3%), with 25-40% of diabetic patients developing CKD. SGLT2 inhibitors and finerenone have proven to significantly delay DKD progression, making early screening and aggressive treatment essential.',
+        }}
+      >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <MetricRow label={t('당뇨 환자 중 CKD 동반', 'CKD among DM patients', lang)} value={dkd?.ckdAmongDM} unit="%" color="#ff6b6b" />
           <MetricRow label={t('ESKD 원인 중 당뇨', 'DM as ESKD cause', lang)} value={dkd?.dmAmongESKD} unit="%" color="#ffd93d" />
@@ -273,12 +388,21 @@ function DKDTab({ lang, examData, latestYear }) {
             {t(dkd?.yearlyProgression, dkd?.yearlyProgression, lang)}
           </div>
         </div>
-      </div>
+      </InsightPanel>
 
       {/* HTN + CKD */}
-      <div style={cardStyle}>
-        <CardTitle text={t('고혈압 + CKD 관련', 'Hypertension + CKD', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="HTN-CKD GL 2025" />
+      <InsightPanel
+        title={t('고혈압 + CKD 관련', 'Hypertension + CKD', lang)}
+        source="HTN-CKD GL 2025" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: t('HTN 중 CKD', 'CKD in HTN', lang), value: ckd.htnCkdOverlap?.ckdAmongHTN || '—', unit: '%', color: '#ff922b' },
+          { label: t('ESKD 원인 HTN', 'HTN in ESKD', lang), value: ckd.htnCkdOverlap?.htnAmongESKD || '—', unit: '%', color: '#e599f7' },
+        ]}
+        insight={{
+          ko: '고혈압은 ESKD의 두 번째 원인(21.6%)이며, 고혈압 환자의 상당수가 CKD를 동반합니다. RAS 차단제 기반의 혈압 조절(목표 <130/80 mmHg)이 CKD 진행 억제의 핵심이며, 단백뇨 동반 시 더욱 적극적인 관리가 필요합니다.',
+          en: 'Hypertension is the second leading cause of ESKD (21.6%), with a significant proportion of hypertensive patients having concurrent CKD. RAS inhibitor-based BP control (target <130/80 mmHg) is key to slowing CKD progression, with more aggressive management needed when proteinuria is present.',
+        }}
+      >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <MetricRow label={t('고혈압 환자 중 CKD', 'CKD among HTN', lang)} value={htn?.ckdAmongHTN} unit="%" color="#ff922b" />
           <MetricRow label={t('ESKD 원인 중 고혈압', 'HTN as ESKD cause', lang)} value={htn?.htnAmongESKD} unit="%" color="#e599f7" />
@@ -290,13 +414,26 @@ function DKDTab({ lang, examData, latestYear }) {
             )}
           </div>
         </div>
-      </div>
+      </InsightPanel>
 
       {/* DKD vs Non-DKD ESKD cause pie comparison */}
-      <div style={{ ...cardStyle, gridColumn: '1 / -1' }}>
-        <CardTitle text={t('ESKD 원인별 비율 — 당뇨가 압도적 1위', 'ESKD by Cause — Diabetes Dominates', lang)}
-          refUrl="https://www.ksn.or.kr/" refLabel="KORDS 2022" />
+      <div style={{ gridColumn: '1 / -1' }}>
+      <InsightPanel
+        title={t('ESKD 원인별 비율 — 당뇨가 압도적 1위', 'ESKD by Cause — Diabetes Dominates', lang)}
+        source="KORDS 2022" sourceUrl="https://www.ksn.or.kr/"
+        details={[
+          { label: t('당뇨', 'DM', lang), value: '48.3', unit: '%', color: '#ff6b6b' },
+          { label: t('고혈압', 'HTN', lang), value: '21.6', unit: '%', color: '#ffd93d' },
+          { label: t('사구체신염', 'GN', lang), value: '7.8', unit: '%', color: '#4d96ff' },
+          { label: t('다낭신', 'PKD', lang), value: '2.1', unit: '%', color: '#6bcb77' },
+        ]}
+        insight={{
+          ko: '당뇨병이 ESKD 원인의 거의 절반(48.3%)을 차지하여 압도적 1위입니다. 당뇨+고혈압 합산 69.9%로, 대사질환 관리가 곧 말기신질환 예방의 핵심임을 명확히 보여줍니다.',
+          en: 'Diabetes accounts for nearly half (48.3%) of all ESKD causes, overwhelmingly the #1 factor. Combined with hypertension (69.9%), this clearly demonstrates that metabolic disease management is the cornerstone of ESKD prevention.',
+        }}
+      >
         <ESKDCauseHorizontal lang={lang} />
+      </InsightPanel>
       </div>
     </div>
   );

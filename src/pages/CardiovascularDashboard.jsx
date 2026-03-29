@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useLang } from '../i18n';
-import CascadeFunnel from '../components/CascadeFunnel';
+import CascadeWaterfall from '../components/CascadeWaterfall';
 import { DISEASE_EPI, DISEASE_TIMESERIES } from '../data/disease_epi';
 import { MI_KOSIS } from '../data/mi_kosis';
 import { HF_KOSIS } from '../data/hf_kosis';
 import { STROKE_KOSIS } from '../data/stroke_kosis';
-import StrokeDashboard from './StrokeDashboard';
-import MIDashboard from './MIDashboard';
+
+const StrokeDashboard = lazy(() => import('./StrokeDashboard'));
+const MIDashboard = lazy(() => import('./MIDashboard'));
 
 const t = (ko, en, lang) => lang === 'ko' ? ko : en;
 
@@ -51,8 +52,10 @@ export default function CardiovascularDashboard() {
         ))}
       </div>
 
-      {subTab === 'mi' && <MIDashboard embedded />}
-      {subTab === 'stroke' && <StrokeDashboard embedded />}
+      <Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>Loading...</div>}>
+        {subTab === 'mi' && <MIDashboard embedded />}
+        {subTab === 'stroke' && <StrokeDashboard embedded />}
+      </Suspense>
       {subTab === 'hf' && <HFPanel hf={hf} kosis={HF_KOSIS} lang={lang} />}
       {subTab === 'htn' && <HTNPanel lang={lang} />}
       {subTab === 'oecd' && <OECDPanel kosis={MI_KOSIS} lang={lang} />}
@@ -506,7 +509,7 @@ function HTNPanel({ lang }) {
       </div>
 
       {/* Care Cascade Funnel */}
-      <CascadeFunnel
+      <CascadeWaterfall
         title={t('고혈압 관리 캐스케이드', 'Hypertension Care Cascade', lang)}
         source="KSH 2025"
         totalPop={4350}
@@ -527,91 +530,3 @@ function HTNPanel({ lang }) {
   );
 }
 
-// CascadeFunnel → ../components/CascadeFunnel.jsx
-function _UNUSED_CascadeFunnel({ lang, title, source, totalPop, stages }) {
-  // stages: [{ label, count, color, note }] — each step of the cascade
-  // Between each step, we show the "lost" (이탈) population
-  const maxCount = totalPop;
-
-  return (
-    <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-        <span style={{ fontSize: '13px', fontWeight: 700, color: '#e8e8f0' }}>{title}</span>
-        <span style={{ fontSize: '9px', color: '#9999bb' }}>{source}</span>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-        {/* Total population bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-          <div style={{ width: '80px', textAlign: 'right', flexShrink: 0 }}>
-            <div style={{ fontSize: '9px', color: '#9999bb' }}>{t('30세+ 인구','30+ Pop.', lang)}</div>
-          </div>
-          <div style={{ flex: 1, height: '16px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '10px', color: '#9999bb', fontFamily: "'JetBrains Mono'" }}>{totalPop.toLocaleString()}{t('만','0K', lang)}</span>
-          </div>
-          <div style={{ width: '60px', flexShrink: 0 }} />
-        </div>
-
-        {stages.map((stage, i) => {
-          const widthPct = Math.max((stage.count / maxCount) * 100, 8);
-          const prev = i === 0 ? totalPop : stages[i - 1].count;
-          const lost = prev - stage.count;
-          const lostPct = prev > 0 ? Math.round((lost / prev) * 100) : 0;
-
-          return (
-            <div key={i}>
-              {/* Loss indicator between stages */}
-              {lost > 0 && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', height: '18px' }}>
-                  <div style={{ width: '80px', flexShrink: 0 }} />
-                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ fontSize: '8px', color: '#ff6b6b', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                      <span style={{ color: '#ff6b6b66' }}>▼</span>
-                      <span>-{lost.toLocaleString()}{t('만','0K', lang)} ({lostPct}% {i === 0 ? t('비유병','no HTN', lang) : t('이탈','lost', lang)})</span>
-                    </div>
-                  </div>
-                  <div style={{ width: '60px', flexShrink: 0 }} />
-                </div>
-              )}
-
-              {/* Stage bar */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '80px', textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontSize: '10px', color: stage.color, fontWeight: 700 }}>{stage.label}</div>
-                </div>
-                <div style={{ flex: 1, position: 'relative' }}>
-                  <div style={{
-                    width: `${widthPct}%`, height: '26px',
-                    background: `linear-gradient(90deg, ${stage.color}dd, ${stage.color}55)`,
-                    borderRadius: '4px',
-                    display: 'flex', alignItems: 'center', paddingLeft: '8px',
-                    transition: 'width 0.8s ease',
-                  }}>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono'", textShadow: '0 1px 4px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>
-                      {stage.count.toLocaleString()}{t('만','0K', lang)}
-                    </span>
-                  </div>
-                </div>
-                <div style={{ width: '60px', flexShrink: 0, fontSize: '8px', color: '#9999bb', lineHeight: 1.3 }}>
-                  {stage.note}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Summary */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '12px', fontSize: '10px' }}>
-        <span style={{ color: '#ff6b6b' }}>
-          {t('최종 이탈','Total lost', lang)}: {stages[0].count - stages[stages.length - 1].count}{t('만','0K', lang)}
-          ({Math.round((1 - stages[stages.length - 1].count / stages[0].count) * 100)}%)
-        </span>
-        <span style={{ color: '#4d96ff' }}>
-          {t('조절 도달','Controlled', lang)}: {stages[stages.length - 1].count}{t('만','0K', lang)}
-          ({Math.round(stages[stages.length - 1].count / stages[0].count * 100)}%)
-        </span>
-      </div>
-    </div>
-  );
-}

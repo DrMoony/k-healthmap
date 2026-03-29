@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useLang } from '../i18n';
 import { DISEASE_EPI } from '../data/disease_epi';
-import CascadeFunnel from '../components/CascadeFunnel';
+import { LIVER_WP } from '../data/liver_whitepaper';
+import CascadeWaterfall from '../components/CascadeWaterfall';
+import InsightPanel from '../components/InsightPanel';
 
 const t = (ko, en, lang) => lang === 'ko' ? ko : en;
 
@@ -52,7 +54,7 @@ export default function LiverDashboard() {
       {subTab === 'progression' && <ProgressionPanel masld={masld} mash={mash} lc={lc} lang={lang} />}
 
       {/* MASLD Progression Funnel */}
-      <CascadeFunnel
+      <CascadeWaterfall
         title={t('MASLD 질병 진행 펀넬 (성인, 만 단위)', 'MASLD Disease Progression Funnel (Adults, in 10K)', lang)}
         source="KASL 2025, NHIS"
         totalPop={3600}
@@ -131,14 +133,38 @@ function MASLDPanel({ masld, mash, lang }) {
         ))}
       </div>
 
+      {/* Liver Disease Mortality Trend (1989-2022) */}
+      <InsightPanel
+        title={t('간질환 사망률 추이 (1989-2022)', 'Liver Disease Mortality Trend (1989-2022)', lang)}
+        source="간질환 백서 2024"
+        details={[
+          { label: t('간질환 사망', 'Liver Disease Deaths', lang), value: '7,541', unit: t('명', '', lang), color: '#ff6b6b' },
+          { label: t('간암 사망', 'HCC Deaths', lang), value: '10,212', unit: t('명', '', lang), color: '#4d96ff' },
+          { label: t('합계', 'Total', lang), value: '17,753', unit: t('명', '', lang), color: '#ffd93d' },
+        ]}
+        insight={{
+          ko: '간경변 사망률은 30년간 29→13으로 55% 감소했으나, 간암 사망률은 22→20으로 거의 변화 없음. 한국은 OECD 간암 사망률 1위.',
+          en: 'Cirrhosis mortality decreased 55% over 30 years (29→13), but HCC mortality barely changed (22→20). Korea ranks 1st in OECD for HCC mortality.',
+        }}
+      >
+        <LiverMortalityChart lang={lang} />
+      </InsightPanel>
+
       {/* MASLD → MASH → Fibrosis → Cirrhosis → HCC Pipeline */}
-      <div style={{
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: '12px', padding: '24px', marginBottom: '16px',
-      }}>
-        <h3 style={{ fontSize: '14px', color: '#fff', margin: '0 0 20px', fontFamily: "'Noto Sans KR'" }}>
-          {t('MASLD → MASH 진행 파이프라인', 'MASLD → MASH Progression Pipeline', lang)}
-        </h3>
+      <InsightPanel
+        title={t('MASLD → MASH 진행 파이프라인', 'MASLD → MASH Progression Pipeline', lang)}
+        source="KASL GL 2025 refs 82-95"
+        sourceUrl="https://www.e-cmh.org/"
+        details={[
+          { label: t('글로벌 MASLD', 'Global MASLD', lang), value: '30', unit: '%', color: '#6bcb77' },
+          { label: t('MASH 비율', 'MASH Rate', lang), value: '~20', unit: '%', color: '#ffd93d' },
+          { label: t('10년 간경변', '10yr Cirrhosis', lang), value: '3.7', unit: '%', color: '#ff6b6b' },
+        ]}
+        insight={{
+          ko: 'MASLD의 약 20%가 MASH로 진행하며, MASH 환자의 섬유화 진행 속도는 단순지방간 대비 2배 빠릅니다. KASL 2025 가이드라인에서는 섬유화 단계가 전체사망률의 독립 예측인자로, F3-F4 진행 시 간경변·HCC 위험이 급격히 증가합니다.',
+          en: 'About 20% of MASLD progresses to MASH, with fibrosis advancing 2x faster than simple steatosis. Per KASL 2025 guidelines, fibrosis stage is an independent predictor of all-cause mortality, with F3-F4 markedly increasing cirrhosis and HCC risk.',
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
           {pipeline.map((stage, i) => (
             <div key={stage.id} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
@@ -181,43 +207,56 @@ function MASLDPanel({ masld, mash, lang }) {
         <div style={{ marginTop: '12px', fontSize: '10px', color: '#9999bb', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
           <span>⏱ NASH→F1: {fibrosis.progressionRate?.nash_to_F1}{t('년', 'yr', lang)} (NAFL: {fibrosis.progressionRate?.nafl_to_F1}{t('년', 'yr', lang)})</span>
           <span>📊 {t('사망위험배수: NAFL 1.71x → MASH 2.14x → 간경변 3.79x', 'Mortality HR: NAFL 1.71x → MASH 2.14x → Cirrhosis 3.79x', lang)}</span>
-          <a href="https://www.e-cmh.org/" target="_blank" rel="noopener noreferrer" style={{ color: '#00d4ff88', textDecoration: 'none', fontSize: '10px' }}>
-            📎 KASL GL 2025 refs 82-95
-          </a>
         </div>
-      </div>
+      </InsightPanel>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         {/* Fibrosis breakdown: MASLD vs MASH */}
-        <div style={{
-          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '20px',
-        }}>
-          <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 14px', fontFamily: "'Noto Sans KR'" }}>
-            {t('MASLD 섬유화 진행 및 예후', 'MASLD Fibrosis Progression & Prognosis', lang)}
-          </h3>
+        <InsightPanel
+          title={t('MASLD 섬유화 진행 및 예후', 'MASLD Fibrosis Progression & Prognosis', lang)}
+          source="KASL GL 2025, Singh 2015"
+          sourceUrl="https://www.e-cmh.org/"
+          details={[
+            { label: t('NAFL→F1', 'NAFL→F1', lang), value: fibrosis.progressionRate?.nafl_to_F1 || '—', unit: t('년', 'yr', lang), color: '#6bcb77' },
+            { label: t('MASH→F1', 'MASH→F1', lang), value: fibrosis.progressionRate?.nash_to_F1 || '—', unit: t('년', 'yr', lang), color: '#ff922b' },
+            { label: 'F2+', value: fibrosis.masldF2plus || '—', unit: '%', color: '#e599f7' },
+          ]}
+          insight={{
+            ko: 'MASH의 섬유화 진행 속도는 단순지방간(NAFL) 대비 약 2배 빠르며, 10년 간경변 전환율은 3.7%입니다. KASL 2025에서는 비침습적 섬유화 평가(FIB-4, NFS)를 1차 선별 도구로 권고합니다.',
+            en: 'MASH fibrosis progresses ~2x faster than NAFL, with 3.7% 10-year cirrhosis conversion. KASL 2025 recommends non-invasive fibrosis assessment (FIB-4, NFS) as first-line screening tools.',
+          }}
+        >
           <FibrosisProgression fibrosis={fibrosis} lang={lang} />
-        </div>
+        </InsightPanel>
 
         {/* Mortality HR staircase */}
-        <div style={{
-          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '20px',
-        }}>
-          <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 14px', fontFamily: "'Noto Sans KR'" }}>
-            {t('전체사망률 위험배수 (HR)', 'All-cause Mortality HR', lang)}
-          </h3>
+        <InsightPanel
+          title={t('전체사망률 위험배수 (HR)', 'All-cause Mortality HR', lang)}
+          source="Simon 2021 Gut"
+          sourceUrl="https://pubmed.ncbi.nlm.nih.gov/33592475/"
+          details={[
+            { label: 'NAFL', value: '1.71', unit: 'x', color: '#6bcb77' },
+            { label: 'MASH', value: '2.14', unit: 'x', color: '#ffd93d' },
+            { label: t('간경변', 'Cirrhosis', lang), value: '3.79', unit: 'x', color: '#ff6b6b' },
+          ]}
+          insight={{
+            ko: '간 질환 단계별 전체사망률 HR은 단순지방간 1.71배, MASH 2.14배, 간경변 3.79배로, 질환이 진행될수록 사망 위험이 기하급수적으로 증가합니다. 섬유화 동반 시 HR이 더욱 상승하며, 이는 조기 선별의 중요성을 뒷받침합니다 (KASL 2025).',
+            en: 'All-cause mortality HR escalates from NAFL 1.71x to MASH 2.14x to cirrhosis 3.79x, showing exponential risk increase with disease progression. Fibrosis further elevates HR, underscoring the importance of early screening (KASL 2025).',
+          }}
+        >
           <MortalityStaircase hr={mortalityHR} lang={lang} />
-        </div>
+        </InsightPanel>
 
         {/* Comorbidity 2012 vs 2022 */}
-        <div style={{
-          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '20px',
-        }}>
-          <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 14px', fontFamily: "'Noto Sans KR'" }}>
-            {t('동반질환 변화 (2012 vs 2022)', 'Comorbidity Change (2012 vs 2022)', lang)}
-          </h3>
+        <InsightPanel
+          title={t('동반질환 변화 (2012 vs 2022)', 'Comorbidity Change (2012 vs 2022)', lang)}
+          source="KASL NAFLD FS 2023"
+          sourceUrl="https://www.kasl.org/"
+          insight={{
+            ko: 'MASLD 환자의 동반질환 유병률은 10년간 전반적으로 증가했으며, 특히 제2형 당뇨병, 이상지질혈증, 고혈압 동반율이 현저히 높습니다. KASL 2025에서는 MASLD를 다장기 대사질환으로 접근할 것을 권고합니다.',
+            en: 'MASLD comorbidity prevalence increased over 10 years, particularly T2DM, dyslipidemia, and hypertension. KASL 2025 recommends approaching MASLD as a multi-organ metabolic disease.',
+          }}
+        >
           <div style={{ fontSize: '12px', color: '#bbbbdd' }}>
             {masld.comorbidities2022 ? Object.entries(masld.comorbidities2022).map(([k, v]) => {
               const pct = typeof v === 'object' && v !== null ? v.percent : (typeof v === 'number' ? v : null);
@@ -232,16 +271,23 @@ function MASLDPanel({ masld, mash, lang }) {
               );
             }) : <span style={{ color: '#9999bb' }}>{t('네트워크 탭에서 확인', 'See Network tab', lang)}</span>}
           </div>
-        </div>
+        </InsightPanel>
 
         {/* Cost */}
-        <div style={{
-          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '20px',
-        }}>
-          <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 14px', fontFamily: "'Noto Sans KR'" }}>
-            {t('의료비 부담', 'Medical Cost Burden', lang)}
-          </h3>
+        <InsightPanel
+          title={t('의료비 부담', 'Medical Cost Burden', lang)}
+          source="KASL Matched Cohort"
+          sourceUrl="https://www.kasl.org/"
+          details={[
+            { label: t('1인당 연간', 'Per Patient/yr', lang), value: '212', unit: t('만원', '0K KRW', lang), color: '#ffd93d' },
+            { label: t('초과비용', 'Excess Cost', lang), value: '97', unit: t('만원/년', '0K/yr', lang), color: '#ff922b' },
+            { label: t('총 초과비용', 'Total Excess', lang), value: '7.5', unit: t('조원', 'T KRW', lang), color: '#ff6b6b' },
+          ]}
+          insight={{
+            ko: 'MASLD 환자의 1인당 연간 의료비는 212만원으로 대조군 대비 97만원 초과합니다. 768만 환자 기준 연간 총 초과 의료비는 약 7.5조원에 달하며, 이는 국가 의료비 부담의 주요 요인입니다.',
+            en: 'Per-patient annual cost is ₩2.12M, ₩970K above matched controls. Applied to 7.68M patients, the total excess burden reaches ~₩7.5 trillion annually, representing a significant national healthcare cost driver.',
+          }}
+        >
           <div style={{ fontSize: '28px', fontWeight: 800, color: '#ffd93d', fontFamily: "'JetBrains Mono'", marginBottom: '8px' }}>
             ₩212{t('만', '0K', lang)}/{t('년', 'yr', lang)}
           </div>
@@ -254,7 +300,7 @@ function MASLDPanel({ masld, mash, lang }) {
           <div style={{ marginTop: '6px', padding: '8px', background: 'rgba(255,107,107,0.05)', borderRadius: '6px', fontSize: '11px', color: '#ff6b6b' }}>
             768만 × 97만 = {t('총 초과비용 약 7.5조원', 'Total excess ~₩7.5T', lang)}
           </div>
-        </div>
+        </InsightPanel>
       </div>
 
       {/* MASH caveat */}
@@ -379,13 +425,20 @@ function ViralPanel({ lang }) {
   return (
     <>
       {/* HBV Section */}
-      <div style={{
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: '12px', padding: '20px', marginBottom: '16px',
-      }}>
-        <h3 style={{ fontSize: '14px', color: '#fff', margin: '0 0 16px', fontFamily: "'Noto Sans KR'" }}>
-          🦠 {t('B형간염 (HBV)', 'Hepatitis B (HBV)', lang)}
-        </h3>
+      <InsightPanel
+        title={t('🦠 B형간염 (HBV)', '🦠 Hepatitis B (HBV)', lang)}
+        source="KASL HBV FS 2023"
+        sourceUrl="https://www.kasl.org/"
+        details={[
+          { label: 'HBsAg', value: '2.14', unit: '%', color: '#4d96ff' },
+          { label: t('만성 환자', 'Chronic Pts', lang), value: '49', unit: t('만명', '0K', lang), color: '#ff922b' },
+          { label: t('HBV 기인 HCC', 'HBV-HCC', lang), value: hbv.complications?.hbvRelatedHCC_2020 || '—', unit: '%', color: '#ff6b6b' },
+        ]}
+        insight={{
+          ko: '한국의 HBsAg 양성률은 1995년 국가예방접종 도입 이후 3.4%→2.14%로 37% 감소했으나, 여전히 만성 B형간염 49만명이 관리 중입니다. 30세 미만에서는 거의 소실되었으나, 20-30대 항체 소실에 따른 추가접종이 필요합니다 (KASL 2022 GL).',
+          en: 'Korea HBsAg prevalence dropped 37% (3.4%→2.14%) since universal vaccination in 1995, but 490K chronic HBV patients remain. Near-zero in <30 age group, though antibody waning in 20-30s requires boosters (KASL 2022 GL).',
+        }}
+      >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '10px', marginBottom: '16px' }}>
           {hbvKpis.map((kpi, i) => (
             <div key={i} style={{
@@ -447,21 +500,40 @@ function ViralPanel({ lang }) {
             </div>
           </div>
         </div>
-        <div style={{ marginTop: '8px', fontSize: '9px', color: '#444' }}>
-          <a href={hbv.refUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#00d4ff88', textDecoration: 'none' }}>
-            📎 {hbv.ref}
-          </a>
-        </div>
-      </div>
+      </InsightPanel>
+
+      {/* HBV HBsAg Prevalence Trend (1982-2021) */}
+      <InsightPanel
+        title={t('B형간염 HBsAg 양성률 추이 (1982-2021)', 'HBV HBsAg Prevalence Trend (1982-2021)', lang)}
+        source="간질환 백서 2024"
+        details={[
+          { label: '1982', value: '8.6', unit: '%', color: '#ff6b6b' },
+          { label: '2021', value: '2.2', unit: '%', color: '#4d96ff' },
+          { label: t('감소율', 'Reduction', lang), value: '74', unit: '%', color: '#6bcb77' },
+        ]}
+        insight={{
+          ko: '1995년 영유아 예방접종 도입 효과로 30세 미만에서 거의 퇴치 수준. 그러나 1992년 이전 출생 코호트에서 40-50대 남성 유병률이 여전히 4-6%로 높아, 이 세대에 대한 선별검사와 항바이러스 치료가 핵심.',
+          en: 'Near-elimination in <30 age group thanks to universal infant vaccination since 1995. However, prevalence remains 4-6% in males aged 40-50s born before 1992, making screening and antiviral treatment in this cohort essential.',
+        }}
+      >
+        <HBVPrevalenceChart lang={lang} />
+      </InsightPanel>
 
       {/* HCV Section */}
-      <div style={{
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: '12px', padding: '20px',
-      }}>
-        <h3 style={{ fontSize: '14px', color: '#fff', margin: '0 0 16px', fontFamily: "'Noto Sans KR'" }}>
-          🧬 {t('C형간염 (HCV)', 'Hepatitis C (HCV)', lang)}
-        </h3>
+      <InsightPanel
+        title={t('🧬 C형간염 (HCV)', '🧬 Hepatitis C (HCV)', lang)}
+        source="KASL HCV FS 2023"
+        sourceUrl="https://www.kasl.org/"
+        details={[
+          { label: 'Anti-HCV', value: hcv.antiHcvPrevalence?.y2019_2021 || '—', unit: '%', color: '#4d96ff' },
+          { label: 'DAA SVR', value: hcv.treatment?.svrRate || '—', unit: '%', color: '#6bcb77' },
+          { label: t('치료율', 'Tx Rate', lang), value: hcv.patients?.treatmentRate || '—', unit: '%', color: '#e599f7' },
+        ]}
+        insight={{
+          ko: 'DAA 도입으로 SVR 95%+ 달성이 가능하지만, 추정 감염자 30만명 중 진단율과 치료율이 모두 WHO 2030 제거 목표에 미달합니다. 1b형(45%)과 2a형(26%)이 주요 유전자형이며, 고위험군 대상 적극적 검진 확대가 필요합니다.',
+          en: 'Despite DAA achieving 95%+ SVR, both diagnosis and treatment rates fall short of WHO 2030 elimination targets among estimated 300K infected. GT 1b (45%) and 2a (26%) dominate, requiring expanded screening in high-risk populations.',
+        }}
+      >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '10px', marginBottom: '16px' }}>
           {hcvKpis.map((kpi, i) => (
             <div key={i} style={{
@@ -534,12 +606,7 @@ function ViralPanel({ lang }) {
           {t('위험요인: ', 'Risk factors: ', lang)}
           {hcv.riskFactors.join(' | ')}
         </div>
-        <div style={{ marginTop: '4px', fontSize: '9px', color: '#444' }}>
-          <a href={hcv.refUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#00d4ff88', textDecoration: 'none' }}>
-            📎 {hcv.ref}
-          </a>
-        </div>
-      </div>
+      </InsightPanel>
     </>
   );
 }
@@ -582,13 +649,20 @@ function ALDPanel({ lang }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
         {/* ALD Spectrum */}
-        <div style={{
-          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '20px',
-        }}>
-          <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 14px', fontFamily: "'Noto Sans KR'" }}>
-            {t('알코올 간질환 스펙트럼', 'ALD Spectrum', lang)}
-          </h3>
+        <InsightPanel
+          title={t('알코올 간질환 스펙트럼', 'ALD Spectrum', lang)}
+          source="KASL ALD FS 2023"
+          sourceUrl="https://www.kasl.org/"
+          details={[
+            { label: t('지방간', 'Fatty Liver', lang), value: ald.prevalence?.alcoholicFattyLiver || '—', unit: '%', color: '#ffd93d' },
+            { label: t('간염', 'Hepatitis', lang), value: ald.prevalence?.alcoholicHepatitis || '—', unit: '%', color: '#ff922b' },
+            { label: t('간경변', 'Cirrhosis', lang), value: ald.prevalence?.alcoholicCirrhosis || '—', unit: '%', color: '#ff6b6b' },
+          ]}
+          insight={{
+            ko: '알코올 간질환은 지방간→간염→간경변 순으로 진행하며, HBV 기인 간경변 비율이 감소하면서 ALD 기인 간경변 비율이 상대적으로 증가하고 있습니다. 한국은 OECD 상위권 음주 수준으로 ALD 예방이 중요합니다.',
+            en: 'ALD progresses from steatosis to hepatitis to cirrhosis. As HBV-related cirrhosis declines, ALD-attributed cirrhosis proportion is rising. Korea ranks high among OECD nations in alcohol consumption, making ALD prevention critical.',
+          }}
+        >
           {[
             { label: t('알코올성 지방간', 'Alcoholic Fatty Liver', lang), value: ald.prevalence.alcoholicFattyLiver, color: '#ffd93d' },
             { label: t('알코올성 간염', 'Alcoholic Hepatitis', lang), value: ald.prevalence.alcoholicHepatitis, color: '#ff922b' },
@@ -605,16 +679,22 @@ function ALDPanel({ lang }) {
           <div style={{ marginTop: '12px', padding: '8px 10px', background: 'rgba(255,146,43,0.08)', borderRadius: '6px', fontSize: '10px', color: '#ff922b' }}>
             {t('ALD 기인 간경변 비율 증가 추세 — HBV 비율 감소분 대체', 'ALD cirrhosis proportion rising — replacing declining HBV share', lang)}
           </div>
-        </div>
+        </InsightPanel>
 
         {/* Demographics + Alcohol */}
-        <div style={{
-          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '20px',
-        }}>
-          <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 14px', fontFamily: "'Noto Sans KR'" }}>
-            {t('성별·연령 분포 및 음주 현황', 'Demographics & Alcohol Consumption', lang)}
-          </h3>
+        <InsightPanel
+          title={t('성별·연령 분포 및 음주 현황', 'Demographics & Alcohol Consumption', lang)}
+          source="KASL ALD FS 2023"
+          sourceUrl="https://www.kasl.org/"
+          details={[
+            { label: t('남성 비율', 'Male Ratio', lang), value: demo.maleRatio || '—', unit: '%', color: '#4d96ff' },
+            { label: t('1인당 음주', 'Per Capita', lang), value: alc.perCapitaAlcohol_L || '—', unit: 'L/yr', color: '#ff922b' },
+          ]}
+          insight={{
+            ko: 'ALD는 남성 우위(약 3:1)이나, 최근 여성 ALD 비율 및 고위험음주가 지속 증가하고 있습니다. 1인당 알코올 소비량은 OECD 평균 이상이며, 폭음 문화가 ALD 발생의 주요 위험요인입니다.',
+            en: 'ALD is male-predominant (~3:1), but female ALD proportion and high-risk drinking are steadily increasing. Per-capita alcohol consumption exceeds the OECD average, with binge drinking culture being a major risk factor.',
+          }}
+        >
 
           {/* Gender ratio bar */}
           <div style={{ marginBottom: '14px' }}>
@@ -645,17 +725,24 @@ function ALDPanel({ lang }) {
           <div style={{ marginTop: '12px', padding: '6px 10px', background: 'rgba(229,153,247,0.08)', borderRadius: '6px', fontSize: '10px', color: '#e599f7' }}>
             {t('⚠️ 여성 ALD 비율 및 고위험음주 지속 증가', '⚠️ Female ALD proportion & high-risk drinking increasing', lang)}
           </div>
-        </div>
+        </InsightPanel>
       </div>
 
       {/* ALD Complications */}
-      <div style={{
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: '12px', padding: '20px', marginBottom: '12px',
-      }}>
-        <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 14px', fontFamily: "'Noto Sans KR'" }}>
-          {t('ALD 관련 간질환 기여도', 'ALD Contribution to Liver Disease', lang)}
-        </h3>
+      <InsightPanel
+        title={t('ALD 관련 간질환 기여도', 'ALD Contribution to Liver Disease', lang)}
+        source="KASL ALD FS 2023"
+        sourceUrl="https://www.kasl.org/"
+        details={[
+          { label: t('간경변 중 ALD', 'ALD in LC', lang), value: comp.aldRelatedLC_proportion || '—', unit: '%', color: '#ff922b' },
+          { label: t('HCC 중 ALD', 'ALD in HCC', lang), value: comp.aldRelatedHCC_proportion || '—', unit: '%', color: '#ff6b6b' },
+          { label: t('ALD 사망률', 'ALD Mortality', lang), value: mort.aldDeathRate2021 || '—', unit: '/10만', color: '#e599f7' },
+        ]}
+        insight={{
+          ko: 'ALD는 간경변 및 HCC의 주요 원인 중 하나로, 특히 HBV 백신 보급 이후 상대적 기여도가 증가하고 있습니다. ALD 사망률도 상승 추세로, 알코올 정책 강화가 시급합니다.',
+          en: 'ALD is a leading cause of cirrhosis and HCC, with rising proportional contribution as HBV vaccination reduces viral hepatitis burden. ALD mortality is also trending upward, highlighting the urgency of alcohol policy interventions.',
+        }}
+      >
         <div style={{ display: 'flex', gap: '24px' }}>
           {[
             { label: t('간경변 중 ALD', 'ALD in Cirrhosis', lang), value: comp.aldRelatedLC_proportion, color: '#ff922b' },
@@ -671,7 +758,7 @@ function ALDPanel({ lang }) {
             </div>
           ))}
         </div>
-      </div>
+      </InsightPanel>
 
       {/* Risk factors + ref */}
       <div style={{ fontSize: '10px', color: '#9999bb', marginBottom: '4px' }}>
@@ -729,13 +816,15 @@ function ProgressionPanel({ masld, mash, lc, lang }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
       {/* 2yr Progression Heatmap */}
-      <div style={{
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: '12px', padding: '20px',
-      }}>
-        <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 8px', fontFamily: "'Noto Sans KR'" }}>
-          {t('MASLD 2년 추적 진행률 (%)', '2-Year Progression Rate (%)', lang)}
-        </h3>
+      <InsightPanel
+        title={t('MASLD 2년 추적 진행률 (%)', '2-Year Progression Rate (%)', lang)}
+        source="KASL NAFLD FS 2023"
+        sourceUrl="https://www.kasl.org/"
+        insight={{
+          ko: 'MASLD 진단 후 2년 내 간경변, HCC, 허혈성심질환, 뇌졸중 등의 진행률을 연령·성별로 추적한 결과입니다. 고령일수록, 남성에서 간경변·HCC 진행률이 높으며, 심혈관 합병증 동반도 증가합니다.',
+          en: 'Two-year progression rates to cirrhosis, HCC, IHD, and stroke after MASLD diagnosis by age and sex. Higher rates in elderly and males for cirrhosis/HCC, with increasing cardiovascular comorbidity.',
+        }}
+      >
         <SexToggle value={sex2yr} onChange={setSex2yr} />
         {diseases2yr.length > 0 ? diseases2yr.map(disease => {
           const sexData = prog2yr[disease]?.[sex2yr];
@@ -781,19 +870,18 @@ function ProgressionPanel({ masld, mash, lc, lang }) {
             ))}
           </div>
         )}
-        <a href="https://www.kasl.org/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '8px', color: '#00d4ff66', textDecoration: 'none', marginTop: '6px', display: 'block' }}>
-          📎 KASL NAFLD FS 2023, NHIS 2yr follow-up
-        </a>
-      </div>
+      </InsightPanel>
 
       {/* 10yr Progression Stacked Bar */}
-      <div style={{
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: '12px', padding: '20px',
-      }}>
-        <h3 style={{ fontSize: '13px', color: '#fff', margin: '0 0 8px', fontFamily: "'Noto Sans KR'" }}>
-          {t('10년 추적 진행률 (2010 기준, %)', '10-Year Progression (2010 baseline, %)', lang)}
-        </h3>
+      <InsightPanel
+        title={t('10년 추적 진행률 (2010 기준, %)', '10-Year Progression (2010 baseline, %)', lang)}
+        source="KASL NAFLD FS 2023"
+        sourceUrl="https://www.kasl.org/"
+        insight={{
+          ko: '2010년 NAFLD 코호트의 10년 추적에서 악성종양, 허혈성심질환, 뇌졸중, 간경변, HCC 발생률을 확인합니다. MASLD는 간 질환뿐 아니라 심혈관·종양 합병증의 독립 위험인자임을 보여줍니다.',
+          en: 'Ten-year follow-up of the 2010 NAFLD cohort shows incidence of malignancy, IHD, stroke, cirrhosis, and HCC. MASLD is an independent risk factor not only for liver disease but also cardiovascular and oncologic complications.',
+        }}
+      >
         <SexToggle value={sex10yr} onChange={setSex10yr} />
         {Object.keys(prog10yrData).length > 0 ? (
           <div>
@@ -839,10 +927,142 @@ function ProgressionPanel({ masld, mash, lc, lang }) {
         <div style={{ marginTop: '8px', fontSize: '9px', color: '#9999bb' }}>
           {t('NAFLD 진단 후 10년 추적, 2010년 코호트', 'NAFLD 10yr follow-up, 2010 cohort', lang)}
         </div>
-        <a href="https://www.kasl.org/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '8px', color: '#00d4ff66', textDecoration: 'none', marginTop: '4px', display: 'block' }}>
-          📎 KASL NAFLD FS 2023
-        </a>
-      </div>
+      </InsightPanel>
     </div>
+  );
+}
+
+function LiverMortalityChart({ lang }) {
+  const { years, liver_disease, hcc_mortality } = LIVER_WP.mortality;
+  const W = 600, H = 220, PL = 45, PR = 15, PT = 15, PB = 35;
+  const plotW = W - PL - PR, plotH = H - PT - PB;
+  const maxVal = 32;
+
+  const toX = (i) => PL + (i / (years.length - 1)) * plotW;
+  const toY = (v) => PT + plotH - (v / maxVal) * plotH;
+
+  const buildPath = (data) => {
+    let path = '';
+    let drawing = false;
+    data.forEach((v, i) => {
+      if (v == null) { drawing = false; return; }
+      const x = toX(i);
+      const y = toY(v);
+      path += drawing ? `L${x},${y} ` : `M${x},${y} `;
+      drawing = true;
+    });
+    return path;
+  };
+
+  const yTicks = [0, 5, 10, 15, 20, 25, 30];
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%' }}>
+      {/* Grid lines */}
+      {yTicks.map(v => (
+        <g key={v}>
+          <line x1={PL} x2={W - PR} y1={toY(v)} y2={toY(v)} stroke="rgba(255,255,255,0.05)" />
+          <text x={PL - 4} y={toY(v) + 3} fill="#9999bb" fontSize="9" textAnchor="end" fontFamily="JetBrains Mono">{v}</text>
+        </g>
+      ))}
+      {/* Y axis label */}
+      <text x={8} y={PT + plotH / 2} fill="#9999bb" fontSize="8" fontFamily="JetBrains Mono" transform={`rotate(-90, 8, ${PT + plotH / 2})`} textAnchor="middle">
+        /10{lang === 'ko' ? '만명' : '0K'}
+      </text>
+      {/* Lines */}
+      <path d={buildPath(liver_disease)} fill="none" stroke="#ff6b6b" strokeWidth="2.5" strokeLinecap="round" />
+      <path d={buildPath(hcc_mortality)} fill="none" stroke="#4d96ff" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Start/end labels for liver_disease */}
+      <text x={toX(0) - 2} y={toY(liver_disease[0]) - 6} fill="#ff6b6b" fontSize="9" fontFamily="JetBrains Mono" textAnchor="start">{liver_disease[0]}</text>
+      {(() => { const lastIdx = liver_disease.findLastIndex(v => v != null); return lastIdx >= 0 ? <text x={toX(lastIdx) + 2} y={toY(liver_disease[lastIdx]) - 6} fill="#ff6b6b" fontSize="9" fontFamily="JetBrains Mono" textAnchor="start">{liver_disease[lastIdx]}</text> : null; })()}
+      {/* Start/end labels for hcc */}
+      <text x={toX(0) - 2} y={toY(hcc_mortality[0]) + 14} fill="#4d96ff" fontSize="9" fontFamily="JetBrains Mono" textAnchor="start">{hcc_mortality[0]}</text>
+      {(() => { const lastIdx = hcc_mortality.findLastIndex(v => v != null); return lastIdx >= 0 ? <text x={toX(lastIdx) + 2} y={toY(hcc_mortality[lastIdx]) + 14} fill="#4d96ff" fontSize="9" fontFamily="JetBrains Mono" textAnchor="start">{hcc_mortality[lastIdx]}</text> : null; })()}
+      {/* X axis */}
+      {years.filter((_, i) => i % 5 === 0).map((y, _, arr) => (
+        <text key={y} x={toX(years.indexOf(y))} y={H - 6} fill="#9999bb" fontSize="9" textAnchor="middle" fontFamily="JetBrains Mono">{y}</text>
+      ))}
+      {/* Legend */}
+      <g transform={`translate(${PL + 10}, ${H - 22})`}>
+        <rect width="12" height="3" fill="#ff6b6b" rx="1" />
+        <text x="16" y="3" fill="#bbbbdd" fontSize="9" fontFamily="JetBrains Mono">{lang === 'ko' ? '간질환 사망률' : 'Liver Disease'}</text>
+        <rect x="120" width="12" height="3" fill="#4d96ff" rx="1" />
+        <text x="136" y="3" fill="#bbbbdd" fontSize="9" fontFamily="JetBrains Mono">{lang === 'ko' ? '간암 사망률' : 'HCC Mortality'}</text>
+      </g>
+    </svg>
+  );
+}
+
+function HBVPrevalenceChart({ lang }) {
+  const { years, prevalence } = LIVER_WP.hbv;
+  const W = 600, H = 220, PL = 45, PR = 15, PT = 15, PB = 35;
+  const plotW = W - PL - PR, plotH = H - PT - PB;
+  const maxVal = 10;
+
+  const toX = (i) => PL + (i / (years.length - 1)) * plotW;
+  const toY = (v) => PT + plotH - (v / maxVal) * plotH;
+
+  const buildPath = (data) => {
+    let path = '';
+    let drawing = false;
+    data.forEach((v, i) => {
+      if (v == null) { drawing = false; return; }
+      const x = toX(i);
+      const y = toY(v);
+      path += drawing ? `L${x},${y} ` : `M${x},${y} `;
+      drawing = true;
+    });
+    return path;
+  };
+
+  const yTicks = [0, 2, 4, 6, 8, 10];
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%' }}>
+      {/* Grid lines */}
+      {yTicks.map(v => (
+        <g key={v}>
+          <line x1={PL} x2={W - PR} y1={toY(v)} y2={toY(v)} stroke="rgba(255,255,255,0.05)" />
+          <text x={PL - 4} y={toY(v) + 3} fill="#9999bb" fontSize="9" textAnchor="end" fontFamily="JetBrains Mono">{v}</text>
+        </g>
+      ))}
+      {/* Y axis label */}
+      <text x={8} y={PT + plotH / 2} fill="#9999bb" fontSize="8" fontFamily="JetBrains Mono" transform={`rotate(-90, 8, ${PT + plotH / 2})`} textAnchor="middle">
+        HBsAg (%)
+      </text>
+      {/* Line */}
+      <path d={buildPath(prevalence)} fill="none" stroke="#4d96ff" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Data points */}
+      {prevalence.map((v, i) => v != null ? (
+        <circle key={i} cx={toX(i)} cy={toY(v)} r="3" fill="#4d96ff" stroke="#1a1a2e" strokeWidth="1.5" />
+      ) : null)}
+      {/* Start label */}
+      <text x={toX(0)} y={toY(prevalence[0]) - 8} fill="#ff6b6b" fontSize="10" fontFamily="JetBrains Mono" fontWeight="700" textAnchor="middle">{prevalence[0]}%</text>
+      {/* End label */}
+      <text x={toX(years.length - 1)} y={toY(prevalence[prevalence.length - 1]) - 8} fill="#6bcb77" fontSize="10" fontFamily="JetBrains Mono" fontWeight="700" textAnchor="middle">{prevalence[prevalence.length - 1]}%</text>
+      {/* 1995 vaccination annotation */}
+      {(() => {
+        const idx1995 = years.indexOf(1995);
+        if (idx1995 < 0) return null;
+        const x95 = toX(idx1995);
+        return (
+          <g>
+            <line x1={x95} x2={x95} y1={PT} y2={PT + plotH} stroke="#6bcb7744" strokeWidth="1" strokeDasharray="4,3" />
+            <text x={x95 + 4} y={PT + 12} fill="#6bcb77" fontSize="8" fontFamily="JetBrains Mono">
+              {lang === 'ko' ? '예방접종 도입' : 'Vaccination'}
+            </text>
+          </g>
+        );
+      })()}
+      {/* Reduction arrow */}
+      <g transform={`translate(${W - PR - 80}, ${PT + 10})`}>
+        <text x="0" y="0" fill="#6bcb77" fontSize="16" fontFamily="JetBrains Mono" fontWeight="800">↓ 74%</text>
+        <text x="0" y="14" fill="#9999bb" fontSize="8" fontFamily="JetBrains Mono">{lang === 'ko' ? '40년간 감소' : '40yr decline'}</text>
+      </g>
+      {/* X axis */}
+      {years.filter((_, i) => i % 3 === 0 || i === years.length - 1).map(y => (
+        <text key={y} x={toX(years.indexOf(y))} y={H - 6} fill="#9999bb" fontSize="9" textAnchor="middle" fontFamily="JetBrains Mono">{y}</text>
+      ))}
+    </svg>
   );
 }
