@@ -928,7 +928,78 @@ function ProgressionPanel({ masld, mash, lc, lang }) {
           {t('NAFLD 진단 후 10년 추적, 2010년 코호트', 'NAFLD 10yr follow-up, 2010 cohort', lang)}
         </div>
       </InsightPanel>
+
+      {/* GBD YLL Ranking Slope Chart */}
+      <InsightPanel
+        title={t('질병부담(YLL) 순위 변화 — 1999 vs 2019', 'Disease Burden (YLL) Ranking — 1999 vs 2019', lang)}
+        source={t('간질환 백서 2024', 'Liver WP 2024', lang)} sourceUrl="https://www.kasl.org/"
+        details={[
+          { label: t('간경변', 'Cirrhosis', lang), value: '3위→6위', color: '#ff6b6b' },
+          { label: t('간암', 'HCC', lang), value: '8위→5위', color: '#e74c3c' },
+          { label: t('교통사고', 'Traffic', lang), value: '2위→10위', color: '#6bcb77' },
+        ]}
+        insight={{
+          ko: '20년간 간경변은 3위→6위로 하락(예방접종+항바이러스 효과)했으나, 간암은 8위→5위로 상승. 자살이 6위→2위, 교통사고가 2위→10위로 극적 변화. 간질환 전체(간경변+간암)는 여전히 한국인 조기사망의 주요 원인.',
+          en: 'Cirrhosis dropped from 3rd→6th (vaccination+antiviral effect) but HCC rose from 8th→5th over 20 years. Suicide surged 6th→2nd, traffic accidents plunged 2nd→10th. Liver diseases combined remain a leading cause of premature death in Korea.',
+        }}
+      >
+        <GBDSlopeChart lang={lang} />
+      </InsightPanel>
     </div>
+  );
+}
+
+function GBDSlopeChart({ lang }) {
+  const data1999 = LIVER_WP.gbd_yll_ranking[1999];
+  const data2019 = LIVER_WP.gbd_yll_ranking[2019];
+  const W = 560, H = 280, ML = 130, MR = 130, MT = 20, MB = 30;
+  const chartW = W - ML - MR, chartH = H - MT - MB;
+  const yStep = chartH / 9;
+
+  const diseases = data1999.map(d => d.disease);
+  const colors = {
+    '간경변증': '#ff6b6b', '간암': '#e74c3c', '뇌졸중': '#ffd93d',
+    '허혈성심질환': '#ff922b', '위암': '#b388ff', '자살': '#ff006e',
+    '폐암': '#9999bb', '교통사고': '#6bcb77', '당뇨': '#4d96ff', '대장암': '#4ecdc4',
+  };
+
+  const t2 = (ko, en) => lang === 'ko' ? ko : en;
+  const dn = {
+    '간경변증': t2('간경변증','Cirrhosis'), '간암': t2('간암','HCC'), '뇌졸중': t2('뇌졸중','Stroke'),
+    '허혈성심질환': t2('허혈심질환','IHD'), '위암': t2('위암','Gastric'), '자살': t2('자살','Suicide'),
+    '폐암': t2('폐암','Lung Ca'), '교통사고': t2('교통사고','Traffic'), '당뇨': t2('당뇨','DM'), '대장암': t2('대장암','Colorectal'),
+  };
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%' }}>
+      <text x={ML - 5} y={MT - 6} fontSize="10" fill="#9999bb" textAnchor="end" fontFamily="JetBrains Mono">1999</text>
+      <text x={ML + chartW + 5} y={MT - 6} fontSize="10" fill="#9999bb" textAnchor="start" fontFamily="JetBrains Mono">2019</text>
+      {diseases.map(d => {
+        const r1999 = data1999.find(e => e.disease === d)?.rank;
+        const r2019 = data2019.find(e => e.disease === d)?.rank;
+        if (!r1999 || !r2019) return null;
+        const y1 = MT + (r1999 - 1) * yStep;
+        const y2 = MT + (r2019 - 1) * yStep;
+        const isLiver = d === '간경변증' || d === '간암';
+        return (
+          <g key={d}>
+            <line x1={ML} y1={y1} x2={ML + chartW} y2={y2}
+              stroke={colors[d] || '#666'} strokeWidth={isLiver ? 3 : 1.5}
+              opacity={isLiver ? 1 : 0.5} />
+            <circle cx={ML} cy={y1} r={isLiver ? 5 : 3} fill={colors[d] || '#666'} opacity={isLiver ? 1 : 0.6} />
+            <circle cx={ML + chartW} cy={y2} r={isLiver ? 5 : 3} fill={colors[d] || '#666'} opacity={isLiver ? 1 : 0.6} />
+            <text x={ML - 8} y={y1 + 4} fontSize="10" fill={colors[d] || '#999'} textAnchor="end"
+              fontWeight={isLiver ? 700 : 400} fontFamily="'Noto Sans KR'">
+              {r1999}. {dn[d] || d}
+            </text>
+            <text x={ML + chartW + 8} y={y2 + 4} fontSize="10" fill={colors[d] || '#999'} textAnchor="start"
+              fontWeight={isLiver ? 700 : 400} fontFamily="'Noto Sans KR'">
+              {r2019}. {dn[d] || d}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
   );
 }
 

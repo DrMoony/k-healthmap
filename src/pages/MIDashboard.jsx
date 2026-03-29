@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MI_KOSIS } from '../data/mi_kosis';
 import { useLang } from '../i18n';
+import InsightPanel from '../components/InsightPanel';
 
 const PROVINCES = [
   '서울','부산','대구','인천','광주','대전','울산','세종',
@@ -446,11 +447,14 @@ export default function MIDashboard({ embedded = false }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
 
         {/* ER Result by Region — Horizontal stacked bar */}
-        <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-          <SectionHeader
-            title={t('시도별 응급실 결과','ER Result by Province')}
-            source="KOSIS 2023"
-          />
+        <InsightPanel
+          title={t('시도별 응급실 결과','ER Result by Province')}
+          source="KOSIS 2023" sourceUrl="https://kosis.kr/"
+          insight={{
+            ko: 'MI 응급실 내원 후 입원이 대부분이나, 시도별 사망률 편차 존재. 경기·서울은 환자 수 최다이나 사망 비율은 상대적으로 낮고, 일부 비수도권 지역은 전원율이 높아 급성기 치료 인프라 격차를 반영.',
+            en: 'Most MI ER visits result in admission, but provincial mortality varies. Gyeonggi/Seoul have highest volume but lower death ratios; some non-capital regions show high transfer rates, reflecting acute care infrastructure gaps.',
+          }}
+        >
           <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
             {erData.map((d, idx) => {
               const total = d.total;
@@ -507,14 +511,17 @@ export default function MIDashboard({ embedded = false }) {
               </div>
             ))}
           </div>
-        </Panel>
+        </InsightPanel>
 
         {/* Monthly Pattern */}
-        <Panel style={{ flex: '0 0 auto', minHeight: '160px' }}>
-          <SectionHeader
-            title={`${t('월별 환자수','Monthly Patients')}${selectedProv ? ` — ${provName(selectedProv)}` : ''}`}
-            source="KOSIS"
-          />
+        <InsightPanel
+          title={`${t('월별 환자수','Monthly Patients')}${selectedProv ? ` — ${provName(selectedProv)}` : ''}`}
+          source="KOSIS" sourceUrl="https://kosis.kr/"
+          insight={{
+            ko: '심근경색은 겨울철(12-2월) 발생이 뚜렷하게 증가. 한랭 자극에 의한 혈관 수축, 혈압 상승, 혈소판 응집 증가가 원인. 특히 새벽 시간대 발생 위험이 높아 고위험군(고령, 당뇨, 관상동맥질환 기왕력)의 동절기 관리가 중요.',
+            en: 'MI shows a clear winter peak (Dec-Feb). Cold-induced vasoconstriction, blood pressure elevation, and increased platelet aggregation are key drivers. Early morning hours carry highest risk — winter management is critical for high-risk groups (elderly, diabetes, prior CAD).',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '110px' }}>
             {monthlyData.map((v, i) => {
               const max = Math.max(...monthlyData, 1);
@@ -546,14 +553,17 @@ export default function MIDashboard({ embedded = false }) {
           <div style={{ fontSize: '9px', color: '#ff922b', marginTop: '6px', textAlign: 'center' }}>
             {t('겨울철(12-2월) 심근경색 발생 증가','Higher MI incidence in winter (Dec-Feb)')}
           </div>
-        </Panel>
+        </InsightPanel>
 
         {/* Death Timing */}
-        <Panel style={{ flex: '0 0 auto' }}>
-          <SectionHeader
-            title={`${t('퇴원 후 사망 시점','Death Timing After Discharge')}${selectedProv ? ` — ${provName(selectedProv)}` : ''}`}
-            source="KOSIS 2017"
-          />
+        <InsightPanel
+          title={`${t('퇴원 후 사망 시점','Death Timing After Discharge')}${selectedProv ? ` — ${provName(selectedProv)}` : ''}`}
+          source="KOSIS 2017" sourceUrl="https://kosis.kr/"
+          insight={{
+            ko: '퇴원 후 30일 이내 사망이 가장 높은 비율을 차지. 퇴원 직후 2주가 가장 위험한 시기로, 외래 추적관찰 지연이 주 원인. 재발성 MI 환자는 첫발생 대비 퇴원 후 사망률이 2배 이상 높아 집중 추적 필요.',
+            en: 'Death within 30 days post-discharge accounts for the highest proportion. The first 2 weeks after discharge are most critical — delayed outpatient follow-up is a key factor. Recurrent MI patients have >2x higher post-discharge mortality than first events.',
+          }}
+        >
           {deathTiming && deathTimingTotal > 0 ? (
             <>
               <div style={{ display: 'flex', height: '28px', borderRadius: '6px', overflow: 'hidden' }}>
@@ -587,17 +597,29 @@ export default function MIDashboard({ embedded = false }) {
           ) : (
             <div style={{ color: '#9999bb', fontSize: '12px', textAlign: 'center', padding: '10px 0' }}>{t('데이터 없음','No data')}</div>
           )}
-        </Panel>
+        </InsightPanel>
       </div>
 
       {/* ═══════ COLUMN 3: Trends + OECD + 첫발생/재발생 치명률 ═══════ */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'auto' }}>
 
         {/* Incidence Trend */}
-        <Panel style={{ flex: '0 0 auto', minHeight: '180px' }}>
+        <InsightPanel
+          title={t('발생률 추이 (2013-2023)','Incidence Trend (2013-2023)')}
+          source="KOSIS" sourceUrl="https://kosis.kr/"
+          details={[
+            { label: t('전체', 'Total'), value: MI_KOSIS.incidenceRate?.['전체']?.['2023'] ?? '—', unit: '/10만', color: '#ff6b6b' },
+            { label: t('남자', 'Male'), value: MI_KOSIS.incidenceRate?.['남자']?.['2023'] ?? '—', unit: '/10만', color: '#4d96ff' },
+            { label: t('여자', 'Female'), value: MI_KOSIS.incidenceRate?.['여자']?.['2023'] ?? '—', unit: '/10만', color: '#ff922b' },
+          ]}
+          insight={{
+            ko: 'MI 발생률은 2013년 이후 완만한 상승 추세. 남성이 여성 대비 2-3배 높으며 격차 유지. 고령화, 대사증후군 증가, 진단 기술 발전(고감도 트로포닌)이 발생률 상승에 기여. 여성은 폐경 후 급격히 증가.',
+            en: 'MI incidence has been gradually rising since 2013. Males are 2-3x higher than females with persistent gap. Aging, metabolic syndrome increase, and diagnostic advances (high-sensitivity troponin) contribute. Female rates surge post-menopause.',
+          }}
+        >
           <TrendLineChart
-            title={t('발생률 추이 (2013-2023)','Incidence Trend (2013-2023)')}
-            source="KOSIS"
+            title=""
+            source=""
             badge={selectedProv ? t('전국 데이터','National') : null}
             years={incYears}
             valueUnit=""
@@ -619,13 +641,24 @@ export default function MIDashboard({ embedded = false }) {
               },
             ]}
           />
-        </Panel>
+        </InsightPanel>
 
         {/* Fatality Trend (30d + 1yr) */}
-        <Panel style={{ flex: '0 0 auto', minHeight: '180px' }}>
+        <InsightPanel
+          title={t('치명률 추이 (30일/1년)','Case Fatality Trend (30d/1yr)')}
+          source="KOSIS" sourceUrl="https://kosis.kr/"
+          details={[
+            { label: t('30일 치명률', '30d CFR'), value: MI_KOSIS.fatality30d?.['전체']?.['2023'] ?? '—', unit: '%', color: '#ff6b6b' },
+            { label: t('1년 치명률', '1yr CFR'), value: MI_KOSIS.fatality1yr?.['전체']?.['2023'] ?? '—', unit: '%', color: '#ff922b' },
+          ]}
+          insight={{
+            ko: '30일 및 1년 치명률 모두 10년간 지속적으로 감소 중. 24시간 PCI 체계 확대, 응급의료 시스템 개선, 약물치료 발전(DAPT, 스타틴) 등이 기여. 다만 재발성 MI의 30일 치명률은 첫발생 대비 2배 이상 높아 이차예방 강화가 핵심.',
+            en: '30-day and 1-year CFR have both declined steadily over 10 years. 24/7 PCI expansion, improved EMS, and pharmacotherapy advances (DAPT, statins) contributed. However, recurrent MI 30-day CFR is >2x higher than first events — secondary prevention is key.',
+          }}
+        >
           <TrendLineChart
-            title={t('치명률 추이 (30일/1년)','Case Fatality Trend (30d/1yr)')}
-            source="KOSIS"
+            title=""
+            source=""
             badge={selectedProv ? t('전국 데이터','National') : null}
             years={fatYears}
             valueUnit="%"
@@ -642,14 +675,17 @@ export default function MIDashboard({ embedded = false }) {
               },
             ]}
           />
-        </Panel>
+        </InsightPanel>
 
         {/* OECD Comparison */}
-        <Panel style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-          <SectionHeader
-            title={t('OECD 원내 30일 사망률 비교','OECD In-hospital 30d Mortality')}
-            source="KOSIS/OECD"
-          />
+        <InsightPanel
+          title={t('OECD 원내 30일 사망률 비교','OECD In-hospital 30d Mortality')}
+          source="KOSIS/OECD" sourceUrl="https://kosis.kr/"
+          insight={{
+            ko: '한국의 AMI 원내 30일 사망률은 OECD 국가 중 최하위권(양호). 전국적 24시간 PCI 체계, 높은 관상동맥조영술 접근성, Door-to-Balloon Time 단축이 주요 요인. OECD 평균 대비 40-50% 낮은 수준.',
+            en: "Korea's AMI in-hospital 30-day mortality ranks among the lowest (best) in OECD. Nationwide 24/7 PCI systems, high coronary angiography access, and shortened Door-to-Balloon Time are key factors. 40-50% lower than OECD average.",
+          }}
+        >
           <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
             {oecdData.map((d, idx) => {
               const maxVal = oecdData.length > 0 ? Math.max(...oecdData.map(x => x.value)) : 1;
@@ -691,13 +727,24 @@ export default function MIDashboard({ embedded = false }) {
               );
             })}
           </div>
-        </Panel>
+        </InsightPanel>
 
         {/* 첫발생 vs 재발생 치명률 */}
-        <Panel style={{ flex: '0 0 auto', minHeight: '160px' }}>
+        <InsightPanel
+          title={t('첫발생 vs 재발생 30일 치명률','First vs Recurrent 30d CFR')}
+          source="KOSIS" sourceUrl="https://kosis.kr/"
+          details={[
+            { label: t('첫발생', 'First'), value: MI_KOSIS.fatality30dType?.['전체_첫발생']?.['2023'] ?? '—', unit: '%', color: '#ff6b6b' },
+            { label: t('재발생', 'Recurrent'), value: MI_KOSIS.fatality30dType?.['전체_재발생']?.['2023'] ?? '—', unit: '%', color: '#ffd93d' },
+          ]}
+          insight={{
+            ko: '재발성 MI의 30일 치명률은 첫발생 대비 약 2배. 기존 심근 손상, 다혈관 질환, 동반질환 축적이 원인. 이차예방(DAPT, 고강도 스타틴, 생활습관 관리) 순응도 향상이 재발 및 사망률 감소의 핵심.',
+            en: 'Recurrent MI 30-day CFR is ~2x that of first events. Prior myocardial damage, multivessel disease, and accumulated comorbidities drive this. Secondary prevention adherence (DAPT, high-intensity statin, lifestyle) is key to reducing recurrence and mortality.',
+          }}
+        >
           <TrendLineChart
-            title={t('첫발생 vs 재발생 30일 치명률','First vs Recurrent 30d CFR')}
-            source="KOSIS"
+            title=""
+            source=""
             badge={selectedProv ? t('전국 데이터','National') : null}
             years={fatTypeYears}
             valueUnit="%"
@@ -714,7 +761,7 @@ export default function MIDashboard({ embedded = false }) {
               },
             ]}
           />
-        </Panel>
+        </InsightPanel>
 
         {/* Footer */}
         <div style={{

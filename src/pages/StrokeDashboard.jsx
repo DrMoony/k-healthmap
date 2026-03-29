@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import KoreaMap from '../components/KoreaMap';
+import InsightPanel from '../components/InsightPanel';
 import { PROVINCE_INFO, NATIONAL_AVG } from '../data/province_info';
 import { FULL_DATA } from '../data/full_data';
 import { STROKE_KOSIS } from '../data/stroke_kosis';
@@ -897,9 +898,21 @@ export default function StrokeDashboard({ embedded = false }) {
         </Panel>
 
         {/* Bottom: 치료 패러다임 변화 tPA vs 혈전제거술 10년 추이 */}
-        <Panel style={{ flex: '0 0 auto', minHeight: '180px' }}>
+        <InsightPanel
+          title={t("치료 패러다임 변화: IV-tPA vs 혈전제거술 (10년)","Treatment Paradigm Shift: IV-tPA vs Thrombectomy (10yr)")}
+          source="KSR 2024" sourceUrl="https://www.strokedb.or.kr/"
+          details={[
+            { label: 'IV-tPA', value: '6.1', unit: '%', color: '#b388ff' },
+            { label: t('혈전제거술', 'Thrombectomy'), value: '6.5', unit: '%', color: '#00ff88' },
+            { label: t('재관류 총', 'Total Recanal.'), value: KSR.revascularization.total.pct, unit: '%', color: '#00d4ff' },
+          ]}
+          insight={{
+            ko: 'IV-tPA는 10.2%→6.1%로 하락, 혈전제거술은 3.0%→6.5%로 2배 증가하여 2022년 역전. 3.5h 내 도착률이 26.2%로 정체되면서 tPA 적응 환자가 제한되고, 대혈관폐색(LVO) 혈전제거술이 대안으로 부상. 지역별 재관류율 편차(12.9~26.1%)가 큰 과제.',
+            en: 'IV-tPA declined from 10.2%→6.1% while thrombectomy doubled 3.0%→6.5%, crossing over in 2022. With 3.5h arrival rate stagnant at 26.2%, tPA-eligible patients are limited; LVO thrombectomy emerged as alternative. Regional recanalization gap (12.9~26.1%) remains a major challenge.',
+          }}
+        >
           <TrendLineChart
-            title={t("치료 패러다임 변화: IV-tPA vs 혈전제거술 (10년)","Treatment Paradigm Shift: IV-tPA vs Thrombectomy (10yr)")}
+            title=""
             years={['2012','2014','2016','2018','2020','2022']}
             lines={[
               { label: 'IV-tPA', color: '#b388ff', data: [10.2, 9.5, 8.8, 7.5, 6.8, 6.1] },
@@ -909,7 +922,7 @@ export default function StrokeDashboard({ embedded = false }) {
           <div style={{ fontSize: '10px', color: '#aaaacc', marginTop: '6px', textAlign: 'center' }}>
             {t('재관류 치료 총','Total recanalization')} {KSR.revascularization.total.pct}% | {t('지역 편차','Regional range')} {KSR.revascularization.regionalRange.min}%~{KSR.revascularization.regionalRange.max}%
           </div>
-        </Panel>
+        </InsightPanel>
       </div>
 
       {/* ═══════ COLUMN 3: 연령·중증도·예후 (전국) / 이송·퇴원·위험인자 (시도) ═══════ */}
@@ -1319,10 +1332,20 @@ export default function StrokeDashboard({ embedded = false }) {
               style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%', overflow: 'auto' }}
             >
               {/* 위험인자 프로파일 */}
-              <Panel>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#ff6b6b', marginBottom: '10px' }}>
-                  {t('위험인자 프로파일','Risk Factor Profile')} <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}>{t('허혈성 뇌졸중 환자 중','Among ischemic stroke patients')}</span>
-                </div>
+              <InsightPanel
+                title={`${t('위험인자 프로파일','Risk Factor Profile')} — ${t('허혈성 뇌졸중 환자 중','Among ischemic stroke patients')}`}
+                source="KSR 2024" sourceUrl="https://www.strokedb.or.kr/"
+                details={[
+                  { label: t('고혈압', 'HTN'), value: KSR.riskFactors.hypertension.pct, unit: '%', color: '#ff4444' },
+                  { label: t('이상지질혈증', 'DLP'), value: KSR.riskFactors.dyslipidemia.pct, unit: '%', color: '#ffaa00' },
+                  { label: t('당뇨', 'DM'), value: KSR.riskFactors.diabetes.pct, unit: '%', color: '#ff6b6b' },
+                  { label: 'AF', value: KSR.riskFactors.atrialFib.pct, unit: '%', color: '#00d4ff' },
+                ]}
+                insight={{
+                  ko: '고혈압이 67.9%로 가장 높은 동반율. 이상지질혈증 42.5% 중 42%가 입원 시 첫 진단 - 건강검진 사각지대. AF 환자의 46%가 뇌졸중으로 입원하여 처음 진단되어 지역사회 AF 스크리닝 강화가 시급.',
+                  en: 'Hypertension leads at 67.9%. 42% of dyslipidemia (42.5%) first diagnosed at admission — screening gap. 46% of AF cases are first diagnosed at stroke admission — community AF screening urgently needed.',
+                }}
+              >
                 {Object.entries(KSR.riskFactors).map(([key, rf]) => {
                   const labels = { hypertension: t('고혈압','Hypertension'), dyslipidemia: t('이상지질혈증','Dyslipidemia'), diabetes: t('당뇨','Diabetes'), smoking: t('현재 흡연','Current Smoking'), atrialFib: t('심방세동','Atrial Fibrillation') };
                   const colors = { hypertension: '#ff4444', dyslipidemia: '#ffaa00', diabetes: '#ff6b6b', smoking: '#b388ff', atrialFib: '#00d4ff' };
@@ -1350,13 +1373,22 @@ export default function StrokeDashboard({ embedded = false }) {
                     </div>
                   );
                 })}
-              </Panel>
+              </InsightPanel>
 
               {/* TOAST 분류 */}
-              <Panel>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#00d4ff', marginBottom: '10px' }}>
-                  {t('TOAST 분류','TOAST Classification')} <span style={{ fontSize: '10px', color: '#aaaacc', fontWeight: 400 }}>{t('허혈성 뇌졸중 아형','Ischemic stroke subtypes')}</span>
-                </div>
+              <InsightPanel
+                title={`${t('TOAST 분류','TOAST Classification')} — ${t('허혈성 뇌졸중 아형','Ischemic stroke subtypes')}`}
+                source="KSR 2024" sourceUrl="https://www.strokedb.or.kr/"
+                details={[
+                  { label: 'LAA', value: KSR.toast.laa.pct, unit: '%', color: '#ff6b6b' },
+                  { label: 'SVO', value: KSR.toast.svo.pct, unit: '%', color: '#ffaa00' },
+                  { label: 'CE', value: KSR.toast.ce.pct, unit: '%', color: '#00d4ff' },
+                ]}
+                insight={{
+                  ko: '10년간 LAA(대혈관 죽상경화)는 감소, SVO(소혈관 폐색)는 증가 추세. CE(심인성 색전)는 안정적이나 AF 환자의 46%가 뇌졸중 입원 시 첫 진단되어 사전 스크리닝이 부족. 클릭하면 아형별 상세 정보 확인 가능.',
+                  en: 'Over 10 years, LAA is declining while SVO is increasing. CE is stable but 46% of AF cases are first diagnosed at stroke admission — pre-screening is insufficient. Click segments for subtype details.',
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <DonutChart
                     size={110}
@@ -1386,14 +1418,21 @@ export default function StrokeDashboard({ embedded = false }) {
                     ))}
                   </div>
                 </div>
-              </Panel>
+              </InsightPanel>
 
               {/* 핵심 인사이트 */}
-              <Panel>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: '#ffaa00', marginBottom: '8px' }}>{t('핵심 인사이트','Key Insights')}</div>
+              <InsightPanel
+                title={t('핵심 인사이트','Key Insights')}
+                source="KSR 2024, KOSIS" sourceUrl="https://www.strokedb.or.kr/"
+                defaultOpen={true}
+                insight={{
+                  ko: '한국의 뇌졸중 치료 품질(30일 치명률 3.3%)은 OECD 최상위이나, 3.5시간 내 도착률 26.2%로 10년 무개선이 최대 과제. AF 46% 첫진단, 이상지질혈증 42% 첫진단 등 사전 스크리닝 부족이 1차 예방의 병목.',
+                  en: "Korea's stroke care quality (3.3% 30-day CFR) is OECD best, but 26.2% arrival within 3.5h — unchanged for 10 years — is the critical bottleneck. 46% AF and 42% dyslipidemia first diagnosed at admission reveal primary prevention gaps.",
+                }}
+              >
                 <div style={{ fontSize: '11px', color: '#ccc', lineHeight: 1.8 }}>
                   <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,170,0,0.06)', borderRadius: '8px', border: '1px solid rgba(255,170,0,0.15)' }}>
-                    <strong style={{ color: '#ffaa00' }}>AF 46%가 뇌졸중 입원 시 첫 진단</strong>
+                    <strong style={{ color: '#ffaa00' }}>AF 46%{t('가 뇌졸중 입원 시 첫 진단',' first diagnosed at stroke admission')}</strong>
                     <div style={{ color: '#ccccdd', marginTop: '2px' }}>{t('심방세동 사전 스크리닝 부족 → 1차 예방 기회 상실','Lack of AF pre-screening → missed primary prevention')}</div>
                   </div>
                   <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,68,68,0.06)', borderRadius: '8px', border: '1px solid rgba(255,68,68,0.15)' }}>
@@ -1405,24 +1444,36 @@ export default function StrokeDashboard({ embedded = false }) {
                     <div style={{ color: '#ccccdd', marginTop: '2px' }}>{t('tPA 하락을 보상. 지역 편차(12.9~26.1%) 해소 필요','Compensating tPA decline. Regional gap (12.9~26.1%) needs attention')}</div>
                   </div>
                 </div>
-              </Panel>
+              </InsightPanel>
 
               {/* 허혈성/출혈성 비교 (2022-2024) */}
               {strokeType !== 'all' && (
-                <Panel>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: strokeType === 'ischemic' ? '#4d96ff' : '#ff6b6b', marginBottom: '10px' }}>
-                    {strokeType === 'ischemic' ? t('허혈성 뇌졸중 (2022-2024)','Ischemic Stroke (2022-2024)') : t('출혈성 뇌졸중 (2022-2024)','Hemorrhagic Stroke (2022-2024)')}
-                  </div>
+                <InsightPanel
+                  title={strokeType === 'ischemic' ? t('허혈성 뇌졸중 (2022-2024)','Ischemic Stroke (2022-2024)') : t('출혈성 뇌졸중 (2022-2024)','Hemorrhagic Stroke (2022-2024)')}
+                  source="KOSIS 2022-2024" sourceUrl="https://kosis.kr/"
+                  insight={{
+                    ko: strokeType === 'ischemic'
+                      ? '허혈성 뇌졸중은 전체의 약 80%를 차지. 2022년부터 허혈성/출혈성 분리 집계 시작. 월별로는 겨울철 발생이 높고, 119 구급차 이용률이 점차 상승 중.'
+                      : '출혈성 뇌졸중은 전체의 약 20%. 허혈성 대비 중증도가 높고 원내 사망률도 높음. 고혈압 관리 불량이 가장 큰 위험인자.',
+                    en: strokeType === 'ischemic'
+                      ? 'Ischemic stroke accounts for ~80% of all strokes. Split reporting began in 2022. Winter months show higher incidence; 119 ambulance utilization is gradually increasing.'
+                      : 'Hemorrhagic stroke accounts for ~20%. Higher severity and in-hospital mortality vs ischemic. Poor hypertension control is the leading risk factor.',
+                  }}
+                >
                   <StrokeTypePanel type={strokeType} kosis={STROKE_KOSIS} selectedProv={selectedProv} lang={lang} t={t} />
-                </Panel>
+                </InsightPanel>
               )}
               {strokeType === 'all' && (
-                <Panel>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#00d4ff', marginBottom: '10px' }}>
-                    {t('허혈성 vs 출혈성 추이 (2022-2024)','Ischemic vs Hemorrhagic Trend (2022-2024)')}
-                  </div>
+                <InsightPanel
+                  title={t('허혈성 vs 출혈성 추이 (2022-2024)','Ischemic vs Hemorrhagic Trend (2022-2024)')}
+                  source="KOSIS 2022-2024" sourceUrl="https://kosis.kr/"
+                  insight={{
+                    ko: '허혈성 뇌졸중이 약 80%, 출혈성이 약 20%를 차지. 2022년 분리 집계 이후 허혈성은 완만한 증가, 출혈성은 안정적. 2024년 데이터는 부분연도 가능성이 있어 해석 주의.',
+                    en: 'Ischemic accounts for ~80%, hemorrhagic ~20%. Since 2022 split reporting, ischemic shows gradual increase while hemorrhagic is stable. 2024 data may be partial-year — interpret with caution.',
+                  }}
+                >
                   <TypeComparison kosis={STROKE_KOSIS} selectedProv={selectedProv} lang={lang} t={t} />
-                </Panel>
+                </InsightPanel>
               )}
 
               {/* 지도 안내 */}

@@ -1,6 +1,7 @@
 import { useState, lazy, Suspense } from 'react';
 import { useLang } from '../i18n';
 import CascadeWaterfall from '../components/CascadeWaterfall';
+import InsightPanel from '../components/InsightPanel';
 import { DISEASE_EPI, DISEASE_TIMESERIES } from '../data/disease_epi';
 import { MI_KOSIS } from '../data/mi_kosis';
 import { HF_KOSIS } from '../data/hf_kosis';
@@ -163,12 +164,31 @@ function HFPanel({ hf, kosis, lang }) {
     <>
       <KPIRow kpis={kpis} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
-        <ChartPanel title={t('심부전 입원율 추이', 'HF Admission Rate Trend', lang)} refUrl="https://kosis.kr/" refLabel="KOSIS HIRA">
+        <InsightPanel
+          title={t('심부전 입원율 추이', 'HF Admission Rate Trend', lang)}
+          source="KOSIS HIRA" sourceUrl="https://kosis.kr/"
+          details={[
+            { label: t('전체', 'Total', lang), value: kosis.admission['전체']?.['2023'] ?? '—', unit: '/10만', color: '#e599f7' },
+            { label: t('남자', 'Male', lang), value: kosis.admission['남자']?.['2023'] ?? '—', unit: '/10만', color: '#4d96ff' },
+            { label: t('여자', 'Female', lang), value: kosis.admission['여자']?.['2023'] ?? '—', unit: '/10만', color: '#ff6b6b' },
+          ]}
+          insight={{
+            ko: '심부전 입원율은 2015년 이후 지속 증가 추세. 고령화와 심부전 진단율 향상이 주 원인. 남성이 여성보다 입원율이 높으나, 80세 이상에서는 여성 비율이 역전. HFpEF 비율 증가로 진단 패턴 변화 중.',
+            en: 'HF admission rate has been rising steadily since 2015, driven by aging and improved diagnosis. Males have higher admission rates, but females surpass males above age 80. HFpEF proportion is increasing, shifting diagnostic patterns.',
+          }}
+        >
           <TrendLines data={kosis.admission} keys={['전체', '남자', '여자']} lang={lang} colors={{ '전체': '#e599f7', '남자': '#4d96ff', '여자': '#ff6b6b' }} />
-        </ChartPanel>
-        <ChartPanel title={t('심부전 동반질환', 'HF Comorbidities', lang)} refUrl="https://www.kshf.or.kr/" refLabel="KSHF 2025">
+        </InsightPanel>
+        <InsightPanel
+          title={t('심부전 동반질환', 'HF Comorbidities', lang)}
+          source="KSHF 2025" sourceUrl="https://www.kshf.or.kr/"
+          insight={{
+            ko: '심부전 환자의 75% 이상이 고혈압을 동반하며, 당뇨 동반율 약 35%. 심방세동은 HFpEF에서 50% 이상 동반. 동반질환 수가 많을수록 재입원율과 사망률이 유의하게 증가하여 다학제 통합 관리가 필수.',
+            en: 'Over 75% of HF patients have comorbid hypertension, ~35% diabetes. AF accompanies >50% of HFpEF. More comorbidities significantly increase readmission and mortality, necessitating multidisciplinary integrated care.',
+          }}
+        >
           <ComorbidityBars data={hf.comorbidities} lang={lang} />
-        </ChartPanel>
+        </InsightPanel>
       </div>
     </>
   );
@@ -189,8 +209,18 @@ function OECDPanel({ kosis, lang }) {
   })).filter(c => c.value != null).sort((a, b) => a.value - b.value);
 
   return (
-    <ChartPanel title={t(`OECD AMI 원내 30일 사망률 (${latestYear})`, `OECD AMI In-hospital 30-day Mortality (${latestYear})`, lang)}
-      refUrl="https://kosis.kr/" refLabel="KOSIS OECD Health Statistics">
+    <InsightPanel
+      title={t(`OECD AMI 원내 30일 사망률 (${latestYear})`, `OECD AMI In-hospital 30-day Mortality (${latestYear})`, lang)}
+      source="KOSIS OECD Health Statistics" sourceUrl="https://kosis.kr/"
+      details={[
+        { label: t('한국', 'Korea', lang), value: koreaData[latestYear] ?? '—', unit: '%', color: '#00d4ff' },
+        { label: t('비교국 수', 'Countries', lang), value: comparison.length, color: '#aaaacc' },
+      ]}
+      insight={{
+        ko: '한국의 AMI 원내 30일 사망률은 OECD 평균 대비 양호한 수준. 이는 PCI(경피적 관상동맥 중재술) 접근성과 24시간 심혈관센터 운영 체계의 영향. 다만 농어촌 지역의 이송시간 격차가 존재하여 지역별 편차 해소가 과제.',
+        en: 'Korea\'s AMI in-hospital 30-day mortality is favorable vs OECD average, reflecting high PCI accessibility and 24/7 cardiovascular center operations. However, transport time disparities in rural areas remain a challenge for reducing regional variation.',
+      }}
+    >
       <div>
         {(() => {
           const maxVal = Math.max(...comparison.map(x => x.value));
@@ -228,7 +258,7 @@ function OECDPanel({ kosis, lang }) {
           });
         })()}
       </div>
-    </ChartPanel>
+    </InsightPanel>
   );
 }
 
@@ -460,7 +490,18 @@ function HTNPanel({ lang }) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <ChartPanel title={t('유병률 추이 (30세 이상, 조율)', 'Prevalence Trend (≥30y, crude)', lang)} refUrl="https://www.ksh.or.kr/" refLabel="KNHANES 1998-2023">
+        <InsightPanel
+          title={t('유병률 추이 (30세 이상, 조율)', 'Prevalence Trend (≥30y, crude)', lang)}
+          source="KNHANES 1998-2023" sourceUrl="https://www.ksh.or.kr/"
+          details={[
+            { label: t('최신 유병률', 'Latest Prevalence', lang), value: trendCrude[trendCrude.length - 1] ?? '—', unit: '%', color: '#ff6b6b' },
+            { label: t('기간', 'Period', lang), value: `${trendYears[0]}-${trendYears[trendYears.length - 1]}`, color: '#aaaacc' },
+          ]}
+          insight={{
+            ko: '고혈압 유병률(30세+)은 1998년 약 30%에서 2007년 24.6%까지 하락 후 다시 상승하여 최근 29% 수준. 비만율 증가와 고령화가 주요 원인. 2020년 COVID 기간 건강검진 감소로 일시적 변동 있으나 장기 추세는 상승.',
+            en: 'HTN prevalence (≥30y) dropped from ~30% in 1998 to 24.6% in 2007, then rebounded to ~29%. Rising obesity and aging are key drivers. COVID-related screening reduction caused transient fluctuation in 2020, but long-term trend is upward.',
+          }}
+        >
           <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%' }}>
             {[15, 20, 25, 30, 35].map(v => {
               const y = PT + plotH - ((v - 15) / 20) * plotH;
@@ -476,9 +517,21 @@ function HTNPanel({ lang }) {
               return <text key={yr} x={x} y={H - 6} fill="#9999bb" fontSize="9" textAnchor="middle" fontFamily="JetBrains Mono">{yr}</text>;
             })}
           </svg>
-        </ChartPanel>
+        </InsightPanel>
 
-        <ChartPanel title={t('관리 캐스케이드 추이 (팩트시트별)', 'Management Cascade (by Factsheet)', lang)} refUrl="https://www.ksh.or.kr/" refLabel="KSH 2018-2025">
+        <InsightPanel
+          title={t('관리 캐스케이드 추이 (팩트시트별)', 'Management Cascade (by Factsheet)', lang)}
+          source="KSH 2018-2025" sourceUrl="https://www.ksh.or.kr/"
+          details={[
+            { label: t('인지율', 'Awareness', lang), value: cascadeAwareness[latestIdx] ?? '—', unit: '%', color: '#ffd93d' },
+            { label: t('치료율', 'Treatment', lang), value: cascadeTreatment[latestIdx] ?? '—', unit: '%', color: '#6bcb77' },
+            { label: t('조절률', 'Control', lang), value: cascadeControl[latestIdx] ?? '—', unit: '%', color: '#4d96ff' },
+          ]}
+          insight={{
+            ko: '인지율 65%→79%, 치료율 61%→76%, 조절률 44%→62%로 7년간 꾸준히 개선. 그러나 20-30대 유병자의 인지율 36%, 치료율 35%로 젊은 층 관리 사각지대가 존재. 65세 이상은 인지율 90% 이상으로 양호.',
+            en: 'Awareness 65%→79%, treatment 61%→76%, control 44%→62% — steady improvement over 7 years. However, ages 20-30: awareness 36%, treatment 35% — young adults remain a blind spot. Ages 65+ awareness exceeds 90%.',
+          }}
+        >
           <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%' }}>
             {[40, 50, 60, 70, 80].map(v => {
               const y = PT + plotH - ((v - 30) / 60) * plotH;
@@ -505,7 +558,7 @@ function HTNPanel({ lang }) {
               <g key={s.l} transform={`translate(${PL + i * 90}, ${H - 18})`}><rect width="10" height="3" fill={s.c} rx="1" /><text x="14" y="3" fill="#bbbbdd" fontSize="9">{s.l}</text></g>
             ))}
           </svg>
-        </ChartPanel>
+        </InsightPanel>
       </div>
 
       {/* Care Cascade Funnel */}
