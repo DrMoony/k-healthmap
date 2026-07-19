@@ -33,6 +33,14 @@ class ErrorBoundary extends Component {
   static getDerivedStateFromError(error) {
     return { hasError: true, error };
   }
+  componentDidCatch(error) {
+    const msg = String(error?.message || '');
+    const isChunk = /dynamically imported module|Loading chunk|Failed to fetch|importing a module script|module script failed/i.test(msg);
+    if (isChunk && !sessionStorage.getItem('chunkReloaded')) {
+      sessionStorage.setItem('chunkReloaded', '1');
+      window.location.reload();
+    }
+  }
   render() {
     if (this.state.hasError) {
       return (
@@ -45,7 +53,7 @@ class ErrorBoundary extends Component {
           <div style={{ fontSize: '12px', color: '#bbbbdd', maxWidth: '600px', textAlign: 'center' }}>
             {this.state.error?.message}
           </div>
-          <button onClick={() => this.setState({ hasError: false, error: null })}
+          <button onClick={() => window.location.reload()}
             style={{
               marginTop: '20px', padding: '10px 24px', background: '#1a1a2e',
               border: '1px solid #00d4ff44', borderRadius: '8px', color: '#00d4ff',
