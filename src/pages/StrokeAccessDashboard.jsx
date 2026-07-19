@@ -110,8 +110,8 @@ export default function StrokeAccessDashboard() {
         {t('🚑 tPA 접근성 — 골든타임 안에 닿지 못하는 곳', '🚑 tPA Access — Beyond the Golden Window', lang)}
       </h1>
       <div style={{ fontSize: 12, color: '#aaaacc', marginBottom: 16, maxWidth: '80ch', lineHeight: 1.6 }}>
-        {t('연령·성별 표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(카카오). 수요=KOSIS 주민등록인구 2024 연령×성별 간접표준화 · 앵커=권역14+지역심뇌혈관10+학회인증74(78).',
-          'Age-standardized ischemic-stroke burden × real drive-time to certified stroke centers (Kakao). Demand=KOSIS 2024 indirect standardization; anchors=14 regional+10 local+74 KSS (78).', lang)}
+        {t('연령·성별 표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(카카오). 수요=KOSIS 주민등록인구 2024 연령×성별 간접표준화 · 앵커=권역15+지역13+학회인증(82).',
+          'Age-standardized ischemic-stroke burden × real drive-time to certified stroke centers (Kakao). Demand=KOSIS 2024 indirect standardization; anchors=15 regional+13 local+KSS (82).', lang)}
       </div>
 
       {/* two toggles */}
@@ -122,7 +122,7 @@ export default function StrokeAccessDashboard() {
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <span style={{ fontSize: 12, color: '#8888aa', fontWeight: 700 }}>{t('앵커 기준', 'Anchors', lang)}</span>
-          {seg(mode, setMode, [['reg', t('권역 14', 'Reg 14', lang)], ['desig', t('+ 지역 24', '+ Local 24', lang)], ['full', t('+ 학회 78', '+ KSS 78', lang)]])}
+          {seg(mode, setMode, [['reg', t('권역 15', 'Reg 15', lang)], ['desig', t('+ 지역 28', '+ Local 28', lang)], ['full', t('+ 학회 82', '+ KSS 82', lang)]])}
         </div>
       </div>
 
@@ -211,7 +211,7 @@ export default function StrokeAccessDashboard() {
         <section style={{ ...card, padding: '16px 18px', borderLeft: '3px solid #ff2d6e' }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{t('지정 단계별 공백 축소', 'Gap closes by tier', lang)}</div>
           <div style={{ fontSize: 13, color: '#cccce0', lineHeight: 1.7 }}>
-            {t('60분 밖 기대발생 — 권역 14곳만 ', 'Burden beyond 60m — 14 regional: ')}
+            {t('60분 밖 기대발생 — 권역 15곳만 ', 'Burden beyond 60m — 15 regional: ')}
             <b style={{ color: '#ff2d6e' }}>{fmt(RES.meta.reg.o60_cases)}({RES.meta.reg.o60_pct}%)</b>
             {t(', 지역센터까지 ', ', + local: ')}<b style={{ color: '#ffd60a' }}>{fmt(RES.meta.desig.o60_cases)}({RES.meta.desig.o60_pct}%)</b>
             {t(', 학회 인증까지 ', ', + KSS: ')}<b style={{ color: '#00ff88' }}>{fmt(RES.meta.full.o60_cases)}({RES.meta.full.o60_pct}%)</b>
