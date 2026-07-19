@@ -159,7 +159,7 @@ export default function StrokeAccessDashboard() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 11, fontSize: 11.5, color: '#bbbbdd', marginTop: 8 }}>
             {BANDS.map((b) => <span key={b.lab} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: b.c }} />{b.lab}</span>)}
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: '50%', background: '#00e5ff', boxShadow: '0 0 4px #00e5ff' }} />{t('인증센터', 'center', lang)}</span>
-            {res === 'emd' && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: '#b388ff' }} />{t('🚁 도서·항공 대상', 'island/air', lang)}</span>}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: '#b388ff' }} />{t('🚁 도서·항공 대상', 'island/air', lang)}</span>
           </div>
           {hover && (
             <div style={{ position: 'fixed', left: hover.x, top: hover.y - 14, transform: 'translate(-50%,-100%)', pointerEvents: 'none', background: '#05050a', border: '1px solid rgba(0,212,255,0.4)', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#e8e8f0', zIndex: 200, whiteSpace: 'nowrap', boxShadow: '0 8px 24px rgba(0,0,0,.5)' }}>
