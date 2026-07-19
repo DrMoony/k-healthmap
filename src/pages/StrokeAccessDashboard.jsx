@@ -110,7 +110,7 @@ export default function StrokeAccessDashboard() {
         {t('🚑 tPA 접근성 — 골든타임 안에 닿지 못하는 곳', '🚑 tPA Access — Beyond the Golden Window', lang)}
       </h1>
       <div style={{ fontSize: 12, color: '#aaaacc', marginBottom: 16, maxWidth: '80ch', lineHeight: 1.6 }}>
-        {t('연령표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(카카오). 수요=KOSIS 주민등록인구 2024 연령×성별 간접표준화 · 앵커=권역14+지역심뇌혈관10+학회인증74(78).',
+        {t('연령·성별 표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(카카오). 수요=KOSIS 주민등록인구 2024 연령×성별 간접표준화 · 앵커=권역14+지역심뇌혈관10+학회인증74(78).',
           'Age-standardized ischemic-stroke burden × real drive-time to certified stroke centers (Kakao). Demand=KOSIS 2024 indirect standardization; anchors=14 regional+10 local+74 KSS (78).', lang)}
       </div>
 
@@ -118,7 +118,7 @@ export default function StrokeAccessDashboard() {
       <div style={{ display: 'flex', gap: 18, alignItems: 'center', marginBottom: 16, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <span style={{ fontSize: 12, color: '#8888aa', fontWeight: 700 }}>{t('해상도', 'Resolution', lang)}</span>
-          {seg(res, setRes, [['sig', t('시군구 252', 'District 252', lang)], ['emd', t('읍면동 3,504', 'Dong 3,504', lang)]])}
+          {seg(res, setRes, [['sig', t('시군구 252', 'District 252', lang)], ['emd', t('읍면동 3,556', 'Dong 3,556', lang)]])}
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <span style={{ fontSize: 12, color: '#8888aa', fontWeight: 700 }}>{t('앵커 기준', 'Anchors', lang)}</span>
