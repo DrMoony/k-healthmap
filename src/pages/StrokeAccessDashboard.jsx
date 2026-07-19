@@ -112,7 +112,7 @@ export default function StrokeAccessDashboard() {
         {t('🚑 tPA 접근성 — 골든타임 안에 닿지 못하는 곳', '🚑 tPA Access — Beyond the Golden Window', lang)}
       </h1>
       <div style={{ fontSize: 12, color: '#aaaacc', marginBottom: 16, maxWidth: '80ch', lineHeight: 1.6 }}>
-        {t('연령·성별 표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(카카오). 수요=KOSIS 주민등록인구 2024 연령×성별 간접표준화 · 앵커=권역15+지역13+학회인증(82).',
+        {t('연령·성별 표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(KakaoMap API). 수요=KOSIS 주민등록인구 2024 연령×성별 간접표준화 · 앵커=권역15+지역13+학회인증(82).',
           'Age-standardized ischemic-stroke burden × real drive-time to certified stroke centers (Kakao). Demand=KOSIS 2024 indirect standardization; anchors=15 regional+13 local+KSS (82).', lang)}
       </div>
 
@@ -233,16 +233,22 @@ export default function StrokeAccessDashboard() {
             'The map multiplies two things: how many stroke patients a district produces per year (demand), and whether they can reach treatment within the golden window (access).', lang)}</p>
           <p style={{ margin: 0 }}>{t('수요는 이렇게 잡았어요. 뇌졸중은 나이가 많을수록, 그리고 같은 나이라도 남성이 더 잘 생기니까, 전국 연령·성별 발생률을 그 동네의 연령·성별 인구 구조에 그대로 입혀서 이 인구라면 몇 건이 나올지를 계산해요(연령×성별 간접표준화).',
             'For demand, stroke rises with age and, at the same age, is higher in men — so we apply nationwide age- and sex-specific incidence rates to each district’s own age×sex population structure, giving an expected count (age×sex indirect standardization).', lang)}</p>
-          <p style={{ margin: 0 }}>{t('접근성은 단순한 거리가 아니라 시간이에요. 카카오 길찾기로 주민센터에서 가장 가까운 인증센터까지 실제 도로 소요시간을 재요. 그런데 tPA(정맥 혈전용해)는 늦으면 그만큼 손해가 아니라, 늦을수록 손해가 가팔라지는 치료예요. 문헌을 보면 발병부터 치료까지 시간이 길어질수록 좋은 결과 확률이 빠르게 떨어지고, 4.5시간을 넘기면 편익이 거의 사라져요(Emberson 2014 등). 그래서 도달시간을 이 시간-편익 곡선에 넣어서 이 지역은 늦어서 얼마나 손해를 보나로 바꿨어요.',
+          <p style={{ margin: 0 }}>{t('접근성은 단순한 거리가 아니라 시간이에요. KakaoMap API로 주민센터에서 가장 가까운 인증센터까지 실제 도로 소요시간을 재요. 그런데 tPA(정맥 혈전용해)는 늦으면 그만큼 손해가 아니라, 늦을수록 손해가 가팔라지는 치료예요. 문헌을 보면 발병부터 치료까지 시간이 길어질수록 좋은 결과 확률이 빠르게 떨어지고, 4.5시간을 넘기면 편익이 거의 사라져요(Emberson 2014 등). 그래서 도달시간을 이 시간-편익 곡선에 넣어서 이 지역은 늦어서 얼마나 손해를 보나로 바꿨어요.',
             'Access is time, not mere distance. We measure real road drive-time from each community center to the nearest certified center (Kakao). But tPA is a treatment whose benefit falls off steeply with delay, not linearly — the chance of a good outcome drops fast as onset-to-treatment time grows and all but vanishes past 4.5 hours (Emberson 2014). So we pass drive-time through this time-benefit curve to express how much outcome a district forgoes by being far.', lang)}</p>
           <p style={{ margin: 0 }}>{t('시급도는 이 둘의 곱이에요. 환자가 많고 손해도 큰 곳이 위로 올라와요. 거리와 발생률을 억지로 몇 대 몇으로 섞는 게 아니라, 각자 제 역할로 들어가요. 발생률은 사람 수를 만들고 거리는 한 명당 손해를 만들어서 곱해지는 구조라, 사람이 임의로 정한 가중치가 없어요.',
             'Priority is the product of the two: places with many patients and large forgone benefit rise to the top. Distance and incidence aren’t blended by some arbitrary ratio — each enters where it belongs. Incidence sets the count, distance sets the per-patient loss, and they multiply. No hand-picked weights.', lang)}</p>
           <p style={{ margin: 0, color: '#9a9db0' }}>{t('한 가지 솔직하게 짚을게요. 이건 지역 단위 집계라 개인의 인과를 말하진 못해요. 도달시간도 동네마다 대표점 한 곳을 기준으로 잡았고, 환자가 증상을 늦게 알아채는 시간처럼 병원 위치를 바꿔도 못 줄이는 지연은 뺐어요. 그래서 정답이라기보다, 어디부터 손봐야 할지 우선순위를 잡는 지도로 봐주시면 좋아요.',
             'One honest caveat: this is ecological, so it can’t speak to individual causation. Drive-time uses one representative point per district, and we exclude delays that placing hospitals can’t fix (like a patient being slow to recognize symptoms). Read it as a map for prioritizing where to act, not as a verdict.', lang)}</p>
+          <div style={{ marginTop: 6, padding: '13px 15px', background: 'rgba(0,0,0,0.28)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12.5, color: '#cdd0dd', lineHeight: 2.1, overflowX: 'auto' }}>
+            <div><span style={{ color: '#8888aa' }}>{t('수요(기대발생)', 'Demand', lang)}</span>{'  E = 0.76 · Σ'}<sub>{t('연령·성별', 'age·sex', lang)}</sub>{' ( '}{t('지역인구', 'pop', lang)}{' × '}{t('국가발생률', 'rate', lang)}{' )'}</div>
+            <div><span style={{ color: '#8888aa' }}>{t('시급도', 'Priority', lang)}</span>{'  U = E · L(t)'}<span style={{ color: '#7a7a99' }}>{t('   ← 부담 × 시간손실 (곱)', '   ← burden × time-loss', lang)}</span></div>
+            <div><span style={{ color: '#8888aa' }}>{t('시간-편익', 'Time-loss', lang)}</span>{'  L(t) = max(0, (T−t)/T),  T = 270'}<span style={{ color: '#7a7a99' }}>{t('분 (Emberson 2014)', 'min (Emberson 2014)', lang)}</span></div>
+            <div style={{ color: '#8888aa' }}>{t('t = 실도로 도달시간 (KakaoMap API) · 병원전 총시간 = 반응(119→환자)+현장+이송 은 확장 중', 't = road drive-time (KakaoMap API) · full prehospital chain (dispatch→patient→hospital) in progress', lang)}</div>
+          </div>
         </div>
       </section>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 18, lineHeight: 1.7 }}>
-        {t('출처 · 인구: KOSIS 주민등록인구 2024 · 발생률: 심뇌혈관질환 발생통계(허혈성 0.76) · 인증센터: 대한뇌졸중학회·권역/지역심뇌혈관질환센터 · 도달시간: 카카오 길찾기(승용차) · 경계: KOSTAT 2018. 읍면동 출발점=주민센터 좌표. 한계 · 생태학적 설계, 병원 전·내 지연 미포함. 섬·미수복 등 육로 불가 지역은 도서·항공(닥터헬기·여객선) 대상으로 분리 표시. 일부 읍면동은 2018 경계와 2024 행정동 차이로 수요 미상.',
+        {t('출처 · 인구: KOSIS 주민등록인구 2024 · 발생률: 심뇌혈관질환 발생통계(허혈성 0.76) · 인증센터: 대한뇌졸중학회·권역/지역심뇌혈관질환센터 · 도달시간: KakaoMap API(승용차) · 경계: KOSTAT 2018. 읍면동 출발점=주민센터 좌표. 한계 · 생태학적 설계, 병원 전·내 지연 미포함. 섬·미수복 등 육로 불가 지역은 도서·항공(닥터헬기·여객선) 대상으로 분리 표시. 일부 읍면동은 2018 경계와 2024 행정동 차이로 수요 미상.',
           'Sources · KOSIS 2024; CVD incidence (ischemic 0.76); KSS & regional/local centers; Kakao routing; KOSTAT 2018 boundaries. Dong origin=community-center coords. No-road areas (islands, DMZ) shown as island/air-transport; some dong lack demand due to 2018–2024 boundary drift.', lang)}
       </div>
     </div>
