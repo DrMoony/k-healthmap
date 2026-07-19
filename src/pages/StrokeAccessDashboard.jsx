@@ -163,8 +163,8 @@ export default function StrokeAccessDashboard() {
           {hover && (
             <div style={{ position: 'fixed', left: hover.x, top: hover.y - 14, transform: 'translate(-50%,-100%)', pointerEvents: 'none', background: '#05050a', border: '1px solid rgba(0,212,255,0.4)', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#e8e8f0', zIndex: 200, whiteSpace: 'nowrap', boxShadow: '0 8px 24px rgba(0,0,0,.5)' }}>
               <b>{hover.r.s} {hover.r.sg ? hover.r.sg + ' ' : ''}{hover.r.n}</b><br />
-              {t('도달', 'access', lang)} <b style={{ color: hover.r[aKey] == null ? '#8a8aa0' : BANDS[Math.max(0, bandOf(hover.r[aKey]))].c }}>{hover.r[aKey] == null ? '–' : hover.r[aKey] + t('분', 'm', lang)}</b>
-              {hover.r.e ? t(' (시군구 근사)', ' (approx)', lang) : ''}<br />
+              {t('도달', 'access', lang)} <b style={{ color: hover.r[aKey] == null ? '#8a8aa0' : BANDS[Math.max(0, bandOf(hover.r[aKey]))].c }}>{hover.r.nr ? t('육로 접근 불가', 'no road', lang) : hover.r[aKey] == null ? '–' : hover.r[aKey] + t('분', 'm', lang)}</b>
+              {hover.r.nr ? t(' (도서·미수복)', ' (island/DMZ)', lang) : hover.r.e ? t(' (시군구 근사)', ' (approx)', lang) : ''}<br />
               <span style={{ color: '#9999bb' }}>{t('기대발생', 'burden', lang)} {fmt(hover.r.c)}{t('건/년 · 인구', '/yr · pop', lang)} {fmt(hover.r.p)}</span>
             </div>
           )}
