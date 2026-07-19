@@ -18,6 +18,8 @@ export default function ExpansionSimulator({ lang, onClose }) {
   const [K, setK] = useState(3);
   const dem = useMemo(() => STROKE_ACCESS.sig.regions.filter((r) => r.x && !r.heli && r.a != null), []);
 
+  const roadB = (r) => r.c - (r.ci || 0);  // 육지 커버 가능 부담 (도서 제외)
+  const roadP = (r) => r.p - (r.pi || 0);
   const sim = useMemo(() => {
     const cands = dem.filter((r) => r.a > CAND_MIN);
     const covered = new Set();
@@ -31,7 +33,7 @@ export default function ExpansionSimulator({ lang, onClose }) {
           if (y.a <= COVER_MIN) continue;
           const key = y.s + y.n;
           if (covered.has(key)) continue;
-          if (hav(c.x, c.y, y.x, y.y) < COVER_KM) { gain += y.c; set.push(key); }
+          if (hav(c.x, c.y, y.x, y.y) < COVER_KM) { gain += roadB(y); set.push(key); }  // 섬 부담 제외
         }
         if (gain > bestGain) { bestGain = gain; best = c; bestSet = set; }
       }
@@ -39,12 +41,12 @@ export default function ExpansionSimulator({ lang, onClose }) {
       picks.push(best); bestSet.forEach((s) => covered.add(s));
       best._gain = bestGain;
     }
-    const beforeB = dem.filter((r) => r.a > COVER_MIN).reduce((s, r) => s + r.c, 0);
-    const beforeP = dem.filter((r) => r.a > COVER_MIN).reduce((s, r) => s + r.p, 0);
-    const afterUn = dem.filter((r) => r.a > COVER_MIN && !covered.has(r.s + r.n));
-    const afterB = afterUn.reduce((s, r) => s + r.c, 0);
-    const afterP = afterUn.reduce((s, r) => s + r.p, 0);
-    return { picks, covered, beforeB, afterB, beforeP, afterP };
+    const gap = dem.filter((r) => r.a > COVER_MIN);
+    const beforeB = gap.reduce((s, r) => s + r.c, 0);
+    const beforeP = gap.reduce((s, r) => s + r.p, 0);
+    const redB = gap.filter((r) => covered.has(r.s + r.n)).reduce((s, r) => s + roadB(r), 0);
+    const redP = gap.filter((r) => covered.has(r.s + r.n)).reduce((s, r) => s + roadP(r), 0);
+    return { picks, covered, beforeB, afterB: beforeB - redB, beforeP, afterP: beforeP - redP };
   }, [K, dem]);
 
   // choropleth projection (fit to sig boundaries, excl. islands)
@@ -69,8 +71,8 @@ export default function ExpansionSimulator({ lang, onClose }) {
         </div>
 
         <div style={{ background: 'rgba(255,45,110,0.08)', border: '1px solid rgba(255,45,110,0.25)', borderRadius: 10, padding: '9px 12px', margin: '14px 0', fontSize: 11.5, color: '#e6a9b8', lineHeight: 1.6 }}>
-          {t('⚠️ 정책 제언이 아닌 탐색적 시나리오입니다. 특정 기관·지역의 센터 지정을 의미하지 않으며, 후보는 실제 병원이 아닌 공백 시군구의 중심점(가상 위치 예시)입니다. 커버리지는 직선거리 근사값입니다.',
-            '⚠️ Exploratory scenario, not a policy recommendation. Candidates are district centroids (illustrative locations), not actual hospitals; coverage is a straight-line approximation.', lang)}
+          {t('⚠️ 정책 제언이 아닌 탐색적 시나리오입니다. 특정 기관·지역의 센터 지정을 의미하지 않으며, 후보는 실제 병원이 아닌 공백 시군구의 중심점(가상 위치 예시)입니다. 커버리지는 직선거리 근사값이며, 섬(도서) 부담은 육지 센터로 도달 불가라 커버에서 제외합니다(항공·여객선 대상).',
+            '⚠️ Exploratory scenario, not a policy recommendation. Candidates are district centroids (illustrative), not actual hospitals; coverage is a straight-line approximation. Island burden is excluded (not road-reachable — needs air/ferry).', lang)}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '10px 0 16px' }}>
