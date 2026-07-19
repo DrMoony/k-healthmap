@@ -26,11 +26,15 @@ export default function StrokeAccessDashboard() {
   const [hover, setHover] = useState(null);
 
   const { regions, anchors, meta } = STROKE_ACCESS;
-  const aKey = mode === 'full' ? 'a' : 'ar';
-  const uKey = mode === 'full' ? 'u' : 'ur';
-  const nKey = mode === 'full' ? 'nr' : 'nrn';
-  const S = mode === 'full' ? meta.full : meta.reg;
-  const shownAnchors = mode === 'full' ? anchors : anchors.filter((a) => a.r);
+  const MODES = {
+    reg:   { a: 'ar', u: 'ur', n: 'nrn', s: 'reg' },
+    desig: { a: 'ad', u: 'ud', n: 'ndn', s: 'desig' },
+    full:  { a: 'a',  u: 'u',  n: 'nr',  s: 'full' },
+  };
+  const M = MODES[mode];
+  const aKey = M.a, uKey = M.u, nKey = M.n;
+  const S = meta[M.s];
+  const shownAnchors = mode === 'full' ? anchors : mode === 'desig' ? anchors.filter((a) => a.r || a.l) : anchors.filter((a) => a.r);
 
   // d3 projection fitted to the sigungu boundaries (exclude island outliers e.g. 울릉 so mainland isn't squeezed)
   const { path, project } = useMemo(() => {
@@ -105,23 +109,25 @@ export default function StrokeAccessDashboard() {
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 18, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 12, color: '#8888aa', fontWeight: 700 }}>{t('앵커 기준', 'Anchor set', lang)}</span>
         <div style={{ display: 'inline-flex', background: '#12121a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 3 }}>
-          {[['full', t('전체 지정·인증 78', 'All 78', lang)], ['reg', t('권역센터 14', 'Regional 14', lang)]].map(([m, lab]) => (
+          {[['reg', t('권역 14', 'Regional 14', lang)], ['desig', t('+ 지역 지정 24', '+ Local 24', lang)], ['full', t('+ 학회 인증 78', '+ KSS 78', lang)]].map(([m, lab]) => (
             <button key={m} onClick={() => setMode(m)} style={{
-              border: 0, cursor: 'pointer', font: 'inherit', fontSize: 12.5, fontWeight: 700, padding: '6px 14px', borderRadius: 8,
+              border: 0, cursor: 'pointer', font: 'inherit', fontSize: 12.5, fontWeight: 700, padding: '6px 13px', borderRadius: 8,
               background: mode === m ? 'linear-gradient(90deg,#00d4ff,#b388ff)' : 'transparent',
               color: mode === m ? '#08080d' : '#bbbbdd' }}>{lab}</button>
           ))}
         </div>
         <span style={{ fontSize: 11.5, color: '#7a7a99' }}>
           {mode === 'reg'
-            ? t('권역심뇌혈관센터 14곳만 있다고 가정한 도달시간', 'Assuming only the 14 regional centers', lang)
-            : t('학회 인증센터까지 포함한 실제 접근성', 'Actual access incl. KSS-certified centers', lang)}
+            ? t('권역심뇌혈관센터 14곳 (국가 최상위 거점)', 'Only 14 regional CVD centers', lang)
+            : mode === 'desig'
+            ? t('국가 지정 전체 = 권역 14 + 지역 심뇌혈관센터 10', 'All state-designated = 14 regional + 10 local', lang)
+            : t('학회 인증센터까지 = 재관류 가능 전체망', 'Incl. KSS-certified = full reperfusion network', lang)}
         </span>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 18 }}>
         {[
-          { lab: t('인증센터(앵커)', 'Anchors', lang), val: mode === 'full' ? meta.n_anchor : meta.n_regional, unit: '', col: '#00d4ff', sub: mode === 'full' ? t('권역14·학회74·지역센터', '14 reg + 74 KSS + local', lang) : t('권역심뇌혈관센터', 'Regional CVD centers', lang) },
+          { lab: t('인증·지정센터(앵커)', 'Anchors', lang), val: mode === 'full' ? meta.n_anchor : mode === 'desig' ? meta.n_desig : meta.n_regional, unit: '', col: '#00d4ff', sub: mode === 'full' ? t('권역14+지역10+학회', '14 reg+10 local+KSS', lang) : mode === 'desig' ? t('권역14 + 지역심뇌혈관10', '14 regional + 10 local', lang) : t('권역심뇌혈관센터', 'Regional CVD centers', lang) },
           { lab: t('중앙 도달시간', 'Median access', lang), val: S.med, unit: t('분', 'm', lang), col: '#ffd60a', sub: t('평균', 'mean', lang) + ' ' + S.mean + t('분 · 최장', 'm · max', lang) + ' ' + S.max + t('분', 'm', lang) },
           { lab: t('60분 밖 기대발생', 'Cases beyond 60m', lang), val: S.o60_cases, unit: t('건', '', lang), col: '#ff2d6e', sub: t('전체의', '', lang) + ' ' + S.o60_pct + t('% · 골든윈도 밖', '% beyond window', lang) },
           { lab: t('60분 밖 인구', 'Pop. beyond 60m', lang), val: Math.round(S.o60_pop / 10000), unit: t('만', '0k', lang), col: '#ff8c42', sub: S.o60_n + t('개 시군구', ' districts', lang) },
@@ -211,14 +217,16 @@ export default function StrokeAccessDashboard() {
           })}
         </section>
         <section style={{ ...card, padding: '16px 18px', borderLeft: '3px solid #ff2d6e' }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{t('학회 인증센터가 메우는 공백', 'What KSS centers close', lang)}</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{t('지정 단계별 공백 축소', 'Gap closes by tier', lang)}</div>
           <div style={{ fontSize: 13, color: '#cccce0', lineHeight: 1.7 }}>
-            {t('권역 14곳만 있다면 60분 밖 기대발생이 ', 'With only 14 regional centers, burden beyond 60 min is ')}
+            {t('60분 밖 기대발생이 지정 단계마다 줄어요 — 권역 14곳만이면 ', 'Burden beyond 60 min shrinks by tier — 14 regional only: ')}
             <b style={{ color: '#ff2d6e' }}>{fmt(meta.reg.o60_cases)}{t('건', '', lang)}({meta.reg.o60_pct}%)</b>
-            {t('. 학회 인증센터(TSC 64/SC 10)까지 더하면 ', '. Adding KSS-certified centers cuts it to ')}
+            {t(', 지역센터까지 ', ', + local: ')}
+            <b style={{ color: '#ffd60a' }}>{fmt(meta.desig.o60_cases)}{t('건', '', lang)}({meta.desig.o60_pct}%)</b>
+            {t(', 학회 인증까지 ', ', + KSS: ')}
             <b style={{ color: '#00ff88' }}>{fmt(meta.full.o60_cases)}{t('건', '', lang)}({meta.full.o60_pct}%)</b>
-            {t('로 절반 가까이 줄어요. 즉 학회 인증망이 재관류 접근성의 실질적 뼈대예요. 반대로 여전히 남는 공백(여수·순천·서산·목포·거제·충남 서북부)이 확충 우선순위.',
-              ' — nearly halved. The KSS network is the real backbone of reperfusion access; the gaps that remain (Yeosu, Suncheon, Seosan, Mokpo, Geoje, NW Chungnam) are the expansion priorities.', lang)}
+            {t('. 성가롤로 같은 지역센터가 전남 동부를, 학회망이 나머지를 메워요. 끝까지 남는 공백(서산·태안·거제·삼척)이 진짜 확충 우선순위.',
+              '. Local centers close the SE, the KSS network the rest; the gaps that survive all tiers (Seosan, Taean, Geoje, Samcheok) are the true priorities.', lang)}
           </div>
         </section>
       </div>
