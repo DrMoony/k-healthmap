@@ -9,6 +9,7 @@ import { STROKE_KOSIS } from '../data/stroke_kosis';
 
 const StrokeDashboard = lazy(() => import('./StrokeDashboard'));
 const MIDashboard = lazy(() => import('./MIDashboard'));
+const StrokeAccessDashboard = lazy(() => import('./StrokeAccessDashboard'));
 
 const t = (ko, en, lang) => lang === 'ko' ? ko : en;
 
@@ -23,6 +24,7 @@ export default function CardiovascularDashboard() {
   const subTabs = [
     { id: 'mi', label: t('급성심근경색', 'MI', lang), icon: '💔' },
     { id: 'stroke', label: t('뇌졸중', 'Stroke', lang), icon: '🧠' },
+    { id: 'access', label: t('tPA 접근성', 'tPA Access', lang), icon: '🚑' },
     { id: 'hf', label: t('심부전', 'Heart Failure', lang), icon: '❤️‍🩹' },
     { id: 'htn', label: t('고혈압', 'Hypertension', lang), icon: '🩺' },
     { id: 'oecd', label: t('OECD 비교', 'OECD Compare', lang), icon: '🌍' },
@@ -56,6 +58,7 @@ export default function CardiovascularDashboard() {
       <Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>Loading...</div>}>
         {subTab === 'mi' && <MIDashboard embedded />}
         {subTab === 'stroke' && <StrokeDashboard embedded />}
+        {subTab === 'access' && <StrokeAccessDashboard />}
       </Suspense>
       {subTab === 'hf' && <HFPanel hf={hf} kosis={HF_KOSIS} lang={lang} />}
       {subTab === 'htn' && <HTNPanel lang={lang} />}
