@@ -226,6 +226,53 @@ export default function StrokeAccessDashboard() {
         </section>
       </div>
 
+      {/* 병원전 · 구급 자원 (시도) — response/resource lever */}
+      {meta.sido && (
+      <section style={{ ...card, padding: '18px 20px', marginTop: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>{t('병원전 단계 · 구급 자원 (시도)', 'Prehospital & EMS resources (province)', lang)}</div>
+          <div style={{ fontSize: 11.5, color: '#7a7a99' }}>{t('소방청 2024 통계연보 · 반응/이송 중앙값', 'NFA 2024 yearbook · medians', lang)}</div>
+        </div>
+        <div style={{ fontSize: 12.5, color: '#9a9db0', lineHeight: 1.7, margin: '8px 0 15px', maxWidth: '76ch' }}>
+          {t('메인 지도가 "인증센터까지 거리" 레버라면, 여기는 "구급 자원" 레버예요. 재미있는 건 — 농촌일수록 인구당 구급차는 오히려 많은데(강원 9.0 vs 서울 2.0대/10만명) 이송시간은 2배예요. 격차를 만드는 건 구급차 수가 아니라 거리라는 뜻이에요. 병원전 반응시간(RT₁)은 시도별로 시급도(U) 계산에 반영했어요.',
+            'If the main map is the "distance-to-center" lever, this panel is the "EMS resource" lever. Tellingly, rural provinces have MORE ambulances per capita (Gangwon 9.0 vs Seoul 2.0 per 100k) yet ~2× the transport time — the gap is distance, not vehicle count. Provincial response time (RT₁) is folded into the priority score (U).', lang)}
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <div style={{ minWidth: 470 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '58px 60px 1.1fr 1.1fr', gap: 12, fontSize: 11, color: '#7a7a99', fontWeight: 700, paddingBottom: 6, borderBottom: '1px solid rgba(255,255,255,0.09)' }}>
+              <span>{t('시도', 'Prov.', lang)}</span>
+              <span style={{ textAlign: 'right' }}>{t('반응 분', 'Resp. m', lang)}</span>
+              <span>{t('이송(현장→병원) 분', 'Transport min', lang)}</span>
+              <span>{t('구급차 / 10만명', 'Ambulances /100k', lang)}</span>
+            </div>
+            {[...meta.sido].sort((a, b) => b.rt3 - a.rt3).map((sd) => {
+              const rt3col = sd.rt3 >= 14 ? '#ff2d6e' : sd.rt3 >= 12 ? '#ff8c42' : '#ffd60a';
+              return (
+                <div key={sd.name} style={{ display: 'grid', gridTemplateColumns: '58px 60px 1.1fr 1.1fr', gap: 12, alignItems: 'center', padding: '5px 0', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.045)' }}>
+                  <span style={{ color: '#cdd0dd', fontWeight: 600 }}>{sd.name}</span>
+                  <span style={{ textAlign: 'right', color: '#bbbbdd', fontVariantNumeric: 'tabular-nums' }}>{sd.rt1}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: 5, height: 12, overflow: 'hidden' }}>
+                      <div style={{ width: `${Math.min(100, sd.rt3 / 16 * 100)}%`, height: '100%', background: rt3col, borderRadius: 5 }} /></div>
+                    <span style={{ width: 30, textAlign: 'right', color: rt3col, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{sd.rt3}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: 5, height: 12, overflow: 'hidden' }}>
+                      <div style={{ width: `${Math.min(100, (sd.amb || 0) / 9.5 * 100)}%`, height: '100%', background: '#00d4ff', borderRadius: 5, opacity: 0.72 }} /></div>
+                    <span style={{ width: 30, textAlign: 'right', color: '#8fd6e6', fontVariantNumeric: 'tabular-nums' }}>{sd.amb ?? '–'}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 11, lineHeight: 1.6 }}>
+          {t('※ 반응=신고→현장 근사(출동→현장 중앙값+turnout), 이송=현장→병원 중앙값. 구급차 밀도가 높아도 이송거리가 길면 도달은 불리 — per100k만으로 "자원 충분"으로 읽으면 안 됨. 출처: 소방청 2024 통계연보, KOSIS 구급차현황·주민등록인구.',
+            '※ Response ≈ call-to-scene (dispatch-to-scene median + turnout); transport = scene-to-hospital median. High per-capita ambulances don’t offset long transport distances. Source: NFA 2024 yearbook, KOSIS.', lang)}
+        </div>
+      </section>
+      )}
+
       <section style={{ ...card, padding: '20px 22px', marginTop: 18 }}>
         <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', marginBottom: 12 }}>{t('이 지도를 어떻게 만들었나', 'How this map was built', lang)}</div>
         <div style={{ fontSize: 13.5, color: '#cdd0dd', lineHeight: 1.85, maxWidth: '76ch', display: 'grid', gap: 12 }}>
@@ -237,13 +284,13 @@ export default function StrokeAccessDashboard() {
             'Access is time, not mere distance. We measure real road drive-time from each community center to the nearest certified center (KakaoMap API). But tPA is a treatment whose benefit falls off steeply with delay, not linearly — the chance of a good outcome drops fast as onset-to-treatment time grows and all but vanishes past 4.5 hours (Emberson 2014). So we pass drive-time through this time-benefit curve to express how much outcome a district forgoes by being far.', lang)}</p>
           <p style={{ margin: 0 }}>{t('시급도는 이 둘의 곱이에요. 환자가 많고 손해도 큰 곳이 위로 올라와요. 거리와 발생률을 억지로 몇 대 몇으로 섞는 게 아니라, 각자 제 역할로 들어가요. 발생률은 사람 수를 만들고 거리는 한 명당 손해를 만들어서 곱해지는 구조라, 사람이 임의로 정한 가중치가 없어요.',
             'Priority is the product of the two: places with many patients and large forgone benefit rise to the top. Distance and incidence aren’t blended by some arbitrary ratio — each enters where it belongs. Incidence sets the count, distance sets the per-patient loss, and they multiply. No hand-picked weights.', lang)}</p>
-          <p style={{ margin: 0, color: '#9a9db0' }}>{t('한 가지 솔직하게 짚을게요. 이건 지역 단위 집계라 개인의 인과를 말하진 못하고, 도달시간도 동네마다 대표점 한 곳을 기준으로 잡았어요. 그리고 지금 재는 시간은 "환자에서 병원까지" 이송 한 구간이에요. 실제로는 신고를 받고 119 구급차가 환자에게 가는 시간, 현장에서 태우는 시간이 앞에 더 붙는데 아직 넣지 않았어요. 그래서 이 지도는 가장 좋게 봐준 값이에요 — 실제 접근성은 여기 나온 것보다 나빴으면 나빴지 좋진 않아요. 바꿔 말하면 이렇게 봐준 값으로도 골든타임 밖이 나온다는 건 격차가 진짜라는 뜻이라, 결론은 오히려 단단해져요. 그러니 정답이라기보다 어디부터 손봐야 할지 우선순위를 잡는 지도로 봐주시면 좋아요.',
-            'One honest caveat: this is ecological, so it can’t speak to individual causation, and drive-time uses one representative point per district. Also, the time we show is just one leg — patient to hospital. In reality the 119 dispatch-to-patient response and on-scene loading come before it, and those aren’t in yet. So this map is a best-case read: real access is at least this bad, likely worse. Which actually strengthens the point — if the golden window is missed even under generous assumptions, the gap is real. Read it as a map for prioritizing where to act, not as a verdict.', lang)}</p>
+          <p style={{ margin: 0, color: '#9a9db0' }}>{t('한 가지 솔직하게 짚을게요. 이건 지역 단위 집계라 개인의 인과를 말하진 못하고, 도달시간도 동네마다 대표점 한 곳을 기준으로 잡았어요. 지도 색으로 보이는 건 "환자→병원" 이송 구간이라, 신고받고 구급차가 오는 반응·현장 시간을 뺀 가장 좋게 봐준 값이에요 — 그래서 실제 접근성은 이보다 나빴으면 나빴지 좋진 않아요(이렇게 봐준 값으로도 골든타임 밖이 나오니 격차는 진짜라는 뜻이고요). 대신 시급도(우선순위) 계산에는 그 병원전 시간을 시도별 실측(반응+현장 약 20분, 소방청 2024)으로 얹어 반영했어요. 정답이라기보다 어디부터 손봐야 할지 우선순위를 잡는 지도로 봐주시면 좋아요.',
+            'One honest caveat: this is ecological, so it can’t speak to individual causation, and drive-time uses one representative point per district. The map color shows one leg — patient to hospital — leaving out the 119 response and on-scene time, so it is a best-case read (real access is at least this bad; that the golden window is still missed under generous assumptions means the gap is real). The priority score, though, does add that prehospital time as an empirical province-level constant (response + on-scene ≈ 20 min, NFA 2024). Read it as a map for prioritizing where to act, not as a verdict.', lang)}</p>
           <div style={{ marginTop: 6, padding: '13px 15px', background: 'rgba(0,0,0,0.28)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12.5, color: '#cdd0dd', lineHeight: 2.1, overflowX: 'auto' }}>
             <div><span style={{ color: '#8888aa' }}>{t('수요(기대발생)', 'Demand', lang)}</span>{'  E = 0.76 · Σ'}<sub>{t('연령·성별', 'age·sex', lang)}</sub>{' ( '}{t('지역인구', 'pop', lang)}{' × '}{t('국가발생률', 'rate', lang)}{' )'}</div>
-            <div><span style={{ color: '#8888aa' }}>{t('시급도', 'Priority', lang)}</span>{'  U = E · L(t)'}<span style={{ color: '#7a7a99' }}>{t('   ← 부담 × 시간손실 (곱)', '   ← burden × time-loss', lang)}</span></div>
+            <div><span style={{ color: '#8888aa' }}>{t('시급도', 'Priority', lang)}</span>{'  U = E · L(t),  t = T'}<sub>fixed</sub>{' + d'}<span style={{ color: '#7a7a99' }}>{t('   ← 병원전 + 이송', '   ← prehospital + transport', lang)}</span></div>
             <div><span style={{ color: '#8888aa' }}>{t('시간-편익', 'Time-loss', lang)}</span>{'  L(t) = max(0, (T−t)/T),  T = 270'}<span style={{ color: '#7a7a99' }}>{t('분 (Emberson 2014)', 'min (Emberson 2014)', lang)}</span></div>
-            <div style={{ color: '#8888aa' }}>{t('t = 이송구간 도달시간 (KakaoMap API) = 낙관 하한 · 병원전 총시간 = 반응(119→환자)+현장+이송 은 확장 중', 't = transport-leg drive-time (KakaoMap API) = best-case lower bound · full chain (dispatch→patient→hospital) in progress', lang)}</div>
+            <div><span style={{ color: '#8888aa' }}>{'T'}<sub>fixed</sub></span>{t(' = 반응(시도) + 현장 ≈ 20분', ' = response(province) + on-scene ≈ 20m', lang)}<span style={{ color: '#7a7a99' }}>{t('  (소방청 2024) · d = 인증센터 실도로 (KakaoMap API)', '  (NFA 2024) · d = road time to center (KakaoMap API)', lang)}</span></div>
           </div>
         </div>
       </section>
