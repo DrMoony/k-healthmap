@@ -110,7 +110,7 @@ export default function StrokeAccessDashboard() {
         {t('🚑 tPA 접근성 — 골든타임 안에 닿지 못하는 곳', '🚑 tPA Access — Beyond the Golden Window', lang)}
       </h1>
       <div style={{ fontSize: 12, color: '#aaaacc', marginBottom: 16, maxWidth: '80ch', lineHeight: 1.6 }}>
-        {t('연령표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(카카오). 수요=KOSIS 주민등록인구 2024 간접표준화 · 앵커=권역14+지역심뇌혈관10+학회인증74(78).',
+        {t('연령표준화 기대 허혈성 뇌졸중 부담 × 인증 뇌졸중센터까지 실도로 도달시간(카카오). 수요=KOSIS 주민등록인구 2024 연령×성별 간접표준화 · 앵커=권역14+지역심뇌혈관10+학회인증74(78).',
           'Age-standardized ischemic-stroke burden × real drive-time to certified stroke centers (Kakao). Demand=KOSIS 2024 indirect standardization; anchors=14 regional+10 local+74 KSS (78).', lang)}
       </div>
 
@@ -225,8 +225,8 @@ export default function StrokeAccessDashboard() {
         <div style={{ fontSize: 13.5, color: '#cdd0dd', lineHeight: 1.85, maxWidth: '76ch', display: 'grid', gap: 12 }}>
           <p style={{ margin: 0 }}>{t('이 지도는 두 가지를 곱해서 만들었어요. 하나는 그 지역에 뇌졸중 환자가 한 해에 몇 명이나 생길지(수요), 다른 하나는 그 환자가 골든타임 안에 치료에 닿는지(접근성)예요.',
             'The map multiplies two things: how many stroke patients a district produces per year (demand), and whether they can reach treatment within the golden window (access).', lang)}</p>
-          <p style={{ margin: 0 }}>{t('수요는 이렇게 잡았어요. 나이가 많을수록 뇌졸중이 잘 생기니까, 전국 연령별 발생률을 그 동네 인구 구조에 그대로 입혀서 이 인구라면 몇 건이 나올지를 계산해요(간접표준화). 성별까지 갈라서 넣으면 더 정확한데, 그 정밀화는 지금 붙이는 중이에요.',
-            'For demand, we apply nationwide age-specific incidence rates to each district’s own age structure — indirect standardization giving an expected count. Splitting by sex sharpens it further, and that refinement is being added now.', lang)}</p>
+          <p style={{ margin: 0 }}>{t('수요는 이렇게 잡았어요. 뇌졸중은 나이가 많을수록, 그리고 같은 나이라도 남성이 더 잘 생기니까, 전국 연령·성별 발생률을 그 동네의 연령·성별 인구 구조에 그대로 입혀서 이 인구라면 몇 건이 나올지를 계산해요(연령×성별 간접표준화).',
+            'For demand, stroke rises with age and, at the same age, is higher in men — so we apply nationwide age- and sex-specific incidence rates to each district’s own age×sex population structure, giving an expected count (age×sex indirect standardization).', lang)}</p>
           <p style={{ margin: 0 }}>{t('접근성은 단순한 거리가 아니라 시간이에요. 카카오 길찾기로 주민센터에서 가장 가까운 인증센터까지 실제 도로 소요시간을 재요. 그런데 tPA(정맥 혈전용해)는 늦으면 그만큼 손해가 아니라, 늦을수록 손해가 가팔라지는 치료예요. 문헌을 보면 발병부터 치료까지 시간이 길어질수록 좋은 결과 확률이 빠르게 떨어지고, 4.5시간을 넘기면 편익이 거의 사라져요(Emberson 2014 등). 그래서 도달시간을 이 시간-편익 곡선에 넣어서 이 지역은 늦어서 얼마나 손해를 보나로 바꿨어요.',
             'Access is time, not mere distance. We measure real road drive-time from each community center to the nearest certified center (Kakao). But tPA is a treatment whose benefit falls off steeply with delay, not linearly — the chance of a good outcome drops fast as onset-to-treatment time grows and all but vanishes past 4.5 hours (Emberson 2014). So we pass drive-time through this time-benefit curve to express how much outcome a district forgoes by being far.', lang)}</p>
           <p style={{ margin: 0 }}>{t('시급도는 이 둘의 곱이에요. 환자가 많고 손해도 큰 곳이 위로 올라와요. 거리와 발생률을 억지로 몇 대 몇으로 섞는 게 아니라, 각자 제 역할로 들어가요. 발생률은 사람 수를 만들고 거리는 한 명당 손해를 만들어서 곱해지는 구조라, 사람이 임의로 정한 가중치가 없어요.',
