@@ -159,13 +159,13 @@ export default function StrokeAccessDashboard() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 11, fontSize: 11.5, color: '#bbbbdd', marginTop: 8 }}>
             {BANDS.map((b) => <span key={b.lab} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: b.c }} />{b.lab}</span>)}
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: '50%', background: '#00e5ff', boxShadow: '0 0 4px #00e5ff' }} />{t('인증센터', 'center', lang)}</span>
-            {res === 'emd' && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: '#b388ff' }} />{t('🚁 닥터헬기 대상', 'air amb.', lang)}</span>}
+            {res === 'emd' && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: '#b388ff' }} />{t('🚁 도서·항공 대상', 'island/air', lang)}</span>}
           </div>
           {hover && (
             <div style={{ position: 'fixed', left: hover.x, top: hover.y - 14, transform: 'translate(-50%,-100%)', pointerEvents: 'none', background: '#05050a', border: '1px solid rgba(0,212,255,0.4)', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#e8e8f0', zIndex: 200, whiteSpace: 'nowrap', boxShadow: '0 8px 24px rgba(0,0,0,.5)' }}>
               <b>{hover.r.s} {hover.r.sg ? hover.r.sg + ' ' : ''}{hover.r.n}</b><br />
               {hover.r.heli
-                ? <b style={{ color: '#b388ff' }}>{t('🚁 닥터헬기 이송 대상 (육로 불가)', '🚁 air-ambulance zone (no road)', lang)}</b>
+                ? <b style={{ color: '#b388ff' }}>{t('🚁 도서·항공이송 대상 (육로 불가)', '🚁 island / air-transport (no road)', lang)}</b>
                 : <>{t('도달', 'access', lang)} <b style={{ color: hover.r[aKey] == null ? '#8a8aa0' : BANDS[Math.max(0, bandOf(hover.r[aKey]))].c }}>{hover.r.nr ? t('육로 접근 불가', 'no road', lang) : hover.r[aKey] == null ? '–' : hover.r[aKey] + t('분', 'm', lang)}</b>{hover.r.nr ? t(' (미수복)', ' (DMZ)', lang) : hover.r.e ? t(' (시군구 근사)', ' (approx)', lang) : ''}</>}<br />
               <span style={{ color: '#9999bb' }}>{t('기대발생', 'burden', lang)} {fmt(hover.r.c)}{t('건/년 · 인구', '/yr · pop', lang)} {fmt(hover.r.p)}</span>
             </div>
@@ -236,8 +236,8 @@ export default function StrokeAccessDashboard() {
         </div>
       </section>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 18, lineHeight: 1.7 }}>
-        {t('출처 · 인구: KOSIS 주민등록인구 2024 · 발생률: 심뇌혈관질환 발생통계(허혈성 0.76) · 인증센터: 대한뇌졸중학회·권역/지역심뇌혈관질환센터 · 도달시간: 카카오 길찾기(승용차) · 경계: KOSTAT 2018. 읍면동 출발점=주민센터 좌표. 한계 · 생태학적 설계, 병원 전·내 지연 미포함. 읍면동 중 973곳(경기·제주 등)은 일일 API 한도로 시군구 근사값(쿼터 리셋 후 갱신 예정).',
-          'Sources · KOSIS 2024; CVD incidence (ischemic 0.76); KSS & regional/local centers; Kakao routing; KOSTAT 2018 boundaries. Dong origin=community-center coords. 973 dong approximated at district level pending API quota reset.', lang)}
+        {t('출처 · 인구: KOSIS 주민등록인구 2024 · 발생률: 심뇌혈관질환 발생통계(허혈성 0.76) · 인증센터: 대한뇌졸중학회·권역/지역심뇌혈관질환센터 · 도달시간: 카카오 길찾기(승용차) · 경계: KOSTAT 2018. 읍면동 출발점=주민센터 좌표. 한계 · 생태학적 설계, 병원 전·내 지연 미포함. 섬·미수복 등 육로 불가 지역은 도서·항공(닥터헬기·여객선) 대상으로 분리 표시. 일부 읍면동은 2018 경계와 2024 행정동 차이로 수요 미상.',
+          'Sources · KOSIS 2024; CVD incidence (ischemic 0.76); KSS & regional/local centers; Kakao routing; KOSTAT 2018 boundaries. Dong origin=community-center coords. No-road areas (islands, DMZ) shown as island/air-transport; some dong lack demand due to 2018–2024 boundary drift.', lang)}
       </div>
     </div>
   );
