@@ -172,7 +172,7 @@ export default function StrokeAccessDashboard() {
 
         <section style={{ ...card, padding: '16px 16px' }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 2 }}>{t('시급도 순위', 'Priority ranking', lang)}</div>
-          <div style={{ fontSize: 11.5, color: '#8888aa', marginBottom: 10 }}>{t('부담 × 30분 초과 지연', 'burden × delay>30m', lang)}</div>
+          <div style={{ fontSize: 11.5, color: '#8888aa', marginBottom: 10 }}>{t('부담 × tPA 시간-편익 손실', 'burden × time-benefit loss', lang)}</div>
           <div style={{ maxHeight: 500, overflow: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
               <thead><tr>
@@ -218,6 +218,21 @@ export default function StrokeAccessDashboard() {
         </section>
       </div>
 
+      <section style={{ ...card, padding: '20px 22px', marginTop: 18 }}>
+        <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', marginBottom: 12 }}>{t('이 지도를 어떻게 만들었나', 'How this map was built', lang)}</div>
+        <div style={{ fontSize: 13.5, color: '#cdd0dd', lineHeight: 1.85, maxWidth: '76ch', display: 'grid', gap: 12 }}>
+          <p style={{ margin: 0 }}>{t('이 지도는 두 가지를 곱해서 만들었어요. 하나는 그 지역에 뇌졸중 환자가 한 해에 몇 명이나 생길지(수요), 다른 하나는 그 환자가 골든타임 안에 치료에 닿는지(접근성)예요.',
+            'The map multiplies two things: how many stroke patients a district produces per year (demand), and whether they can reach treatment within the golden window (access).', lang)}</p>
+          <p style={{ margin: 0 }}>{t('수요는 이렇게 잡았어요. 나이가 많을수록 뇌졸중이 잘 생기니까, 전국 연령별 발생률을 그 동네 인구 구조에 그대로 입혀서 이 인구라면 몇 건이 나올지를 계산해요(간접표준화). 성별까지 갈라서 넣으면 더 정확한데, 그 정밀화는 지금 붙이는 중이에요.',
+            'For demand, we apply nationwide age-specific incidence rates to each district’s own age structure — indirect standardization giving an expected count. Splitting by sex sharpens it further, and that refinement is being added now.', lang)}</p>
+          <p style={{ margin: 0 }}>{t('접근성은 단순한 거리가 아니라 시간이에요. 카카오 길찾기로 주민센터에서 가장 가까운 인증센터까지 실제 도로 소요시간을 재요. 그런데 tPA(정맥 혈전용해)는 늦으면 그만큼 손해가 아니라, 늦을수록 손해가 가팔라지는 치료예요. 문헌을 보면 발병부터 치료까지 시간이 길어질수록 좋은 결과 확률이 빠르게 떨어지고, 4.5시간을 넘기면 편익이 거의 사라져요(Emberson 2014 등). 그래서 도달시간을 이 시간-편익 곡선에 넣어서 이 지역은 늦어서 얼마나 손해를 보나로 바꿨어요.',
+            'Access is time, not mere distance. We measure real road drive-time from each community center to the nearest certified center (Kakao). But tPA is a treatment whose benefit falls off steeply with delay, not linearly — the chance of a good outcome drops fast as onset-to-treatment time grows and all but vanishes past 4.5 hours (Emberson 2014). So we pass drive-time through this time-benefit curve to express how much outcome a district forgoes by being far.', lang)}</p>
+          <p style={{ margin: 0 }}>{t('시급도는 이 둘의 곱이에요. 환자가 많고 손해도 큰 곳이 위로 올라와요. 거리와 발생률을 억지로 몇 대 몇으로 섞는 게 아니라, 각자 제 역할로 들어가요. 발생률은 사람 수를 만들고 거리는 한 명당 손해를 만들어서 곱해지는 구조라, 사람이 임의로 정한 가중치가 없어요.',
+            'Priority is the product of the two: places with many patients and large forgone benefit rise to the top. Distance and incidence aren’t blended by some arbitrary ratio — each enters where it belongs. Incidence sets the count, distance sets the per-patient loss, and they multiply. No hand-picked weights.', lang)}</p>
+          <p style={{ margin: 0, color: '#9a9db0' }}>{t('한 가지 솔직하게 짚을게요. 이건 지역 단위 집계라 개인의 인과를 말하진 못해요. 도달시간도 동네마다 대표점 한 곳을 기준으로 잡았고, 환자가 증상을 늦게 알아채는 시간처럼 병원 위치를 바꿔도 못 줄이는 지연은 뺐어요. 그래서 정답이라기보다, 어디부터 손봐야 할지 우선순위를 잡는 지도로 봐주시면 좋아요.',
+            'One honest caveat: this is ecological, so it can’t speak to individual causation. Drive-time uses one representative point per district, and we exclude delays that placing hospitals can’t fix (like a patient being slow to recognize symptoms). Read it as a map for prioritizing where to act, not as a verdict.', lang)}</p>
+        </div>
+      </section>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 18, lineHeight: 1.7 }}>
         {t('출처 · 인구: KOSIS 주민등록인구 2024 · 발생률: 심뇌혈관질환 발생통계(허혈성 0.76) · 인증센터: 대한뇌졸중학회·권역/지역심뇌혈관질환센터 · 도달시간: 카카오 길찾기(승용차) · 경계: KOSTAT 2018. 읍면동 출발점=주민센터 좌표. 한계 · 생태학적 설계, 병원 전·내 지연 미포함. 읍면동 중 973곳(경기·제주 등)은 일일 API 한도로 시군구 근사값(쿼터 리셋 후 갱신 예정).',
           'Sources · KOSIS 2024; CVD incidence (ischemic 0.76); KSS & regional/local centers; Kakao routing; KOSTAT 2018 boundaries. Dong origin=community-center coords. 973 dong approximated at district level pending API quota reset.', lang)}
