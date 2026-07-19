@@ -63,7 +63,7 @@ export default function StrokeAccessDashboard() {
     const sw = res === 'sig' ? 0.4 : 0.12;
     return geo.features.map((f, i) => {
       const r = regOf(f); const v = r ? r[aKey] : null; const b = bandOf(v);
-      const col = !r || b < 0 ? NA : BANDS[b].c;
+      const col = r && r.heli ? '#b388ff' : (!r || b < 0 ? NA : BANDS[b].c);
       return (
         <path key={i} d={path(f)} fill={col} fillOpacity={0.9} stroke="#0a0a0f" strokeWidth={sw}
           style={{ cursor: r ? 'pointer' : 'default', filter: b >= 2 ? `drop-shadow(0 0 1.2px ${col})` : 'none' }}
@@ -159,12 +159,14 @@ export default function StrokeAccessDashboard() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 11, fontSize: 11.5, color: '#bbbbdd', marginTop: 8 }}>
             {BANDS.map((b) => <span key={b.lab} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: b.c }} />{b.lab}</span>)}
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: '50%', background: '#00e5ff', boxShadow: '0 0 4px #00e5ff' }} />{t('인증센터', 'center', lang)}</span>
+            {res === 'emd' && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: '#b388ff' }} />{t('🚁 닥터헬기 대상', 'air amb.', lang)}</span>}
           </div>
           {hover && (
             <div style={{ position: 'fixed', left: hover.x, top: hover.y - 14, transform: 'translate(-50%,-100%)', pointerEvents: 'none', background: '#05050a', border: '1px solid rgba(0,212,255,0.4)', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#e8e8f0', zIndex: 200, whiteSpace: 'nowrap', boxShadow: '0 8px 24px rgba(0,0,0,.5)' }}>
               <b>{hover.r.s} {hover.r.sg ? hover.r.sg + ' ' : ''}{hover.r.n}</b><br />
-              {t('도달', 'access', lang)} <b style={{ color: hover.r[aKey] == null ? '#8a8aa0' : BANDS[Math.max(0, bandOf(hover.r[aKey]))].c }}>{hover.r.nr ? t('육로 접근 불가', 'no road', lang) : hover.r[aKey] == null ? '–' : hover.r[aKey] + t('분', 'm', lang)}</b>
-              {hover.r.nr ? t(' (도서·미수복)', ' (island/DMZ)', lang) : hover.r.e ? t(' (시군구 근사)', ' (approx)', lang) : ''}<br />
+              {hover.r.heli
+                ? <b style={{ color: '#b388ff' }}>{t('🚁 닥터헬기 이송 대상 (육로 불가)', '🚁 air-ambulance zone (no road)', lang)}</b>
+                : <>{t('도달', 'access', lang)} <b style={{ color: hover.r[aKey] == null ? '#8a8aa0' : BANDS[Math.max(0, bandOf(hover.r[aKey]))].c }}>{hover.r.nr ? t('육로 접근 불가', 'no road', lang) : hover.r[aKey] == null ? '–' : hover.r[aKey] + t('분', 'm', lang)}</b>{hover.r.nr ? t(' (미수복)', ' (DMZ)', lang) : hover.r.e ? t(' (시군구 근사)', ' (approx)', lang) : ''}</>}<br />
               <span style={{ color: '#9999bb' }}>{t('기대발생', 'burden', lang)} {fmt(hover.r.c)}{t('건/년 · 인구', '/yr · pop', lang)} {fmt(hover.r.p)}</span>
             </div>
           )}
