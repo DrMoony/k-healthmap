@@ -1,5 +1,6 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
+const ExpansionSimulator = lazy(() => import('./ExpansionSimulator'));
 import { geoMercator, geoPath } from 'd3';
 import { useLang } from '../i18n';
 import { STROKE_ACCESS } from '../data/stroke_access';
@@ -23,6 +24,7 @@ export default function StrokeAccessDashboard() {
   const [hover, setHover] = useState(null);
   const [emdGeo, setEmdGeo] = useState(null);
   const [loadingEmd, setLoadingEmd] = useState(false);
+  const [showSim, setShowSim] = useState(false);
 
   const { anchors, meta } = STROKE_ACCESS;
   const RES = STROKE_ACCESS[res];
@@ -124,7 +126,11 @@ export default function StrokeAccessDashboard() {
           <span style={{ fontSize: 12, color: '#8888aa', fontWeight: 700 }}>{t('앵커 기준', 'Anchors', lang)}</span>
           {seg(mode, setMode, [['reg', t('권역 15', 'Reg 15', lang)], ['desig', t('+ 지역 28', '+ Local 28', lang)], ['full', t('+ 학회 82', '+ KSS 82', lang)]])}
         </div>
+        <button onClick={() => setShowSim(true)} style={{ marginLeft: 'auto', background: 'rgba(179,136,255,0.12)', border: '1px solid rgba(179,136,255,0.4)', color: '#b388ff', borderRadius: 9, padding: '7px 14px', cursor: 'pointer', fontSize: 12.5, fontWeight: 700 }}>
+          {t('🔬 가상 확충 시뮬레이터', '🔬 Expansion simulator', lang)}
+        </button>
       </div>
+      {showSim && <Suspense fallback={null}><ExpansionSimulator lang={lang} onClose={() => setShowSim(false)} /></Suspense>}
 
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 18 }}>
