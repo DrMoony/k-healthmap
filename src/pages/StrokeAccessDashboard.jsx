@@ -25,6 +25,8 @@ export default function StrokeAccessDashboard() {
   const [emdGeo, setEmdGeo] = useState(null);
   const [loadingEmd, setLoadingEmd] = useState(false);
   const [showSim, setShowSim] = useState(false);
+  const [query, setQuery] = useState('');
+  const [picked, setPicked] = useState(null);
 
   const { anchors, meta } = STROKE_ACCESS;
   const RES = STROKE_ACCESS[res];
@@ -41,6 +43,8 @@ export default function StrokeAccessDashboard() {
       import('../data/korea_emd_geo').then((m) => { setEmdGeo(m.KOREA_EMD_GEO); setLoadingEmd(false); });
     }
   }, [res, emdGeo, loadingEmd]);
+
+  useEffect(() => { setPicked(null); setQuery(''); }, [res]);
 
   const geo = res === 'sig' ? KOREA_SIG_GEO : emdGeo;
 
@@ -66,15 +70,17 @@ export default function StrokeAccessDashboard() {
     return geo.features.map((f, i) => {
       const r = regOf(f); const v = r ? r[aKey] : null; const b = bandOf(v);
       const col = r && r.heli ? '#b388ff' : (!r || b < 0 ? NA : BANDS[b].c);
+      const sel = r && picked && r === picked;
       return (
-        <path key={i} d={path(f)} fill={col} fillOpacity={0.9} stroke="#0a0a0f" strokeWidth={sw}
-          style={{ cursor: r ? 'pointer' : 'default', filter: b >= 2 ? `drop-shadow(0 0 1.2px ${col})` : 'none' }}
+        <path key={i} d={path(f)} fill={col} fillOpacity={sel ? 1 : 0.9} stroke={sel ? '#fff' : '#0a0a0f'} strokeWidth={sel ? 1.6 : sw}
+          style={{ cursor: r ? 'pointer' : 'default', filter: sel ? `drop-shadow(0 0 5px ${col})` : (b >= 2 ? `drop-shadow(0 0 1.2px ${col})` : 'none') }}
+          onClick={r ? () => { setPicked(r); setQuery(res === 'emd' ? `${r.s} ${r.sg || ''} ${r.n}` : `${r.s} ${r.n}`); } : undefined}
           onMouseEnter={r ? (e) => setHover({ r, x: e.clientX, y: e.clientY }) : undefined}
           onMouseMove={r ? (e) => setHover({ r, x: e.clientX, y: e.clientY }) : undefined}
           onMouseLeave={() => setHover(null)} />
       );
     });
-  }, [geo, path, aKey, res]); // eslint-disable-line
+  }, [geo, path, aKey, res, picked]); // eslint-disable-line
 
   const anchorDots = useMemo(() => {
     if (!project) return null;
@@ -90,6 +96,23 @@ export default function StrokeAccessDashboard() {
     arr.sort((x, y) => (sortK === 'n' ? x.n.localeCompare(y.n, 'ko') : (y[sortK] || 0) - (x[sortK] || 0)));
     return arr.slice(0, 25);
   }, [regions, sortK, aKey]);
+
+  // 지역 검색 — 현재 해상도 기준. 전국 시급도 순위도 함께 산출.
+  const rankMap = useMemo(() => {
+    const arr = regions.filter((r) => r[uKey] != null && !r.isl)
+      .slice().sort((x, y) => (y[uKey] || 0) - (x[uKey] || 0));
+    const m = new Map(); arr.forEach((r, i) => m.set(r, i + 1));
+    return { map: m, total: arr.length };
+  }, [regions, uKey]);
+
+  const hits = useMemo(() => {
+    const q = query.trim().replace(/\s+/g, '');
+    if (q.length < 1) return [];
+    return regions.filter((r) => {
+      const full = res === 'emd' ? `${r.s}${r.sg || ''}${r.n}` : `${r.s}${r.n}`;
+      return full.replace(/\s+/g, '').includes(q);
+    }).slice(0, 8);
+  }, [query, regions, res]);
 
   const card = { background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14 };
   const seg = (val, set, opts) => (
@@ -131,6 +154,91 @@ export default function StrokeAccessDashboard() {
         </button>
       </div>
       {showSim && <Suspense fallback={null}><ExpansionSimulator lang={lang} onClose={() => setShowSim(false)} /></Suspense>}
+
+      {/* 우리 동네 찾기 — 검색 + 상세 */}
+      <section style={{ ...card, padding: '16px 18px', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 14, fontWeight: 800, color: '#fff', whiteSpace: 'nowrap' }}>
+            {t('🔎 우리 동네는 어떤가요', '🔎 Look up your area', lang)}</span>
+          <div style={{ position: 'relative', flex: 1, minWidth: 220 }}>
+            <input value={query} onChange={(e) => { setQuery(e.target.value); setPicked(null); }}
+              placeholder={res === 'emd' ? t('읍면동 이름 (예: 대산읍, 해남읍)', 'Dong name', lang) : t('시군구 이름 (예: 서산시, 해남군)', 'District name', lang)}
+              style={{ width: '100%', background: '#0f0f16', border: '1px solid rgba(255,255,255,0.13)', borderRadius: 9, padding: '9px 12px', color: '#e8e8f0', font: 'inherit', fontSize: 13, outline: 'none' }} />
+            {hits.length > 0 && !picked && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 4, background: '#161620', border: '1px solid rgba(255,255,255,0.14)', borderRadius: 9, zIndex: 30, overflow: 'hidden', boxShadow: '0 12px 32px rgba(0,0,0,.5)' }}>
+                {hits.map((r, i) => (
+                  <button key={i} onClick={() => { setPicked(r); setQuery(res === 'emd' ? `${r.s} ${r.sg || ''} ${r.n}` : `${r.s} ${r.n}`); }}
+                    style={{ display: 'flex', width: '100%', justifyContent: 'space-between', gap: 10, border: 0, borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'transparent', color: '#e8e8f0', font: 'inherit', fontSize: 12.5, padding: '8px 12px', cursor: 'pointer', textAlign: 'left' }}>
+                    <span>{res === 'emd' ? `${r.s} ${r.sg || ''} ${r.n}` : `${r.s} ${r.n}`}</span>
+                    <span style={{ color: '#8888aa' }}>{r[aKey] == null ? '–' : `${r[aKey]}${t('분', 'm', lang)}`}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          {picked && <button onClick={() => { setPicked(null); setQuery(''); }} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.18)', color: '#bbbbdd', borderRadius: 8, padding: '6px 11px', cursor: 'pointer', fontSize: 12 }}>{t('지우기', 'Clear', lang)}</button>}
+        </div>
+
+        {picked && (() => {
+          const rk = rankMap.map.get(picked); const b = bandOf(picked[aKey]);
+          const pct = rk ? Math.round((rk / rankMap.total) * 100) : null;
+          const nm = res === 'sig' ? { a: picked.nr, ad: picked.ndn, ar: picked.nrn }[aKey] : null;
+          const rows = [
+            ['reg', t('권역 15', 'Regional 15', lang), picked.ar],
+            ['desig', t('+ 지역 28', '+ Local 28', lang), picked.ad],
+            ['full', t('+ 학회 82', '+ KSS 82', lang), picked.a],
+          ];
+          return (
+            <div style={{ marginTop: 14, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 14, display: 'grid', gap: 14 }}>
+              <div style={{ display: 'flex', gap: 26, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                <div>
+                  <div style={{ fontSize: 11.5, color: '#8888aa', fontWeight: 700 }}>{t('실도로 도달시간', 'Drive-time', lang)}</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 3 }}>
+                    <span style={{ fontSize: 30, fontWeight: 800, color: b < 0 ? '#8a8aa0' : BANDS[b].c, fontVariantNumeric: 'tabular-nums' }}>{picked[aKey] ?? '–'}</span>
+                    <span style={{ fontSize: 14, color: '#bbbbdd' }}>{t('분', 'min', lang)}</span>
+                    {b >= 0 && <span style={{ fontSize: 12, fontWeight: 700, color: BANDS[b].c }}>{BANDS[b].lab}</span>}
+                  </div>
+                  {nm && <div style={{ fontSize: 11.5, color: '#8888aa', marginTop: 3 }}>→ {nm}</div>}
+                  {picked.nr === 1 && <div style={{ fontSize: 11.5, color: '#b388ff', marginTop: 3 }}>🚁 {t('육로 불가 · 항공이송 대상', 'No road access', lang)}</div>}
+                </div>
+                <div>
+                  <div style={{ fontSize: 11.5, color: '#8888aa', fontWeight: 700 }}>{t('연 기대발생', 'Cases/yr', lang)}</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, color: '#e8e8f0', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>{fmt(picked.c)}</div>
+                  <div style={{ fontSize: 11.5, color: '#8888aa', marginTop: 2 }}>{t('인구', 'pop', lang)} {fmt(picked.p)}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 11.5, color: '#8888aa', fontWeight: 700 }}>{t('시급도 전국순위', 'Priority rank', lang)}</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, color: rk && pct <= 10 ? '#ff2d6e' : '#e8e8f0', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>
+                    {rk ? `${rk}` : '–'}<span style={{ fontSize: 13, color: '#8888aa', fontWeight: 600 }}> / {fmt(rankMap.total)}</span></div>
+                  {rk && <div style={{ fontSize: 11.5, color: pct <= 10 ? '#ff2d6e' : '#8888aa', marginTop: 2 }}>{t('상위', 'top', lang)} {pct}%{pct <= 10 ? t(' · 최우선권', ' · highest priority', lang) : ''}</div>}
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: 11.5, color: '#8888aa', fontWeight: 700, marginBottom: 6 }}>{t('어느 인증 단계까지 열려야 닿나요', 'Access by designation tier', lang)}</div>
+                <div style={{ display: 'grid', gap: 5 }}>
+                  {rows.map(([k, lab, v]) => {
+                    const bb = bandOf(v); const col = bb < 0 ? '#8a8aa0' : BANDS[bb].c; const w = v == null ? 0 : Math.min(100, v / 120 * 100);
+                    return (
+                      <div key={k} style={{ display: 'grid', gridTemplateColumns: '92px 1fr 62px', gap: 10, alignItems: 'center', fontSize: 12 }}>
+                        <span style={{ color: mode === k ? '#00d4ff' : '#bbbbdd', fontWeight: mode === k ? 700 : 500 }}>{lab}</span>
+                        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 5, height: 11, overflow: 'hidden' }}>
+                          <div style={{ width: `${Math.max(2, w)}%`, height: '100%', background: col, borderRadius: 5 }} /></div>
+                        <span style={{ textAlign: 'right', color: col, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{v == null ? '–' : `${v}${t('분', 'm', lang)}`}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 7, lineHeight: 1.6 }}>
+                  {picked.ar != null && picked.a != null && picked.ar - picked.a >= 15
+                    ? t(`국가지정(권역)만으로는 ${picked.ar}분이지만 학회 인증망까지 열면 ${picked.a}분 — 학회망이 이 지역을 실질적으로 떠받쳐요.`,
+                        `Regional-only ${picked.ar}m vs ${picked.a}m with the KSS network — the society network carries this area.`, lang)
+                    : t('단계별로 도달시간이 크게 줄지 않아요. 이 지역은 어느 망 기준으로도 접근성이 비슷해요.', 'Access changes little across tiers here.', lang)}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+      </section>
 
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 18 }}>
@@ -190,7 +298,8 @@ export default function StrokeAccessDashboard() {
               </tr></thead>
               <tbody>
                 {tableRows.map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <tr key={i} onClick={() => { setPicked(r); setQuery(res === 'emd' ? `${r.s} ${r.sg || ''} ${r.n}` : `${r.s} ${r.n}`); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', cursor: 'pointer', background: picked === r ? 'rgba(0,212,255,0.08)' : 'transparent' }}>
                     <td style={{ textAlign: 'right', padding: '6px 7px', fontWeight: 700, color: '#ffd60a', fontVariantNumeric: 'tabular-nums' }}>{r[uKey] ? fmt(r[uKey]) : '–'}</td>
                     <td style={{ padding: '6px 7px', color: '#e8e8f0' }}>{r.n}<span style={{ color: '#7a7a99', fontSize: 11 }}> {r.sg || r.s}</span></td>
                     <td style={{ textAlign: 'right', padding: '6px 7px' }}>{chip(r[aKey])}</td>
