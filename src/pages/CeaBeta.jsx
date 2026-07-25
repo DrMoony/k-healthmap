@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { STROKE_CANDIDATES } from '../data/stroke_candidates';
 
 const t = (ko, en, lang) => (lang === 'ko' ? ko : en);
 const ACCESS_CODE = '1003';
@@ -25,6 +26,12 @@ export default function CeaBeta({ lang }) {
   const [err, setErr] = useState(false);
   const [scen, setScen] = useState('low');
 
+  const pool = useMemo(() => {
+    const byEr = {};
+    STROKE_CANDIDATES.forEach((c) => { byEr[c.er] = (byEr[c.er] || 0) + 1; });
+    return { total: STROKE_CANDIDATES.length, tsc: STROKE_CANDIDATES.filter((c) => c.b).length, byEr };
+  }, []);
+
   const card = { background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14 };
   const submit = (e) => {
     e.preventDefault();
@@ -36,12 +43,12 @@ export default function CeaBeta({ lang }) {
     return (
       <section style={{ ...card, padding: '20px 22px', marginTop: 16, borderStyle: 'dashed', borderColor: 'rgba(179,136,255,0.35)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>{t('🔒 비용효과분석 (CEA)', '🔒 Cost-effectiveness analysis', lang)}</span>
+          <span style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>{t('🔒 비용효과분석 · 승격 후보 (CEA)', '🔒 Cost-effectiveness & upgrade candidates', lang)}</span>
           <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: '.04em', color: '#b388ff', background: 'rgba(179,136,255,0.14)', border: '1px solid rgba(179,136,255,0.4)', borderRadius: 4, padding: '2px 7px' }}>BETA</span>
         </div>
         <div style={{ fontSize: 12.5, color: '#9a9db0', lineHeight: 1.7, margin: '8px 0 14px', maxWidth: '74ch' }}>
-          {t('공백지 병원을 재관류센터로 승격했을 때의 증분 비용효과비(₩/QALY)를 후보별로 추정한 결과예요. 검증 전 단계라 허가코드가 있는 분에게만 열려 있어요.',
-            'Incremental cost-effectiveness (₩/QALY) of upgrading gap-area hospitals into reperfusion centres. Pre-validation — access code required.', lang)}
+          {t('공백지 병원을 재관류센터로 승격했을 때의 증분 비용효과비(₩/QALY), 전국 승격 후보 풀, 그리고 서산 사례를 담고 있어요. 특정 기관 언급이 있어 검증 전까지는 허가코드가 있는 분에게만 열려 있어요.',
+            'Incremental cost-effectiveness (₩/QALY) of upgrading gap-area hospitals, the national candidate pool, and the Seosan case. Names specific institutions — access code required pre-validation.', lang)}
         </div>
         <form onSubmit={submit} style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <input type="password" value={code} onChange={(e) => { setCode(e.target.value); setErr(false); }}
@@ -107,6 +114,60 @@ export default function CeaBeta({ lang }) {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      {/* 서산 케이스 — infrastructure-ready gap */}
+      <div style={{ marginTop: 16, background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.22)', borderLeft: '3px solid #00d4ff', borderRadius: 10, padding: '15px 17px' }}>
+        <div style={{ fontSize: 13.5, fontWeight: 800, color: '#fff' }}>
+          {t('사례 — 서산: 인프라는 다 있는데, 인증이 없어서 74분', 'Case — Seosan: infrastructure ready, designation missing', lang)}</div>
+        <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap', margin: '11px 0 10px' }}>
+          {[
+            { v: '74.5' + t('분', 'm', lang), l: t('최근접 인증센터까지', 'to nearest certified centre', lang), c: '#ff2d6e' },
+            { v: '2' + t('위', 'nd', lang), l: t('전국 시급도 (251개 중)', 'priority rank of 251', lang), c: '#ff8c42' },
+            { v: '349' + t('건', '', lang), l: t('연 기대 허혈성 발생', 'expected cases/yr', lang), c: '#ffd60a' },
+            { v: '2' + t('곳', '', lang), l: t('관내 종합병원 (둘 다 CT·MRI)', 'general hospitals, both CT+MRI', lang), c: '#00ff88' },
+          ].map((k, i) => (
+            <div key={i}>
+              <div style={{ fontSize: 19, fontWeight: 800, color: k.c, fontVariantNumeric: 'tabular-nums' }}>{k.v}</div>
+              <div style={{ fontSize: 11, color: '#8888aa', marginTop: 1 }}>{k.l}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gap: 5, margin: '10px 0' }}>
+          {[['서산중앙병원', '지역응급의료센터 · CT · MRI'], ['충청남도 서산의료원', '지역응급의료센터 · CT · MRI']].map(([n, d], i) => (
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12, background: 'rgba(0,0,0,0.22)', borderRadius: 7, padding: '7px 11px' }}>
+              <span style={{ color: '#e8e8f0', fontWeight: 600 }}>{n}</span>
+              <span style={{ color: '#8fd6e6', fontSize: 11.5 }}>{d}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 12, color: '#9a9db0', lineHeight: 1.75, maxWidth: '76ch' }}>
+          {t('서산에는 응급의료센터급 종합병원이 둘 있고 CT·MRI도 갖췄어요. 그런데 재관류 뇌졸중센터 인증이 없어서, 환자는 시화(74.5분)나 천안(83분)까지 가야 해요. 병원이 없어서 생긴 공백이 아니라 지정이 없어서 생긴 공백이라, 확충의 병목은 건물이나 장비가 아니라 신경과 인력과 지정 정책이에요. 그래서 이 유형이 가장 싸고 빠른 확충 경로예요.',
+            'Seosan has two emergency-centre-level general hospitals with CT and MRI, yet no reperfusion certification — so patients travel 74.5 or 83 minutes. The gap comes from designation, not from missing facilities; the bottleneck is neurology staffing and policy, which makes this the cheapest, fastest expansion route.', lang)}
+        </div>
+      </div>
+
+      {/* 후보 풀 */}
+      <div style={{ marginTop: 14, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 12 }}>
+        <div style={{ fontSize: 12.5, fontWeight: 700, color: '#cdd0dd', marginBottom: 7 }}>
+          {t('전국 승격 후보 풀 (기존 인증센터 82 제외)', 'National candidate pool (excl. 82 existing)', lang)}</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {[
+            { v: pool.total, l: t('tPA-ready · 응급의료기관+CT', 'tPA-ready', lang), c: '#00d4ff' },
+            { v: pool.tsc, l: t('TSC-ready · 지역센터+ · MRI', 'TSC-ready', lang), c: '#b388ff' },
+            { v: pool.byEr['권역'] || 0, l: t('권역응급의료센터', 'regional ER centre', lang), c: '#00ff88' },
+            { v: pool.byEr['지역센터'] || 0, l: t('지역응급의료센터', 'local ER centre', lang), c: '#ffd60a' },
+          ].map((k, i) => (
+            <div key={i} style={{ flex: '1 1 120px', background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 9, padding: '10px 12px' }}>
+              <div style={{ fontSize: 19, fontWeight: 800, color: k.c, fontVariantNumeric: 'tabular-nums' }}>{k.v}</div>
+              <div style={{ fontSize: 10.5, color: '#8888aa', marginTop: 2, lineHeight: 1.45 }}>{k.l}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 8, lineHeight: 1.6 }}>
+          {t('※ 이미 인프라 문턱(응급실·CT, 상위 티어는 MRI)을 넘은 실제 종합병원이에요. 신축이 아니라 승격이 전제라 증분비용이 낮고, 이것이 위 ICER가 대부분 비용절감으로 나오는 구조적 이유예요. 출처: HIRA 병의원·의료장비 2026.6 · 중앙응급의료센터 E-Gen.',
+            '※ Real general hospitals already past the infrastructure threshold. Upgrade — not new build — is why incremental cost is low and most ICERs turn cost-saving. Source: HIRA 2026.6, E-Gen.', lang)}
+        </div>
       </div>
 
       <div style={{ fontSize: 11.5, color: '#9a9db0', lineHeight: 1.75, marginTop: 13, maxWidth: '78ch' }}>
