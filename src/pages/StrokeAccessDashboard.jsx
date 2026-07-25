@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 const ExpansionSimulator = lazy(() => import('./ExpansionSimulator'));
+const CeaBeta = lazy(() => import('./CeaBeta'));
 import { geoMercator, geoPath } from 'd3';
 import { useLang } from '../i18n';
 import { STROKE_ACCESS } from '../data/stroke_access';
@@ -381,6 +382,42 @@ export default function StrokeAccessDashboard() {
         </div>
       </section>
       )}
+
+      {/* 모델 검증 */}
+      <section style={{ ...card, padding: '18px 20px', marginTop: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>{t('이 모델을 믿어도 되나 — 외부 검증', 'Model validation', lang)}</div>
+          <div style={{ fontSize: 11.5, color: '#7a7a99' }}>{t('독립 실측자료 대조', 'against independent data', lang)}</div>
+        </div>
+        <div style={{ fontSize: 12.5, color: '#9a9db0', lineHeight: 1.7, margin: '7px 0 14px', maxWidth: '78ch' }}>
+          {t('수요 추정이 현실과 맞는지 두 가지 독립 자료로 대조했어요. 시군구 발생 통계는 공개되지 않아서, 가장 세밀하게 얻을 수 있는 뇌혈관 사망률(229 시군구)을 대리지표로, 실측 발생률(시도)은 보조로 썼어요.',
+            'We checked demand estimates against two independent sources. Small-area incidence is not published, so cerebrovascular mortality (229 districts) serves as proxy, with observed incidence (province) as support.', lang)}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(178px,1fr))', gap: 11 }}>
+          {[
+            { v: '0.77', lab: t('사망률 대조 R²', 'R² vs mortality', lang), sub: t('229 시군구 · 2024', '229 districts', lang), c: '#00ff88' },
+            { v: '±0.003', lab: t('성별 추가 효과', 'sex adjustment', lang), sub: t('연령만 0.773 → 연령×성별 0.770', 'age-only vs age×sex', lang), c: '#8fd6e6' },
+            { v: '1.35×', lab: t('연령 제거 후 지역위험', 'residual regional risk', lang), sub: t('충북 133 vs 서울 99 (실측)', 'Chungbuk vs Seoul', lang), c: '#ffd60a' },
+            { v: 'r=0.76', lab: t('고령·고위험 중첩', 'age–risk overlap', lang), sub: t('충북·경북·전북 이중고', 'double burden', lang), c: '#ff8c42' },
+          ].map((k, i) => (
+            <div key={i} style={{ background: 'rgba(0,0,0,0.24)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 10, padding: '12px 14px' }}>
+              <div style={{ fontSize: 21, fontWeight: 800, color: k.c, fontVariantNumeric: 'tabular-nums' }}>{k.v}</div>
+              <div style={{ fontSize: 12, color: '#cdd0dd', fontWeight: 600, marginTop: 2 }}>{k.lab}</div>
+              <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 2, lineHeight: 1.5 }}>{k.sub}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 12, color: '#9a9db0', lineHeight: 1.75, marginTop: 13, maxWidth: '78ch' }}>
+          {t('읽는 법 — R²=0.77은 높아 보이지만 상당 부분이 연령 착시예요(고령지는 발생도 사망도 함께 높으니까). 그래서 성별을 더해도 값이 거의 안 움직이고(±0.003), 위험인자를 더 넣으면 교차검증에서 오히려 떨어져요(과적합). 대신 실측 발생률로 보면 연령을 걷어내도 지역 위험이 1.35배 남고, 그 위험이 고령지와 겹쳐요 — 충북·경북·전북은 늙었고 동시에 위험도 높은 이중고예요.',
+            'Reading it — R² 0.77 is largely an age artifact; adding sex barely moves it (±0.003) and risk factors overfit. Observed incidence shows 1.35× residual regional risk after age removal, concentrated in the same older provinces — a double burden.', lang)}
+        </div>
+        <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 11, lineHeight: 1.6, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 10 }}>
+          {t('⚠️ 한계 — 검증 타깃이 발생이 아니라 사망이에요(사망=발생×치명률, 그 치명률이 하필 접근성과 얽혀요). 뇌혈관 사망(I60–69)은 뇌경색 39%·출혈 32%·후유증 23%로 구성되고, 뇌경색 단독 사망은 지역 단위로 공표되지 않아요. 시군구 실제 발생은 건강보험 맞춤형 DB라야 가능해요. 출처: KOSIS 사망원인통계 DT_1B34E13(2024) · 질병관리청 심뇌혈관 발생통계 DT_177001_A018(2023).',
+            '⚠️ Limitation — the target is mortality, not incidence (mortality = incidence × fatality, and fatality itself relates to access). Cerebrovascular death (I60–69) = 39% infarction / 32% hemorrhage / 23% sequelae; I63-only death is not published sub-nationally. Sources: KOSIS DT_1B34E13 (2024), KDCA DT_177001_A018 (2023).', lang)}
+        </div>
+      </section>
+
+      <Suspense fallback={null}><CeaBeta lang={lang} /></Suspense>
 
       <section style={{ ...card, padding: '20px 22px', marginTop: 18 }}>
         <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', marginBottom: 12 }}>{t('이 지도를 어떻게 만들었나', 'How this map was built', lang)}</div>
