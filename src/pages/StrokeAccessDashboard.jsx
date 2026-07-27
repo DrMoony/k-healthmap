@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 const ExpansionSimulator = lazy(() => import('./ExpansionSimulator'));
 const CeaBeta = lazy(() => import('./CeaBeta'));
+const EvidenceMap = lazy(() => import('./EvidenceMap'));
 import { geoMercator, geoPath } from 'd3';
 import { useLang } from '../i18n';
 import { STROKE_ACCESS } from '../data/stroke_access';
@@ -416,6 +417,8 @@ export default function StrokeAccessDashboard() {
             '⚠️ Limitation — the target is mortality, not incidence (mortality = incidence × fatality, and fatality itself relates to access). Cerebrovascular death (I60–69) = 39% infarction / 32% hemorrhage / 23% sequelae; I63-only death is not published sub-nationally. Sources: KOSIS DT_1B34E13 (2024), KDCA DT_177001_A018 (2023).', lang)}
         </div>
       </section>
+
+      <Suspense fallback={null}><EvidenceMap lang={lang} /></Suspense>
 
       <Suspense fallback={null}><CeaBeta lang={lang} /></Suspense>
 
