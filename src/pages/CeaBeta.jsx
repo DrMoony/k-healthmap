@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { STROKE_CANDIDATES } from '../data/stroke_candidates';
 import CeaThreshold from './CeaThreshold';
+import CeaPsa from './CeaPsa';
 
 const t = (ko, en, lang) => (lang === 'ko' ? ko : en);
 const ACCESS_CODE = '1003';
@@ -118,6 +119,7 @@ export default function CeaBeta({ lang }) {
       </div>
 
       <CeaThreshold lang={lang} />
+      <CeaPsa lang={lang} />
 
       {/* 서산 케이스 — infrastructure-ready gap */}
       <div style={{ marginTop: 16, background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.22)', borderLeft: '3px solid #00d4ff', borderRadius: 10, padding: '15px 17px' }}>
