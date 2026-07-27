@@ -4,11 +4,11 @@ const t = (ko, en, lang) => (lang === 'ko' ? ko : en);
 
 // 임계값 분석 — WTP에서 역산한 후보별 허용 연간지원 상한(억원). cea_threshold.py 산출.
 const SITES = [
-  { n: '서산중앙병원', sg: '충남 서산', cases: 1099, qaly: 327, save: 58, cap: { w35: 20.9, w50: 26.8 } },
-  { n: '해남종합병원', sg: '전남 해남', cases: 855, qaly: 219, save: 39, cap: { w35: 14.0, w50: 18.0 } },
-  { n: '거붕백병원', sg: '경남 거제', cases: 345, qaly: 148, save: 26, cap: { w35: 9.5, w50: 12.1 } },
-  { n: '서귀포의료원', sg: '제주 서귀포', cases: 371, qaly: 136, save: 24, cap: { w35: 8.7, w50: 11.2 } },
-  { n: '태백병원', sg: '강원 태백', cases: 250, qaly: 66, save: 12, cap: { w35: 4.2, w50: 5.4 } },
+  { n: '서산중앙병원', sg: '충남 서산', cases: 1099, qaly: 330, save: 58, cap: { w35: 20.9, w50: 26.8 } },
+  { n: '해남종합병원', sg: '전남 해남', cases: 855, qaly: 221, save: 39, cap: { w35: 14.0, w50: 18.0 } },
+  { n: '거붕백병원', sg: '경남 거제', cases: 345, qaly: 149, save: 26, cap: { w35: 9.5, w50: 12.1 } },
+  { n: '서귀포의료원', sg: '제주 서귀포', cases: 371, qaly: 137, save: 24, cap: { w35: 8.7, w50: 11.2 } },
+  { n: '태백병원', sg: '강원 태백', cases: 250, qaly: 67, save: 12, cap: { w35: 4.2, w50: 5.4 } },
 ];
 const TOTAL = { w35: 57, w50: 74 };
 const REF = [
@@ -91,8 +91,8 @@ export default function CeaThreshold({ lang }) {
           'If a bar passes the blue line (regional-centre budget ₩1.4B), regional-level support is justified. Seosan allows up to ₩2.09B; Taebaek caps at ₩420M, matching local-centre scale. Larger averted burden justifies larger support — that ordering is the budget priority.', lang)}
       </div>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 9, lineHeight: 1.6 }}>
-        {t('※ 상한 = (WTP × 증분 QALY − 하류 의료비 절감)을 10년 현가로 환산한 연간액. 설립비 0, 할인 4.5% 가정. 운영비를 가정하지 않으므로 CEA에서 가장 불확실한 파라미터를 우회해요.',
-          '※ Ceiling = (WTP × incremental QALY − downstream savings) annualised over 10 years at 4.5%. Avoids assuming operating cost, the least certain CEA parameter.', lang)}
+        {t('※ 상한 = (WTP × 증분 QALY − 하류 의료비 절감)을 10년 현가로 환산한 연간액. 설립비 0, 할인 4.5% 가정. 운영비를 가정하지 않으므로 CEA에서 가장 불확실한 파라미터를 우회해요. 효과는 Saver 2013(JAMA, GWTG n=58,353)의 15분 단축당 오즈비(독립보행 1.04·사망 0.96)를 적용했고, 5개소 10년 903 QALY(95%CI 572–1,123)예요.',
+          '※ Ceiling = (WTP × incremental QALY − downstream savings) annualised over 10 years at 4.5%. Effect from Saver 2013 (JAMA, GWTG n=58,353): OR 1.04 ambulation / 0.96 mortality per 15 min faster. 903 QALY over 10 yrs (95%CI 572–1,123).', lang)}
       </div>
     </div>
   );

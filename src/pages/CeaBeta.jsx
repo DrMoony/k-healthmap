@@ -7,11 +7,11 @@ const ACCESS_CODE = '1003';
 
 // 후보별 ICER (M원/QALY) — 운영비 시나리오별. cea_model.py 산출.
 const SITES = [
-  { n: '서산중앙병원', sg: '충남 서산', cases: 1099, qaly: 327, icer: { low: -11.5, base: 22.2, high: 62.6 } },
-  { n: '해남종합병원', sg: '전남 해남', cases: 855, qaly: 220, icer: { low: -8.4, base: 41.8, high: 102.1 } },
-  { n: '서귀포의료원', sg: '제주 서귀포', cases: 371, qaly: 136, icer: { low: -2.6, base: 78.3, high: 175.4 } },
-  { n: '거붕백병원', sg: '경남 거제', cases: 345, qaly: 148, icer: { low: -3.8, base: 70.5, high: 159.9 } },
-  { n: '태백병원', sg: '강원 태백', cases: 250, qaly: 66, icer: { low: 13.4, base: 179.2, high: 378.5 } },
+  { n: '서산중앙병원', sg: '충남 서산', cases: 1099, qaly: 330, icer: { low: -11.5, base: 22.2, high: 62.6 } },
+  { n: '해남종합병원', sg: '전남 해남', cases: 855, qaly: 221, icer: { low: -8.4, base: 41.8, high: 102.1 } },
+  { n: '서귀포의료원', sg: '제주 서귀포', cases: 371, qaly: 137, icer: { low: -2.6, base: 78.3, high: 175.4 } },
+  { n: '거붕백병원', sg: '경남 거제', cases: 345, qaly: 149, icer: { low: -3.8, base: 70.5, high: 159.9 } },
+  { n: '태백병원', sg: '강원 태백', cases: 250, qaly: 67, icer: { low: 13.4, base: 179.2, high: 378.5 } },
 ];
 const AGG = { low: -6.3, base: 55.1, high: 128.8 };
 const SCEN = [
@@ -178,8 +178,8 @@ export default function CeaBeta({ lang }) {
           'Below WTP ₩35M/QALY is cost-effective; negative means cost-saving. tPA averts severe disability (mRS 4–5), saving ~₩12.5M per patient over 5 years (Kim 2020, n=11,136 Korea). At realistic upgrade costs most sites turn cost-saving. Operating cost drives the verdict; the top site stays cost-effective even at regional-centre cost.', lang)}
       </div>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 10, lineHeight: 1.6, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 10 }}>
-        {t('모델 — 의사결정나무(3개월 mRS) + Markov(평생), 지불자 관점, 할인 4.5%(NECA), 운영 10년. 효과는 도달시간 단축 → tPA 시간-편익(Emberson 2014) → mRS 이동(NINDS 1995) → 효용·비용(Kim 2020) 경로로 전달. 후보=응급의료기관+CT 보유 종합병원(기존 인증센터 82 제외). CHEERS 2022 준수 지향.',
-          'Model — decision tree (3-month mRS) + Markov (lifetime), payer perspective, 4.5% discount (NECA), 10-year operation. CHEERS 2022.', lang)}
+        {t('모델 — 의사결정나무(3개월 mRS) + Markov(평생), 지불자 관점, 할인 4.5%(NECA), 운영 10년. 효과는 도달시간 단축 → Saver 2013(JAMA, GWTG n=58,353)의 15분 단축당 오즈비(독립보행 1.04 / 사망 0.96)를 오즈 스케일에 적용 → 효용·비용(Kim 2020, 국내 11,136명) 경로로 전달. 민감도로 Emberson 2014 3구간 OR를 쓰면 커버지역이 모두 첫 구간(0–180분) 안이라 편익이 0으로 계산돼요. 후보=응급의료기관+CT 보유 종합병원(기존 인증센터 82 제외). CHEERS 2022 준수 지향.',
+          'Model — decision tree (3-month mRS) + Markov (lifetime), payer perspective, 4.5% discount (NECA), 10-year operation. Effect via Saver 2013 (JAMA, GWTG n=58,353) odds ratios per 15-min gain (ambulation 1.04 / mortality 0.96); costs from Kim 2020 (n=11,136 Korea). CHEERS 2022.', lang)}
       </div>
     </section>
   );
