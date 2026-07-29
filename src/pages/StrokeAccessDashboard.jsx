@@ -29,6 +29,7 @@ export default function StrokeAccessDashboard() {
   const [showSim, setShowSim] = useState(false);
   const [query, setQuery] = useState('');
   const [picked, setPicked] = useState(null);
+  const [tab, setTab] = useState('map');   // 'map' | 'analysis' | 'evidence'
 
   const { anchors, meta } = STROKE_ACCESS;
   const RES = STROKE_ACCESS[res];
@@ -242,6 +243,21 @@ export default function StrokeAccessDashboard() {
         })()}
       </section>
 
+      {/* 탭 */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.09)', flexWrap: 'wrap' }}>
+        {[['map', t('🗺️ 지도', '🗺️ Map', lang)],
+          ['analysis', t('📊 분석', '📊 Analysis', lang)],
+          ['evidence', t('📖 근거와 비용', '📖 Evidence & cost', lang)]].map(([k, lab]) => {
+          const on = tab === k;
+          return (
+            <button key={k} onClick={() => setTab(k)}
+              style={{ border: 0, borderBottom: `2px solid ${on ? '#00d4ff' : 'transparent'}`, background: 'transparent',
+                cursor: 'pointer', font: 'inherit', fontSize: 13.5, fontWeight: on ? 800 : 600,
+                color: on ? '#fff' : '#8888aa', padding: '9px 15px', marginBottom: -1 }}>{lab}</button>
+          );
+        })}
+      </div>
+
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 18 }}>
         {[
@@ -259,6 +275,7 @@ export default function StrokeAccessDashboard() {
         ))}
       </div>
 
+      {tab === 'map' && (
       <div style={{ display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: 16, alignItems: 'start' }}>
         <section style={{ ...card, padding: '16px 18px', position: 'relative' }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 2 }}>{t('접근성 지도', 'Access Map', lang)}</div>
@@ -313,8 +330,10 @@ export default function StrokeAccessDashboard() {
           </div>
         </section>
       </div>
+      )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
+      {tab === 'analysis' && (<>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <section style={{ ...card, padding: '16px 18px' }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 12 }}>{t('접근성 심각도 분포', 'Severity distribution', lang)}</div>
           {S.bands.map((n, i) => { const mx = Math.max(...S.bands); return (
@@ -418,6 +437,9 @@ export default function StrokeAccessDashboard() {
         </div>
       </section>
 
+      </>)}
+
+      {tab === 'evidence' && (<>
       <Suspense fallback={null}><EvidenceMap lang={lang} /></Suspense>
 
       <Suspense fallback={null}><CeaBeta lang={lang} /></Suspense>
@@ -443,6 +465,8 @@ export default function StrokeAccessDashboard() {
           </div>
         </div>
       </section>
+      </>)}
+
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 18, lineHeight: 1.7 }}>
         {t('출처 · 인구: KOSIS 주민등록인구 2024 · 발생률: 심뇌혈관질환 발생통계(허혈성 0.76) · 인증센터: 대한뇌졸중학회·권역/지역심뇌혈관질환센터 · 도달시간: KakaoMap API(승용차) · 경계: KOSTAT 2018. 읍면동 출발점=주민센터 좌표. 한계 · 생태학적 설계. 도달시간은 이송 한 구간만 잰 낙관 하한(병원전 반응·현장 지연 제외 → 참값은 이상, 단방향이라 격차 결론 방어). 섬·미수복 등 육로 불가 지역은 도서·항공(닥터헬기·여객선) 대상으로 분리 표시. 일부 읍면동은 2018 경계와 2024 행정동 차이로 수요 미상.',
           'Sources · KOSIS 2024; CVD incidence (ischemic 0.76); KSS & regional/local centers; KakaoMap API routing; KOSTAT 2018 boundaries. Dong origin=community-center coords. Access is a best-case lower bound (transport leg only; prehospital response/on-scene excluded → true value is worse, one-directional so it defends the gap). No-road areas (islands, DMZ) shown as island/air-transport; some dong lack demand due to 2018–2024 boundary drift.', lang)}
