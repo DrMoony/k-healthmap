@@ -8,19 +8,19 @@ const ACCESS_CODE = '1003';
 
 // 후보별 ICER (M원/QALY) — 운영비 시나리오별. cea_model.py 산출.
 const SITES = [
-  { n: '서산중앙병원', sg: '충남 서산', cases: 1099, qaly: 330, icer: { low: -11.5, base: 22.2, high: 62.6 } },
-  { n: '해남종합병원', sg: '전남 해남', cases: 855, qaly: 221, icer: { low: -8.4, base: 41.8, high: 102.1 } },
-  { n: '서귀포의료원', sg: '제주 서귀포', cases: 371, qaly: 137, icer: { low: -2.6, base: 78.3, high: 175.4 } },
-  { n: '거붕백병원', sg: '경남 거제', cases: 345, qaly: 149, icer: { low: -3.8, base: 70.5, high: 159.9 } },
-  { n: '태백병원', sg: '강원 태백', cases: 250, qaly: 67, icer: { low: 13.4, base: 179.2, high: 378.5 } },
+  { n: '서산중앙병원', sg: '충남 서산', cases: 1099, qaly: 168, icer: { low: 5.4, base: 17.7, high: 52.1 } },
+  { n: '해남종합병원', sg: '전남 해남', cases: 855, qaly: 113, icer: { low: 10.4, base: 28.7, high: 80.1 } },
+  { n: '서귀포의료원', sg: '제주 서귀포', cases: 371, qaly: 70, icer: { low: 24.0, base: 53.5, high: 136.3 } },
+  { n: '거붕백병원', sg: '경남 거제', cases: 345, qaly: 76, icer: { low: 22.5, base: 49.7, high: 126.1 } },
+  { n: '태백병원', sg: '강원 태백', cases: 250, qaly: 34, icer: { low: 53.1, base: 114.0, high: 284.4 } },
 ];
-const AGG = { low: -6.3, base: 55.1, high: 128.8 };
+const AGG = { low: 15.8, base: 38.2, high: 101.0 };
 const SCEN = [
-  { k: 'low', lab: '지역센터급 2.5억/년', note: 'tPA 승격 현실 비용 (혈관조영실 불필요)' },
-  { k: 'base', lab: '권역급 14억/년', note: '권역센터 총사업비 + 설립 15억' },
-  { k: 'high', lab: '전담팀 30억/년', note: 'EVT 24/7 전담팀 풀코스트' },
+  { k: 'low', lab: '지역센터급 2.5억/년', note: '지역심뇌혈관질환센터 총사업비 (국비 1.25억) — 본 확충안의 기본 시나리오' },
+  { k: 'base', lab: '24시간 진료체계 5억/년', note: '권역센터가 24시간 전문진료에 배정하는 사업비 (국비 2.5억)' },
+  { k: 'high', lab: '권역 총사업비 12억/년', note: '권역심뇌혈관질환센터 전체 운영비 — EVT 포함 규모로 tPA 승격에는 과대' },
 ];
-const WTP = 35;
+const WTP = 37;   // 1인당 GDP 기준
 
 export default function CeaBeta({ lang }) {
   const [code, setCode] = useState('');
@@ -72,8 +72,8 @@ export default function CeaBeta({ lang }) {
         <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: '.04em', color: '#b388ff', background: 'rgba(179,136,255,0.14)', border: '1px solid rgba(179,136,255,0.4)', borderRadius: 4, padding: '2px 7px' }}>BETA</span>
       </div>
       <div style={{ background: 'rgba(255,45,110,0.07)', border: '1px solid rgba(255,45,110,0.22)', borderRadius: 9, padding: '9px 12px', margin: '11px 0 14px', fontSize: 11.5, color: '#e6a9b8', lineHeight: 1.6 }}>
-        {t('⚠️ 검증 전 초안입니다. 확률적 민감도분석(PSA) 미완료, mRS 효용값은 국내값 부재로 동아시아 대체값을 씁니다. 특정 기관의 센터 지정을 뜻하지 않는 탐색적 what-if예요.',
-          '⚠️ Pre-validation draft. PSA pending; utilities are East-Asian substitutes. Exploratory what-if, not a designation.', lang)}
+        {t('⚠️ 검증 전 초안입니다. 이 후보들은 혈전 제거 시술이 아닌 정맥 혈전용해(tPA) 체계를 갖추는 시나리오라, 치료 비율도 국내 tPA 실적 10.2%를 씁니다. 후유증 정도별 삶의 질 값은 국내 자료가 없어 동아시아 값을 빌려 썼어요. 특정 기관의 센터 지정을 뜻하지 않는 탐색적 what-if예요.',
+          '⚠️ Pre-validation draft. These sites model IV thrombolysis (not thrombectomy), so the treatment rate uses Korea\u2019s 10.2% IVT figure. Utilities are East-Asian substitutes. Exploratory what-if, not a designation.', lang)}
       </div>
 
       <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap', marginBottom: 6 }}>
@@ -180,9 +180,8 @@ export default function CeaBeta({ lang }) {
           'Below WTP ₩35M/QALY is cost-effective; negative means cost-saving. tPA averts severe disability (mRS 4–5), saving ~₩12.5M per patient over 5 years (Kim 2020, n=11,136 Korea). At realistic upgrade costs most sites turn cost-saving. Operating cost drives the verdict; the top site stays cost-effective even at regional-centre cost.', lang)}
       </div>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 10, lineHeight: 1.6, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 10 }}>
-        {t('모델 — 의사결정나무(3개월 mRS) + Markov(평생), 지불자 관점, 할인 4.5%(NECA), 운영 10년. 효과는 도달시간 단축 → Saver 2013(JAMA, GWTG n=58,353)의 15분 단축당 오즈비(독립보행 1.04 / 사망 0.96)를 오즈 스케일에 적용 → 효용·비용(Kim 2020, 국내 11,136명) 경로로 전달. 민감도로 Emberson 2014 3구간 OR를 쓰면 커버지역이 모두 첫 구간(0–180분) 안이라 편익이 0으로 계산돼요. 후보=응급의료기관+CT 보유 종합병원(기존 인증센터 82 제외). CHEERS 2022 준수 지향.',
-          'Model — decision tree (3-month mRS) + Markov (lifetime), payer perspective, 4.5% discount (NECA), 10-year operation. Effect via Saver 2013 (JAMA, GWTG n=58,353) odds ratios per 15-min gain (ambulation 1.04 / mortality 0.96); costs from Kim 2020 (n=11,136 Korea). CHEERS 2022.', lang)}
-      </div>
+        {t('모델 — 의사결정나무(3개월 결과) + Markov(평생), 지불자 관점, 할인 4.5%, 운영 10년. 효과는 도달시간 단축 → Saver 2013(JAMA, 환자 58,353명)의 15분당 오즈비(혼자 걷기 1.04 / 사망 0.96) → 삶의 질·의료비(Kim 2020, 국내 11,136명) 경로로 전달돼요. 치료 비율은 국내 tPA 실적 10.2%(CRCS-K 2021)이고, 이는 유럽 평균 14.3%·독일 19.5%에 못 미쳐요. 기준선 3,700만원은 1인당 GDP예요. 후보=응급의료기관+CT 보유 종합병원(기존 인증센터 82곳 제외).',
+          'Model — decision tree + Markov, payer perspective, 4.5% discount, 10-year operation. Effect via Saver 2013 (n=58,353) odds ratios per 15-min gain; costs from Kim 2020 (n=11,136 Korea). Treatment rate uses Korea\u2019s 10.2% IVT rate, below the European average of 14.3%. Threshold ₩37M = GDP per capita.', lang)}</div>
     </section>
   );
 }
