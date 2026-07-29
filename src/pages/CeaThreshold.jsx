@@ -134,8 +134,17 @@ export default function CeaThreshold({ lang }) {
           'At the current thrombolysis rate an average ₩490M per centre is justified — nearly identical to the ₩500M the government allocates for 24-hour care at regional centres. Seosan alone justifies ₩890M, rising to ₩1.25B at the European average rate.', lang)}
       </div>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 10, lineHeight: 1.65 }}>
-        {t('※ 상한 = (지불의사 × 늘어나는 건강수명 + 아끼는 의료비)를 10년 현가로 환산한 연간액. 할인 4.5%, 설립비 제외. 이 후보들은 혈전 제거 시술이 아닌 정맥 혈전용해(tPA) 체계를 갖추는 시나리오라 시행률도 tPA 기준이에요. 정부 지원 기준선: 지역센터 총사업비 2.5억, 권역센터 24시간 전문진료체계 5억(국비 2.5억), 권역센터 총사업비 12억(2026 신규 공고 14억).',
-          '※ Ceiling = (WTP × QALY gained + downstream savings), annualised over 10 years at 4.5%. These sites model IV thrombolysis capability, not thrombectomy. Government reference: local centre ₩250M, regional 24-hour care ₩500M, regional total ₩1.2B.', lang)}
+        {t('※ 상한 = (지불의사 × 늘어나는 건강수명 + 아끼는 의료비)를 10년 현가로 환산한 연간액. 할인 4.5%, 설립비 제외. 이 후보들은 혈전 제거 시술이 아닌 정맥 혈전용해(tPA) 체계를 갖추는 시나리오라 시행률도 tPA 기준이에요.',
+          '※ Ceiling = (WTP × QALY gained + downstream savings), annualised over 10 years at 4.5%. These sites model IV thrombolysis capability, not thrombectomy.', lang)}
+      </div>
+      <div style={{ fontSize: 10.5, color: '#6e6e8a', marginTop: 7, lineHeight: 1.7, background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 8, padding: '9px 11px' }}>
+        <b style={{ color: '#8888aa' }}>{t('세로선 출처', 'Reference lines', lang)}</b><br />
+        {t('· 지역센터 2.5억 — 보건복지부 「지역심뇌혈관질환센터 지정 공모」 공고 제2024-816호(국비 1.25억·자부담 1.25억), 제2025-922호(국비 1.25·지방비 0.75·자부담 0.5)',
+          '· Local centre ₩250M — MOHW notices 2024-816, 2025-922', lang)}<br />
+        {t('· 권역 24시간 전문진료체계 5억 — 보건복지부 「2024년 권역심뇌혈관질환센터 운영지침」. 총 5억(국비 2.5억) 중 2.5억 이상을 전문의 당직수당, 당직팀원 수당, 24시간 진료 추가인력 인건비, 지역 네트워크 운영비에 편성하도록 명시',
+          '· Regional 24-hour care ₩500M — MOHW 2024 Regional CVD Centre Operating Guideline; ≥₩250M must fund on-call pay and 24-hour staffing', lang)}<br />
+        {t('· 권역 총사업비 12억 — 같은 운영지침(국비 6억 = 전문진료 2.5 + 예방관리 3.5). 2026년 신규 지정 공고 제2025-921호(전남)는 운영비 14억 + 시설장비비 30억(1회)',
+          '· Regional total ₩1.2B — same guideline; 2026 new-designation notice 2025-921 sets ₩1.4B plus ₩3B one-off facility cost', lang)}
       </div>
     </div>
   );

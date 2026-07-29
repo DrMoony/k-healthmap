@@ -63,7 +63,7 @@ const STEPS = [
     k: 'F', ttl: ['그만한 돈을 쓸 값어치가 있나', 'Is it worth the money'],
     desc: ['시간이 줄면 후유증이 가벼워지고 사망도 줄어요. 그 개선을 "건강하게 사는 햇수"로 바꾸고 장애가 남았을 때 5년간 드는 의료비와 견줘요. 국내 환자 1만 1천여 명의 실제 진료비 자료를 썼어요.',
       'Gains are converted to healthy life-years and weighed against 5-year care costs.'],
-    src: [['국내', 'kr'], ['Kim DY 2020 Neurology 94(9):e978 — 국내 11,136명', '']],
+    src: [['국내', 'kr'], ['Kim DY 2020 Neurology 94(9):e978 — 국내 11,136명 · 지원 기준선: 복지부 지역센터 공고 2024-816호(2.5억), 「2024년 권역심뇌혈관질환센터 운영지침」(24시간 전문진료체계 5억·총사업비 12억)', '']],
   },
 ];
 
