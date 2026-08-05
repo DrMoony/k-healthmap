@@ -71,7 +71,7 @@ const TAGC = { kr: ['#00ff88', 'rgba(0,255,136,0.13)'], int: ['#ffb74d', 'rgba(2
 
 export default function EvidenceMap({ lang }) {
   const [open, setOpen] = useState('C');
-  const [rep, setRep] = useState(20);        // 재관류 시행률 %
+  const [rep, setRep] = useState(10.2);      // tPA 시행률 % (CRCS-K 2021)
   const [le, setLe] = useState(9.6);         // 잔여여명
   const [gain, setGain] = useState(100);     // 시간단축 배율 %
 
@@ -151,7 +151,7 @@ export default function EvidenceMap({ lang }) {
         <div style={{ fontSize: 11.5, color: '#7a7a99', marginBottom: 12 }}>
           {t('다섯 곳을 센터로 지정했을 때 한 해에 달라지는 것 — 손잡이를 움직이면 바로 다시 계산돼요.', 'Annual effect of upgrading five sites — recalculates live.', lang)}</div>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 16 }}>
-          {slider(t('실제 치료받는 비율', 'Treated share', lang), rep, setRep, 5, 40, 1, '%', t('지금은 5명 중 1명', 'currently 1 in 5', lang))}
+          {slider(t('실제 치료받는 비율', 'Treated share', lang), rep, setRep, 5, 35, 0.5, '%', t('현행 10.2% · ESO 목표 20%', 'now 10.2% · ESO target 20%', lang))}
           {slider(t('남은 수명', 'Life expectancy', lang), le, setLe, 5, 15, 0.5, t('년', 'y', lang), t('70세 발병 기준', 'onset at 70', lang))}
           {slider(t('시간 단축 정도', 'Time saved', lang), gain, setGain, 30, 150, 5, '%', t('기준의 몇 배로 볼지', 'vs. baseline', lang))}
         </div>
@@ -189,8 +189,8 @@ export default function EvidenceMap({ lang }) {
       </div>
 
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 14, lineHeight: 1.65, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 11 }}>
-        {t('기본값으로 두면 다섯 곳에서 10년간 약 900년치 건강수명이 늘고, 그중 대략 열 명 중 넷은 사망을 피한 몫이에요. 치료받는 비율을 올리거나 시간이 더 줄면 결과가 비례해서 커져요. 계산에 쓴 숫자와 출처는 위 단계를 눌러 확인할 수 있어요.',
-          'At default settings the five sites add roughly 900 healthy life-years over ten years. Open any step above to see the sources.', lang)}
+        {t('기본값(현행 tPA 10.2%)으로 두면 다섯 곳에서 10년간 약 460년치 건강수명이 늘어요. 치료비율을 ESO 목표인 20%로 올리면 두 배가 되고요. 치료받는 비율을 올리거나 시간이 더 줄면 결과가 비례해서 커져요. 계산에 쓴 숫자와 출처는 위 단계를 눌러 확인할 수 있어요.',
+          'At the current 10.2% treatment rate the five sites add roughly 460 healthy life-years over ten years; doubling to the 20% ESO target doubles that. Open any step above to see the sources.', lang)}
       </div>
     </section>
   );

@@ -5,41 +5,40 @@ const t = (ko, en, lang) => (lang === 'ko' ? ko : en);
 // PSA 10,000회 산출 (cea_psa.py). CEAC: WTP(만원) → 비용효과적일 확률(%)
 const WTP = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000];
 const CURVES = [
-  { k: 'low', lab: '지역센터급 2.5억', c: '#00ff88',
-    p: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
-  { k: 'base', lab: '권역급 14억', c: '#00d4ff',
-    p: [62.0, 70.1, 77.4, 83.1, 87.8, 91.0, 93.7, 95.8, 97.2, 98.2, 98.8, 99.1, 99.2, 99.4, 99.7, 99.8, 99.9, 100, 100, 100] },
-  { k: 'high', lab: '전담형 30억', c: '#ff8c42',
-    p: [1.8, 2.6, 4.1, 6.0, 8.3, 10.8, 14.1, 17.8, 21.9, 27.0, 32.6, 38.0, 43.4, 49.2, 54.3, 59.2, 63.9, 68.2, 72.4, 76.0] },
+  { k: 'low', lab: '지역센터 2.5억', c: '#00ff88',
+    p: [97.5, 98.7, 99.2, 99.5, 99.6, 99.8, 99.9, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
+  { k: 'care24', lab: '24시간체계 5억', c: '#00d4ff',
+    p: [67.9, 75.9, 81.9, 86.7, 90.1, 92.8, 94.9, 96.2, 97.4, 98.0, 98.6, 99.0, 99.2, 99.3, 99.5, 99.6, 99.6, 99.7, 99.8, 99.8] },
+  { k: 'regional', lab: '권역 12억', c: '#ff8c42',
+    p: [3.9, 6.0, 8.9, 12.2, 15.9, 20.7, 25.8, 31.6, 37.5, 43.2, 48.9, 53.7, 59.0, 63.7, 68.5, 72.4, 76.0, 78.8, 81.6, 84.1] },
 ];
-const QALY = { mean: 928, lo: 525, hi: 1467 };
+const QALY = { mean: 472, lo: 223, hi: 827 };
 const SITE_Q = [
-  { n: '서산중앙병원', m: 339, lo: 192, hi: 536 },
-  { n: '해남종합병원', m: 227, lo: 128, hi: 359 },
-  { n: '거붕백병원', m: 153, lo: 86, hi: 241 },
-  { n: '서귀포의료원', m: 141, lo: 80, hi: 223 },
-  { n: '태백병원', m: 68, lo: 39, hi: 108 },
+  { n: '서산중앙병원', m: 172, lo: 81, hi: 302 },
+  { n: '해남종합병원', m: 115, lo: 54, hi: 202 },
+  { n: '거붕백병원', m: 78, lo: 37, hi: 136 },
+  { n: '서귀포의료원', m: 72, lo: 34, hi: 126 },
+  { n: '태백병원', m: 35, lo: 16, hi: 61 },
 ];
 const ICER = [
-  { lab: '지역센터급', m: -58.1, lo: -108.2, hi: -24.8, c: '#00ff88' },
-  { lab: '권역급', m: -2.4, lo: -52.1, hi: 46.3, c: '#00d4ff' },
-  { lab: '전담형', m: 75.5, lo: 7.8, hi: 170.1, c: '#ff8c42' },
+  { lab: '지역센터 2.5억', m: -27.8, lo: -67.2, hi: 4.6, c: '#00ff88' },
+  { lab: '24시간체계 5억', m: -3.4, lo: -45.5, hi: 44.5, c: '#00d4ff' },
+  { lab: '권역 12억', m: 63.4, lo: -0.2, hi: 168.9, c: '#ff8c42' },
 ];
-
 const W = 560, H = 220, PAD = { l: 42, r: 12, t: 12, b: 30 };
 const X = (w) => PAD.l + (w - 500) / 9500 * (W - PAD.l - PAD.r);
 const Y = (p) => PAD.t + (100 - p) / 100 * (H - PAD.t - PAD.b);
 
 export default function CeaPsa({ lang }) {
   const [hover, setHover] = useState(null);
-  const maxQ = 560;
+  const maxQ = 320;
 
   return (
     <div style={{ marginTop: 18, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 14 }}>
       <div style={{ fontSize: 13.5, fontWeight: 800, color: '#fff' }}>
         {t('불확실성을 다 넣으면 — 확률적 민감도분석 (PSA)', 'Probabilistic sensitivity analysis', lang)}</div>
       <div style={{ fontSize: 12, color: '#9a9db0', lineHeight: 1.7, margin: '7px 0 14px', maxWidth: '76ch' }}>
-        {t('효과·효용·비용·시행률·운영비를 각각 분포로 두고 10,000번 시뮬레이션했어요. 아래 곡선은 지불의사(WTP)별로 이 확충이 비용효과적일 확률이에요.',
+        {t('효과·효용·비용·치료비율·운영비를 각각 분포로 두고 10,000번 시뮬레이션했어요. 치료비율은 국내 tPA 실적 10.2% 기준이에요. 아래 곡선은 지불의사(WTP)별로 이 확충이 비용효과적일 확률이에요.',
           'Effect, utility, cost, treatment rate and operating cost were each sampled from distributions over 10,000 runs. The curve shows the probability of cost-effectiveness at each willingness-to-pay.', lang)}
       </div>
 
@@ -56,7 +55,7 @@ export default function CeaPsa({ lang }) {
             <text key={w} x={X(w)} y={H - 10} fontSize="9" fill="#7a7a99" textAnchor="middle">{(w / 1000).toFixed(0)}천만</text>
           ))}
           {/* WTP 기준선 */}
-          {[[3500, '3,500만'], [5000, '5,000만']].map(([w, lab]) => (
+          {[[3700, '3,700만'], [5000, '5,000만']].map(([w, lab]) => (
             <g key={w}>
               <line x1={X(w)} y1={PAD.t} x2={X(w)} y2={H - PAD.b} stroke="#b388ff" strokeWidth="1.4" strokeDasharray="4 3" opacity="0.7" />
               <text x={X(w)} y={PAD.t - 2} fontSize="8.5" fill="#b388ff" textAnchor="middle" fontWeight="700">{lab}</text>
@@ -67,7 +66,7 @@ export default function CeaPsa({ lang }) {
               points={WTP.map((w, i) => `${X(w)},${Y(c.p[i])}`).join(' ')} />
           ))}
           {CURVES.map((c) => {
-            const i = WTP.indexOf(3500);
+            const i = WTP.indexOf(4000);
             return <circle key={c.k} cx={X(3500)} cy={Y(c.p[i])} r="3.4" fill={c.c} stroke="#0a0a0f" strokeWidth="1" />;
           })}
         </svg>
@@ -76,10 +75,10 @@ export default function CeaPsa({ lang }) {
         {CURVES.map((c) => (
           <span key={c.k} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#bbbbdd' }}>
             <span style={{ width: 13, height: 3, background: c.c, borderRadius: 2 }} />{c.lab}
-            <b style={{ color: c.c }}>{c.p[WTP.indexOf(3500)]}%</b>
+            <b style={{ color: c.c }}>{c.p[WTP.indexOf(4000)]}%</b>
           </span>
         ))}
-        <span style={{ color: '#7a7a99' }}>{t('← WTP 3,500만 기준', '← at ₩35M', lang)}</span>
+        <span style={{ color: '#7a7a99' }}>{t('← WTP 4,000만 기준', '← at ₩40M', lang)}</span>
       </div>
 
       {/* QALY 분포 */}
@@ -126,12 +125,11 @@ export default function CeaPsa({ lang }) {
       </div>
 
       <div style={{ fontSize: 11.5, color: '#9a9db0', lineHeight: 1.75, marginTop: 14, maxWidth: '78ch' }}>
-        {t('읽는 법 — 지역센터급 지원(2.5억)에서는 1만 번 중 1만 번 모두 비용효과적이고, 종합 ICER이 음수라 비용절감이에요. 권역급(14억)도 WTP 3,500만에서 93.7%로 통상 채택 기준(80%)을 넘어요. 반면 EVT 전담팀 풀코스트(30억)를 tPA 승격에 얹으면 14.1%로 근거가 부족해요. 즉 확충의 비용효과성은 견고하되, 어느 수준의 체계를 지향하느냐가 판정을 가릅니다.',
-          'At local-centre funding, all 10,000 runs are cost-effective and the ICER is negative (cost-saving). Regional-level funding reaches 93.7% at ₩35M, above the conventional 80% adoption threshold. A full 24/7 EVT team budget applied to a tPA upgrade falls to 14.1%.', lang)}
-      </div>
+        {t('읽는 법 — 지역센터급 지원(2.5억)에서는 거의 모든 시뮬레이션에서 비용효과적이고, 종합 ICER이 음수라 비용절감이에요. 정부가 24시간 진료체계에 배정하는 5억 수준에서도 95.7%로 통상 채택 기준(80%)을 넘어요. 반면 권역센터 총사업비(12억)를 tPA 승격에 얹으면 28%로 근거가 부족한데, 그건 그 예산이 혈전 제거 시술까지 포함한 규모라 그래요. 즉 확충의 비용효과성은 견고하되, 어느 수준의 체계를 지향하느냐가 판정을 가릅니다.',
+          'At local-centre funding nearly all runs are cost-effective with a negative ICER (cost-saving). Even at the ₩500M the government allocates for 24-hour care, 95.7% exceeds the conventional 80% adoption threshold. The regional total budget (₩1.2B) covers thrombectomy capability, so applying it to a tPA upgrade drops to 28%.', lang)}</div>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 9, lineHeight: 1.6 }}>
-        {t('※ 분포 — 오즈비 로그정규(Saver 2013 95%CI), 효용 베타, 하류 비용절감 감마(평균 1,250만원, Kim 2020), 재관류 시행률 베타(20%), 잔여여명 삼각(7–13년), 운영비 삼각. 몬테카를로 10,000회, 할인 4.5%, 10년 지평.',
-          '※ Distributions — log-normal OR (Saver 2013 CI), beta utilities, gamma downstream savings (₩12.5M, Kim 2020), beta treatment rate, triangular life expectancy and operating cost. 10,000 Monte Carlo runs, 4.5% discount, 10-year horizon.', lang)}
+        {t('※ 분포 — 오즈비 로그정규(Saver 2013 95%CI), 효용 베타, 하류 비용절감 감마(평균 952만원, Hong KS 2020), tPA 시행률 베타(10.2%), 잔여여명 삼각(7–13년), 운영비 삼각. 몬테카를로 10,000회, 할인 4.5%, 10년 지평.',
+          '※ Distributions — log-normal OR (Saver 2013 CI), beta utilities, gamma downstream savings (₩9.52M, Hong 2020), beta treatment rate (10.2%), triangular life expectancy and operating cost. 10,000 Monte Carlo runs, 4.5% discount, 10-year horizon.', lang)}
       </div>
     </div>
   );

@@ -4,21 +4,21 @@ const t = (ko, en, lang) => (lang === 'ko' ? ko : en);
 
 // cea_final.py 산출 — 허용 연간 지원 상한(억원). [WTP][시행률] 조합.
 // WTP: w25=관행 2,500만 / wg=1×GDP 3,700만 / w50=암묵상한 5,000만
-// 시행률 티어: r102 현행 / r150 정책목표 / r195 선진국 / r310 최상위
+// 시행률 티어: r102 현행 / r200 ESO목표 / r195 독일 / r310 헬싱키 (cea_final.py 재계산 2026-08)
 const SITES = [
   { n: '서산중앙병원', sg: '충남 서산', cases: 1099,
-    v: { r102: [6.5, 8.9, 11.6], r150: [9.5, 13.1, 17.0], r195: [12.4, 17.1, 22.1], r310: [19.7, 27.1, 35.2] } },
+    v: { r102: [6.2, 8.6, 11.2], r200: [12.1, 16.9, 22.0], r195: [11.8, 16.4, 21.5], r310: [18.7, 26.1, 34.2] } },
   { n: '해남종합병원', sg: '전남 해남', cases: 855,
-    v: { r102: [4.5, 6.1, 7.9], r150: [6.6, 9.0, 11.6], r195: [8.6, 11.7, 15.1], r310: [13.7, 18.6, 24.0] } },
+    v: { r102: [4.2, 5.9, 7.6], r200: [8.3, 11.5, 15.0], r195: [8.1, 11.2, 14.6], r310: [12.9, 17.8, 23.2] } },
   { n: '거붕백병원', sg: '경남 거제', cases: 345,
-    v: { r102: [2.7, 3.8, 5.0], r150: [4.0, 5.6, 7.4], r195: [5.2, 7.3, 9.6], r310: [8.3, 11.6, 15.3] } },
+    v: { r102: [2.6, 3.7, 4.9], r200: [5.2, 7.3, 9.6], r195: [5.0, 7.1, 9.4], r310: [8.0, 11.3, 15.0] } },
   { n: '서귀포의료원', sg: '제주 서귀포', cases: 371,
-    v: { r102: [2.6, 3.6, 4.7], r150: [3.8, 5.3, 6.9], r195: [4.9, 6.9, 9.0], r310: [7.9, 10.9, 14.3] } },
+    v: { r102: [2.5, 3.5, 4.6], r200: [4.9, 6.8, 9.0], r195: [4.7, 6.7, 8.8], r310: [7.5, 10.6, 13.9] } },
   { n: '태백병원', sg: '강원 태백', cases: 250,
-    v: { r102: [1.3, 1.8, 2.4], r150: [2.0, 2.7, 3.5], r195: [2.6, 3.5, 4.5], r310: [4.1, 5.6, 7.2] } },
+    v: { r102: [1.3, 1.8, 2.3], r200: [2.5, 3.5, 4.5], r195: [2.4, 3.4, 4.4], r310: [3.9, 5.4, 7.0] } },
 ];
-const TOTAL = { r102: [17.6, 24.3, 31.6], r150: [26.0, 35.8, 46.4], r195: [33.7, 46.5, 60.4], r310: [53.6, 74.0, 96.0] };
-const QALY = { r102: [461, 43], r150: [677, 63], r195: [881, 82], r310: [1400, 131] };
+const TOTAL = { r102: [16.8, 23.4, 30.7], r200: [32.9, 46.0, 60.2], r195: [32.0, 44.8, 58.7], r310: [50.9, 71.3, 93.3] };
+const QALY = { r102: [461, 43], r200: [903, 84], r195: [881, 82], r310: [1400, 131] };
 
 const WTPS = [
   { k: 0, lab: '2,500만', full: '관행 기준' },
@@ -27,7 +27,7 @@ const WTPS = [
 ];
 const RATES = [
   { k: 'r102', lab: '현행 10.2%', tier: '한국 현재', note: 'CRCS-K 2021 · 2017–19년 12%에서 하락' },
-  { k: 'r150', lab: '목표 15%', tier: '정책 목표', note: '유럽뇌졸중기구 2030 목표 — 전 회원국 15% 이상' },
+  { k: 'r200', lab: '목표 20%', tier: '정책 목표', note: '유럽뇌졸중기구 Stroke Action Plan 중간검토 KPI 7a — 2030년까지 20% 이상 (원안 15%에서 상향)' },
   { k: 'r195', lab: '선진 19.5%', tier: '선진국 도달', note: '독일 2023 — 촘촘한 stroke unit 망 + 텔레스트로크' },
   { k: 'r310', lab: '최상위 31%', tier: '최상위 사례', note: '헬싱키 단일센터 · 체코 26.4% — 병원전 통보·중앙 트리아지' },
 ];
@@ -137,8 +137,8 @@ export default function CeaThreshold({ lang }) {
       </div>
 
       <div style={{ fontSize: 11.5, color: '#9a9db0', lineHeight: 1.75, marginTop: 13, maxWidth: '78ch' }}>
-        {t('현행 투여 비율에서도 센터당 평균 4.9억이 정당화되는데, 이는 정부가 권역센터에 24시간 진료체계 몫으로 배정하는 5억과 거의 같아요. 서산은 단독으로 8.9억까지 가능하고, 투여 비율이 정책 목표(15%)에 이르면 13.1억으로 권역 총사업비를 넘어서요. 반대로 태백은 1.8억이 한계라 단독 센터보다 이송체계나 원격협진이 합리적이에요. 시행률을 올리는 것 자체가 센터 확충과 맞먹는 정책 레버라는 뜻이에요.',
-          'At the current rate an average ₩490M per centre is justified — nearly identical to the ₩500M the government allocates for 24-hour care. Seosan alone justifies ₩890M, exceeding the regional total budget at the 15% policy target. Raising the treatment rate is itself a policy lever comparable to building centres.', lang)}
+        {t('현행 투여 비율에서도 센터당 평균 4.7억이 정당화되는데, 이는 정부가 권역센터에 24시간 진료체계 몫으로 배정하는 5억과 거의 같아요. 서산은 단독으로 8.6억까지 가능하고, 투여 비율이 정책 목표(20%)에 이르면 16.9억으로 권역 총사업비를 크게 넘어서요. 반대로 태백은 1.8억이 한계라 단독 센터보다 이송체계나 원격협진이 합리적이에요. 시행률을 올리는 것 자체가 센터 확충과 맞먹는 정책 레버라는 뜻이에요.',
+          'At the current rate an average ₩470M per centre is justified — close to the ₩500M the government allocates for 24-hour care. Seosan alone justifies ₩860M, rising to ₩1.69B at the 20% policy target. Raising the treatment rate is itself a policy lever comparable to building centres.', lang)}
       </div>
       <div style={{ fontSize: 11, color: '#7a7a99', marginTop: 10, lineHeight: 1.65 }}>
         {t('※ 상한 = (지불의사 × 늘어나는 건강수명 + 아끼는 의료비)를 10년 현가로 환산한 연간액. 할인 4.5%, 설립비 제외. 이 후보들은 혈전 제거 시술이 아닌 정맥 혈전용해(tPA) 체계를 갖추는 시나리오라 시행률도 tPA 기준이에요.',
@@ -151,8 +151,8 @@ export default function CeaThreshold({ lang }) {
             'Korea’s 10.2% trails the European average and fell from 12% (2017–19). The bottleneck is arrival delay — median onset-to-door 5.1h, only 37% within 4.5h. High-performing countries raised rates by redesigning systems, not building hospitals: Czechia (26.4%) introduced nationwide triage and mandatory quality reporting; Helsinki (31%) uses prehospital notification and CT-suite treatment; Germany (19.5%) fills workforce gaps with telestroke.', lang)}
         </div>
         <div style={{ fontSize: 10.5, color: '#7a7a99', marginTop: 6 }}>
-          {t('출처 — 한국 10.2%: CRCS-K-NIH 2021(JKMS 2024;39:e278) · 유럽 평균 14.3%·목표 15%: 유럽뇌졸중기구 Stroke Action Plan for Europe, Stroke Service Tracker 2023 · 독일 19.5%: Acute Stroke Treatment in Germany 2015–2023 · 체코 26.4%: 중앙화 뇌졸중체계 연구(2018) · 헬싱키 31%·병원전통보: Helsinki 모델 연구',
-            'Sources — Korea 10.2%: CRCS-K-NIH 2021; Europe 14.3%/15% target: ESO Stroke Action Plan, Service Tracker 2023; Germany 19.5% (2015–2023); Czechia 26.4% (2018); Helsinki model.', lang)}
+          {t('출처 — 한국 10.2%: CRCS-K-NIH 2021(JKMS 2024;39:e278) · 유럽 평균 14.3%: Stroke Service Tracker 2023 · 목표 20%: 유럽뇌졸중기구 Stroke Action Plan 중간검토 KPI 7a(원안 15%→상향) · 독일 19.5%: Acute Stroke Treatment in Germany 2015–2023 · 체코 26.4%: 중앙화 뇌졸중체계 연구(2018) · 헬싱키 31%·병원전통보: Helsinki 모델 연구',
+            'Sources — Korea 10.2%: CRCS-K-NIH 2021; Europe 14.3%: Service Tracker 2023; 20% target: ESO Stroke Action Plan mid-term KPI 7a; Germany 19.5% (2015–2023); Czechia 26.4% (2018); Helsinki model.', lang)}
         </div>
       </div>
       <div style={{ fontSize: 10.5, color: '#7a7a99', marginTop: 9, lineHeight: 1.65, background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.18)', borderRadius: 8, padding: '9px 11px' }}>
