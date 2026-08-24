@@ -18,9 +18,9 @@ export const NATIONAL_AVG = {
   // 허혈성 뇌졸중 관련 — KDCA 심뇌혈관질환 발생통계(2022), KSR 2024, KOSIS(411)
   strokeIncidence: 114.6,     // 허혈성 뇌졸중 연령표준화 발생률 (건/10만명). 출처: KDCA 2022
   strokeMortality: 33.5,      // 뇌혈관질환(I60-I69) 사망률 (명/10만명). 출처: KOSIS 사망원인통계 2022
-  tpaRate: 6.1,               // 정맥내 혈전용해술(IV-tPA) 시행률 (%). 출처: KSR 2024 Fact Sheet (2022년 기준, 97개 병원)
+  tpaRate: 6.1,               // 정맥내 혈전용해술(IV-tPA) 시행률 (%). 출처: KSR 2024 Fact Sheet (2022년 데이터, 97개 병원). ⚠️ 아래 시도별 tpaRate·goldenTimeRate는 추정치(KSR 미공개) — 실측 아님
   thrombectomyRate: 6.5,      // 혈전제거술 시행률 (%). 출처: KSR 2024 Fact Sheet (2022년 기준)
-  goldenTimeRate: 26.2,       // 3.5시간 내 도착률 (%). 출처: KSR 2024 Fact Sheet (2022년 기준). ⚠️ 10년간 개선 없음
+  goldenTimeRate: 26.2,       // 3.5시간 내 도착률 (%). 출처: KSR 2024 Fact Sheet (2022년 데이터). ⚠️ 10년간 개선 없음 · 시도별 값은 추정치
 };
 
 export const PROVINCE_INFO = {

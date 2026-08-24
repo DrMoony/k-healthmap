@@ -895,6 +895,12 @@ export default function StrokeDashboard({ embedded = false }) {
               ━ {t('전국 평균','National Avg')} {col2NatAvg}
             </div>
           )}
+          {(col2Metric === 'tpa' || col2Metric === 'goldenTime') && (
+            <div style={{ fontSize: '10px', color: '#ff8c42', marginTop: '3px', lineHeight: 1.5, flexShrink: 0 }}>
+              ⚠️ {t('전국값만 KSR 2022 실측(Fact Sheet 2024 발행) · 시도별 값은 추정치 — KSR은 시도별 자료를 공개하지 않음',
+                'National value = KSR 2022 (Fact Sheet 2024). Province values are estimates — KSR does not publish province-level data')}
+            </div>
+          )}
         </Panel>
 
         {/* Bottom: 치료 패러다임 변화 tPA vs 혈전제거술 10년 추이 */}
